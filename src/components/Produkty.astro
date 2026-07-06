@@ -1,0 +1,31 @@
+<section id="produkty">
+  <div class="wrap">
+    <div class="eyebrow">Produkty</div>
+    <h2>Wiedza, którą zabierzesz ze sobą</h2>
+    <div class="prod-grid">
+      <article class="prod">
+        <span class="status st-soon">Książka · w przygotowaniu</span>
+        <h3>Korporacja bez stresu</h3>
+        <p>Książka o tym, jak naprawdę działa korporacja — feedbacki, oceny, eskalacje, odejścia — i jak przejść przez to wszystko z podniesioną głową. Zapisani na newsletter dostają fragmenty jako pierwsi.</p>
+        <a class="btn btn-ghost" href="#checklista">Chcę fragmenty przedpremierowe</a>
+      </article>
+      <article class="prod" id="firmy">
+        <span class="status st-b2b">Dla firm</span>
+        <h3>Szkolenia i warsztaty</h3>
+        <p>Feedback, który nie niszczy. Zarządzanie stresem w zespole. Profilaktyka antymobbingowa. Warsztaty prowadzone przez praktyka z 20-letnim doświadczeniem operacyjnym, nie z prezentacji.</p>
+        <a class="btn btn-primary" href="mailto:kontakt@michalbezstresu.pl">Porozmawiajmy o Twoim zespole</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+.prod-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:40px}
+@media(max-width:760px){.prod-grid{grid-template-columns:1fr}}
+.prod{background:var(--papier);border:1px solid var(--linia);border-radius:10px;padding:30px 28px}
+.prod .status{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;display:inline-block;margin-bottom:16px}
+.st-soon{background:var(--marker);color:#6B5A14}
+.st-b2b{background:rgba(46,107,93,.12);color:var(--sygnal)}
+.prod h3{font-size:23px;margin-bottom:10px}
+.prod p{font-size:15px;color:#4A5A55;margin-bottom:20px}
+</style>

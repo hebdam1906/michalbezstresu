@@ -1,0 +1,57 @@
+---
+// Etap 2: źródłem odcinków jest Supabase (tabela `odcinki`).
+// Fallback: lokalna lista src/data/odcinki.js — używana, gdy env Supabase
+// nie jest ustawiony (Etap 1) albo gdy zapytanie zawiedzie. Dzięki temu
+// strona ZAWSZE się zbuduje. Pobieranie odbywa się na etapie build — nowy
+// odcinek pojawi się po redeployu (Deploy Hook Vercela wołany z Make.com).
+import { odcinki as fallback } from '../data/odcinki.js';
+
+async function getOdcinki() {
+  const url = import.meta.env.PUBLIC_SUPABASE_URL;
+  const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return fallback;
+  try {
+    const res = await fetch(
+      `${url}/rest/v1/odcinki?select=nr,tytul,opis,url&order=nr.desc`,
+      { headers: { apikey: key, Authorization: `Bearer ${key}` } }
+    );
+    if (!res.ok) return fallback;
+    const data = await res.json();
+    return Array.isArray(data) && data.length ? data : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+const odcinki = await getOdcinki();
+---
+<section class="odcinki" id="odcinki">
+  <div class="wrap">
+    <div class="eyebrow">Co tydzień nowy odcinek</div>
+    <h2>Najnowsze odcinki</h2>
+    <p class="sub">Sytuacje, które znasz z własnego biurka — rozłożone na czynniki pierwsze przez kogoś, kto siedział po obu stronach stołu.</p>
+    <div class="cards">
+      {odcinki.map((o) => (
+        <article class="card">
+          <div class="tag">Odcinek {o.nr}</div>
+          <h3>{o.tytul}</h3>
+          <p>{o.opis}</p>
+          <a href={o.url} target="_blank" rel="noopener">Obejrzyj na YouTube →</a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+.odcinki{background:var(--papier);border-top:1px solid var(--linia);border-bottom:1px solid var(--linia)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px}
+@media(max-width:880px){.cards{grid-template-columns:1fr}}
+.card{background:var(--mgla);border:1px solid var(--linia);border-radius:10px;padding:26px 24px;display:flex;flex-direction:column;transition:transform .15s}
+.card:hover{transform:translateY(-3px)}
+.card .tag{font-family:var(--mono);font-size:11.5px;color:var(--sygnal);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
+.card h3{font-size:21px;margin-bottom:10px}
+.card p{font-size:15px;color:#4A5A55;flex:1}
+.card a{margin-top:18px;font-weight:700;font-size:15px;color:var(--sygnal);text-decoration:none}
+.card a:hover{text-decoration:underline}
+</style>

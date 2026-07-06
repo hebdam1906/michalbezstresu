@@ -1,0 +1,57 @@
+<section class="lead" id="checklista">
+  <div class="wrap lead-grid">
+    <div>
+      <div class="eyebrow">Bezpłatny materiał</div>
+      <h2>Checklista: jak dokumentować trudne sytuacje w pracy</h2>
+      <p class="sub">Firma dokumentuje wszystko od Twojego pierwszego dnia. Ty masz do tego takie samo prawo.</p>
+      <ul>
+        <li>Wzór notatki po trudnej rozmowie — 5 minut, które może być warte wszystko</li>
+        <li>10 gotowych zdań odpowiedzi na niesprawiedliwy feedback</li>
+        <li>Gdzie trzymać dokumentację (i dlaczego nie na służbowym laptopie)</li>
+      </ul>
+    </div>
+
+    <!--
+      ▼▼▼ MIEJSCE NA EMBED MAILERLITE ▼▼▼
+      MailerLite → Forms → Embedded → skopiuj kod i wklej PONIŻEJ,
+      a cały <form class="form"> usuń. Style embedu nadpisz w MailerLite
+      (kolory: przycisk #FFE9A3, tekst #1E2B28).
+    -->
+    <form class="form" id="ml-placeholder">
+      <label for="imie">Imię</label>
+      <input id="imie" type="text" placeholder="Michał" required />
+      <label for="email">Adres e-mail</label>
+      <input id="email" type="email" placeholder="twoj@email.pl" required />
+      <button class="btn" type="submit">Wyślij mi checklistę</button>
+      <small>Zapisując się dołączasz do newslettera. Możesz wypisać się jednym kliknięciem. Bez spamu.</small>
+    </form>
+  </div>
+</section>
+
+<script>
+  // Placeholder do czasu wklejenia embedu MailerLite
+  document.getElementById('ml-placeholder')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    e.currentTarget.innerHTML =
+      "<p style='font-size:17px;font-weight:700'>Dziękuję! Sprawdź skrzynkę — checklista jest w drodze. 📄</p>";
+  });
+</script>
+
+<style>
+.lead{background:var(--sygnal);color:#F2F7F5}
+.lead .eyebrow{color:var(--marker)}
+.lead h2{color:#fff}
+.lead .sub{color:#CFE0DA}
+.lead-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+@media(max-width:880px){.lead-grid{grid-template-columns:1fr}}
+.lead ul{list-style:none;margin-top:22px}
+.lead li{padding-left:28px;position:relative;margin-bottom:12px;font-size:16px}
+.lead li::before{content:"✓";position:absolute;left:0;color:var(--marker);font-weight:700}
+.form{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:30px 28px}
+.form label{font-size:14px;font-weight:500;display:block;margin-bottom:8px}
+.form input{width:100%;padding:14px;border-radius:8px;border:none;font-size:16px;font-family:var(--body);margin-bottom:14px}
+.form input:focus-visible{outline:3px solid var(--marker)}
+.form .btn{width:100%;text-align:center;background:var(--marker);color:var(--atrament)}
+.form .btn:hover{background:#F7DD8B}
+.form small{display:block;margin-top:12px;font-size:12.5px;color:#B9CFC8;line-height:1.5}
+</style>

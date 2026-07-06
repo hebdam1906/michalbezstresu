@@ -1,0 +1,25 @@
+<section class="omnie" id="omnie">
+  <div class="wrap omnie-grid">
+    <div>
+      <div class="eyebrow">O mnie</div>
+      <h2>Siedziałem po obu stronach tego stołu</h2>
+      <p class="sub">Przez 20 lat pracowałem w międzynarodowych korporacjach finansowych — od specjalisty po senior managera. Dawałem feedbacki i je dostawałem. Prowadziłem oceny roczne i przechodziłem przez własne. Wiem, jak ta maszyna działa od środka — i uważam, że każdy pracownik powinien znać jej instrukcję obsługi.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>20 lat</b><span>w korporacjach finansowych</span></div>
+      <div class="stat"><b>4 firmy</b><span>od specjalisty po senior managera</span></div>
+      <div class="stat"><b>Black Belt</b><span>Lean Six Sigma — procesy znam od podszewki</span></div>
+      <div class="stat"><b>1 cel</b><span>mniej stresu po Twojej stronie biurka</span></div>
+    </div>
+  </div>
+</section>
+
+<style>
+.omnie{background:var(--papier);border-top:1px solid var(--linia)}
+.omnie-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:center}
+@media(max-width:880px){.omnie-grid{grid-template-columns:1fr}}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.stat{background:var(--mgla);border:1px solid var(--linia);border-radius:10px;padding:18px}
+.stat b{font-family:var(--disp);font-size:30px;font-weight:600;display:block;color:var(--sygnal)}
+.stat span{font-size:13.5px;color:#5E6E68}
+</style>
