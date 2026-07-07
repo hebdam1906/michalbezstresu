@@ -1,0 +1,109 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Stopka from '../components/Stopka.astro';
+
+const tematy = [
+  'Jak przyjąć trudny feedback i nie rozłożyć się na tygodnie',
+  'Ocena roczna i plan naprawczy (PIP) bez paniki — od strony pracownika',
+  'Gdzie kończy się wymagający szef, a zaczyna mobbing',
+  'Dokumentowanie trudnych sytuacji w pracy — po co i jak',
+  'Stres korporacyjny: jak odciąć się od pracy po godzinach',
+  'Odejście z firmy bez palenia mostów',
+];
+
+const bioShort = 'Michał — twórca „Michał bez Stresu”, praktyk z 20-letnim doświadczeniem operacyjnym w korporacji. Uczy, jak przechodzić przez trudne sytuacje w pracy — feedback, oceny, plany naprawcze, eskalacje — bez paniki i z podniesioną głową.';
+---
+<Layout
+  title="Dla mediów | Michał bez Stresu"
+  description="Press room Michał bez Stresu: bio, tematy do rozmowy, kontakt dla dziennikarzy i organizatorów. Ekspert od trudnych sytuacji w korporacji."
+>
+  <Nav />
+
+  <header class="phead">
+    <div class="wrap">
+      <div class="eyebrow">Dla mediów</div>
+      <h1>Press room</h1>
+      <p class="lead">Materiały dla dziennikarzy, podcasterów i organizatorów wydarzeń.
+        Chętnie rozmawiam o realiach pracy w korporacji — konkretnie, bez sensacji
+        i bez ogólników.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="mailto:kontakt@michalbezstresu.pl?subject=Zapytanie%20medialne">Zapytanie medialne</a>
+        <span class="cta-note">Odpowiadam osobiście, zwykle w ciągu jednego dnia roboczego.</span>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">Bio</div>
+      <h2>Nota do wykorzystania</h2>
+      <div class="bio-card">
+        <span class="lbl mono">Krótkie bio (do zapowiedzi)</span>
+        <p class="bio">{bioShort}</p>
+        <p class="hint">Możesz skopiować powyższy tekst bez pytania o zgodę. Preferowana forma
+          nazwy: <strong>Michał bez Stresu</strong>. Strona: <strong>michalbezstresu.pl</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="eyebrow">Tematy do rozmowy</div>
+      <h2>O czym mogę opowiedzieć w wywiadzie</h2>
+      <p class="sub">Wszystkie tematy omawiam na przykładach zanonimizowanych — bez wskazywania
+        konkretnych firm czy osób.</p>
+      <ul class="topics">
+        {tematy.map((t) => <li>{t}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">Materiały</div>
+      <h2>Zdjęcia i logo</h2>
+      <p class="sub">Pakiet prasowy (zdjęcia w wysokiej rozdzielczości + logo) udostępniam
+        na życzenie — napisz, a odeślę linkiem. Wkrótce dostępny też do pobrania bezpośrednio stąd.</p>
+      <a class="btn btn-ghost" href="mailto:kontakt@michalbezstresu.pl?subject=Pakiet%20prasowy">Poproś o pakiet prasowy</a>
+    </div>
+  </section>
+
+  <section class="band contact">
+    <div class="wrap">
+      <div class="eyebrow">Kontakt dla mediów</div>
+      <h2>Napisz bezpośrednio</h2>
+      <div class="c-grid">
+        <div class="c-item"><span class="mono">E-mail</span><a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a></div>
+        <div class="c-item"><span class="mono">YouTube</span><a href="https://www.youtube.com/@michalbezstresu" target="_blank" rel="noopener">@michalbezstresu</a></div>
+        <div class="c-item"><span class="mono">TikTok</span><a href="https://www.tiktok.com/@michalbezstresu" target="_blank" rel="noopener">@michalbezstresu</a></div>
+        <div class="c-item"><span class="mono">Instagram</span><a href="https://www.instagram.com/michalbezstresu" target="_blank" rel="noopener">@michalbezstresu</a></div>
+      </div>
+    </div>
+  </section>
+
+  <Stopka />
+</Layout>
+
+<style>
+.phead{padding:72px 0 60px;background:linear-gradient(180deg,var(--mgla),var(--papier))}
+.phead h1{font-family:var(--disp);font-weight:500;font-size:clamp(34px,5.5vw,58px);line-height:1.1;margin-bottom:18px}
+.phead .lead{font-size:clamp(17px,2.2vw,20px);color:#3C4A46;max-width:60ch}
+.cta-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:32px}
+.cta-note{font-size:14px;color:#5E6E68;max-width:32ch}
+.band{background:var(--papier);border-top:1px solid var(--linia);border-bottom:1px solid var(--linia)}
+.bio-card{background:var(--papier);border:1px solid var(--linia);border-left:3px solid var(--sygnal);border-radius:0 12px 12px 0;padding:28px 28px;margin-top:32px;max-width:78ch}
+.bio-card .lbl{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--szalwia);display:block;margin-bottom:12px}
+.bio-card .bio{font-family:var(--disp);font-size:20px;line-height:1.5;color:var(--atrament)}
+.bio-card .hint{margin-top:18px;font-size:14px;color:#5E6E68}
+.topics{list-style:none;margin-top:34px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:760px){.topics{grid-template-columns:1fr}}
+.topics li{background:var(--mgla);border:1px solid var(--linia);border-radius:10px;padding:16px 18px 16px 42px;position:relative;font-size:16px}
+.topics li::before{content:"“";position:absolute;left:16px;top:10px;font-family:var(--disp);font-size:28px;color:var(--szalwia);line-height:1}
+.c-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:32px}
+@media(max-width:760px){.c-grid{grid-template-columns:1fr 1fr}}
+.c-item{display:flex;flex-direction:column;gap:6px}
+.c-item .mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--szalwia)}
+.c-item a{font-size:16px;color:var(--sygnal);text-decoration:none;word-break:break-word}
+.c-item a:hover{text-decoration:underline}
+</style>

@@ -1,0 +1,372 @@
+---
+export const prerender = false;
+import { readSession } from '../lib/panel-auth';
+
+const zalogowany = readSession(Astro.cookies);
+const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy skonfigurowano
+---
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Panel · Michał bez Stresu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Schibsted+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root{--mgla:#EDF1EF;--papier:#FFF;--atrament:#1E2B28;--szalwia:#7C9E8E;--sygnal:#2E6B5D;--sygnal-c:#245549;--marker:#FFE9A3;--linia:#D8E0DC;--mono:'IBM Plex Mono',monospace;--disp:'Spectral',serif;--body:'Schibsted Grotesk',sans-serif}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:var(--body);background:var(--mgla);color:var(--atrament);line-height:1.55;-webkit-font-smoothing:antialiased}
+    a{color:var(--sygnal)}
+    .wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+    .mono{font-family:var(--mono)}
+    /* --- login --- */
+    .login{min-height:100vh;display:grid;place-items:center;padding:24px}
+    .login-card{background:var(--papier);border:1px solid var(--linia);border-radius:16px;padding:40px 36px;max-width:400px;width:100%}
+    .login-card .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--sygnal);margin-bottom:10px}
+    .login-card h1{font-family:var(--disp);font-weight:500;font-size:26px;margin-bottom:6px}
+    .login-card p{font-size:14px;color:#5E6E68;margin-bottom:22px}
+    .login-card input{width:100%;padding:14px;border-radius:9px;border:1.5px solid var(--linia);font-size:16px;font-family:var(--body);margin-bottom:14px}
+    .login-card input:focus-visible{outline:3px solid var(--sygnal);outline-offset:1px;border-color:var(--sygnal)}
+    .btn{display:inline-block;width:100%;text-align:center;font-family:var(--body);font-weight:700;font-size:16px;padding:14px 22px;border-radius:9px;border:none;cursor:pointer;background:var(--sygnal);color:#fff;transition:background .2s}
+    .btn:hover{background:var(--sygnal-c)}
+    .err{color:#B23A3A;font-size:13.5px;margin-top:4px;min-height:18px}
+    /* --- top bar --- */
+    .top{background:var(--sygnal);color:#F2F7F5;padding:14px 0}
+    .top-in{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{font-family:var(--disp);font-weight:600;font-size:19px;color:#fff}
+    .brand span{color:var(--marker)}
+    .top .mono{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#Bfe0d8;opacity:.85}
+    .logout{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#F2F7F5;font-size:13px;padding:8px 14px;border-radius:8px;cursor:pointer;font-family:var(--body)}
+    .logout:hover{background:rgba(255,255,255,.2)}
+    /* --- layout --- */
+    main{padding:28px 0 80px}
+    .warn{background:var(--marker);color:#6B5A14;border-radius:10px;padding:14px 18px;font-size:14px;margin-bottom:22px}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px}
+    @media(max-width:820px){.kpis{grid-template-columns:1fr 1fr}}
+    .kpi{background:var(--papier);border:1px solid var(--linia);border-radius:12px;padding:18px 20px}
+    .kpi .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--szalwia)}
+    .kpi .val{font-family:var(--disp);font-size:32px;line-height:1.1;margin-top:6px}
+    .kpi .val small{font-size:14px;color:#7C9E8E}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--papier);border:1px solid var(--linia);border-radius:14px;padding:22px 22px 24px}
+    .card.full{grid-column:1/-1}
+    .card h2{font-family:var(--disp);font-weight:500;font-size:20px;margin-bottom:2px}
+    .card .hint{font-size:13px;color:#7C9E8E;margin-bottom:16px}
+    /* kanban */
+    .kanban{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media(max-width:700px){.kanban{grid-template-columns:1fr}}
+    .col{background:var(--mgla);border-radius:10px;padding:10px}
+    .col h3{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--sygnal);margin:4px 4px 10px;display:flex;justify-content:space-between}
+    .task{background:var(--papier);border:1px solid var(--linia);border-radius:8px;padding:10px 11px;margin-bottom:8px;font-size:14px}
+    .task .who{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--szalwia);display:block;margin-bottom:4px}
+    .task .row{display:flex;gap:6px;margin-top:8px}
+    .mini{font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--linia);background:#fff;cursor:pointer;font-family:var(--body);color:var(--sygnal)}
+    .mini:hover{background:var(--mgla)}
+    .mini.del{color:#B23A3A;margin-left:auto}
+    /* lists */
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    th{text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--szalwia);font-weight:500;padding:6px 8px;border-bottom:1px solid var(--linia)}
+    td{padding:9px 8px;border-bottom:1px solid var(--linia);vertical-align:middle}
+    tr:last-child td{border-bottom:none}
+    .pill{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:99px;white-space:nowrap}
+    .p-pomysl,.p-szkic{background:var(--mgla);color:#5E6E68}
+    .p-wprodukcji,.p-wpisaniu{background:var(--marker);color:#6B5A14}
+    .p-zaplanowane{background:rgba(46,107,93,.12);color:var(--sygnal)}
+    .p-opublikowane,.p-gotowy{background:var(--sygnal);color:#fff}
+    .bar{height:7px;background:var(--mgla);border-radius:99px;overflow:hidden;margin-top:5px}
+    .bar>i{display:block;height:100%;background:var(--sygnal)}
+    /* add row */
+    .add{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+    .add input,.add select{padding:9px 11px;border:1.5px solid var(--linia);border-radius:8px;font-size:13.5px;font-family:var(--body)}
+    .add input{flex:1;min-width:140px}
+    .add .btn{width:auto;padding:9px 16px;font-size:14px}
+    .empty{font-size:13.5px;color:#7C9E8E;padding:10px 4px}
+    select{font-family:var(--body)}
+  </style>
+</head>
+<body>
+
+{!zalogowany ? (
+  <div class="login">
+    <form class="login-card" id="loginForm">
+      <div class="eyebrow">Panel · dostęp prywatny</div>
+      <h1>Michał <span style="color:var(--sygnal)">bez Stresu</span></h1>
+      <p>Centrum zarządzania: zadania, publikacje, książka, lejek.</p>
+      <input id="pw" type="password" placeholder="Hasło" autocomplete="current-password" required />
+      <button class="btn" type="submit">Wejdź</button>
+      <div class="err" id="loginErr"></div>
+    </form>
+  </div>
+
+  <script>
+    const f = document.getElementById('loginForm');
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const err = document.getElementById('loginErr');
+      err.textContent = '';
+      const password = (document.getElementById('pw')).value;
+      const r = await fetch('/api/panel/login', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      if (r.ok) { location.reload(); }
+      else { const d = await r.json().catch(() => ({})); err.textContent = d.error || 'Błąd logowania.'; }
+    });
+  </script>
+) : (
+  <>
+    <div class="top">
+      <div class="wrap top-in">
+        <div>
+          <div class="brand">Michał <span>bez Stresu</span></div>
+          <div class="mono">Command Center</div>
+        </div>
+        <button class="logout" id="logoutBtn">Wyloguj</button>
+      </div>
+    </div>
+
+    <main>
+      <div class="wrap">
+        {!envOk && (
+          <div class="warn">
+            ⚠️ Wygląda na to, że Supabase nie jest jeszcze podłączony (brak zmiennych env).
+            Panel się zaloguje, ale dane nie będą się ładować, dopóki nie ustawisz env i nie uruchomisz
+            <b> SUPABASE_PANEL.sql</b>. Instrukcja: <b>PANEL_SETUP.md</b>.
+          </div>
+        )}
+
+        <div class="kpis" id="kpis">
+          <div class="kpi"><div class="lbl">Zadania otwarte</div><div class="val" id="kZad">—</div></div>
+          <div class="kpi"><div class="lbl">Zaplanowane publikacje</div><div class="val" id="kPub">—</div></div>
+          <div class="kpi"><div class="lbl">Rozdziały gotowe</div><div class="val" id="kRoz">—</div></div>
+          <div class="kpi"><div class="lbl">Subskrybenci</div><div class="val" id="kSub">—</div></div>
+        </div>
+
+        <div class="grid">
+          <!-- ZADANIA -->
+          <section class="card full">
+            <h2>Zadania</h2>
+            <div class="hint">Przeciąganie zastąpione przyciskami — klik przesuwa status. Klaudiusz może dodawać zadania przez API.</div>
+            <div class="kanban" id="kanban">
+              <div class="col" data-col="todo"><h3>Do zrobienia <span id="cntTodo">0</span></h3><div class="col-body" id="colTodo"></div></div>
+              <div class="col" data-col="inprogress"><h3>W toku <span id="cntProg">0</span></h3><div class="col-body" id="colProg"></div></div>
+              <div class="col" data-col="done"><h3>Zrobione <span id="cntDone">0</span></h3><div class="col-body" id="colDone"></div></div>
+            </div>
+            <div class="add">
+              <input id="zTresc" placeholder="Nowe zadanie…" maxlength="500" />
+              <select id="zOwner">
+                <option value="mike">mike</option>
+                <option value="marcin">marcin</option>
+                <option value="klaudiusz">klaudiusz</option>
+                <option value="team">team</option>
+              </select>
+              <button class="btn" id="zAdd">Dodaj</button>
+            </div>
+          </section>
+
+          <!-- PUBLIKACJE -->
+          <section class="card">
+            <h2>Kalendarz publikacji</h2>
+            <div class="hint">Pomysł → w produkcji → zaplanowane → opublikowane.</div>
+            <table><thead><tr><th>Tytuł</th><th>Kanał</th><th>Data</th><th>Status</th><th></th></tr></thead>
+              <tbody id="pubBody"></tbody></table>
+            <div class="add">
+              <input id="pTytul" placeholder="Tytuł publikacji…" maxlength="300" />
+              <select id="pPlat"><option value="yt">YT</option><option value="tt">TT</option><option value="ig">IG</option><option value="fb">FB</option><option value="newsletter">Newsletter</option><option value="blog">Blog</option></select>
+              <input id="pData" type="date" />
+              <button class="btn" id="pAdd">Dodaj</button>
+            </div>
+          </section>
+
+          <!-- ROZDZIAŁY -->
+          <section class="card">
+            <h2>Książka — rozdziały</h2>
+            <div class="hint">Postęp = udział rozdziałów „gotowych”.</div>
+            <div class="bar"><i id="bookBar" style="width:0%"></i></div>
+            <table style="margin-top:12px"><thead><tr><th>#</th><th>Rozdział</th><th>Słowa</th><th>Status</th><th></th></tr></thead>
+              <tbody id="rozBody"></tbody></table>
+            <div class="add">
+              <input id="rNr" type="number" min="1" placeholder="#" style="max-width:64px;flex:0" />
+              <input id="rTytul" placeholder="Tytuł rozdziału…" maxlength="300" />
+              <button class="btn" id="rAdd">Dodaj</button>
+            </div>
+          </section>
+
+          <!-- LEJEK -->
+          <section class="card full">
+            <h2>Lejek — wzrost listy mailowej</h2>
+            <div class="hint">Dodawaj wpis co jakiś czas (np. co tydzień) z aktualną liczbą subskrybentów.</div>
+            <table><thead><tr><th>Data</th><th>Subskrybenci</th><th>Przyrost</th><th>Notatka</th><th></th></tr></thead>
+              <tbody id="lejBody"></tbody></table>
+            <div class="add">
+              <input id="lData" type="date" style="flex:0" />
+              <input id="lSub" type="number" min="0" placeholder="Łącznie" style="max-width:120px;flex:0" />
+              <input id="lNowi" type="number" placeholder="Nowi" style="max-width:100px;flex:0" />
+              <input id="lNota" placeholder="Notatka (opcjonalnie)" />
+              <button class="btn" id="lAdd">Dodaj</button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const $ = (id) => document.getElementById(id);
+      const api = async (path, method = 'GET', body) => {
+        const opt = { method, headers: {} };
+        if (body) { opt.headers['Content-Type'] = 'application/json'; opt.body = JSON.stringify(body); }
+        const r = await fetch('/api/panel/' + path, opt);
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(d.error || ('HTTP ' + r.status));
+        return d;
+      };
+      const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+      $('logoutBtn').addEventListener('click', async () => {
+        await fetch('/api/panel/logout', { method: 'POST' });
+        location.reload();
+      });
+
+      // ---------- ZADANIA ----------
+      async function loadZadania() {
+        let items = [];
+        try { items = (await api('zadania')).items; } catch (e) { return; }
+        const cols = { todo: $('colTodo'), inprogress: $('colProg'), done: $('colDone') };
+        Object.values(cols).forEach((c) => (c.innerHTML = ''));
+        const cnt = { todo: 0, inprogress: 0, done: 0 };
+        items.forEach((t) => {
+          cnt[t.status]++;
+          const prev = t.status === 'inprogress' ? 'todo' : t.status === 'done' ? 'inprogress' : null;
+          const next = t.status === 'todo' ? 'inprogress' : t.status === 'inprogress' ? 'done' : null;
+          const el = document.createElement('div');
+          el.className = 'task';
+          el.innerHTML =
+            '<span class="who">' + esc(t.owner) + '</span>' + esc(t.tresc) +
+            '<div class="row">' +
+            (prev ? '<button class="mini" data-move="' + t.id + ':' + prev + '">←</button>' : '') +
+            (next ? '<button class="mini" data-move="' + t.id + ':' + next + '">→</button>' : '') +
+            '<button class="mini del" data-del="' + t.id + '">usuń</button></div>';
+          cols[t.status].appendChild(el);
+        });
+        $('cntTodo').textContent = cnt.todo; $('cntProg').textContent = cnt.inprogress; $('cntDone').textContent = cnt.done;
+        $('kZad').innerHTML = (cnt.todo + cnt.inprogress) + ' <small>/ ' + items.length + '</small>';
+      }
+      $('kanban').addEventListener('click', async (e) => {
+        const mv = e.target.getAttribute?.('data-move');
+        const dl = e.target.getAttribute?.('data-del');
+        if (mv) { const [id, status] = mv.split(':'); await api('zadania', 'PATCH', { id: +id, status }); loadZadania(); }
+        if (dl) { await api('zadania?id=' + dl, 'DELETE'); loadZadania(); }
+      });
+      $('zAdd').addEventListener('click', async () => {
+        const tresc = $('zTresc').value.trim(); if (tresc.length < 2) return;
+        await api('zadania', 'POST', { tresc, owner: $('zOwner').value });
+        $('zTresc').value = ''; loadZadania();
+      });
+
+      // ---------- PUBLIKACJE ----------
+      const PLAT = { yt: 'YouTube', tt: 'TikTok', ig: 'Instagram', fb: 'Facebook', newsletter: 'Newsletter', blog: 'Blog' };
+      const NEXT_PUB = { pomysl: 'wprodukcji', wprodukcji: 'zaplanowane', zaplanowane: 'opublikowane', opublikowane: 'opublikowane' };
+      async function loadPub() {
+        let items = [];
+        try { items = (await api('publikacje')).items; } catch (e) { return; }
+        const b = $('pubBody'); b.innerHTML = '';
+        if (!items.length) b.innerHTML = '<tr><td colspan="5" class="empty">Brak publikacji.</td></tr>';
+        items.forEach((p) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td>' + esc(p.tytul) + '</td>' +
+            '<td>' + (PLAT[p.platforma] || p.platforma) + '</td>' +
+            '<td>' + (p.data_pub || '—') + '</td>' +
+            '<td><button class="pill p-' + p.status + '" data-cyc="' + p.id + ':' + NEXT_PUB[p.status] + '">' + p.status + '</button></td>' +
+            '<td><button class="mini del" data-delp="' + p.id + '">usuń</button></td>';
+          b.appendChild(tr);
+        });
+        $('kPub').textContent = items.filter((p) => p.status === 'zaplanowane').length;
+      }
+      $('pubBody').addEventListener('click', async (e) => {
+        const cy = e.target.getAttribute?.('data-cyc');
+        const dl = e.target.getAttribute?.('data-delp');
+        if (cy) { const [id, status] = cy.split(':'); await api('publikacje', 'PATCH', { id: +id, status }); loadPub(); }
+        if (dl) { await api('publikacje?id=' + dl, 'DELETE'); loadPub(); }
+      });
+      $('pAdd').addEventListener('click', async () => {
+        const tytul = $('pTytul').value.trim(); if (tytul.length < 2) return;
+        await api('publikacje', 'POST', { tytul, platforma: $('pPlat').value, data_pub: $('pData').value || null, status: 'pomysl' });
+        $('pTytul').value = ''; $('pData').value = ''; loadPub();
+      });
+
+      // ---------- ROZDZIAŁY ----------
+      const NEXT_ROZ = { szkic: 'wpisaniu', wpisaniu: 'gotowy', gotowy: 'szkic' };
+      async function loadRoz() {
+        let items = [];
+        try { items = (await api('rozdzialy')).items; } catch (e) { return; }
+        const b = $('rozBody'); b.innerHTML = '';
+        if (!items.length) b.innerHTML = '<tr><td colspan="5" class="empty">Brak rozdziałów.</td></tr>';
+        items.forEach((r) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td class="mono">' + r.nr + '</td>' +
+            '<td>' + esc(r.tytul) + '</td>' +
+            '<td class="mono">' + (r.slowa || 0) + '</td>' +
+            '<td><button class="pill p-' + r.status + '" data-cycr="' + r.id + ':' + NEXT_ROZ[r.status] + '">' + r.status + '</button></td>' +
+            '<td><button class="mini del" data-delr="' + r.id + '">usuń</button></td>';
+          b.appendChild(tr);
+        });
+        const gotowe = items.filter((r) => r.status === 'gotowy').length;
+        $('kRoz').innerHTML = gotowe + ' <small>/ ' + items.length + '</small>';
+        $('bookBar').style.width = (items.length ? Math.round((gotowe / items.length) * 100) : 0) + '%';
+      }
+      $('rozBody').addEventListener('click', async (e) => {
+        const cy = e.target.getAttribute?.('data-cycr');
+        const dl = e.target.getAttribute?.('data-delr');
+        if (cy) { const [id, status] = cy.split(':'); await api('rozdzialy', 'PATCH', { id: +id, status }); loadRoz(); }
+        if (dl) { await api('rozdzialy?id=' + dl, 'DELETE'); loadRoz(); }
+      });
+      $('rAdd').addEventListener('click', async () => {
+        const nr = +$('rNr').value; const tytul = $('rTytul').value.trim();
+        if (!nr || tytul.length < 1) return;
+        await api('rozdzialy', 'POST', { nr, tytul, status: 'szkic', slowa: 0 });
+        $('rNr').value = ''; $('rTytul').value = ''; loadRoz();
+      });
+
+      // ---------- LEJEK ----------
+      async function loadLejek() {
+        let items = [];
+        try { items = (await api('lejek')).items; } catch (e) { return; }
+        const b = $('lejBody'); b.innerHTML = '';
+        if (!items.length) b.innerHTML = '<tr><td colspan="5" class="empty">Brak wpisów.</td></tr>';
+        [...items].reverse().forEach((l) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td class="mono">' + l.data + '</td>' +
+            '<td><b>' + l.subskrybenci + '</b></td>' +
+            '<td class="mono">' + (l.nowi >= 0 ? '+' : '') + l.nowi + '</td>' +
+            '<td>' + esc(l.notatka || '—') + '</td>' +
+            '<td><button class="mini del" data-dell="' + l.id + '">usuń</button></td>';
+          b.appendChild(tr);
+        });
+        const last = items[items.length - 1];
+        $('kSub').textContent = last ? last.subskrybenci : 0;
+      }
+      $('lejBody').addEventListener('click', async (e) => {
+        const dl = e.target.getAttribute?.('data-dell');
+        if (dl) { await api('lejek?id=' + dl, 'DELETE'); loadLejek(); }
+      });
+      $('lAdd').addEventListener('click', async () => {
+        const sub = +$('lSub').value; if (!Number.isInteger(sub)) return;
+        await api('lejek', 'POST', { subskrybenci: sub, nowi: +$('lNowi').value || 0, data: $('lData').value || undefined, notatka: $('lNota').value || undefined });
+        $('lSub').value = ''; $('lNowi').value = ''; $('lNota').value = ''; $('lData').value = ''; loadLejek();
+      });
+
+      // init
+      loadZadania(); loadPub(); loadRoz(); loadLejek();
+    </script>
+  </>
+)}
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Stopka from '../components/Stopka.astro';
+
+const rozdzialy = [
+  { nr: '01', t: 'Pierwszy dzień, pierwsze zasady', d: 'Czego nikt Ci nie powie na onboardingu — jak naprawdę działa firma i gdzie są prawdziwe reguły gry.' },
+  { nr: '02', t: 'Feedback, który nie niszczy', d: 'Jak słuchać oceny bez paniki, jak oddzielić fakt od emocji i co odpowiedzieć, gdy uwaga jest niesprawiedliwa.' },
+  { nr: '03', t: 'Ocena roczna bez dramatu', d: 'Przygotowanie, rozmowa, ustalenia. Jak wejść z konkretami i wyjść z jasnym planem, a nie z niepokojem.' },
+  { nr: '04', t: 'Plan naprawczy (PIP) na spokojnie', d: 'Co to naprawdę oznacza, jak czytać kryteria i jak przejść przez ten czas z podniesioną głową.' },
+  { nr: '05', t: 'Gdy robi się nieprzyjemnie', d: 'Granica między trudnym szefem a sytuacją, której nie wolno tolerować. Jak dokumentować i gdzie szukać wsparcia.' },
+  { nr: '06', t: 'Stres, który nie zjada wieczorów', d: 'Praktyczne sposoby na odcięcie się od pracy po godzinach — bez coachingowych sloganów.' },
+  { nr: '07', t: 'Odejście z klasą', d: 'Kiedy warto zostać, kiedy iść, i jak zamknąć rozdział tak, by móc wrócić po dobre referencje.' },
+];
+---
+<Layout
+  title="Korporacja bez stresu — książka | Michał bez Stresu"
+  description="Książka o tym, jak naprawdę działa korporacja: feedback, ocena roczna, plan naprawczy, trudne rozmowy — i jak przejść przez to z podniesioną głową. Zapisz się po fragmenty przedpremierowe."
+>
+  <Nav />
+
+  <header class="phead">
+    <div class="wrap">
+      <div class="eyebrow">Książka · w przygotowaniu</div>
+      <h1>Korporacja bez stresu</h1>
+      <p class="lead">Praktyczny przewodnik po trudnych sytuacjach w pracy — feedback, oceny,
+        plan naprawczy, eskalacje, odejścia. Napisany przez praktyka, nie przez teoretyka.
+        Bez motywacyjnych sloganów. Konkret, spokój, po Twojej stronie.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="/#checklista">Chcę fragmenty przedpremierowe</a>
+        <span class="cta-note">Zapisani na newsletter dostają rozdziały jako pierwsi — za darmo.</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="eyebrow">Dla kogo</div>
+      <h2>Jeśli poznajesz choć jedno zdanie — to książka dla Ciebie</h2>
+      <div class="quotes">
+        <blockquote>„Dostałem feedback i do wieczora nie mogłem się pozbierać.”</blockquote>
+        <blockquote>„Boję się oceny rocznej, choć robię swoje dobrze.”</blockquote>
+        <blockquote>„Nie wiem, czy to, co się dzieje, jest jeszcze normalne.”</blockquote>
+        <blockquote>„Chcę odejść, ale bez palenia mostów.”</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">Co w środku</div>
+      <h2>Siedem rozdziałów, siedem trudnych momentów</h2>
+      <p class="sub">Każdy rozdział to jedna sytuacja rozłożona na czynniki pierwsze:
+        co się dzieje, dlaczego, i co możesz zrobić krok po kroku. Spis jest roboczy
+        i może się jeszcze zmienić.</p>
+      <ol class="chapters">
+        {rozdzialy.map((r) => (
+          <li>
+            <span class="cnr">{r.nr}</span>
+            <div>
+              <h3>{r.t}</h3>
+              <p>{r.d}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="band author">
+    <div class="wrap author-in">
+      <div>
+        <div class="eyebrow">Autor</div>
+        <h2>20 lat w korporacji. Znam zasady gry i uczę w nią grać.</h2>
+        <p class="sub">Przeszedłem przez feedbacki, oceny, plany naprawcze, reorganizacje
+          i trudne rozstania — z obu stron stołu. Piszę o tym, co przeżyłem i czego
+          nauczyłem innych, w formie, którą sam chciałbym dostać na początku drogi.</p>
+        <a class="btn btn-ghost" href="/#omnie">Poznaj mnie bliżej</a>
+      </div>
+      <div class="badge">
+        <span class="mono">notatka służbowa</span>
+        <p>„Nie napiszę Ci, że w korporacji jest łatwo.<br/>Napiszę, jak przejść przez trudne
+          momenty tak, żeby nie kosztowały Cię zdrowia.”</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="wrap">
+      <h2>Bądź pierwszy, gdy ruszy przedsprzedaż</h2>
+      <p class="sub">Zapisz się na listę — dostaniesz darmowe fragmenty, informację o premierze
+        i specjalną cenę dla subskrybentów. Zero spamu, wypisujesz się jednym kliknięciem.</p>
+      <a class="btn btn-primary" href="/#checklista">Zapisz mnie na listę</a>
+    </div>
+  </section>
+
+  <Stopka />
+</Layout>
+
+<style>
+.phead{padding:72px 0 60px;background:linear-gradient(180deg,var(--mgla),var(--papier))}
+.phead h1{font-family:var(--disp);font-weight:500;font-size:clamp(34px,5.5vw,58px);line-height:1.1;margin-bottom:18px}
+.phead .lead{font-size:clamp(17px,2.2vw,20px);color:#3C4A46;max-width:60ch}
+.cta-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:32px}
+.cta-note{font-size:14px;color:#5E6E68;max-width:34ch}
+.band{background:var(--papier);border-top:1px solid var(--linia);border-bottom:1px solid var(--linia)}
+.quotes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:36px}
+@media(max-width:680px){.quotes{grid-template-columns:1fr}}
+.quotes blockquote{background:var(--mgla);border-left:3px solid var(--szalwia);border-radius:0 10px 10px 0;padding:20px 22px;font-family:var(--disp);font-size:19px;color:var(--atrament)}
+.chapters{list-style:none;margin-top:40px;display:grid;gap:4px}
+.chapters li{display:flex;gap:22px;padding:22px 0;border-bottom:1px solid var(--linia)}
+.chapters li:last-child{border-bottom:none}
+.cnr{font-family:var(--mono);font-size:14px;color:var(--szalwia);padding-top:4px;min-width:34px}
+.chapters h3{font-size:21px;margin-bottom:6px}
+.chapters p{font-size:15.5px;color:#4A5A55;max-width:64ch}
+.author-in{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center}
+@media(max-width:820px){.author-in{grid-template-columns:1fr}}
+.badge{background:var(--sygnal);color:#F2F7F5;border-radius:14px;padding:30px 28px}
+.badge .mono{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--marker);display:block;margin-bottom:14px}
+.badge p{font-family:var(--disp);font-size:20px;line-height:1.45}
+.closing{text-align:center}
+.closing .sub{margin:0 auto 28px}
+.closing h2{margin-bottom:14px}
+</style>
