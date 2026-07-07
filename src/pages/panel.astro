@@ -15,6 +15,14 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Schibsted+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- PWA: apka na telefon (Dodaj do ekranu głównego) -->
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#2E6B5D" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="MbS Panel" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <style>
     :root{--mgla:#EDF1EF;--papier:#FFF;--atrament:#1E2B28;--szalwia:#7C9E8E;--sygnal:#2E6B5D;--sygnal-c:#245549;--marker:#FFE9A3;--linia:#D8E0DC;--mono:'IBM Plex Mono',monospace;--disp:'Spectral',serif;--body:'Schibsted Grotesk',sans-serif}
     *{margin:0;padding:0;box-sizing:border-box}
