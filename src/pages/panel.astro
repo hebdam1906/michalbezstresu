@@ -110,7 +110,7 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
     </form>
   </div>
 
-  <script>
+  <script is:inline>
     const f = document.getElementById('loginForm');
     f.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -222,7 +222,7 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
       </div>
     </main>
 
-    <script>
+    <script is:inline>
       const $ = (id) => document.getElementById(id);
       const api = async (path, method = 'GET', body) => {
         const opt = { method, headers: {} };
