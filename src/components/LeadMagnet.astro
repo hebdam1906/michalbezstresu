@@ -11,31 +11,22 @@
       </ul>
     </div>
 
-    <!--
-      ▼▼▼ MIEJSCE NA EMBED MAILERLITE ▼▼▼
-      MailerLite → Forms → Embedded → skopiuj kod i wklej PONIŻEJ,
-      a cały <form class="form"> usuń. Style embedu nadpisz w MailerLite
-      (kolory: przycisk #FFE9A3, tekst #1E2B28).
-    -->
-    <form class="form" id="ml-placeholder">
-      <label for="imie">Imię</label>
-      <input id="imie" type="text" placeholder="Michał" required />
-      <label for="email">Adres e-mail</label>
-      <input id="email" type="email" placeholder="twoj@email.pl" required />
-      <button class="btn" type="submit">Wyślij mi checklistę</button>
-      <small>Zapisując się dołączasz do newslettera. Możesz wypisać się jednym kliknięciem. Bez spamu.</small>
-    </form>
+    <!-- Formularz MailerLite (embedded) — konto 2494941, formularz by0euU -->
+    <div class="form-embed">
+      <div class="ml-embedded" data-form="by0euU"></div>
+    </div>
   </div>
 </section>
 
-<script>
-  // Placeholder do czasu wklejenia embedu MailerLite
-  document.getElementById('ml-placeholder')?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    e.currentTarget.innerHTML =
-      "<p style='font-size:17px;font-weight:700'>Dziękuję! Sprawdź skrzynkę — checklista jest w drodze. 📄</p>";
-  });
+<!-- MailerLite Universal -->
+<script is:inline>
+  (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+  .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+  n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+  (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+  ml('account', '2494941');
 </script>
+<!-- End MailerLite Universal -->
 
 <style>
 .lead{background:var(--sygnal);color:#F2F7F5}
