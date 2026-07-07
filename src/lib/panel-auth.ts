@@ -23,8 +23,8 @@ const COOKIE_TTL_DAYS = 30;
 /** Porównanie hasła w czasie stałym (ochrona przed timing-attack). */
 export function checkPassword(input: string | undefined): boolean {
   if (!input || !PANEL_PASSWORD) return false;
-  const a = Buffer.from(input);
-  const b = Buffer.from(PANEL_PASSWORD);
+  const a = Buffer.from(input.trim());
+  const b = Buffer.from(PANEL_PASSWORD.trim());
   if (a.length !== b.length) return false;
   return crypto.timingSafeEqual(a, b);
 }
