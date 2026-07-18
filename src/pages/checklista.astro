@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+<Layout
+  title="Darmowa checklista: jak dokumentować trudne sytuacje w pracy | Michał bez Stresu"
+  description="Wzór notatki po trudnej rozmowie, 10 gotowych zdań odpowiedzi na niesprawiedliwy feedback i miejsce na dokumentację. Zapisz się — checklistę dostaniesz mailem."
+>
+  <main class="lp">
+    <div class="lp-wrap">
+      <div class="brand mono">Michał bez Stresu</div>
+
+      <div class="eyebrow">Bezpłatny materiał</div>
+      <h1>Checklista: jak dokumentować trudne sytuacje w pracy</h1>
+      <p class="sub">Firma dokumentuje wszystko od Twojego pierwszego dnia.
+        Ty masz do tego takie samo prawo.</p>
+
+      <ul class="benefits">
+        <li>Wzór notatki po trudnej rozmowie — 5 minut, które może być warte wszystko</li>
+        <li>10 gotowych zdań odpowiedzi na niesprawiedliwy feedback</li>
+        <li>Gdzie trzymać dokumentację (i dlaczego nie na służbowym laptopie)</li>
+      </ul>
+
+      <!-- Formularz MailerLite (embedded) — konto 2494941, formularz by0euU -->
+      <div class="form-embed">
+        <div class="ml-embedded" data-form="by0euU"></div>
+      </div>
+
+      <p class="fineprint">Zero spamu. Wypisujesz się jednym kliknięciem.</p>
+    </div>
+  </main>
+
+  <!-- MailerLite Universal -->
+  <script is:inline>
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '2494941');
+  </script>
+  <!-- End MailerLite Universal -->
+</Layout>
+
+<style>
+.lp{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:var(--sygnal);color:#F2F7F5;padding:56px 24px}
+.lp-wrap{width:100%;max-width:620px}
+.brand{font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--marker);margin-bottom:40px}
+.lp .eyebrow{color:var(--marker)}
+.lp h1{font-family:var(--disp);font-weight:500;color:#fff;
+  font-size:clamp(28px,5vw,44px);line-height:1.12;margin:6px 0 16px}
+.lp .sub{font-size:clamp(16px,2.2vw,19px);color:#CFE0DA;max-width:52ch}
+.benefits{list-style:none;margin:26px 0 34px}
+.benefits li{padding-left:30px;position:relative;margin-bottom:14px;font-size:16px}
+.benefits li::before{content:"✓";position:absolute;left:0;color:var(--marker);font-weight:700}
+.form-embed{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+  border-radius:12px;padding:26px 24px}
+.fineprint{margin-top:16px;font-size:12.5px;color:#B9CFC8;text-align:center}
+</style>
