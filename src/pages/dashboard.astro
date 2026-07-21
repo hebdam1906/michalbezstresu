@@ -1,0 +1,245 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Stopka from '../components/Stopka.astro';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DANE DASHBOARDU
+// Na start uzupełniane RĘCZNIE (wartości startowe = uczciwe zera).
+// Docelowo (Etap 4) podpinamy pod API i codzienny GitHub Action, wzorem
+// ztrybun.pl/dashboard:
+//   - lista:   MailerLite API (subscribers + przyrost)   → metryka główna
+//   - ruch:    Vercel Web Analytics (już wpięte w Layout) → wizyty + źródła
+//   - kanaly:  YouTube Data API / TikTok / IG Graph / FB Graph
+// Zmień liczby tutaj — reszta strony przeliczy się sama.
+// ─────────────────────────────────────────────────────────────────────────────
+const aktualizacja = '2026-07-21';
+
+const lista = {
+  subskrybenci: 0,        // realni subskrybenci (bez testów)
+  przyrostTydzien: 0,     // +/− w 7 dni  ← METRYKA GŁÓWNA
+  cel: 100,               // pierwszy cel listy
+};
+
+const ruch = {
+  wizyty7: 0,
+  zrodla: [
+    { nazwa: 'Bezpośrednie', v: 0 },
+    { nazwa: 'YouTube', v: 0 },
+    { nazwa: 'Facebook', v: 0 },
+    { nazwa: 'Instagram', v: 0 },
+    { nazwa: 'TikTok', v: 0 },
+  ],
+};
+
+const kanaly = [
+  {
+    nazwa: 'YouTube', handle: '@michalbezstresu',
+    url: 'https://www.youtube.com/@michalbezstresu',
+    metryki: [
+      { label: 'Subskrybenci', v: 0 },
+      { label: 'Wyświetlenia (28 dni)', v: 0 },
+    ],
+  },
+  {
+    nazwa: 'TikTok', handle: '@michalbezstresu.pl',
+    url: 'https://www.tiktok.com/@michalbezstresu.pl',
+    metryki: [
+      { label: 'Obserwujący', v: 0 },
+      { label: 'Polubienia', v: 0 },
+      { label: 'Filmy', v: 0 },
+    ],
+  },
+  {
+    nazwa: 'Instagram', handle: '@michalbezstresu',
+    url: 'https://www.instagram.com/michalbezstresu',
+    metryki: [
+      { label: 'Obserwujący', v: 0 },
+      { label: 'Posty', v: 0 },
+    ],
+  },
+  {
+    nazwa: 'Facebook', handle: 'michalbezstresu',
+    url: 'https://www.facebook.com/michalbezstresu',
+    metryki: [
+      { label: 'Obserwujący', v: 0 },
+      { label: 'Zasięg (28 dni)', v: 0 },
+    ],
+  },
+];
+
+// Lejek: wizyty → zapisy → konwersja
+const lejek = {
+  wizyty: ruch.wizyty7,
+  zapisy: lista.przyrostTydzien,
+};
+const konwersja = lejek.wizyty > 0
+  ? ((lejek.zapisy / lejek.wizyty) * 100).toFixed(1)
+  : '—';
+
+const fmt = (n: number) => n.toLocaleString('pl-PL');
+const procentCelu = Math.min(100, Math.round((lista.subskrybenci / lista.cel) * 100));
+---
+<Layout
+  title="Dashboard · Michał bez Stresu"
+  description="Panel metryk Michał bez Stresu — lista mailowa, ruch na stronie, kanały YouTube / TikTok / Instagram / Facebook."
+>
+  <Nav />
+
+  <header class="dhead">
+    <div class="wrap">
+      <div class="eyebrow">Panel metryk</div>
+      <h1>Dashboard</h1>
+      <p class="lead">Jeden ekran na całość: wzrost listy, ruch na stronie i kanały.
+        Metryka główna — <strong>przyrost listy mailowej na tydzień</strong>.</p>
+      <p class="stamp mono">Stan na {aktualizacja} · aktualizacja ręczna do czasu podpięcia API</p>
+    </div>
+  </header>
+
+  <!-- METRYKA GŁÓWNA -->
+  <section class="hero-metric">
+    <div class="wrap">
+      <div class="eyebrow">Metryka główna</div>
+      <div class="big-card">
+        <div class="big-main">
+          <span class="big-label mono">Lista mailowa — subskrybenci</span>
+          <span class="big-value">{fmt(lista.subskrybenci)}</span>
+          <span class={`delta ${lista.przyrostTydzien >= 0 ? 'up' : 'down'}`}>
+            {lista.przyrostTydzien >= 0 ? '↑' : '↓'} {lista.przyrostTydzien >= 0 ? '+' : ''}{fmt(lista.przyrostTydzien)} w 7 dni
+          </span>
+        </div>
+        <div class="big-goal">
+          <div class="goal-row"><span class="mono">Cel: {fmt(lista.cel)}</span><span class="mono">{procentCelu}%</span></div>
+          <div class="bar"><div class="bar-fill" style={`width:${procentCelu}%`}></div></div>
+          <p class="goal-hint">Wszystko na kanałach prowadzi tutaj. To jedyny kanał, którego nikt Ci nie zabierze.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RUCH NA STRONIE -->
+  <section class="band">
+    <div class="wrap">
+      <div class="eyebrow">Ruch na stronie</div>
+      <h2>michalbezstresu.pl</h2>
+      <p class="sub">Źródła wizyt z ostatnich 7 dni. Dane: Vercel Web Analytics.</p>
+      <div class="stat-grid">
+        <div class="stat big">
+          <span class="stat-ico">Wizyty (7 dni)</span>
+          <span class="stat-v">{fmt(ruch.wizyty7)}</span>
+        </div>
+        {ruch.zrodla.map((z) => (
+          <div class="stat">
+            <span class="stat-ico">{z.nazwa}</span>
+            <span class="stat-v">{fmt(z.v)}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- KANAŁY -->
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">Kanały</div>
+      <h2>Zasięgi platform</h2>
+      <p class="sub">Cztery platformy, jedna marka — ten sam handle, to samo zdjęcie, ten sam cel.</p>
+      <div class="kanaly">
+        {kanaly.map((k) => (
+          <a class="kanal" href={k.url} target="_blank" rel="noopener">
+            <div class="kanal-top">
+              <span class="kanal-nazwa">{k.nazwa}</span>
+              <span class="kanal-handle mono">{k.handle}</span>
+            </div>
+            <div class="kanal-metryki">
+              {k.metryki.map((m) => (
+                <div class="km">
+                  <span class="km-v">{fmt(m.v)}</span>
+                  <span class="km-l">{m.label}</span>
+                </div>
+              ))}
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- LEJEK -->
+  <section class="band">
+    <div class="wrap">
+      <div class="eyebrow">Lejek</div>
+      <h2>Od wizyty do zapisu</h2>
+      <p class="sub">Jeśli konwersja spada poniżej ~20% — poprawiamy landing, nie ruch.</p>
+      <div class="lejek">
+        <div class="lstep"><span class="lstep-v">{fmt(lejek.wizyty)}</span><span class="lstep-l">Wizyty (7 dni)</span></div>
+        <div class="larr">→</div>
+        <div class="lstep"><span class="lstep-v">{fmt(lejek.zapisy)}</span><span class="lstep-l">Zapisy (7 dni)</span></div>
+        <div class="larr">→</div>
+        <div class="lstep hi"><span class="lstep-v">{konwersja}{konwersja !== '—' ? '%' : ''}</span><span class="lstep-l">Konwersja</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="upd"><div class="wrap"><span class="mono">Ostatnia aktualizacja danych: {aktualizacja}</span></div></footer>
+
+  <Stopka />
+</Layout>
+
+<style>
+.dhead{padding:72px 0 44px;background:linear-gradient(180deg,var(--mgla),var(--papier))}
+.dhead h1{font-family:var(--disp);font-weight:500;font-size:clamp(34px,5.5vw,58px);line-height:1.1;margin-bottom:16px}
+.dhead .lead{font-size:clamp(17px,2.2vw,20px);color:#3C4A46;max-width:60ch}
+.dhead .stamp{margin-top:18px;font-size:12px;letter-spacing:.08em;color:#6B7B75}
+
+section{padding:56px 0}
+.band{background:var(--papier);border-top:1px solid var(--linia);border-bottom:1px solid var(--linia)}
+
+/* metryka główna */
+.hero-metric{padding-top:40px}
+.big-card{margin-top:18px;display:grid;grid-template-columns:1.1fr 1fr;gap:28px;background:var(--papier);border:1px solid var(--linia);border-left:4px solid var(--sygnal);border-radius:0 16px 16px 0;padding:34px 34px}
+@media(max-width:760px){.big-card{grid-template-columns:1fr;gap:22px}}
+.big-label{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--szalwia);margin-bottom:10px}
+.big-value{font-family:var(--disp);font-size:clamp(52px,9vw,84px);font-weight:600;line-height:1;color:var(--atrament);display:block}
+.delta{display:inline-block;margin-top:14px;font-family:var(--mono);font-size:14px;padding:5px 12px;border-radius:999px}
+.delta.up{background:rgba(46,107,93,.12);color:var(--sygnal-c)}
+.delta.down{background:rgba(180,70,70,.12);color:#9B3B3B}
+.big-goal{align-self:center}
+.goal-row{display:flex;justify-content:space-between;font-size:12px;letter-spacing:.08em;color:#5E6E68;margin-bottom:8px}
+.bar{height:12px;background:var(--mgla);border:1px solid var(--linia);border-radius:999px;overflow:hidden}
+.bar-fill{height:100%;background:var(--sygnal);border-radius:999px;min-width:2px}
+.goal-hint{margin-top:16px;font-size:14px;color:#5E6E68;line-height:1.5}
+
+/* stat grid (ruch) */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+@media(max-width:760px){.stat-grid{grid-template-columns:1fr 1fr}}
+.stat{background:var(--mgla);border:1px solid var(--linia);border-radius:12px;padding:20px}
+.stat.big{background:var(--marker);border-color:#E8CF7A}
+.stat-ico{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#5E6E68;margin-bottom:10px}
+.stat-v{font-family:var(--disp);font-size:32px;font-weight:600;color:var(--atrament)}
+
+/* kanały */
+.kanaly{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px}
+@media(max-width:760px){.kanaly{grid-template-columns:1fr}}
+.kanal{display:block;background:var(--papier);border:1px solid var(--linia);border-radius:14px;padding:24px;text-decoration:none;transition:border-color .2s,transform .15s}
+.kanal:hover{border-color:var(--szalwia);transform:translateY(-2px)}
+.kanal-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px;gap:12px}
+.kanal-nazwa{font-family:var(--disp);font-size:22px;font-weight:600;color:var(--atrament)}
+.kanal-handle{font-size:12px;color:var(--szalwia)}
+.kanal-metryki{display:flex;gap:26px;flex-wrap:wrap}
+.km{display:flex;flex-direction:column}
+.km-v{font-family:var(--disp);font-size:28px;font-weight:600;color:var(--sygnal)}
+.km-l{font-size:12px;color:#5E6E68;margin-top:2px}
+
+/* lejek */
+.lejek{display:flex;align-items:center;gap:16px;margin-top:30px;flex-wrap:wrap}
+.lstep{flex:1;min-width:120px;background:var(--papier);border:1px solid var(--linia);border-radius:12px;padding:22px;text-align:center}
+.lstep.hi{border-color:var(--sygnal);border-width:2px}
+.lstep-v{display:block;font-family:var(--disp);font-size:34px;font-weight:600;color:var(--atrament)}
+.lstep-l{display:block;font-size:12px;color:#5E6E68;margin-top:6px}
+.larr{font-family:var(--disp);font-size:26px;color:var(--szalwia)}
+@media(max-width:640px){.lejek{flex-direction:column}.larr{transform:rotate(90deg)}}
+
+.upd{padding:26px 0 60px;text-align:center}
+.upd .mono{font-size:12px;letter-spacing:.08em;color:#84948E}
+</style>
