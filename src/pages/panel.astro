@@ -49,6 +49,8 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
     .top .mono{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#Bfe0d8;opacity:.85}
     .logout{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#F2F7F5;font-size:13px;padding:8px 14px;border-radius:8px;cursor:pointer;font-family:var(--body)}
     .logout:hover{background:rgba(255,255,255,.2)}
+    a.logout{text-decoration:none;color:#F2F7F5;display:inline-block}
+    .top-akcje{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
     /* --- layout --- */
     main{padding:28px 0 80px}
     .warn{background:var(--marker);color:#6B5A14;border-radius:10px;padding:14px 18px;font-size:14px;margin-bottom:22px}
@@ -94,6 +96,19 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
     .add .btn{width:auto;padding:9px 16px;font-size:14px}
     .empty{font-size:13.5px;color:#7C9E8E;padding:10px 4px}
     select{font-family:var(--body)}
+    /* statystyki */
+    .card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    .card-head .mini{flex:0 0 auto;white-space:nowrap}
+    .sync-info{font-size:11px;color:var(--szalwia);margin-bottom:12px;min-height:15px}
+    .sync-info.err{color:#B23A3A}
+    .delta{font-family:var(--mono);font-size:12.5px}
+    .delta.up{color:var(--sygnal)}
+    .delta.flat{color:var(--szalwia)}
+    .delta.down{color:#B23A3A}
+    .lejek-kpi{display:flex;align-items:center;gap:14px;margin:6px 0 4px}
+    .lejek-kpi .lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--szalwia)}
+    .lejek-kpi .big{font-family:var(--disp);font-size:28px;line-height:1.2}
+    .lejek-kpi .arrow{color:var(--szalwia);font-size:18px}
   </style>
 </head>
 <body>
@@ -103,7 +118,7 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
     <form class="login-card" id="loginForm">
       <div class="eyebrow">Panel · dostęp prywatny</div>
       <h1>Michał <span style="color:var(--sygnal)">bez Stresu</span></h1>
-      <p>Centrum zarządzania: zadania, publikacje, książka, lejek.</p>
+      <p>Centrum zarządzania: zadania, publikacje, książka, lejek i statystyki.</p>
       <input id="pw" type="password" placeholder="Hasło" autocomplete="current-password" required />
       <button class="btn" type="submit">Wejdź</button>
       <div class="err" id="loginErr"></div>
@@ -133,7 +148,11 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
           <div class="brand">Michał <span>bez Stresu</span></div>
           <div class="mono">Command Center</div>
         </div>
-        <button class="logout" id="logoutBtn">Wyloguj</button>
+        <div class="top-akcje">
+          <a class="logout" href="#statystyki">Statystyki</a>
+          <a class="logout" href="/dashboard">Dashboard</a>
+          <button class="logout" id="logoutBtn">Wyloguj</button>
+        </div>
       </div>
     </div>
 
@@ -217,6 +236,68 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
               <input id="lNota" placeholder="Notatka (opcjonalnie)" />
               <button class="btn" id="lAdd">Dodaj</button>
             </div>
+          </section>
+
+          <!-- STATYSTYKI: KANAŁY -->
+          <section class="card full" id="statystyki">
+            <div class="card-head">
+              <div>
+                <h2>Statystyki kanałów</h2>
+                <div class="hint">Wzrost obserwujących dzień do dnia. Automat chodzi codziennie o 7:00; TikTok wpisujesz ręcznie.</div>
+              </div>
+              <button class="mini" id="syncBtn">Odśwież z API</button>
+            </div>
+            <div class="sync-info mono" id="syncInfo">—</div>
+            <table><thead><tr><th>Kanał</th><th>Obserwujący</th><th>+7 dni</th><th>Wyświetlenia</th><th>Aktualizacja</th></tr></thead>
+              <tbody id="statBody"></tbody></table>
+            <div class="add">
+              <select id="sPlat"><option value="tt">TikTok</option><option value="yt">YouTube</option><option value="ig">Instagram</option><option value="fb">Facebook</option><option value="newsletter">Newsletter</option></select>
+              <input id="sObs" type="number" min="0" placeholder="Obserwujący" style="max-width:150px;flex:0" />
+              <input id="sWysw" type="number" min="0" placeholder="Wyświetlenia" style="max-width:150px;flex:0" />
+              <button class="btn" id="sAdd">Zapisz na dziś</button>
+            </div>
+          </section>
+
+          <!-- STATYSTYKI: MATERIAŁY -->
+          <section class="card full">
+            <h2>Wyświetlenia per materiał</h2>
+            <div class="hint">Każdy short i odcinek osobno — widać, który temat chwycił.</div>
+            <table><thead><tr><th>Materiał</th><th>Kanał</th><th>Data</th><th>Wyświetlenia</th><th>Reakcje</th><th></th></tr></thead>
+              <tbody id="matBody"></tbody></table>
+            <div class="add">
+              <input id="mTytul" placeholder="Tytuł materiału…" maxlength="300" />
+              <select id="mPlat"><option value="tt">TT</option><option value="yt">YT</option><option value="ig">IG</option><option value="fb">FB</option></select>
+              <input id="mData" type="date" style="flex:0" />
+              <input id="mWysw" type="number" min="0" placeholder="Wyśw." style="max-width:110px;flex:0" />
+              <button class="btn" id="mAdd">Dodaj</button>
+            </div>
+          </section>
+
+          <!-- LEJEK DO CHECKLISTY -->
+          <section class="card">
+            <h2>Lejek do checklisty</h2>
+            <div class="hint">Wizyta → zapis. Poniżej ~20% konwersji poprawiamy landing, nie ruch.</div>
+            <div class="lejek-kpi">
+              <div><div class="lbl mono">Wizyty (7 dni)</div><div class="big" id="fWiz">—</div></div>
+              <div class="arrow">→</div>
+              <div><div class="lbl mono">Zapisy (7 dni)</div><div class="big" id="fZap">—</div></div>
+              <div class="arrow">→</div>
+              <div><div class="lbl mono">Konwersja</div><div class="big" id="fKon">—</div></div>
+            </div>
+            <div class="add">
+              <input id="fData" type="date" style="flex:0" />
+              <input id="fWizIn" type="number" min="0" placeholder="Wizyty" style="max-width:110px;flex:0" />
+              <input id="fZapIn" type="number" min="0" placeholder="Zapisy" style="max-width:110px;flex:0" />
+              <button class="btn" id="fAdd">Zapisz dzień</button>
+            </div>
+          </section>
+
+          <!-- ZAPISY NA NEWSLETTER -->
+          <section class="card">
+            <h2>Ostatnie zapisy na newsletter</h2>
+            <div class="hint">Na żywo z MailerLite. Adresy nie są kopiowane do naszej bazy.</div>
+            <table><thead><tr><th>E-mail</th><th>Imię</th><th>Data</th></tr></thead>
+              <tbody id="subBody"></tbody></table>
           </section>
         </div>
       </div>
@@ -370,8 +451,173 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
         $('lSub').value = ''; $('lNowi').value = ''; $('lNota').value = ''; $('lData').value = ''; loadLejek();
       });
 
+      // ---------- STATYSTYKI ----------
+      const KANAL = { yt: 'YouTube', tt: 'TikTok', ig: 'Instagram', fb: 'Facebook', newsletter: 'Newsletter' };
+      const KOLEJNOSC = ['yt', 'tt', 'ig', 'fb', 'newsletter'];
+
+      /** Ostatni snapshot każdej platformy + porównanie z wpisem sprzed ~7 dni. */
+      function zbierzKanaly(metryki) {
+        const wg = {};
+        metryki.forEach((m) => { (wg[m.platforma] ||= []).push(m); });
+        return KOLEJNOSC.map((p) => {
+          const seria = (wg[p] || []).sort((a, b) => a.data.localeCompare(b.data));
+          if (!seria.length) return { platforma: p, brak: true };
+          const teraz = seria[seria.length - 1];
+          const granica = new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10);
+          const starsze = seria.filter((s) => s.data <= granica);
+          const bazowy = starsze.length ? starsze[starsze.length - 1] : seria[0];
+          return {
+            platforma: p, brak: false, data: teraz.data,
+            obserwujacy: teraz.obserwujacy,
+            wyswietlenia: teraz.wyswietlenia_28,
+            delta: teraz.obserwujacy - bazowy.obserwujacy,
+          };
+        });
+      }
+
+      function rysujKanaly(metryki) {
+        const b = $('statBody'); b.innerHTML = '';
+        zbierzKanaly(metryki).forEach((k) => {
+          const tr = document.createElement('tr');
+          if (k.brak) {
+            tr.innerHTML = '<td>' + KANAL[k.platforma] + '</td>' +
+              '<td colspan="4" class="empty">Brak danych — wpisz poniżej albo odśwież z API.</td>';
+          } else {
+            const kl = k.delta > 0 ? 'up' : k.delta < 0 ? 'down' : 'flat';
+            tr.innerHTML =
+              '<td>' + KANAL[k.platforma] + '</td>' +
+              '<td><b>' + k.obserwujacy + '</b></td>' +
+              '<td class="delta ' + kl + '">' + (k.delta > 0 ? '+' : '') + k.delta + '</td>' +
+              '<td class="mono">' + (k.wyswietlenia || '—') + '</td>' +
+              '<td class="mono">' + k.data + '</td>';
+          }
+          b.appendChild(tr);
+        });
+      }
+
+      function rysujMaterialy(items) {
+        const b = $('matBody'); b.innerHTML = '';
+        if (!items.length) { b.innerHTML = '<tr><td colspan="6" class="empty">Brak materiałów.</td></tr>'; return; }
+        items.slice(0, 40).forEach((m) => {
+          const tr = document.createElement('tr');
+          const tytul = m.link
+            ? '<a href="' + esc(m.link) + '" target="_blank" rel="noopener">' + esc(m.tytul) + '</a>'
+            : esc(m.tytul);
+          tr.innerHTML =
+            '<td>' + tytul + '</td>' +
+            '<td>' + (KANAL[m.platforma] || m.platforma) + '</td>' +
+            '<td class="mono">' + (m.data_pub || '—') + '</td>' +
+            '<td><b>' + m.wyswietlenia + '</b></td>' +
+            '<td class="mono">' + (m.polubienia || 0) + ' ♥ · ' + (m.komentarze || 0) + ' 💬</td>' +
+            '<td><button class="mini del" data-delm="' + m.id + '">usuń</button></td>';
+          b.appendChild(tr);
+        });
+      }
+
+      function rysujLejek(ruch) {
+        const granica = new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10);
+        const ost = ruch.filter((r) => r.data > granica);
+        const wiz = ost.reduce((s, r) => s + (r.wizyty || 0), 0);
+        const zap = ost.reduce((s, r) => s + (r.zapisy || 0), 0);
+        $('fWiz').textContent = wiz || '—';
+        $('fZap').textContent = zap || '—';
+        $('fKon').textContent = wiz ? Math.round((zap / wiz) * 100) + '%' : '—';
+      }
+
+      function rysujSync(log) {
+        const el = $('syncInfo');
+        if (!log.length) { el.textContent = 'Automat jeszcze nie chodził.'; return; }
+        const ostatni = log[0];
+        const bledy = log.filter((l) => l.uruchomiono === ostatni.uruchomiono && l.status === 'blad');
+        const kiedy = String(ostatni.uruchomiono).replace('T', ' ').slice(0, 16);
+        el.className = 'sync-info mono' + (bledy.length ? ' err' : '');
+        el.textContent = bledy.length
+          ? 'Ostatnia synchronizacja ' + kiedy + ' — błędy: ' + bledy.map((b) => b.platforma + ' (' + b.szczegoly + ')').join(', ')
+          : 'Ostatnia synchronizacja: ' + kiedy;
+      }
+
+      async function loadStat() {
+        let d;
+        try { d = await api('statystyki'); } catch (e) { return; }
+        rysujKanaly(d.metryki || []);
+        rysujMaterialy(d.materialy || []);
+        rysujLejek(d.ruch || []);
+        rysujSync(d.sync || []);
+      }
+
+      $('matBody').addEventListener('click', async (e) => {
+        const dl = e.target.getAttribute?.('data-delm');
+        if (dl) { await api('statystyki?typ=material&id=' + dl, 'DELETE'); loadStat(); }
+      });
+
+      $('sAdd').addEventListener('click', async () => {
+        const obs = +$('sObs').value;
+        if (!Number.isInteger(obs)) return;
+        await api('statystyki', 'POST', {
+          typ: 'metryka', platforma: $('sPlat').value,
+          obserwujacy: obs, wyswietlenia_28: +$('sWysw').value || 0,
+        });
+        $('sObs').value = ''; $('sWysw').value = ''; loadStat();
+      });
+
+      $('mAdd').addEventListener('click', async () => {
+        const tytul = $('mTytul').value.trim(); if (tytul.length < 2) return;
+        await api('statystyki', 'POST', {
+          typ: 'material', tytul, platforma: $('mPlat').value,
+          data_pub: $('mData').value || null, wyswietlenia: +$('mWysw').value || 0,
+        });
+        $('mTytul').value = ''; $('mWysw').value = ''; loadStat();
+      });
+
+      $('fAdd').addEventListener('click', async () => {
+        const wiz = +$('fWizIn').value;
+        if (!Number.isInteger(wiz)) return;
+        await api('statystyki', 'POST', {
+          typ: 'ruch', data: $('fData').value || undefined,
+          wizyty: wiz, zapisy: +$('fZapIn').value || 0,
+        });
+        $('fWizIn').value = ''; $('fZapIn').value = ''; loadStat();
+      });
+
+      $('syncBtn').addEventListener('click', async () => {
+        const b = $('syncBtn'); const tekst = b.textContent;
+        b.disabled = true; b.textContent = 'Pobieram…';
+        try {
+          const d = await api('sync', 'POST');
+          const ok = (d.wyniki || []).filter((w) => w.status === 'ok').length;
+          $('syncInfo').className = 'sync-info mono';
+          $('syncInfo').textContent = 'Pobrano teraz — ' + ok + ' z ' + (d.wyniki || []).length + ' kanałów OK.';
+        } catch (e) {
+          $('syncInfo').className = 'sync-info mono err';
+          $('syncInfo').textContent = 'Błąd synchronizacji: ' + e.message;
+        }
+        b.disabled = false; b.textContent = tekst;
+        loadStat(); loadLejek();
+      });
+
+      // ---------- ZAPISY NA NEWSLETTER ----------
+      async function loadSubskrybenci() {
+        const b = $('subBody');
+        let d;
+        try { d = await api('subskrybenci?limit=15'); }
+        catch (e) {
+          b.innerHTML = '<tr><td colspan="3" class="empty">' + esc(e.message) + '</td></tr>';
+          return;
+        }
+        b.innerHTML = '';
+        if (!d.items.length) { b.innerHTML = '<tr><td colspan="3" class="empty">Brak zapisów.</td></tr>'; return; }
+        d.items.forEach((s) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td>' + esc(s.email) + '</td>' +
+            '<td>' + esc(s.imie || '—') + '</td>' +
+            '<td class="mono">' + (s.data || '—') + '</td>';
+          b.appendChild(tr);
+        });
+      }
+
       // init
-      loadZadania(); loadPub(); loadRoz(); loadLejek();
+      loadZadania(); loadPub(); loadRoz(); loadLejek(); loadStat(); loadSubskrybenci();
     </script>
   </>
 )}
