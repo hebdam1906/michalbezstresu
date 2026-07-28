@@ -151,3 +151,6 @@ curl -X POST https://michalbezstresu.pl/api/panel/sync \
   nie wpuszczała na `/dashboard`. To był powód, dla którego statystyk „nie było".
 - Każdy snapshot ma pole `zrodlo` (`api` / `reczne` / `chrome`) — widać,
   która liczba jest z automatu, a która z palca.
+
+
+https://open.spotify.com/track/2PLQtfIgNa0XCkUBtY3tg7

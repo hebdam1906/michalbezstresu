@@ -105,10 +105,6 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
     .delta.up{color:var(--sygnal)}
     .delta.flat{color:var(--szalwia)}
     .delta.down{color:#B23A3A}
-    /* archiwum — wiersz-przełącznik w tabeli publikacji + zwijana kolumna „Zrobione” */
-    #pubArchToggle{padding:9px 10px!important}
-    #pubArchToggle:hover{color:var(--sygnal)!important}
-    .pub-arch-item td{color:#6B7B76}
     .lejek-kpi{display:flex;align-items:center;gap:14px;margin:6px 0 4px}
     .lejek-kpi .lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--szalwia)}
     .lejek-kpi .big{font-family:var(--disp);font-size:28px;line-height:1.2}
@@ -185,7 +181,7 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
             <div class="kanban" id="kanban">
               <div class="col" data-col="todo"><h3>Do zrobienia <span id="cntTodo">0</span></h3><div class="col-body" id="colTodo"></div></div>
               <div class="col" data-col="inprogress"><h3>W toku <span id="cntProg">0</span></h3><div class="col-body" id="colProg"></div></div>
-              <div class="col" data-col="done"><h3 id="doneHeader" style="cursor:pointer;user-select:none">Zrobione <span id="cntDone">0</span> <span id="doneArrow" style="color:var(--szalwia)">▸</span></h3><div class="col-body" id="colDone"></div></div>
+              <div class="col" data-col="done"><h3>Zrobione <span id="cntDone">0</span></h3><div class="col-body" id="colDone"></div></div>
             </div>
             <div class="add">
               <input id="zTresc" placeholder="Nowe zadanie…" maxlength="500" />
@@ -347,20 +343,7 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
         });
         $('cntTodo').textContent = cnt.todo; $('cntProg').textContent = cnt.inprogress; $('cntDone').textContent = cnt.done;
         $('kZad').innerHTML = (cnt.todo + cnt.inprogress) + ' <small>/ ' + items.length + '</small>';
-        applyDoneCollapse();
       }
-      function applyDoneCollapse() {
-        const body = $('colDone'), arrow = $('doneArrow');
-        if (!body) return;
-        const open = localStorage.getItem('mbs_done_open') === '1';
-        body.style.display = open ? 'block' : 'none';
-        if (arrow) arrow.textContent = open ? '▾' : '▸';
-      }
-      $('doneHeader')?.addEventListener('click', () => {
-        const open = localStorage.getItem('mbs_done_open') === '1';
-        localStorage.setItem('mbs_done_open', open ? '0' : '1');
-        applyDoneCollapse();
-      });
       $('kanban').addEventListener('click', async (e) => {
         const mv = e.target.getAttribute?.('data-move');
         const dl = e.target.getAttribute?.('data-del');
@@ -379,39 +362,18 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
       async function loadPub() {
         let items = [];
         try { items = (await api('publikacje')).items; } catch (e) { return; }
-        const b = $('pubBody');
-        const pubRow = (p, arch) =>
-          '<tr' + (arch ? ' class="pub-arch-item"' : '') + '>' +
-          '<td>' + esc(p.tytul) + '</td>' +
-          '<td>' + (PLAT[p.platforma] || p.platforma) + '</td>' +
-          '<td>' + (p.data_pub || '—') + '</td>' +
-          '<td><button class="pill p-' + p.status + '" data-cyc="' + p.id + ':' + NEXT_PUB[p.status] + '">' + p.status + '</button></td>' +
-          '<td><button class="mini del" data-delp="' + p.id + '">usuń</button></td>' +
-          '</tr>';
-        const active = items.filter((p) => p.status !== 'opublikowane');
-        const arch = items.filter((p) => p.status === 'opublikowane');
-        if (!items.length) {
-          b.innerHTML = '<tr><td colspan="5" class="empty">Brak publikacji.</td></tr>';
-        } else {
-          let html = active.length
-            ? active.map((p) => pubRow(p)).join('')
-            : '<tr><td colspan="5" class="empty">Brak aktywnych — wszystko opublikowane. Zajrzyj do archiwum poniżej.</td></tr>';
-          if (arch.length) {
-            const open = localStorage.getItem('mbs_pub_arch') === '1';
-            html += '<tr><td colspan="5" id="pubArchToggle" style="cursor:pointer;user-select:none;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--szalwia);background:var(--mgla);border-radius:8px">📦 Archiwum — opublikowane (' + arch.length + ') <span id="pubArchArrow">' + (open ? '▾ zwiń' : '▸ pokaż') + '</span></td></tr>';
-            html += arch.map((p) => pubRow(p, true)).join('');
-          }
-          b.innerHTML = html;
-          const open = localStorage.getItem('mbs_pub_arch') === '1';
-          b.querySelectorAll('.pub-arch-item').forEach((r) => { r.style.display = open ? '' : 'none'; });
-          const tgl = $('pubArchToggle');
-          if (tgl) tgl.addEventListener('click', () => {
-            const nowOpen = localStorage.getItem('mbs_pub_arch') !== '1';
-            localStorage.setItem('mbs_pub_arch', nowOpen ? '1' : '0');
-            b.querySelectorAll('.pub-arch-item').forEach((r) => { r.style.display = nowOpen ? '' : 'none'; });
-            const a = $('pubArchArrow'); if (a) a.textContent = nowOpen ? '▾ zwiń' : '▸ pokaż';
-          });
-        }
+        const b = $('pubBody'); b.innerHTML = '';
+        if (!items.length) b.innerHTML = '<tr><td colspan="5" class="empty">Brak publikacji.</td></tr>';
+        items.forEach((p) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td>' + esc(p.tytul) + '</td>' +
+            '<td>' + (PLAT[p.platforma] || p.platforma) + '</td>' +
+            '<td>' + (p.data_pub || '—') + '</td>' +
+            '<td><button class="pill p-' + p.status + '" data-cyc="' + p.id + ':' + NEXT_PUB[p.status] + '">' + p.status + '</button></td>' +
+            '<td><button class="mini del" data-delp="' + p.id + '">usuń</button></td>';
+          b.appendChild(tr);
+        });
         $('kPub').textContent = items.filter((p) => p.status === 'zaplanowane').length;
       }
       $('pubBody').addEventListener('click', async (e) => {
