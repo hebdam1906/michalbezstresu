@@ -39,6 +39,38 @@ async function pobierz(url: string, opcje?: RequestInit): Promise<any> {
   return dane;
 }
 
+/**
+ * Liczba aktywnych subskrybentów MailerLite.
+ *
+ * ⚠️ `GET /api/subscribers` używa kursorowej paginacji i **nie zwraca `meta.total`**
+ * (meta ma tylko path, per_page, next_cursor, prev_cursor). Wcześniejsza wersja
+ * czytała `meta.total` i zawsze dostawała 0.
+ * Liczbę daje osobny wariant: `?limit=0` → `{ "total": N }` w korzeniu odpowiedzi.
+ * Gdyby MailerLite kiedyś zmienił kształt odpowiedzi, liczymy stronicowaniem.
+ */
+async function policzSubskrybentow(key: string): Promise<number> {
+  const naglowki = { Authorization: `Bearer ${key}`, Accept: 'application/json' };
+
+  const d = await pobierz(
+    'https://connect.mailerlite.com/api/subscribers?limit=0&filter[status]=active',
+    { headers: naglowki },
+  );
+  const total = Number(d?.total ?? d?.meta?.total ?? NaN);
+  if (Number.isFinite(total)) return total;
+
+  // fallback: przejście po stronach (przy naszej skali to jedno zapytanie)
+  let razem = 0;
+  let url = 'https://connect.mailerlite.com/api/subscribers?limit=500&filter[status]=active';
+  for (let strona = 0; strona < 40; strona++) {
+    const s = await pobierz(url, { headers: naglowki });
+    razem += (s?.data ?? []).length;
+    const kursor = s?.meta?.next_cursor;
+    if (!kursor) break;
+    url = `https://connect.mailerlite.com/api/subscribers?limit=500&filter[status]=active&cursor=${encodeURIComponent(kursor)}`;
+  }
+  return razem;
+}
+
 // ── MAILERLITE ──────────────────────────────────────────────────────────────
 // Zapisuje snapshot do panel_metryki oraz — dla ciągłości z Etapem 3 —
 // dopisuje wpis do istniejącej tabeli panel_lejek.
@@ -46,10 +78,7 @@ async function syncMailerLite(db: NonNullable<typeof supabaseAdmin>): Promise<Wy
   const key = process.env.MAILERLITE_API_KEY;
   if (!key) return { platforma: 'newsletter', status: 'pominieto', szczegoly: 'brak MAILERLITE_API_KEY' };
 
-  const d = await pobierz('https://connect.mailerlite.com/api/subscribers?limit=1&filter[status]=active', {
-    headers: { Authorization: `Bearer ${key}`, Accept: 'application/json' },
-  });
-  const razem = Number(d?.meta?.total ?? 0);
+  const razem = await policzSubskrybentow(key);
 
   await db.from('panel_metryki').upsert(
     { data: DZIS(), platforma: 'newsletter', obserwujacy: razem, zrodlo: 'api' },
@@ -122,7 +151,11 @@ async function syncYouTube(db: NonNullable<typeof supabaseAdmin>): Promise<Wynik
         zaktualizowano: new Date().toISOString(),
       }));
       if (wiersze.length) {
-        await db.from('panel_materialy').upsert(wiersze, { onConflict: 'platforma,external_id' });
+        // ⚠️ bez sprawdzenia `error` upsert potrafi cicho nie zapisać nic,
+        // a log i tak pokazuje „N filmów" — tak było przy indeksie częściowym.
+        const { error } = await db
+          .from('panel_materialy').upsert(wiersze, { onConflict: 'platforma,external_id' });
+        if (error) throw new Error(`zapis materiałów: ${error.message}`);
         filmy = wiersze.length;
       }
     }
@@ -198,7 +231,9 @@ async function syncInstagram(db: NonNullable<typeof supabaseAdmin>): Promise<Wyn
       zaktualizowano: new Date().toISOString(),
     }));
     if (wiersze.length) {
-      await db.from('panel_materialy').upsert(wiersze, { onConflict: 'platforma,external_id' });
+      const { error } = await db
+        .from('panel_materialy').upsert(wiersze, { onConflict: 'platforma,external_id' });
+      if (error) throw new Error(`zapis materiałów: ${error.message}`);
       posty = wiersze.length;
     }
   } catch { /* brak uprawnień do media — snapshot i tak zapisany */ }

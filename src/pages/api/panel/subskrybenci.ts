@@ -34,5 +34,18 @@ export const GET: APIRoute = async ({ request, cookies, url }) => {
     data: s?.subscribed_at ? String(s.subscribed_at).slice(0, 10) : null,
   }));
 
-  return json({ ok: true, razem: Number(d?.meta?.total ?? items.length), items });
+  // ⚠️ `meta.total` w tym API nie istnieje (paginacja kursorowa) — liczbę
+  // daje osobne wywołanie z `limit=0`. Gdyby padło, pokazujemy liczbę wierszy.
+  let razem = items.length;
+  try {
+    const rc = await fetch(
+      'https://connect.mailerlite.com/api/subscribers?limit=0&filter[status]=active',
+      { headers: { Authorization: `Bearer ${key}`, Accept: 'application/json' } },
+    );
+    const dc = await rc.json().catch(() => null);
+    const t = Number(dc?.total);
+    if (Number.isFinite(t)) razem = t;
+  } catch { /* zostaje items.length */ }
+
+  return json({ ok: true, razem, items });
 };

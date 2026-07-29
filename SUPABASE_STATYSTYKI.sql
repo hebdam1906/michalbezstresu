@@ -108,3 +108,16 @@ from panel_metryki m;
 -- ============================================================================
 -- GOTOWE. Kolejny krok: zmienne środowiskowe w Vercel — patrz ETAP4_STATYSTYKI.md
 -- ============================================================================
+
+-- ── POPRAWKA 29.07.2026 ─────────────────────────────────────────────────────
+-- Indeks CZĘŚCIOWY nie działa z ON CONFLICT w PostgREST — upsert materiałów
+-- z API cicho nie zapisywał nic. Zamiana na pełny constraint.
+-- (NULL-e nie kolidują w UNIQUE, więc ręczne wpisy bez external_id są OK.)
+drop index if exists panel_materialy_ext_uniq;
+
+do $$
+begin
+  alter table panel_materialy
+    add constraint panel_materialy_ext_uniq unique (platforma, external_id);
+exception when duplicate_table or duplicate_object then null;
+end $$;
