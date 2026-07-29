@@ -121,3 +121,16 @@ begin
     add constraint panel_materialy_ext_uniq unique (platforma, external_id);
 exception when duplicate_table or duplicate_object then null;
 end $$;
+
+-- ── CHECKLISTA PRODUKCYJNA (29.07.2026) ─────────────────────────────────────
+-- Stan odhaczeń przy publikacjach. Szablony punktów w src/lib/checklisty.ts.
+create table if not exists panel_checklist (
+  id             bigserial primary key,
+  publikacja_id  bigint not null references panel_publikacje(id) on delete cascade,
+  punkt          text   not null,
+  zrobione       boolean not null default false,
+  zaktualizowano timestamptz not null default now()
+);
+create unique index if not exists panel_checklist_uniq on panel_checklist (publikacja_id, punkt);
+create index if not exists panel_checklist_pub_idx on panel_checklist (publikacja_id);
+alter table panel_checklist enable row level security;

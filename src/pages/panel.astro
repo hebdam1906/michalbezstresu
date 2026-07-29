@@ -109,6 +109,23 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
     #pubArchToggle{padding:9px 10px!important}
     #pubArchToggle:hover{color:var(--sygnal)!important}
     .pub-arch-item td{color:#6B7B76}
+
+    /* checklista produkcyjna — rozwijana przy publikacji */
+    .chk-tgl{padding:1px 6px!important;font-size:12px!important;opacity:.55}
+    .chk-tgl:hover{opacity:1;color:var(--sygnal)}
+    .chk-licznik{font-family:var(--mono);font-size:10px;color:var(--szalwia);margin-left:6px}
+    .chk-licznik.chk-pelny{color:var(--sygnal)}
+    .chk-licznik.chk-brak{color:#B23A3A}
+    .chk-box{background:var(--mgla);border-radius:8px;padding:12px 14px!important}
+    .chk-etap{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--szalwia);margin:8px 0 6px}
+    .chk-etap:first-child{margin-top:0}
+    .chk-poz{display:block;font-size:13px;line-height:1.5;padding:3px 0;cursor:pointer;color:var(--atrament)}
+    .chk-poz input{margin-right:7px;accent-color:var(--sygnal);vertical-align:-1px}
+    .chk-poz.chk-ok{color:#6B7B76;text-decoration:line-through;text-decoration-color:var(--linia)}
+    .chk-kryt{font-family:var(--mono);font-size:9px;letter-spacing:.05em;text-transform:uppercase;
+      background:#F6E4E4;color:#B23A3A;padding:1px 6px;border-radius:4px;margin-left:4px;text-decoration:none;display:inline-block}
+    .chk-jak{display:block;font-size:11px;color:#7C8E88;margin:1px 0 2px 22px;text-decoration:none}
     .lejek-kpi{display:flex;align-items:center;gap:14px;margin:6px 0 4px}
     .lejek-kpi .lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--szalwia)}
     .lejek-kpi .big{font-family:var(--disp);font-size:28px;line-height:1.2}
@@ -314,7 +331,11 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
         if (body) { opt.headers['Content-Type'] = 'application/json'; opt.body = JSON.stringify(body); }
         const r = await fetch('/api/panel/' + path, opt);
         const d = await r.json().catch(() => ({}));
-        if (!r.ok) throw new Error(d.error || ('HTTP ' + r.status));
+        if (!r.ok) {
+          const err = new Error(d.error || ('HTTP ' + r.status));
+          Object.assign(err, d); // np. `brakujace` z checklisty (409)
+          throw err;
+        }
         return d;
       };
       const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -382,12 +403,16 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
         const b = $('pubBody');
         const pubRow = (p, arch) =>
           '<tr' + (arch ? ' class="pub-arch-item"' : '') + '>' +
-          '<td>' + esc(p.tytul) + '</td>' +
+          '<td>' + esc(p.tytul) +
+            ' <button class="mini chk-tgl" data-chk="' + p.id + '" title="Checklista produkcyjna">☑︎</button>' +
+            '<span class="chk-licznik" id="chkL' + p.id + '"></span></td>' +
           '<td>' + (PLAT[p.platforma] || p.platforma) + '</td>' +
           '<td>' + (p.data_pub || '—') + '</td>' +
           '<td><button class="pill p-' + p.status + '" data-cyc="' + p.id + ':' + NEXT_PUB[p.status] + '">' + p.status + '</button></td>' +
           '<td><button class="mini del" data-delp="' + p.id + '">usuń</button></td>' +
-          '</tr>';
+          '</tr>' +
+          '<tr class="chk-wiersz' + (arch ? ' pub-arch-item' : '') + '" id="chkR' + p.id + '" style="display:none">' +
+          '<td colspan="5" id="chkB' + p.id + '" class="chk-box"></td></tr>';
         const active = items.filter((p) => p.status !== 'opublikowane');
         const arch = items.filter((p) => p.status === 'opublikowane');
         if (!items.length) {
@@ -414,11 +439,65 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
         }
         $('kPub').textContent = items.filter((p) => p.status === 'zaplanowane').length;
       }
+      // ---------- CHECKLISTA PRODUKCYJNA ----------
+      // Punkty krytyczne blokują status „opublikowane" (API zwraca 409).
+      async function loadChk(id) {
+        const box = $('chkB' + id); if (!box) return;
+        let d;
+        try { d = await api('checklist?publikacja_id=' + id); } catch { box.innerHTML = '<span class="empty">Nie udało się wczytać.</span>'; return; }
+        if (!d.punkty?.length) { box.innerHTML = '<span class="empty">Brak checklisty dla tej platformy.</span>'; return; }
+        const grupa = (etap, tytul) => {
+          const pk = d.punkty.filter((p) => p.etap === etap);
+          if (!pk.length) return '';
+          return '<div class="chk-etap">' + tytul + '</div>' + pk.map((p) =>
+            '<label class="chk-poz' + (p.zrobione ? ' chk-ok' : '') + '">' +
+            '<input type="checkbox" data-chkp="' + id + ':' + p.klucz + '"' + (p.zrobione ? ' checked' : '') + '> ' +
+            esc(p.tekst) +
+            (p.krytyczny ? ' <span class="chk-kryt">krytyczny</span>' : '') +
+            (p.jak ? '<span class="chk-jak">' + esc(p.jak) + '</span>' : '') +
+            '</label>').join('');
+        };
+        box.innerHTML = grupa('produkcja', 'Przed eksportem') + grupa('publikacja', 'Przed publikacją');
+        odswiezLicznik(id, d.punkty);
+      }
+      function odswiezLicznik(id, punkty) {
+        const el = $('chkL' + id); if (!el) return;
+        const zrobione = punkty.filter((p) => p.zrobione).length;
+        const brakKryt = punkty.some((p) => p.krytyczny && !p.zrobione);
+        el.textContent = zrobione + '/' + punkty.length;
+        el.className = 'chk-licznik' + (zrobione === punkty.length ? ' chk-pelny' : (brakKryt ? ' chk-brak' : ''));
+      }
+
       $('pubBody').addEventListener('click', async (e) => {
         const cy = e.target.getAttribute?.('data-cyc');
         const dl = e.target.getAttribute?.('data-delp');
-        if (cy) { const [id, status] = cy.split(':'); await api('publikacje', 'PATCH', { id: +id, status }); loadPub(); }
+        const ck = e.target.getAttribute?.('data-chk');
+        if (ck) {
+          const r = $('chkR' + ck);
+          const otwarte = r.style.display !== 'none';
+          r.style.display = otwarte ? 'none' : '';
+          if (!otwarte) loadChk(ck);
+          return;
+        }
+        if (cy) {
+          const [id, status] = cy.split(':');
+          const res = await api('publikacje', 'PATCH', { id: +id, status }).catch((err) => err);
+          if (res?.brakujace?.length) {
+            alert('Nie mogę oznaczyć jako opublikowane — zostało do odhaczenia:\n\n• ' + res.brakujace.join('\n• '));
+            const r = $('chkR' + id); if (r) { r.style.display = ''; loadChk(id); }
+            return;
+          }
+          loadPub();
+        }
         if (dl) { await api('publikacje?id=' + dl, 'DELETE'); loadPub(); }
+      });
+      $('pubBody').addEventListener('change', async (e) => {
+        const cp = e.target.getAttribute?.('data-chkp');
+        if (!cp) return;
+        const [id, punkt] = cp.split(':');
+        await api('checklist', 'POST', { publikacja_id: +id, punkt, zrobione: e.target.checked });
+        e.target.closest('.chk-poz')?.classList.toggle('chk-ok', e.target.checked);
+        loadChk(id);
       });
       $('pAdd').addEventListener('click', async () => {
         const tytul = $('pTytul').value.trim(); if (tytul.length < 2) return;

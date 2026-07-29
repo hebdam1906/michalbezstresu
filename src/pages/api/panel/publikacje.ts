@@ -5,6 +5,7 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 import { supabaseAdmin } from '../../../lib/supabase';
 import { isAuthorized } from '../../../lib/panel-auth';
+import { braklujaceKrytyczne } from './checklist';
 
 const json = (b: unknown, s = 200) =>
   new Response(JSON.stringify(b), { status: s, headers: { 'Content-Type': 'application/json' } });
@@ -54,6 +55,21 @@ export const PATCH: APIRoute = async ({ request, cookies }) => {
   if (!Number.isInteger(id)) return json({ error: 'zły id' }, 400);
   const { u, err } = clean(b);
   if (err) return json({ error: err }, 400);
+
+  // ✅ Nie da się oznaczyć jako „opublikowane" z niedomkniętą checklistą.
+  // Powód: 29.07 odcinek #3 poszedł do eksportu bez planszy końcowej CTA,
+  // mimo że punkt był w Checklista-montazowa.md. Dokument do czytania nie działa.
+  if (u.status === 'opublikowane') {
+    const { data: pub } = await supabaseAdmin
+      .from('panel_publikacje').select('platforma').eq('id', id).single();
+    if (pub) {
+      const brak = await braklujaceKrytyczne(supabaseAdmin, id, pub.platforma);
+      if (brak.length) {
+        return json({ error: 'Niedomknięta checklista', brakujace: brak }, 409);
+      }
+    }
+  }
+
   u.updated_at = new Date().toISOString();
   const { data, error } = await supabaseAdmin.from('panel_publikacje').update(u).eq('id', id).select().single();
   if (error) return json({ error: error.message }, 500);
