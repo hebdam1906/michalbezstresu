@@ -41,6 +41,8 @@ const ODCINEK: PunktChecklisty[] = [
   { klucz: 'ekran_koncowy', tekst: 'Ekran końcowy YouTube ustawiony', etap: 'publikacja' },
   { klucz: 'napisy_srt', tekst: 'Plik SRT wgrany jako napisy PL', etap: 'publikacja' },
   { klucz: 'komentarz_przypiety', tekst: 'Komentarz dodany i przypięty', etap: 'publikacja' },
+  { klucz: 'po_publikacji_przeczytane', tekst: 'Tytuł i opis przeczytane na żywo po publikacji', etap: 'publikacja',
+    jak: 'Literówki wchodzą przy ręcznym wpisywaniu w Studio, nawet gdy plik z opisem jest poprawny' },
   { klucz: 'playlista', tekst: 'Dodane do playlisty', etap: 'publikacja' },
   { klucz: 'podcast_mp3', tekst: 'MP3 wyeksportowany i wgrany do Spotify', etap: 'publikacja',
     jak: 'Tylko długie odcinki. Opis przez przełącznik HTML — edytor gubi polskie znaki' },
@@ -62,6 +64,10 @@ const SHORT: PunktChecklisty[] = [
   { klucz: 'wszystkie_platformy', tekst: 'Wrzucone na wszystkie zaplanowane platformy', etap: 'publikacja' },
   { klucz: 'godzina_zgodna', tekst: 'Godzina publikacji zgodna z planem', etap: 'publikacja',
     jak: 'Sprawdź w podglądzie właściciela — YT pokazuje zaplanowane jakby były publiczne' },
+  { klucz: 'po_publikacji_przeczytane', tekst: 'Tytuł i komentarz przeczytane NA KAŻDEJ platformie', etap: 'publikacja',
+    jak: '30.07: literówka „48 godzin decyduje" (→ decydują) i „checklista w bio" na YT, ' +
+         'gdzie bio nie istnieje. Teksty per platforma są dobre dla algorytmów, ale wymagają ' +
+         'sprawdzenia pod kątem realiów danej platformy. Wchodzisz i czytasz to, co widzi widz.' },
 ];
 
 // ── MAIL (newsletter) ───────────────────────────────────────────────────────
