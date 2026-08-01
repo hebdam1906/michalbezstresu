@@ -59,7 +59,9 @@ const SHORT: PunktChecklisty[] = [
   { klucz: 'bez_watermarku', tekst: 'Plik natywny, zero watermarków', etap: 'produkcja', krytyczny: true },
   { klucz: 'audio_loudnorm', tekst: 'Dźwięk wyrównany do −14 LUFS', etap: 'produkcja' },
 
-  { klucz: 'opisy_per_platforma', tekst: 'Opis osobny na każdą platformę', etap: 'publikacja' },
+  { klucz: 'opisy_per_platforma', tekst: 'Opis osobny na każdą platformę — WKLEJONY, nie przepisany', etap: 'publikacja',
+    jak: 'Kopiuj przez schowek z pliku z opisami. 30.07 i 1.08 przepisywanie ręczne dało ' +
+         'literówkę w tytule i ucięty opis bez hashtagów — plik źródłowy był za każdym razem dobry.' },
   { klucz: 'link_bio', tekst: 'CTA prowadzi do checklisty', etap: 'publikacja', krytyczny: true },
   { klucz: 'wszystkie_platformy', tekst: 'Wrzucone na wszystkie zaplanowane platformy', etap: 'publikacja' },
   { klucz: 'godzina_zgodna', tekst: 'Godzina publikacji zgodna z planem', etap: 'publikacja',
