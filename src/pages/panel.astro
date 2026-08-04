@@ -77,6 +77,11 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
     .mini{font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--linia);background:#fff;cursor:pointer;font-family:var(--body);color:var(--sygnal)}
     .mini:hover{background:var(--mgla)}
     .mini.del{color:#B23A3A;margin-left:auto}
+    .task-edit textarea{width:100%;box-sizing:border-box;min-height:64px;resize:vertical;font-family:var(--body);font-size:14px;line-height:1.45;color:var(--atrament);background:#fff;border:1px solid var(--sygnal);border-radius:6px;padding:7px 8px}
+    .task-edit .row{align-items:center}
+    .task-edit select{font-family:var(--mono);font-size:11px;padding:3px 6px;border-radius:6px;border:1px solid var(--linia);background:#fff;color:var(--sygnal)}
+    .mini.ok{color:#fff;background:var(--sygnal);border-color:var(--sygnal)}
+    .mini.ok:hover{filter:brightness(1.08)}
     /* lists */
     table{width:100%;border-collapse:collapse;font-size:14px}
     th{text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--szalwia);font-weight:500;padding:6px 8px;border-bottom:1px solid var(--linia)}
@@ -198,7 +203,7 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
           <!-- ZADANIA -->
           <section class="card full">
             <h2>Zadania</h2>
-            <div class="hint">Przeciąganie zastąpione przyciskami — klik przesuwa status. Klaudiusz może dodawać zadania przez API.</div>
+            <div class="hint">Przeciąganie zastąpione przyciskami — klik przesuwa status, „edytuj” zmienia treść i osobę bez kasowania zadania (zostaje id i historia). Klaudiusz może dodawać zadania przez API.</div>
             <div class="kanban" id="kanban">
               <div class="col" data-col="todo"><h3>Do zrobienia <span id="cntTodo">0</span></h3><div class="col-body" id="colTodo"></div></div>
               <div class="col" data-col="inprogress"><h3>W toku <span id="cntProg">0</span></h3><div class="col-body" id="colProg"></div></div>
@@ -346,9 +351,12 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
       });
 
       // ---------- ZADANIA ----------
+      const ZAD_OWNERS = ['mike', 'marcin', 'klaudiusz', 'team'];
+      let zadaniaCache = [];   // do edycji w miejscu — API PATCH przyjmuje tresc i owner
       async function loadZadania() {
         let items = [];
         try { items = (await api('zadania')).items; } catch (e) { return; }
+        zadaniaCache = items;
         const cols = { todo: $('colTodo'), inprogress: $('colProg'), done: $('colDone') };
         Object.values(cols).forEach((c) => (c.innerHTML = ''));
         const cnt = { todo: 0, inprogress: 0, done: 0 };
@@ -363,6 +371,7 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
             '<div class="row">' +
             (prev ? '<button class="mini" data-move="' + t.id + ':' + prev + '">←</button>' : '') +
             (next ? '<button class="mini" data-move="' + t.id + ':' + next + '">→</button>' : '') +
+            '<button class="mini" data-edit="' + t.id + '">edytuj</button>' +
             '<button class="mini del" data-del="' + t.id + '">usuń</button></div>';
           cols[t.status].appendChild(el);
         });
@@ -382,11 +391,41 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
         localStorage.setItem('mbs_done_open', open ? '0' : '1');
         applyDoneCollapse();
       });
+      // edycja w miejscu — zamienia kartę zadania na pole tekstowe + wybór ownera
+      function edytorZadania(el, t) {
+        el.classList.add('task-edit');
+        el.innerHTML =
+          '<textarea data-tresc="' + t.id + '">' + esc(t.tresc) + '</textarea>' +
+          '<div class="row"><select data-owner="' + t.id + '">' +
+          ZAD_OWNERS.map((o) => '<option value="' + o + '"' + (o === t.owner ? ' selected' : '') + '>' + o + '</option>').join('') +
+          '</select>' +
+          '<button class="mini ok" data-save="' + t.id + '">zapisz</button>' +
+          '<button class="mini" data-cancel="1">anuluj</button></div>';
+        const ta = el.querySelector('textarea');
+        ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+      }
+
       $('kanban').addEventListener('click', async (e) => {
         const mv = e.target.getAttribute?.('data-move');
         const dl = e.target.getAttribute?.('data-del');
+        const ed = e.target.getAttribute?.('data-edit');
+        const sv = e.target.getAttribute?.('data-save');
+        const ca = e.target.getAttribute?.('data-cancel');
         if (mv) { const [id, status] = mv.split(':'); await api('zadania', 'PATCH', { id: +id, status }); loadZadania(); }
         if (dl) { await api('zadania?id=' + dl, 'DELETE'); loadZadania(); }
+        if (ed) {
+          const t = zadaniaCache.find((z) => z.id === +ed);
+          if (t) edytorZadania(e.target.closest('.task'), t);
+        }
+        if (ca) loadZadania();
+        if (sv) {
+          const box = e.target.closest('.task');
+          const tresc = box.querySelector('[data-tresc]').value.trim();
+          const owner = box.querySelector('[data-owner]').value;
+          if (tresc.length < 2 || tresc.length > 500) { alert('Treść zadania: 2–500 znaków.'); return; }
+          await api('zadania', 'PATCH', { id: +sv, tresc, owner });
+          loadZadania();
+        }
       });
       $('zAdd').addEventListener('click', async () => {
         const tresc = $('zTresc').value.trim(); if (tresc.length < 2) return;
