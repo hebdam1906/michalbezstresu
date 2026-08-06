@@ -2,13 +2,22 @@
 
 Zadanie Klaudiusza ze Slacka z 5.08 (termin śr 13.08). Stan na czw 6.08 wieczorem.
 
-**Strona techniczna jest skończona i zmierzona — 7 dni przed terminem.** To, co jeszcze
-blokuje wdrożenie na produkcję, nie jest już kodem: polityka prywatności ma pola
-`[DO UZUPEŁNIENIA]` z Twoimi danymi firmowymi, powinna ją przejrzeć osoba znająca RODO,
-a w MailerLite trzeba ustawić przekierowanie na `/dziekuje` (krok 3 niżej) — bez tego
-konwersja nie ma się kiedy odpalić u prawdziwego zapisującego się.
+## ✅ NA PRODUKCJI OD 6.08 — cały fundament, 7 dni przed terminem
 
-## Co już zrobiłem — gałąź `feature/zgody-i-piksele`, NIE wdrożone na produkcję
+Baner zgody, polityka prywatności, strona `/dziekuje`, piksel Mety, tag Google
+i przekierowanie z formularza MailerLite. Zmierzone na produkcji, nie „na oko" —
+wyniki niżej.
+
+Zostały **dwie rzeczy nietechniczne**, obie po Twojej stronie:
+
+1. **Godzina z kimś od RODO.** Polityka jest na produkcji w wersji, którą napisałem
+   ja — nie prawnik. Na stronie stoi ramka „dokument w wersji roboczej, czeka na
+   sprawdzenie", więc nikogo nie wprowadzamy w błąd, ale to nie jest stan docelowy.
+2. **Forma prawna, adres i NIP** do sekcji o administratorze. Na razie jest tam imię,
+   nazwisko i adres kontaktowy — minimum z art. 13 RODO — plus zdanie, że pełne dane
+   rejestrowe podajesz na prośbę.
+
+## Co powstało — gałąź `feature/zgody-i-piksele`, scalona do `main` 6.08
 
 | plik | co robi |
 |---|---|
@@ -21,10 +30,10 @@ konwersja nie ma się kiedy odpalić u prawdziwego zapisującego się.
 Sprawdzone w przeglądarce z podpiętym podsłuchem ruchu sieciowego, nie „na oko” —
 pełne wyniki w sekcji „Test końcowy” niżej.
 
-**Kluczowa rzecz:** dopóki w Vercelu nie ma wpisanych ID, `Trackery.astro` nie renderuje
-nic. Czyli tę gałąź można wdrożyć **zanim** założysz konta reklamowe — wjedzie sam baner,
-polityka i strona podziękowania, bez żadnego śledzenia. Piksele ruszą dopiero wtedy, gdy
-wpiszesz ID i zrobisz redeploy. Kodu nie trzeba wtedy ruszać.
+**Zawór bezpieczeństwa, gdyby trzeba było szybko wyłączyć śledzenie:** `Trackery.astro`
+przy pustych ID **nie renderuje nic**. Skasowanie obu zmiennych w Vercelu i redeploy
+zdejmuje piksele ze strony w kilka minut, bez ruszania kodu. Baner, polityka i strona
+podziękowania zostają.
 
 ---
 
@@ -94,13 +103,39 @@ Dwie rzeczy, w których się pomyliłem po drodze — zapisuję, żeby nie wróc
 formularz gubił ogonek w ostatnim słowie. Zamiast walczyć z polem, nazwałem akcję
 `Checklista - zapis na liste`. Nazwa jest tylko etykietą w panelu — na pomiar nie wpływa.
 
-## 3. MailerLite — przekierowanie po zapisie (~2 min)
+## 3. MailerLite — przekierowanie po zapisie
 
-To jest ta rzecz, której brakowało w planie: **strony podziękowania nie było**.
-Formularz `by0euU` pokazywał komunikat w miejscu, więc konwersji nie było jak zmierzyć.
+✅ **ZROBIONE 6.08.** Formularz „Checklista — lead magne" → Success message →
+Settings → **Custom success page** → `https://michalbezstresu.pl/dziekuje`.
 
-MailerLite → **Forms → formularz `by0euU` → Settings → After signup →
-Redirect to URL** → `https://michalbezstresu.pl/dziekuje` → zapisz.
+To była ta rzecz, której brakowało w planie: **strony podziękowania nie było**.
+Formularz pokazywał komunikat w miejscu, więc konwersji nie było jak zmierzyć.
+
+### ⚠️ I to, co wyszło dopiero przy klikaniu: formularz ma PODWÓJNE POTWIERDZENIE
+
+Kolejność jest taka: wysłanie formularza → `/dziekuje` → mail „Potwierdź zapis
+i odbierz checklistę" → **dopiero po kliknięciu w niego** idzie checklista.
+
+**Konsekwencja dla treści.** Strona `/dziekuje` mówiła „Checklista jest w drodze".
+To była nieprawda i człowiek czekałby na plik, którego nikt nie wysyła. Poprawione
+na „Został jeden klik", z wyraźnym zdaniem, że bez potwierdzenia nic nie przyjdzie.
+
+**Konsekwencja dla pomiaru.** Konwersja liczy **wysłanie formularza, nie potwierdzony
+zapis** — czyli jest zawyżona o tych, którzy nie potwierdzili. Sprawdziłem, czy da się
+ją przenieść na moment potwierdzenia: **nie da się.** Strona po potwierdzeniu to szablon
+hostowany u MailerLite, bez opcji przekierowania na własny adres. Innego momentu po
+prostu nie ma. Zanim zaczniesz optymalizować kampanie po tej liczbie, zestaw ją
+z realną liczbą potwierdzonych zapisów z MailerLite — proponuję zrobić to na
+przeglądzie 26.08.
+
+### Trzy drobiazgi z MailerLite, których nie ruszałem
+
+- Strona potwierdzenia jest **po angielsku i bez marki** („Thank you! You've signed up
+  for the newsletter!") — jedyna taka rzecz w całym lejku.
+- W ustawieniach formularza wyłączony jest **link do polityki prywatności** i **pola
+  zgód marketingowych (RODO)**. Skoro polityka już istnieje, warto włączyć pierwsze.
+- W stopce maili masz już podany adres. Jeśli to ten sam, którego chcesz użyć
+  w polityce — powiedz słowo, uzupełnię sekcję o administratorze.
 
 ## 4. Wklejenie ID do Vercela
 
@@ -115,14 +150,14 @@ PUBLIC_GOOGLE_TAG_ID   = AW-18374464641
 „Use existing Build Cache”. Astro wkleja `PUBLIC_*` do plików w momencie budowania —
 z cache'u dostaniesz stare pliki i będziesz szukał błędu tam, gdzie go nie ma.
 
-## ✅ Test końcowy — wykonany 6.08 na deployu podglądowym, obie firmy naraz
+## ✅ Test końcowy — wykonany 6.08 na PRODUKCJI, obie firmy naraz
 
 W Vercelu wpisane `PUBLIC_META_PIXEL_ID = 1521198102602559` i
-`PUBLIC_GOOGLE_TAG_ID = AW-18374464641`, redeploy z wyłączonym cache'em budowania
-(zmienne `PUBLIC_*` w Astro wchodzą do kodu **w momencie budowania**, więc redeploy
-z cache'u pokazałby stary stan i test byłby bez wartości).
+`PUBLIC_GOOGLE_TAG_ID = AW-18374464641`, zakres **Production and Preview**
+(zmienne `PUBLIC_*` w Astro wchodzą do kodu **w momencie budowania**, więc po każdej
+ich zmianie redeploy z odznaczonym cache'em — inaczej testujesz stary stan).
 
-Najpierw sprawdziłem sam kod pobrany z serwera — czy oba ID w ogóle są w wyniku budowania:
+Najpierw sam kod pobrany z produkcji — czy oba ID w ogóle są w wyniku budowania:
 
 | strona | piksel Meta | tag Google | etykieta konwersji | baner |
 |---|---|---|---|---|
@@ -139,36 +174,52 @@ Potem zachowanie w prawdziwej przeglądarce, na tych samych bajtach:
 | po „Zgadzam się” | `fbevents.js` ✅ | `gtag/js` ✅ | startują dopiero teraz, obie naraz |
 | `/dziekuje` | `Lead` ✅ | konwersja ✅ | z etykietą `CUDbCLnijt0cEIGp0LlE`, `noindex, nofollow` |
 
-⚠️ **Ten test wysłał prawdziwe zdarzenia.** W Events Managerze Mety zobaczysz `PageView`
-i `Lead` z 6.08, a w Google Ads jedną konwersję „Checklista - zapis na liste” — żadnego
-z nich nie zrobił widz, to moje. U Google potrafi się pokazać z opóźnieniem do kilku
-godzin, więc brak konwersji w panelu w dniu testu nie znaczy, że coś nie działa.
+**Czego ten test NIE dowodzi, żeby było uczciwie.** Przeglądarka w moim środowisku nie ma
+dostępu do serwerów Mety i Google, więc samego wystrzelonego zdarzenia nie zobaczyłem —
+sprawdziłem kolejkę, którą strona przekazuje bibliotekom, i tam jest dokładnie to, co ma
+być: `init 1521198102602559` · `PageView` · `Lead` dla Mety oraz `config AW-18374464641`
+i konwersja z etykietą `CUDbCLnijt0cEIGp0LlE` dla Google. Kod robi swoje. Ostateczny
+dowód daje dopiero prawdziwy zapis wykonany z Twojej przeglądarki — patrz krok 5.
 
-## 5. Test przy starcie kampanii (~5 min)
+⚠️ **Wcześniejszy test na deployu podglądowym wysłał prawdziwe zdarzenia.** W Events
+Managerze Mety zobaczysz `PageView` i `Lead` z 6.08, a w Google Ads jedną konwersję
+„Checklista - zapis na liste” — żadnego z nich nie zrobił widz, to moje. U Google
+potrafi się pokazać z opóźnieniem do kilku godzin.
 
-1. Wejście na `/checklista` w trybie incognito → w Meta Events Manager **nie powinno być
-   nic**, dopóki nie kliknę „Zgadzam się”.
-2. Zgoda → odświeżenie → **PageView** w Events Manager i „Tag wykryty” w Google.
-3. Testowy zapis na moją skrzynkę → przekierowanie na `/dziekuje` → **Lead** w Meta
-   i konwersja `Zapis na checklistę` w Google Ads (u Google potrafi wejść z opóźnieniem
-   do kilku godzin — to normalne, nie panikuj w dniu testu).
+## 5. Ostatnie ogniwo — jeden prawdziwy zapis Twoją przeglądarką (~5 min)
+
+To jedyna rzecz, której nie sprawdzę z mojego miejsca, bo wymaga prawdziwej skrzynki
+i prawdziwego kliknięcia. Warto ją zrobić raz, teraz, a nie w dniu startu kampanii.
+
+1. `/checklista` w trybie incognito → w Meta Events Manager **nie powinno być nic**,
+   dopóki nie klikniesz „Zgadzam się”.
+2. Zgoda → odświeżenie → **PageView** w Events Manager, „Tag wykryty” w Google.
+3. Zapis na swój adres → przekierowanie na `/dziekuje` → **Lead** w Mecie i konwersja
+   „Checklista - zapis na liste” w Google Ads. U Google potrafi wejść z opóźnieniem
+   do kilku godzin — to normalne, nie panikuj w dniu testu.
+4. Sprawdź jeszcze mail: ma przyjść **„Potwierdź zapis i odbierz checklistę”**,
+   a checklista dopiero po kliknięciu w niego. Jeśli przyjdzie od razu — znaczy, że
+   podwójne potwierdzenie ktoś wyłączył i treść `/dziekuje` przestała pasować.
 
 ---
 
-## Do Twojej decyzji — dwie rzeczy, których nie rozstrzygnę sam
+## Do Twojej decyzji — co zostało
 
-**Polityka prywatności to szkic.** Napisałem go, żeby strona nie ruszyła z pikselami bez
-żadnej polityki, ale nie jestem prawnikiem. W tekście są miejsca `[DO UZUPEŁNIENIA]`,
-których nie znam: forma prawna, adres, NIP, podstawa przekazywania danych do USA,
-okresy przechowywania po stronie Meta i Google. Zanim to pójdzie na produkcję, ktoś
-znający RODO powinien to przejrzeć — zwłaszcza że przy tym kanale zaufanie jest produktem.
+**Polityka prywatności jest na produkcji w wersji, której nie pisał prawnik.**
+Usunąłem z niej wszystkie widoczne dla czytelnika `[DO UZUPEŁNIENIA]` i uzupełniłem
+to, co dało się ustalić rzetelnie: podstawę przekazywania danych do USA (udział Mety
+i Google w EU-U.S. Data Privacy Framework, plus standardowe klauzule umowne) i okresy
+przechowywania (danych z pikseli nie trzymamy u siebie w ogóle — odsyłamy do polityk
+obu firm). Została **forma prawna, adres i NIP**; do czasu ich podania w sekcji
+o administratorze jest imię, nazwisko i adres kontaktowy, czyli minimum z art. 13 RODO.
 
-**Kolejność wdrożenia.** Proponuję rozbić na dwa kroki:
+Ramka „dokument w wersji roboczej, czeka na sprawdzenie" zostaje na stronie do momentu,
+aż przejrzy ją ktoś znający RODO. Przy tym kanale zaufanie jest produktem — lepiej
+napisać wprost, że dokument czeka na sprawdzenie, niż udawać, że jest gotowy.
 
-1. **Teraz:** wdrażamy baner, politykę i `/dziekuje` — bez ID, czyli bez śledzenia.
-   Strona zyskuje politykę prywatności, której dziś w ogóle nie ma, i realną stronę
-   podziękowania. Zero ryzyka.
-2. **Po Twoich kontach i po sprawdzeniu polityki:** wpisujemy ID, redeploy, test.
-   Kampanie i tak nie ruszają przed 1.09.
+**Kolejność wdrożenia** rozstrzygnięta 6.08: Michał wybrał wdrożenie całości razem
+z pikselami, świadomie i po wysłuchaniu argumentu za rozbiciem na dwa kroki. Zapisuję,
+bo za trzy miesiące nikt nie będzie pamiętał, że to była decyzja, a nie przypadek.
 
-Tak czy inaczej zdążymy przed 13.08 — sam kod jest gotowy dziś.
+Kampanie i tak nie ruszają przed 1.09, a termin Klaudiusza (13.08) zamknięty siedem
+dni wcześniej.
