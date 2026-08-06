@@ -5,6 +5,7 @@ import Hero from '../components/Hero.astro';
 import Odcinki from '../components/Odcinki.astro';
 import LeadMagnet from '../components/LeadMagnet.astro';
 import Produkty from '../components/Produkty.astro';
+import PoCoToRobie from '../components/PoCoToRobie.astro';
 import OMnie from '../components/OMnie.astro';
 import Stopka from '../components/Stopka.astro';
 ---
@@ -14,6 +15,10 @@ import Stopka from '../components/Stopka.astro';
   <Odcinki />
   <LeadMagnet />
   <Produkty />
+  {/* „Po co to robię" celowo PO produktach, a przed „O mnie": najpierw widz
+      wie, co dostaje, potem dlaczego to dostaje za darmo, a dopiero potem
+      kim jest osoba, która to mówi. */}
+  <PoCoToRobie />
   <OMnie />
   <Stopka />
 </Layout>

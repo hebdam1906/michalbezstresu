@@ -1,0 +1,265 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Stopka from '../components/Stopka.astro';
+
+/**
+ * BRIEF-11 (Klaudiusz, 6.08). Treść wg sekcji A briefu, ceny wg aktualizacji
+ * ze Slacka: 299 / 254 / 199 / pakiet 749.
+ *
+ * ⚠️ CENY BEZ PRZEKREŚLEŃ — decyzja Michała z 6.08, wbrew pierwotnemu pomysłowi
+ * na „~299 zł~ → 199 zł, −33%". Powód: dyrektywa Omnibus każe pokazywać przy
+ * obniżce najniższą cenę z ostatnich 30 dni, a 299 zł zaczyna obowiązywać
+ * dopiero dziś — nikt jej jeszcze nie zapłacił. Przekreślenie ceny, która nigdy
+ * nie obowiązywała, to dokładnie ten wzór, który ściga UOKiK.
+ *
+ * Przekaz jest ten sam, tylko powiedziany słowami zamiast grafiką przeceny.
+ * Po 30 dniach obowiązywania 299 zł wystarczy przestawić PRZEKRESLENIA na true
+ * — reszta jest już przygotowana.
+ */
+const PRZEKRESLENIA = false;
+const CENA = { baza: 299, subskrybent: 254, startowa: 199, pakiet: 749, pakietOsobno: 897 };
+const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
+---
+<Layout
+  title="Konsultacje indywidualne — Michał bez Stresu"
+  description="Trudny feedback, PIP, ocena roczna, rozmowa, której się boisz. Godzina jeden na jeden z kimś, kto siedział po obu stronach tego stołu."
+>
+  <Nav />
+
+  <header class="khead">
+    <div class="wrap">
+      <div class="eyebrow">Konsultacje</div>
+      <h1>Porozmawiajmy o Twojej sytuacji — jeden na jeden</h1>
+      <p class="lead">Filmy i podcast dają wiedzę ogólną: jak działa system, jakie są zasady gry.
+        Ale Twoja sytuacja nie jest ogólna. Ma nazwiska, daty, konkretny dokument na stole
+        i konkretną rozmowę w kalendarzu. Jeśli chcesz przegadać ją z kimś, kto siedział
+        po obu stronach tego stołu — jestem tu.</p>
+      <a class="btn btn-primary" href="#formularz">Napisz o swojej sytuacji</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="blok">
+      <h2>Z czym ludzie do mnie przychodzą</h2>
+      <ul class="lista">
+        <li>Dostałem trudny feedback albo niską ocenę roczną — co teraz?</li>
+        <li>Wręczono mi PIP — jak przez to przejść z głową?</li>
+        <li>Nie wiem, czy to jeszcze wymagający szef, czy już coś więcej</li>
+        <li>Mam przed sobą trudną rozmowę — ocena, podwyżka, porozumienie stron — i chcę się przygotować</li>
+        <li>Czuję, że tracę grunt i chcę uporządkować sytuację oraz opcje</li>
+      </ul>
+    </section>
+
+    <section class="blok">
+      <h2>Jak to wygląda</h2>
+      <ol class="kroki">
+        <li><strong>Piszesz do mnie</strong> przez formularz niżej albo wprost na
+          <a href="mailto:michal@michalbezstresu.pl">michal@michalbezstresu.pl</a> — dwa, trzy zdania o sytuacji.</li>
+        <li><strong>Odpowiadam w ciągu 48 godzin</strong>: czy i jak mogę pomóc. Jeśli Twoja sprawa
+          wymaga prawnika albo psychologa, powiem Ci to wprost już na tym etapie —
+          <strong>zanim wydasz złotówkę</strong>.</li>
+        <li><strong>Rozmawiamy online, 60 minut.</strong> Wcześniej dostajesz ode mnie kilka pytań,
+          żeby ten czas pracował na Ciebie od pierwszej minuty.</li>
+        <li><strong>Po rozmowie dostajesz podsumowanie</strong>: co ustaliliśmy, plan kroków
+          i gotowe sformułowania na Twoją sytuację.</li>
+      </ol>
+    </section>
+
+    <section class="blok" id="cennik">
+      <h2>Ile to kosztuje</h2>
+      <div class="ceny">
+        <article class="cena">
+          <div class="kwota">{CENA.baza} zł</div>
+          <h3>Konsultacja 60 minut</h3>
+          <p>Jeśli rozmowa musi potrwać dłużej — potrwa. Rozliczamy się uczciwie,
+            nie z zegarkiem w ręku.</p>
+        </article>
+
+        <article class="cena">
+          <div class="kwota">
+            {PRZEKRESLENIA && <s class="stara">{CENA.baza} zł</s>}
+            {CENA.subskrybent} zł
+            {PRZEKRESLENIA && <span class="badge">−{rabat(CENA.subskrybent)}%</span>}
+          </div>
+          <h3>Dla subskrybentów newslettera</h3>
+          <p>Kod rabatowy −15% dostajesz w mailu powitalnym i masz go w stopce każdego
+            newslettera. Wpisujesz go w formularzu niżej.</p>
+        </article>
+
+        <article class="cena wyroznione">
+          <span class="etykieta">Cena startowa · pierwsze 5 osób</span>
+          <div class="kwota">
+            {PRZEKRESLENIA && <s class="stara">{CENA.baza} zł</s>}
+            {CENA.startowa} zł
+            {PRZEKRESLENIA && <span class="badge">−{rabat(CENA.startowa)}%</span>}
+          </div>
+          <h3>W zamian za anonimową opinię</h3>
+          <p>Mówię wprost dlaczego taniej: dopiero otwieram ten format i potrzebuję
+            wiedzieć, co w nim działa, a co nie.</p>
+        </article>
+
+        <article class="cena">
+          <div class="kwota">{CENA.pakiet} zł</div>
+          <h3>Pakiet „Przetrwaj PIP”</h3>
+          <p>Trzy sesje w rytmie planu naprawczego: analiza dokumentu → strategia →
+            przygotowanie do rozmów kontrolnych. Między sesjami przerabiam Twój PIP
+            na piśmie. Osobno te trzy sesje kosztowałyby {CENA.pakietOsobno} zł.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="blok kim">
+      <h2>Kim jestem — i kim nie jestem</h2>
+      <p>Przez 20 lat pracowałem w korporacjach: od specjalisty po senior managera w finansach.
+        Dawałem oceny i je dostawałem. Pisałem plany naprawcze i widziałem z bliska, jak kończą się
+        jedne i drugie. Siedziałem na kalibracjach, negocjowałem porozumienia.</p>
+      <p class="uwaga"><strong>Nie jestem psychologiem ani prawnikiem</strong> — i nie udaję żadnego z nich.
+        Jeśli Twoja sytuacja wymaga pomocy prawnej albo wsparcia psychologicznego, pomogę Ci ją
+        uporządkować i powiem wprost, do kogo się zwrócić. Konsultacja ze mną to praktyczna wiedza
+        o tym, jak działa korporacyjny system i jak się w nim poruszać — nie porada prawna
+        i nie terapia.</p>
+    </section>
+
+    <section class="blok" id="formularz">
+      <h2>Napisz o swojej sytuacji</h2>
+      <p class="podtytul">Dwa, trzy zdania wystarczą. Odpowiadam w ciągu 48 godzin —
+        także wtedy, gdy uznam, że nie jestem właściwą osobą.</p>
+
+      <form id="f-konsultacje" novalidate>
+        <div class="pole">
+          <label for="imie">Imię</label>
+          <input id="imie" name="imie" type="text" autocomplete="given-name" required maxlength="80" />
+        </div>
+        <div class="pole">
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" autocomplete="email" required maxlength="160" />
+        </div>
+        <div class="pole">
+          <label for="sytuacja">Co się dzieje?</label>
+          <textarea id="sytuacja" name="sytuacja" rows="5" required maxlength="4000"
+            placeholder="Np. Dostałem PIP w zeszłym tygodniu, mam trzy cele do zrealizowania w miesiąc i rozmowę kontrolną za dwa tygodnie."></textarea>
+        </div>
+        <div class="pole">
+          <label for="kod">Kod rabatowy <span class="opcjonalne">— jeśli masz</span></label>
+          <input id="kod" name="kod" type="text" maxlength="40" autocomplete="off" />
+        </div>
+
+        {/* Pułapka na boty — ukryta przed człowiekiem, kuszące dla automatu. */}
+        <div class="pulapka" aria-hidden="true">
+          <label for="firma">Firma</label>
+          <input id="firma" name="firma" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <label class="zgoda">
+          <input id="zgoda" name="zgoda" type="checkbox" required />
+          <span>Zgadzam się, żeby Michał Hebda skontaktował się ze mną w sprawie tego zapytania.
+            Dane wykorzystamy wyłącznie w tym celu — szczegóły w <a href="/prywatnosc">polityce prywatności</a>.</span>
+        </label>
+
+        <button class="btn btn-primary" type="submit">Wyślij zapytanie</button>
+        <p class="komunikat" id="komunikat" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <Stopka />
+
+  <script is:inline>
+    (function () {
+      var f = document.getElementById('f-konsultacje');
+      var kom = document.getElementById('komunikat');
+      if (!f) return;
+
+      /* Zdarzenie „Contact" leci do Mety i Google TYLKO wtedy, gdy ktoś
+         wcześniej zgodził się na ciasteczka. Bez zgody formularz działa
+         normalnie, po prostu nikt się o tym nie dowiaduje poza nami. */
+      function zglosKonwersje() {
+        if (window.fbq) window.fbq('track', 'Contact');
+        if (window.gtag) window.gtag('event', 'generate_lead', { value: 299, currency: 'PLN' });
+      }
+
+      f.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        var btn = f.querySelector('button[type=submit]');
+        kom.className = 'komunikat';
+        kom.textContent = '';
+        btn.disabled = true;
+        btn.textContent = 'Wysyłam…';
+        try {
+          var r = await fetch('/api/konsultacje', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              imie: f.imie.value,
+              email: f.email.value,
+              sytuacja: f.sytuacja.value,
+              kod: f.kod.value,
+              firma: f.firma.value,
+              zgoda: f.zgoda.checked,
+              zrodlo: document.referrer || location.search || '',
+            }),
+          });
+          var d = await r.json();
+          if (!r.ok) throw new Error(d.error || 'Coś poszło nie tak.');
+          f.style.display = 'none';
+          kom.className = 'komunikat ok';
+          kom.textContent = 'Dostałem. Odpowiadam w ciągu 48 godzin — sprawdź też zakładkę „Oferty” i spam, gdyby moja odpowiedź tam wpadła.';
+          zglosKonwersje();
+        } catch (err) {
+          kom.className = 'komunikat blad';
+          kom.textContent = err.message;
+          btn.disabled = false;
+          btn.textContent = 'Wyślij zapytanie';
+        }
+      });
+    })();
+  </script>
+</Layout>
+
+<style>
+.khead{padding:64px 0 40px;border-bottom:1px solid var(--linia)}
+.khead h1{font-family:var(--disp);font-weight:500;font-size:clamp(30px,5vw,46px);
+  line-height:1.12;margin:6px 0 18px;max-width:20ch}
+.lead{font-size:clamp(16px,2.2vw,19px);color:#3C4A46;max-width:60ch;margin-bottom:26px}
+.blok{padding:44px 0;border-bottom:1px solid var(--linia)}
+.blok:last-of-type{border-bottom:0}
+.blok h2{font-size:clamp(22px,3vw,28px);margin-bottom:18px}
+.podtytul{color:#4A5A55;max-width:58ch;margin-bottom:24px}
+.lista{list-style:none}
+.lista li{padding-left:26px;position:relative;margin-bottom:12px;font-size:16.5px;max-width:64ch}
+.lista li::before{content:"—";position:absolute;left:0;color:var(--sygnal)}
+.kroki{list-style:none;counter-reset:k}
+.kroki li{counter-increment:k;padding-left:44px;position:relative;margin-bottom:18px;max-width:64ch}
+.kroki li::before{content:counter(k);position:absolute;left:0;top:-2px;width:28px;height:28px;
+  border-radius:99px;background:var(--sygnal);color:#fff;display:grid;place-items:center;
+  font-family:var(--mono);font-size:13px}
+.ceny{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+@media(max-width:760px){.ceny{grid-template-columns:1fr}}
+.cena{background:var(--papier);border:1px solid var(--linia);border-radius:10px;padding:26px 24px}
+.cena.wyroznione{border-color:var(--sygnal);box-shadow:0 0 0 1px var(--sygnal) inset}
+.etykieta{font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;
+  background:var(--marker);color:#6B5A14;padding:4px 10px;border-radius:99px;display:inline-block;margin-bottom:12px}
+.kwota{font-family:var(--disp);font-size:32px;color:var(--sygnal);margin-bottom:6px}
+.kwota .stara{color:#8A9A95;font-size:21px;margin-right:10px;font-weight:400}
+.kwota .badge{font-family:var(--mono);font-size:12px;background:var(--sygnal);color:#fff;
+  padding:3px 8px;border-radius:99px;vertical-align:middle;margin-left:8px}
+.cena h3{font-size:18px;margin-bottom:8px}
+.cena p{font-size:15px;color:#4A5A55}
+.kim p{max-width:64ch;margin-bottom:14px}
+.uwaga{background:var(--papier);border-left:3px solid var(--sygnal);padding:16px 18px;border-radius:0 8px 8px 0}
+form{max-width:560px}
+.pole{margin-bottom:18px}
+.pole label{display:block;font-size:14.5px;margin-bottom:6px;color:#3C4A46}
+.opcjonalne{color:#7A8A85;font-weight:400}
+.pole input,.pole textarea{width:100%;padding:12px 14px;border:1px solid var(--linia);
+  border-radius:8px;font:inherit;font-size:16px;background:#fff;color:var(--atrament)}
+.pole textarea{resize:vertical;line-height:1.5}
+.pole input:focus,.pole textarea:focus{outline:2px solid var(--sygnal);outline-offset:1px;border-color:transparent}
+.pulapka{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.zgoda{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#4A5A55;margin:6px 0 22px;max-width:56ch}
+.zgoda input{margin-top:3px;flex:0 0 auto}
+.komunikat{margin-top:16px;font-size:15.5px}
+.komunikat.ok{color:var(--sygnal);font-weight:500}
+.komunikat.blad{color:#B4553F}
+</style>
