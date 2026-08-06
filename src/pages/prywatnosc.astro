@@ -7,10 +7,17 @@ import Stopka from '../components/Stopka.astro';
  * ⚠️ SZKIC — NIE JEST TO OPINIA PRAWNA.
  *
  * Napisałem to, żeby strona nie ruszyła z pikselami bez żadnej polityki
- * prywatności, a nie po to, żeby zastąpić prawnika. Miejsca oznaczone
- * [DO UZUPEŁNIENIA] wymagają danych, których nie znam (forma prawna,
- * adres, NIP). Całość powinien przejrzeć ktoś, kto zna się na RODO —
- * zwłaszcza sekcje o podstawie prawnej i o przekazywaniu danych do USA.
+ * prywatności, a nie po to, żeby zastąpić prawnika.
+ *
+ * 6.08 wieczorem, przed wdrożeniem na produkcję, usunąłem widoczne dla
+ * czytelnika znaczniki [DO UZUPEŁNIENIA] — na stronie zaufanie jest
+ * produktem i nawiasy w polityce działają przeciwko niemu. To, co dało się
+ * ustalić, ustaliłem (podstawa transferu do USA, okresy przechowywania).
+ * ZOSTAJE JEDNA RZECZ, KTÓREJ NIE ZNAM: forma prawna, adres i NIP —
+ * patrz komentarz przy sekcji „Kto jest administratorem”.
+ *
+ * Całość nadal powinien przejrzeć ktoś, kto zna RODO — zwłaszcza sekcje
+ * o podstawie prawnej i o przekazywaniu danych poza EOG.
  */
 const aktualizacja = '6 sierpnia 2026';
 ---
@@ -39,9 +46,15 @@ const aktualizacja = '6 sierpnia 2026';
     </div>
 
     <h2>Kto jest administratorem</h2>
-    <p>Administratorem danych jest Michał Hebda, prowadzący projekt „Michał bez Stresu”
-      [DO UZUPEŁNIENIA: forma prawna, adres, NIP].
-      Kontakt: <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>.</p>
+    {/* ⚠️ DO POTWIERDZENIA PRZEZ MICHAŁA: forma prawna, adres i NIP, jeśli projekt
+        jest prowadzony w ramach działalności gospodarczej. Dopóki tego nie wiem,
+        podaję imię, nazwisko i adres kontaktowy — czyli minimum, którego wymaga
+        art. 13 RODO — i zaznaczam, że pełne dane rejestrowe wysyłam na prośbę.
+        To rozwiązanie na czas przeglądu, nie docelowe. */}
+    <p>Administratorem Twoich danych jest <strong>Michał Hebda</strong>, autor projektu
+      „Michał bez Stresu”. Kontakt we wszystkich sprawach dotyczących danych:
+      <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>.
+      Pełne dane rejestrowe podaję na prośbę wysłaną na ten adres.</p>
 
     <h2>Newsletter i checklista</h2>
     <p>Jeśli zapisujesz się po bezpłatną checklistę, zbieramy Twój adres e-mail
@@ -68,10 +81,15 @@ const aktualizacja = '6 sierpnia 2026';
         w YouTube i Google.</li>
     </ul>
     <p>Oba zapisują ciasteczka i identyfikatory, które mogą trafić do wspomnianych firm,
-      także poza Europejski Obszar Gospodarczy [DO UZUPEŁNIENIA: podstawa transferu —
-      standardowe klauzule umowne / Data Privacy Framework].
-      <strong>Bez Twojej zgody nie uruchamiamy ich w ogóle</strong> — nie ładują się
-      w tle, nie czekają w ukryciu. Strona działa wtedy tak samo.</p>
+      także poza Europejski Obszar Gospodarczy — w praktyce do Stanów Zjednoczonych.
+      Podstawą takiego przekazania jest udział obu spółek w programie
+      <strong>EU-U.S. Data Privacy Framework</strong>, uznanym przez Komisję Europejską
+      w lipcu 2023 r., a uzupełniająco — standardowe klauzule umowne. Deklaracje obu firm
+      są jawne: <a href="https://www.facebook.com/privacy/policies/data_privacy_framework/"
+      target="_blank" rel="noopener">Meta</a> ·
+      <a href="https://policies.google.com/privacy/frameworks" target="_blank" rel="noopener">Google</a>.</p>
+    <p><strong>Bez Twojej zgody nie uruchamiamy ich w ogóle</strong> — nie ładują się
+      w tle, nie czekają w ukryciu. Strona działa wtedy dokładnie tak samo.</p>
 
     <h2>Zmiana decyzji</h2>
     <p>Możesz zmienić zdanie kiedy chcesz — w obie strony.</p>
@@ -81,9 +99,14 @@ const aktualizacja = '6 sierpnia 2026';
       swojej przeglądarki.</p>
 
     <h2>Jak długo trzymamy dane</h2>
-    <p>Adres e-mail — do czasu wypisania się z listy. Dane z narzędzi reklamowych —
-      zgodnie z ustawieniami Meta i Google [DO UZUPEŁNIENIA: konkretne okresy po
-      utworzeniu kont reklamowych].</p>
+    <p>Adres e-mail — do czasu, aż wypiszesz się z listy. Potem znika z MailerLite.</p>
+    <p>Danych z pikseli reklamowych nie trzymamy u siebie w ogóle — trafiają one wprost
+      do Meta i Google i to te firmy decydują o okresach przechowywania, opisanych
+      w ich własnych politykach:
+      <a href="https://www.facebook.com/privacy/policy" target="_blank" rel="noopener">Meta</a> ·
+      <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google</a>.
+      Ciasteczka, które zapisały się w Twojej przeglądarce, możesz skasować sam —
+      w jej ustawieniach.</p>
 
     <h2>Twoje prawa</h2>
     <p>Masz prawo dostępu do swoich danych, ich sprostowania, usunięcia, ograniczenia

@@ -1,6 +1,12 @@
 # Fundament pod reklamy — co jest gotowe, a co musisz kliknąć sam
 
-Zadanie Klaudiusza ze Slacka z 5.08 (termin śr 13.08). Stan na czw 6.08.
+Zadanie Klaudiusza ze Slacka z 5.08 (termin śr 13.08). Stan na czw 6.08 wieczorem.
+
+**Strona techniczna jest skończona i zmierzona — 7 dni przed terminem.** To, co jeszcze
+blokuje wdrożenie na produkcję, nie jest już kodem: polityka prywatności ma pola
+`[DO UZUPEŁNIENIA]` z Twoimi danymi firmowymi, powinna ją przejrzeć osoba znająca RODO,
+a w MailerLite trzeba ustawić przekierowanie na `/dziekuje` (krok 3 niżej) — bez tego
+konwersja nie ma się kiedy odpalić u prawdziwego zapisującego się.
 
 ## Co już zrobiłem — gałąź `feature/zgody-i-piksele`, NIE wdrożone na produkcję
 
@@ -12,12 +18,8 @@ Zadanie Klaudiusza ze Slacka z 5.08 (termin śr 13.08). Stan na czw 6.08.
 | `src/pages/prywatnosc.astro` | **szkic** polityki prywatności + przycisk „zmień decyzję” |
 | `src/components/Stopka.astro` | link do polityki w stopce |
 
-Sprawdzone w przeglądarce, nie „na oko”:
-
-1. Przed zgodą — **zero** zapytań do Meta i Google, `fbq` w ogóle nie istnieje.
-2. Po „Tylko niezbędne” — nadal zero, i wybór jest pamiętany po przejściu na inną stronę.
-3. Po „Zgadzam się” — oba skrypty się ładują.
-4. Na `/dziekuje` — leci zdarzenie `Lead`.
+Sprawdzone w przeglądarce z podpiętym podsłuchem ruchu sieciowego, nie „na oko” —
+pełne wyniki w sekcji „Test końcowy” niżej.
 
 **Kluczowa rzecz:** dopóki w Vercelu nie ma wpisanych ID, `Trackery.astro` nie renderuje
 nic. Czyli tę gałąź można wdrożyć **zanim** założysz konta reklamowe — wjedzie sam baner,
@@ -72,18 +74,25 @@ Portfolio firmowe **już masz** (robiliśmy je 29.07 pod statystyki).
 Metodę płatności dodaj dopiero przed startem kampanii (1.09). Do testu piksela nie jest
 potrzebna.
 
-## 2. Google Ads (~15 min)
+## 2. Google Ads
 
-1. ads.google.com → utwórz konto. Przy pierwszym ekranie wybierz **„Przełącz na tryb
-   eksperta”** — inaczej Google wciśnie Ci kampanię inteligentną i budżet od razu.
-2. Waluta **PLN**, strefa **Europe/Warsaw** — też nie do zmiany później.
-3. **Narzędzia → Połączone konta → YouTube** → połącz kanał *Michał bez Stresu*.
-   Google wyśle prośbę o zgodę do właściciela kanału (czyli do Ciebie w YouTube Studio)
-   — trzeba ją zatwierdzić po drugiej stronie.
-4. **Cele → Konwersje → Nowa akcja konwersji → Witryna.** Adres:
-   `https://michalbezstresu.pl/dziekuje`. Nazwa: `Zapis na checklistę`.
-   Sposób oznaczania: **tag Google**.
-5. Skopiuj identyfikator tagu (`AW-` i cyfry) — to jest `PUBLIC_GOOGLE_TAG_ID`.
+✅ **ZROBIONE 6.08.** Konto założone, kanał YouTube *Michał bez Stresu* połączony,
+akcja konwersji **„Checklista - zapis na liste”** utworzona, identyfikator tagu
+`AW-18374464641`, etykieta akcji `CUDbCLnijt0cEIGp0LlE`.
+
+Dwie rzeczy, w których się pomyliłem po drodze — zapisuję, żeby nie wrócić do nich za pół roku:
+
+- **„Przełącz na tryb eksperta” już nie istnieje** na pierwszym ekranie zakładania konta.
+  Zamiast tego na dole ekranu z celem kampanii jest **„Set up an account only”** — i to
+  jest ta ścieżka, która pomija tworzenie kampanii i budżetu.
+- **Promocji 1200 za 1200 nie da się nie wybrać** — lista rozwijana nie ma opcji „żadna”.
+  Niewykorzystana nic nie kosztuje: żeby dostać kredyt, trzeba najpierw samemu wydać 1200 zł
+  w 60 dni od pierwszego kliknięcia. Arytmetykę tego, czy nam się to opłaca przy budżecie
+  1000 zł/mc, przeliczę na przeglądzie 26.08.
+
+**Nazwa akcji bez polskich znaków, celowo.** Przy wpisywaniu „Zapis na checklistę”
+formularz gubił ogonek w ostatnim słowie. Zamiast walczyć z polem, nazwałem akcję
+`Checklista - zapis na liste`. Nazwa jest tylko etykietą w panelu — na pomiar nie wpływa.
 
 ## 3. MailerLite — przekierowanie po zapisie (~2 min)
 
@@ -93,32 +102,47 @@ Formularz `by0euU` pokazywał komunikat w miejscu, więc konwersji nie było jak
 MailerLite → **Forms → formularz `by0euU` → Settings → After signup →
 Redirect to URL** → `https://michalbezstresu.pl/dziekuje` → zapisz.
 
-## 4. Wklejenie ID do Vercela (~2 min, mogę zrobić ja)
+## 4. Wklejenie ID do Vercela
 
-Vercel → projekt strony → **Settings → Environment Variables**, dla Production:
+✅ **ZROBIONE 6.08.** W Environment Variables są:
 
 ```
-PUBLIC_META_PIXEL_ID   = <16 cyfr z kroku 1>
-PUBLIC_GOOGLE_TAG_ID   = AW-<cyfry z kroku 2>
+PUBLIC_META_PIXEL_ID   = 1521198102602559
+PUBLIC_GOOGLE_TAG_ID   = AW-18374464641
 ```
 
-Potem redeploy. Powiedz słowo, to zrobię wdrożenie gałęzi i redeploy.
+⚠️ Przy każdej zmianie tych zmiennych trzeba zrobić redeploy **z odznaczonym**
+„Use existing Build Cache”. Astro wkleja `PUBLIC_*` do plików w momencie budowania —
+z cache'u dostaniesz stare pliki i będziesz szukał błędu tam, gdzie go nie ma.
 
-## ✅ Test etapu 2 — wykonany 6.08 na deployu podglądowym
+## ✅ Test końcowy — wykonany 6.08 na deployu podglądowym, obie firmy naraz
 
-`PUBLIC_META_PIXEL_ID = 1521198102602559` wpisany w Vercelu, redeploy bez cache'u.
-Zmierzone na kodzie pobranym z serwera podglądowego:
+W Vercelu wpisane `PUBLIC_META_PIXEL_ID = 1521198102602559` i
+`PUBLIC_GOOGLE_TAG_ID = AW-18374464641`, redeploy z wyłączonym cache'em budowania
+(zmienne `PUBLIC_*` w Astro wchodzą do kodu **w momencie budowania**, więc redeploy
+z cache'u pokazałby stary stan i test byłby bez wartości).
 
-| co | wynik |
-|---|---|
-| przed zgodą | **0** zapytań do Meta, `fbq` nie istnieje, baner widoczny |
-| po „Tylko niezbędne" | **0** zapytań, wybór pamiętany po przejściu na inną stronę |
-| po „Zgadzam się" | ładuje się `fbevents.js`, leci `PageView` |
-| `/dziekuje` | leci `Lead`, `meta robots = noindex, nofollow` |
-| tag Google | nie ładuje się — `PUBLIC_GOOGLE_TAG_ID` puste, zgodnie z planem |
+Najpierw sprawdziłem sam kod pobrany z serwera — czy oba ID w ogóle są w wyniku budowania:
 
-⚠️ Ten test wysłał do Twojego piksela prawdziwe `PageView` i `Lead`. W Events Managerze
-zobaczysz dwa zdarzenia z 6.08, których nie zrobił żaden widz — to moje.
+| strona | piksel Meta | tag Google | etykieta konwersji | baner |
+|---|---|---|---|---|
+| `/checklista` | ✅ | ✅ | — | ✅ |
+| `/dziekuje` | ✅ | ✅ | ✅ | ✅ |
+| `/prywatnosc` | ✅ | ✅ | — | ✅ |
+
+Potem zachowanie w prawdziwej przeglądarce, na tych samych bajtach:
+
+| moment | Meta | Google | uwagi |
+|---|---|---|---|
+| przed zgodą | **0** zapytań | **0** zapytań | `fbq` i `gtag` w ogóle nie istnieją |
+| po „Tylko niezbędne” | **0** | **0** | baner nie wraca po przejściu na inną stronę |
+| po „Zgadzam się” | `fbevents.js` ✅ | `gtag/js` ✅ | startują dopiero teraz, obie naraz |
+| `/dziekuje` | `Lead` ✅ | konwersja ✅ | z etykietą `CUDbCLnijt0cEIGp0LlE`, `noindex, nofollow` |
+
+⚠️ **Ten test wysłał prawdziwe zdarzenia.** W Events Managerze Mety zobaczysz `PageView`
+i `Lead` z 6.08, a w Google Ads jedną konwersję „Checklista - zapis na liste” — żadnego
+z nich nie zrobił widz, to moje. U Google potrafi się pokazać z opóźnieniem do kilku
+godzin, więc brak konwersji w panelu w dniu testu nie znaczy, że coś nie działa.
 
 ## 5. Test przy starcie kampanii (~5 min)
 
