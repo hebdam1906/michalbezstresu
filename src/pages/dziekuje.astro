@@ -9,28 +9,42 @@ import Layout from '../layouts/Layout.astro';
  * MailerLite pokazywał komunikat w miejscu, bez przekierowania. Bez osobnego
  * adresu nie ma czego zmierzyć.
  *
- * ⚠️ Żeby to zadziałało, trzeba jeszcze w MailerLite (formularz `by0euU`)
- * ustawić po wysłaniu przekierowanie na https://michalbezstresu.pl/dziekuje
- * — to zmiana w panelu MailerLite, nie w kodzie.
+ * ✅ 6.08: przekierowanie ustawione w MailerLite (formularz `by0euU`,
+ * Success message → Settings → Custom success page → Redirect URL).
+ *
+ * ⚠️ FORMULARZ MA WŁĄCZONE PODWÓJNE POTWIERDZENIE (double opt-in), więc ta
+ * strona pokazuje się PO WYSŁANIU formularza, a nie po potwierdzeniu adresu.
+ * Dwie konsekwencje, obie policzone świadomie:
+ *   1. Treść mówi „został jeden klik", a nie „checklista jest w drodze" —
+ *      inaczej ludzie czekaliby na plik, który bez potwierdzenia nie przyjdzie.
+ *   2. Konwersja liczy WYSŁANIE formularza, nie potwierdzony zapis. MailerLite
+ *      nie pozwala przekierować strony po potwierdzeniu (sprawdzone 6.08 —
+ *      to szablon hostowany u nich, bez opcji redirectu), więc innego momentu
+ *      po prostu nie ma. Różnicę między jednym a drugim widać w MailerLite
+ *      i warto ją znać, zanim zacznie się optymalizować kampanie po tej liczbie.
  *
  * Zdarzenie konwersji leci TYLKO wtedy, gdy użytkownik zgodził się na piksele.
  * Bez zgody strona po prostu dziękuje i nic nie wysyła.
  */
 ---
 <Layout
-  title="Dziękuję — checklista jest w drodze | Michał bez Stresu"
-  description="Checklista dokumentowania trudnych sytuacji w pracy jest w drodze na Twoją skrzynkę."
+  title="Potwierdź zapis — Michał bez Stresu"
+  description="Sprawdź skrzynkę i potwierdź zapis, a checklista przyjdzie od razu potem."
   noindex
 >
   <main class="lp">
     <div class="lp-wrap">
       <div class="brand mono">Michał bez Stresu</div>
 
-      <div class="eyebrow">Zapisane</div>
-      <h1>Checklista jest w drodze</h1>
-      <p class="sub">Za chwilę dostaniesz maila z linkiem do pobrania. Jeśli nie
-        widzisz go w ciągu kilku minut — zajrzyj do zakładki „Oferty" albo do spamu
-        i przenieś wiadomość do odebranych. Dzięki temu kolejne trafią już tam, gdzie trzeba.</p>
+      <div class="eyebrow">Prawie gotowe</div>
+      <h1>Został jeden klik</h1>
+      <p class="sub">Wysłałem Ci maila <strong>„Potwierdź zapis i odbierz checklistę”</strong>.
+        Kliknij w nim przycisk potwierdzenia — checklista przyjdzie od razu potem.
+        Bez tego kliknięcia nic nie wyślę; tak działa podwójne potwierdzenie i dzięki
+        niemu nikt nie zapisze Cię na listę bez Twojej wiedzy.</p>
+      <p class="sub">Nie widzisz maila w ciągu kilku minut? Zajrzyj do zakładki „Oferty”
+        albo do spamu i przenieś wiadomość do odebranych — dzięki temu kolejne trafią
+        już tam, gdzie trzeba.</p>
 
       <ul class="benefits">
         <li>Wzór notatki po trudnej rozmowie — kto, co, kiedy i przy kim</li>
