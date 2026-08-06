@@ -1,8 +1,13 @@
 ---
 import '../styles/global.css';
+import Zgody from '../components/Zgody.astro';
+import Trackery from '../components/Trackery.astro';
 const {
   title = 'Michał bez Stresu — Znam zasady gry w korporacji',
   description = 'Konkretne odpowiedzi na trudne sytuacje w korporacji: feedback, ocena roczna, plan naprawczy, rozmowa z HR. Bez paniki, krok po kroku.',
+  /** strony, które nie mają istnieć w Google — np. /dziekuje, żeby nikt nie
+   *  wpadał tam z wyszukiwarki i nie generował fałszywych konwersji */
+  noindex = false,
 } = Astro.props;
 ---
 <!DOCTYPE html>
@@ -12,17 +17,21 @@ const {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  {noindex && <meta name="robots" content="noindex, nofollow" />}
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@400;500;600&family=Schibsted+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
-  <!-- Vercel Web Analytics (ruch na stronie) -->
+  <!-- Vercel Web Analytics (ruch na stronie) — bez ciasteczek, nie wymaga zgody -->
   <script is:inline>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
   <slot />
+  <!-- Baner musi być PRZED trackerami: to on decyduje, czy w ogóle wystartują. -->
+  <Zgody />
+  <Trackery />
 </body>
 </html>

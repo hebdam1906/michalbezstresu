@@ -1,0 +1,127 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Stopka from '../components/Stopka.astro';
+
+/**
+ * ⚠️ SZKIC — NIE JEST TO OPINIA PRAWNA.
+ *
+ * Napisałem to, żeby strona nie ruszyła z pikselami bez żadnej polityki
+ * prywatności, a nie po to, żeby zastąpić prawnika. Miejsca oznaczone
+ * [DO UZUPEŁNIENIA] wymagają danych, których nie znam (forma prawna,
+ * adres, NIP). Całość powinien przejrzeć ktoś, kto zna się na RODO —
+ * zwłaszcza sekcje o podstawie prawnej i o przekazywaniu danych do USA.
+ */
+const aktualizacja = '6 sierpnia 2026';
+---
+<Layout
+  title="Polityka prywatności | Michał bez Stresu"
+  description="Jakie dane zbieramy, po co i jakie masz prawa. Newsletter, checklista, statystyki i narzędzia reklamowe."
+>
+  <Nav />
+
+  <header class="phead">
+    <div class="wrap">
+      <div class="eyebrow">Polityka prywatności</div>
+      <h1>Co robimy z Twoimi danymi</h1>
+      <p class="lead">Krótko i bez prawniczego żargonu: jakie dane zbieramy, po co,
+        komu je powierzamy i co możesz z tym zrobić.</p>
+      <p class="data mono">Ostatnia aktualizacja: {aktualizacja}</p>
+    </div>
+  </header>
+
+  <main class="wrap tresc">
+    <div class="szkic">
+      <strong>Uwaga redakcyjna:</strong> ten dokument jest w wersji roboczej i czeka
+      na sprawdzenie. Jeśli coś w nim jest niejasne albo wygląda na pomyłkę —
+      napisz na <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>,
+      poprawimy.
+    </div>
+
+    <h2>Kto jest administratorem</h2>
+    <p>Administratorem danych jest Michał Hebda, prowadzący projekt „Michał bez Stresu”
+      [DO UZUPEŁNIENIA: forma prawna, adres, NIP].
+      Kontakt: <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>.</p>
+
+    <h2>Newsletter i checklista</h2>
+    <p>Jeśli zapisujesz się po bezpłatną checklistę, zbieramy Twój adres e-mail
+      (i imię, jeśli je podasz). Używamy go do wysłania materiału i kolejnych
+      wiadomości z serii. Podstawą jest Twoja zgoda — możesz ją wycofać w każdej
+      chwili, klikając „wypisz się” w stopce dowolnej wiadomości. Wycofanie zgody
+      nie wpływa na to, co wysłaliśmy wcześniej.</p>
+    <p>Listę prowadzimy w narzędziu <strong>MailerLite</strong> (MailerLite Limited,
+      Irlandia) — to ono przechowuje adresy i wysyła wiadomości.</p>
+
+    <h2>Statystyki odwiedzin</h2>
+    <p>Liczymy odwiedziny przez <strong>Vercel Web Analytics</strong>. To narzędzie
+      nie zapisuje ciasteczek i nie tworzy profilu — pokazuje nam wyłącznie zbiorcze
+      liczby: ile osób weszło na którą stronę. Dlatego działa niezależnie od Twojej
+      decyzji w banerze.</p>
+
+    <h2>Narzędzia reklamowe — tylko za Twoją zgodą</h2>
+    <p>Jeśli klikniesz „Zgadzam się” w banerze, uruchamiamy dwa narzędzia:</p>
+    <ul>
+      <li><strong>Piksel Meta</strong> (Meta Platforms Ireland) — pozwala sprawdzić,
+        czy osoby, które trafiły tu z reklamy na Facebooku lub Instagramie, faktycznie
+        pobrały checklistę, i nie pokazywać reklamy tym, którzy już to zrobili.</li>
+      <li><strong>Tag Google</strong> (Google Ireland) — to samo po stronie reklam
+        w YouTube i Google.</li>
+    </ul>
+    <p>Oba zapisują ciasteczka i identyfikatory, które mogą trafić do wspomnianych firm,
+      także poza Europejski Obszar Gospodarczy [DO UZUPEŁNIENIA: podstawa transferu —
+      standardowe klauzule umowne / Data Privacy Framework].
+      <strong>Bez Twojej zgody nie uruchamiamy ich w ogóle</strong> — nie ładują się
+      w tle, nie czekają w ukryciu. Strona działa wtedy tak samo.</p>
+
+    <h2>Zmiana decyzji</h2>
+    <p>Możesz zmienić zdanie kiedy chcesz — w obie strony.</p>
+    <p><button type="button" id="zmien-zgode" class="btn btn-primary">Zmień moją decyzję o ciasteczkach</button></p>
+    <p class="drobne">Kliknięcie kasuje zapamiętany wybór i pokazuje baner od nowa.
+      Ciasteczka zapisane wcześniej przez Meta i Google usuniesz w ustawieniach
+      swojej przeglądarki.</p>
+
+    <h2>Jak długo trzymamy dane</h2>
+    <p>Adres e-mail — do czasu wypisania się z listy. Dane z narzędzi reklamowych —
+      zgodnie z ustawieniami Meta i Google [DO UZUPEŁNIENIA: konkretne okresy po
+      utworzeniu kont reklamowych].</p>
+
+    <h2>Twoje prawa</h2>
+    <p>Masz prawo dostępu do swoich danych, ich sprostowania, usunięcia, ograniczenia
+      przetwarzania, przeniesienia oraz sprzeciwu. Możesz też złożyć skargę do Prezesa
+      Urzędu Ochrony Danych Osobowych. W każdej z tych spraw wystarczy napisać na
+      <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>.</p>
+
+    <h2>Materiały na stronie</h2>
+    <p>Treści na tej stronie i w checkliście to doświadczenie i opinie autora.
+      <strong>Nie są poradą prawną ani psychologiczną.</strong> Wszystkie historie
+      opisywane w odcinkach są zanonimizowane — bez nazw firm, imion i dat.</p>
+  </main>
+
+  <script is:inline>
+    (function () {
+      var b = document.getElementById('zmien-zgode');
+      if (b) b.addEventListener('click', function () {
+        if (window.mbsZgoda) window.mbsZgoda.zmien();
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      });
+    })();
+  </script>
+
+  <Stopka />
+</Layout>
+
+<style>
+.phead{padding:72px 0 28px}
+.phead h1{font-size:clamp(30px,4.6vw,44px);margin-bottom:14px}
+.lead{font-size:clamp(16px,2.1vw,19px);color:#4A5A55;max-width:60ch}
+.data{font-size:12.5px;color:#7C9E8E;margin-top:16px}
+.tresc{padding-bottom:72px;max-width:760px}
+.tresc h2{font-size:clamp(20px,2.6vw,26px);margin:36px 0 10px}
+.tresc p{margin-bottom:12px;color:#3A4A45}
+.tresc ul{margin:0 0 12px 20px;color:#3A4A45}
+.tresc li{margin-bottom:8px}
+.tresc a{color:var(--sygnal)}
+.szkic{background:var(--marker);border-radius:10px;padding:16px 18px;
+  font-size:14.5px;line-height:1.55;margin-bottom:8px}
+.drobne{font-size:13px;color:#5E6E68}
+</style>

@@ -1,0 +1,68 @@
+---
+/**
+ * Piksel Meta i tag Google — ładowane WYŁĄCZNIE po zgodzie z banera.
+ *
+ * Identyfikatory biorą się ze zmiennych środowiskowych Vercela:
+ *   PUBLIC_META_PIXEL_ID   np. 1234567890123456
+ *   PUBLIC_GOOGLE_TAG_ID   np. AW-123456789  (albo G-XXXXXXX dla samego GA4)
+ *
+ * Dopóki zmienne są puste, ten komponent nie robi NIC — można go bezpiecznie
+ * wdrożyć, zanim Michał założy konta. Wpisanie ID w Vercelu i redeploy
+ * wystarczy, żeby ruszyło; nie trzeba wtedy dotykać kodu.
+ *
+ * Zdarzenia:
+ *   PageView / page_view  — na każdej podstronie, po zgodzie
+ *   Lead / generate_lead  — tylko na /dziekuje (patrz dziekuje.astro)
+ */
+const metaId = import.meta.env.PUBLIC_META_PIXEL_ID ?? '';
+const googleId = import.meta.env.PUBLIC_GOOGLE_TAG_ID ?? '';
+---
+
+{(metaId || googleId) && (
+  <script is:inline define:vars={{ metaId, googleId }}>
+    (function () {
+      var odpalone = false;
+
+      function meta() {
+        if (!metaId) return;
+        /* standardowy snippet Meta, wstrzykiwany dopiero teraz */
+        !(function (f, b, e, v, n, t, s) {
+          if (f.fbq) return; n = f.fbq = function () {
+            n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+          };
+          if (!f._fbq) f._fbq = n;
+          n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = [];
+          t = b.createElement(e); t.async = !0; t.src = v;
+          s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+        })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        window.fbq('init', metaId);
+        window.fbq('track', 'PageView');
+      }
+
+      function google() {
+        if (!googleId) return;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + googleId;
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { window.dataLayer.push(arguments); };
+        window.gtag('js', new Date());
+        window.gtag('config', googleId);
+      }
+
+      function start() {
+        if (odpalone) return;
+        odpalone = true;
+        meta();
+        google();
+        /* strony, które chcą wysłać własne zdarzenie (np. /dziekuje),
+           czekają na ten sygnał zamiast zgadywać, czy fbq/gtag już są */
+        document.dispatchEvent(new CustomEvent('mbs:trackery-gotowe'));
+      }
+
+      if (window.mbsZgoda && window.mbsZgoda.udzielona()) start();
+      document.addEventListener('mbs:zgoda', start);
+    })();
+  </script>
+)}

@@ -1,0 +1,101 @@
+---
+/**
+ * Baner zgody na cookies analityczno-marketingowe.
+ *
+ * Zasada: NIC nie ładuje się z wyprzedzeniem. Piksel Meta i tag Google startują
+ * dopiero po kliknięciu „Zgadzam się" — i tylko wtedy. Vercel Web Analytics
+ * zostaje bez zmian, bo nie używa ciasteczek ani identyfikatorów i zgody
+ * nie wymaga.
+ *
+ * Wybór trzymamy w localStorage (`mbs-zgoda`), nie w ciasteczku — samo
+ * zapamiętanie decyzji nie wymaga wtedy niczyjej zgody.
+ *
+ * Decyzję da się zmienić w każdej chwili: `/prywatnosc` woła
+ * `window.mbsZgoda.zmien()`, co czyści wybór i pokazuje baner od nowa.
+ *
+ * ⚠️ To jest warstwa techniczna, nie opinia prawna. Treść banera i polityki
+ * powinien przejrzeć ktoś, kto zna się na RODO.
+ */
+---
+
+<div id="zgody" class="zgody" hidden role="dialog" aria-live="polite"
+     aria-labelledby="zgody-tytul" aria-describedby="zgody-opis">
+  <div class="zgody-tresc">
+    <p id="zgody-tytul" class="zgody-naglowek">Zanim ruszymy dalej</p>
+    <p id="zgody-opis">
+      Chcemy wiedzieć, czy nasze materiały trafiają do właściwych osób. Do tego
+      potrzebujemy narzędzi Meta i Google, które zapisują ciasteczka.
+      Bez Twojej zgody nie uruchamiamy ich w ogóle — strona działa normalnie.
+      Szczegóły w <a href="/prywatnosc">polityce prywatności</a>.
+    </p>
+  </div>
+  <div class="zgody-przyciski">
+    <button type="button" id="zgody-nie" class="btn btn-ghost">Tylko niezbędne</button>
+    <button type="button" id="zgody-tak" class="btn btn-primary">Zgadzam się</button>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var KLUCZ = 'mbs-zgoda';
+    var baner = document.getElementById('zgody');
+
+    function stan() {
+      try { return localStorage.getItem(KLUCZ); } catch (e) { return null; }
+    }
+    function zapisz(v) {
+      try { localStorage.setItem(KLUCZ, v); } catch (e) {}
+    }
+
+    window.mbsZgoda = {
+      stan: stan,
+      udzielona: function () { return stan() === 'tak'; },
+      /** wywoływane ze strony /prywatnosc — kasuje wybór i pokazuje baner */
+      zmien: function () {
+        try { localStorage.removeItem(KLUCZ); } catch (e) {}
+        if (baner) baner.hidden = false;
+      },
+    };
+
+    function rozstrzygnij(v) {
+      zapisz(v);
+      if (baner) baner.hidden = true;
+      if (v === 'tak') {
+        // Trackery.astro nasłuchuje i dopiero teraz wstrzykuje skrypty.
+        document.dispatchEvent(new CustomEvent('mbs:zgoda'));
+      }
+    }
+
+    if (baner) {
+      if (!stan()) baner.hidden = false;
+      var tak = document.getElementById('zgody-tak');
+      var nie = document.getElementById('zgody-nie');
+      if (tak) tak.addEventListener('click', function () { rozstrzygnij('tak'); });
+      if (nie) nie.addEventListener('click', function () { rozstrzygnij('nie'); });
+    }
+  })();
+</script>
+
+<style>
+.zgody{
+  position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;
+  max-width:720px;margin:0 auto;
+  background:var(--papier);color:var(--atrament);
+  border:1px solid var(--linia);border-radius:14px;
+  box-shadow:0 10px 34px rgba(30,43,40,.16);
+  padding:22px 24px;
+  display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;
+}
+.zgody[hidden]{display:none}
+.zgody-tresc{flex:1 1 340px;min-width:0}
+.zgody-naglowek{font-family:var(--disp);font-size:18px;margin-bottom:6px}
+.zgody-tresc p{font-size:14.5px;line-height:1.55;color:#4A5A55}
+.zgody-tresc a{color:var(--sygnal);text-decoration:underline}
+.zgody-przyciski{display:flex;gap:10px;flex:0 0 auto}
+.zgody-przyciski .btn{font-size:14.5px;padding:11px 18px}
+@media(max-width:560px){
+  .zgody{padding:18px}
+  .zgody-przyciski{width:100%}
+  .zgody-przyciski .btn{flex:1}
+}
+</style>

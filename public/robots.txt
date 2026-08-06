@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Strona po zapisie na checklistę — ma być osiągalna tylko przez przekierowanie
+# z formularza. Wejście z wyszukiwarki generowałoby fałszywe konwersje w Meta
+# i Google Ads (uwaga Klaudiusza, 6.08).
+Disallow: /dziekuje
+
+# Panel i dashboard są za logowaniem, ale nie ma powodu, żeby w ogóle trafiały do indeksu.
+Disallow: /panel
+Disallow: /dashboard
