@@ -54,9 +54,14 @@ import Layout from '../layouts/Layout.astro';
         if (wyslane) return;
         wyslane = true;
         if (window.fbq) window.fbq('track', 'Lead');
-        if (window.gtag) window.gtag('event', 'generate_lead', {
-          event_category: 'checklista',
-          event_label: 'zapis-na-liste',
+        /* Dokładny snippet z Google Ads dla akcji „Checklista - zapis na liste".
+           Etykieta po ukośniku jest przypisana do TEJ akcji konwersji — bez niej
+           Google zaliczy zdarzenie do niczego. Wartość 1 PLN to wartość domyślna
+           z ustawień akcji, nie realna wycena leada. */
+        if (window.gtag) window.gtag('event', 'conversion', {
+          send_to: 'AW-18374464641/CUDbCLnijt0cEIGp0LlE',
+          value: 1.0,
+          currency: 'PLN',
         });
       }
       /* Trackery.astro daje znać, kiedy fbq/gtag faktycznie istnieją. */
