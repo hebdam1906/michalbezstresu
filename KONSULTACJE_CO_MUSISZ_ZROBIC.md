@@ -1,7 +1,11 @@
 # Konsultacje — co jest gotowe, a co musisz kliknąć sam
 
-BRIEF-11 Klaudiusza z 6.08. Kod gotowy tego samego wieczora, **nie wdrożony na produkcję**
-— czeka na dwie rzeczy po Twojej stronie (niżej, ~5 minut).
+BRIEF-11 Klaudiusza z 6.08. **Na produkcji od 6.08 wieczorem** — strona `/konsultacje`
+działa, tabela w Supabase stoi, formularz sprawdzony na żywo.
+
+Zostaje jedna rzecz do kliknięcia: grupa w MailerLite pod autoodpowiedź (krok 2 niżej).
+Bez niej formularz działa normalnie — zapytanie zapisuje się w bazie, po prostu nikt
+nie dostaje automatycznego potwierdzenia.
 
 ## Co powstało
 
@@ -38,14 +42,14 @@ prywatności.
 
 ## Co musisz zrobić — dwie rzeczy
 
-### 1. Odpalić SQL w Supabase (~2 min)
+### 1. ✅ SQL w Supabase — ZROBIONE 6.08
 
 Supabase → projekt `michal-bez-stresu` → **SQL Editor** → wklej całe
 `SUPABASE_KONSULTACJE.sql` → **Run**. Tworzy tabelę `konsultacje_zapytania`
 z włączonym RLS i bez żadnej polityki dla anonimowych — czyli do zapytań
 wchodzi wyłącznie serwer, nikt z przeglądarki ich nie odczyta.
 
-### 2. Grupa w MailerLite + autoodpowiedź (~3 min)
+### 2. ⬜ Grupa w MailerLite + autoodpowiedź (~3 min) — DO ZROBIENIA
 
 MailerLite → **Subscribers → Groups → Create group**, nazwa: `Konsultacje — zapytania`.
 Skopiuj **ID grupy** (jest w adresie, długi ciąg cyfr) i wpisz w Vercelu:
@@ -84,18 +88,28 @@ Termin tych rzeczy to 14.08 (scheduler), więc zostawiam na kolejne dni:
 - **Kod rabatowy −15%** w mailu powitalnym i stopce (sekcja G) — wymaga najpierw
   ustalenia samego kodu. Zaproponuję brzmienie, jak powiesz słowo.
 
-## Zabezpieczenia formularza — sprawdzone, nie założone
+## ✅ Zabezpieczenia — sprawdzone NA PRODUKCJI 6.08, nie założone
 
-Endpoint `/api/konsultacje` to jedyne publiczne API w projekcie, więc ma trzy blokady,
-każdą przetestowaną:
+Endpoint `/api/konsultacje` to jedyne publiczne API w projekcie. Każdą blokadę
+wywołałem na żywym serwerze:
 
 | próba | wynik |
 |---|---|
-| bot wypełnia ukryte pole-pułapkę | udaje sukces, nic nie zapisuje |
-| puste imię / zły e-mail / opis krótszy niż 20 znaków | odrzucone z ludzkim komunikatem |
-| brak zgody RODO | odrzucone |
-| opis dłuższy niż 4000 znaków | odrzucone |
-| więcej niż 3 zapytania z jednego adresu na godzinę | odrzucone |
+| bot wypełnia ukryte pole-pułapkę | ✅ udaje sukces, nic nie zapisuje |
+| zły adres e-mail | ✅ odrzucone |
+| opis krótszy niż 20 znaków | ✅ odrzucone |
+| brak zgody RODO | ✅ odrzucone |
+| opis 5000 znaków | ✅ odrzucone |
+| czwarte zapytanie z tego samego adresu w ciągu godziny | ✅ odrzucone (429) |
+| poprawne zgłoszenie | ✅ zapisane w bazie z kompletem pól |
+
+**Ochrona bazy sprawdzona osobno.** Kluczem publicznym (tym, który każdy widzi
+w kodzie strony) próbowałem odczytać tabelę i coś do niej dopisać:
+odczyt zwraca pustkę, zapis leci z błędem „violates row-level security policy".
+Do zapytań wchodzi wyłącznie serwer.
 
 Adresu IP nie zapisujemy — w bazie ląduje jego skrót, wystarczający do wyłapania
 zalewu z jednego źródła i bezużyteczny do czegokolwiek innego.
+
+⚠️ **Siedem testowych zgłoszeń skasowałem** — tabela jest pusta, licznik na zerze.
+Do MailerLite nic nie poszło, bo zmiennej z grupą jeszcze nie ma (krok 2).
