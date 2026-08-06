@@ -36,8 +36,26 @@ nie klikam tego w Twoim imieniu, nawet jeśli mnie o to poprosisz. Poniżej inst
 
 ## 1. Meta — konto reklamowe (~10 min)
 
-Portfolio firmowe **już masz**: „Michał bez Stresu”, ID `2212556386159889` (robiliśmy je
-29.07 pod statystyki). Dochodzi tylko konto reklamowe i piksel.
+✅ **ZROBIONE 6.08** — konto reklamowe istnieje, ID `1035786742657518`
+(w portfolio „Michał bez Stresu”, `2212556386159889`). Zostaje sam piksel.
+
+⚠️ **UWAGA NA POMYŁKĘ, ŁATWĄ I KOSZTOWNĄ W DEBUGOWANIU.** W Mecie krążą dwa różne
+numery po 15–16 cyfr i wyglądają identycznie:
+
+| numer | co to jest | gdzie się używa |
+|---|---|---|
+| `1035786742657518` | **konto reklamowe** | rozliczenia, kampanie, budżet |
+| `1521198102602559` | **zestaw danych „MBS - strona”** | `PUBLIC_META_PIXEL_ID` na stronie |
+
+✅ Oba istnieją (6.08). Trzeci numer, który krąży w tym samym panelu i też wygląda
+podobnie: `2073445213253164` — to zestaw „MBS panel statystyki”, czyli nasza aplikacja
+do odczytu statystyk FB/IG z 29.07. **Nie jest pikselem strony**, nie ruszamy go.
+
+Do zmiennej `PUBLIC_META_PIXEL_ID` idzie **ten drugi**. Wpisanie tam numeru konta
+reklamowego nie wywali błędu — piksel po prostu nigdy nic nie zaraportuje, a szukanie
+przyczyny zajmie wieczór.
+
+Portfolio firmowe **już masz** (robiliśmy je 29.07 pod statystyki).
 
 1. business.facebook.com → wybierz portfolio **Michał bez Stresu** (sprawdź w lewym górnym
    rogu — łatwo wylądować w prywatnym).
@@ -86,7 +104,23 @@ PUBLIC_GOOGLE_TAG_ID   = AW-<cyfry z kroku 2>
 
 Potem redeploy. Powiedz słowo, to zrobię wdrożenie gałęzi i redeploy.
 
-## 5. Test (~5 min, robię ja i pokazuję wynik)
+## ✅ Test etapu 2 — wykonany 6.08 na deployu podglądowym
+
+`PUBLIC_META_PIXEL_ID = 1521198102602559` wpisany w Vercelu, redeploy bez cache'u.
+Zmierzone na kodzie pobranym z serwera podglądowego:
+
+| co | wynik |
+|---|---|
+| przed zgodą | **0** zapytań do Meta, `fbq` nie istnieje, baner widoczny |
+| po „Tylko niezbędne" | **0** zapytań, wybór pamiętany po przejściu na inną stronę |
+| po „Zgadzam się" | ładuje się `fbevents.js`, leci `PageView` |
+| `/dziekuje` | leci `Lead`, `meta robots = noindex, nofollow` |
+| tag Google | nie ładuje się — `PUBLIC_GOOGLE_TAG_ID` puste, zgodnie z planem |
+
+⚠️ Ten test wysłał do Twojego piksela prawdziwe `PageView` i `Lead`. W Events Managerze
+zobaczysz dwa zdarzenia z 6.08, których nie zrobił żaden widz — to moje.
+
+## 5. Test przy starcie kampanii (~5 min)
 
 1. Wejście na `/checklista` w trybie incognito → w Meta Events Manager **nie powinno być
    nic**, dopóki nie kliknę „Zgadzam się”.
