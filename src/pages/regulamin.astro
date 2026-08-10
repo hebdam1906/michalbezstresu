@@ -1,0 +1,191 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Stopka from '../components/Stopka.astro';
+
+/**
+ * REGULAMIN SPRZEDAŻY — opublikowany 10.08.2026.
+ *
+ * Źródło treści: `regulamin-sprzedazy-DRAFT.md` (Klaudiusz, 10.08.2026, Drive
+ * → 01-briefy). Tekst przeniesiony 1:1 z trzema świadomymi zmianami, każda
+ * opisana w komentarzu przy odpowiednim paragrafie:
+ *   1. adres kontaktowy: kontakt@ zamiast michal@ (spójność z resztą strony),
+ *   2. §1 pkt 4 — usunięte twierdzenie o statusie VAT do czasu konsultacji księgowej,
+ *   3. §8 pkt 1 — link poprawiony na /prywatnosc (w draftzie był nieistniejący
+ *      /polityka-prywatnosci).
+ *
+ * ⚠️ Dokument NIE przeszedł jeszcze przez prawnika. Konsultacja RODO + regulamin
+ * jest zaplanowana przed 1.09. Po niej podmienić treść i datę obowiązywania.
+ * Świadomie NIE publikujemy tu adnotacji „wersja robocza” — regulamin jest umową
+ * z konsumentem i taka adnotacja działałaby przeciwko obu stronom.
+ */
+const obowiazujeOd = '10 sierpnia 2026';
+---
+<Layout
+  title="Regulamin sprzedaży | Michał bez Stresu"
+  description="Zasady sprzedaży konsultacji i treści cyfrowych: zamówienia, płatności, realizacja, prawo odstąpienia i reklamacje."
+>
+  <Nav />
+
+  <header class="phead">
+    <div class="wrap">
+      <div class="eyebrow">Regulamin sprzedaży</div>
+      <h1>Zasady, na jakich sprzedaję</h1>
+      <p class="lead">Co kupujesz, jak to dostajesz, kiedy możesz zrezygnować
+        i co zrobić, jeśli coś pójdzie nie tak.</p>
+      <p class="data mono">Obowiązuje od: {obowiazujeOd}</p>
+    </div>
+  </header>
+
+  <main class="wrap tresc">
+
+    <h2>§1. Postanowienia ogólne</h2>
+    <ol>
+      <li>Niniejszy Regulamin określa zasady sprzedaży usług i treści cyfrowych
+        za pośrednictwem strony michalbezstresu.pl oraz koszyka płatności EasyCart.</li>
+      {/* ZMIANA 1 wobec draftu: adres kontaktowy kontakt@ zamiast michal@ —
+          to adres podany w stopce, na /konsultacje i w polityce prywatności.
+          Jeden adres w całym serwisie zamiast dwóch. */}
+      <li>Sprzedawcą jest <strong>Michał Hebda</strong>, prowadzący działalność
+        nierejestrowaną w rozumieniu art. 5 ustawy Prawo przedsiębiorców,
+        adres do korespondencji: <strong>ul. Czeczów 36/65, 30-798 Kraków</strong>,
+        e-mail: <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>.</li>
+      <li>Kontakt ze Sprzedawcą: <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>.
+        Sprzedawca odpowiada na wiadomości w terminie do 48 godzin w dni robocze.</li>
+      {/* ZMIANA 2 wobec draftu: usunięte zdanie „Sprzedawca nie jest podatnikiem VAT”.
+          W draftzie stało przy nim [DO POTWIERDZENIA PO KONSULTACJI KSIĘGOWEJ],
+          a usługi doradcze bywają wyłączone ze zwolnienia podmiotowego niezależnie
+          od obrotu. Do czasu konsultacji (do 12.08) mówimy tylko to, co jest pewne:
+          cena na stronie jest ceną końcową. Po konsultacji dopisać status VAT. */}
+      <li>Ceny podane na stronie są cenami całkowitymi — Kupujący nie ponosi
+        żadnych dodatkowych opłat poza ceną widoczną przy produkcie.</li>
+    </ol>
+
+    <h2>§2. Oferowane usługi i treści</h2>
+    <ol>
+      <li><strong>Konsultacja indywidualna online</strong> (60 minut, prowadzona przez
+        komunikator wideo) — usługa edukacyjno-mentoringowa dotycząca funkcjonowania
+        w środowisku korporacyjnym.</li>
+      <li><strong>Pakiet konsultacji</strong> — zestaw sesji opisany każdorazowo
+        na stronie produktu.</li>
+      <li><strong>Treści cyfrowe</strong> (np. e-booki, materiały PDF) — dostarczane
+        po opłaceniu na adres e-mail podany w zamówieniu.</li>
+      <li>Konsultacje mają charakter edukacyjny i informacyjny.
+        <strong>Nie stanowią porady prawnej, psychologicznej ani medycznej.</strong>
+        Sprzedawca nie jest prawnikiem ani psychologiem; w sytuacjach wymagających
+        takiej pomocy wskaże potrzebę kontaktu z właściwym specjalistą.</li>
+    </ol>
+
+    <h2>§3. Zamówienia i płatności</h2>
+    <ol>
+      <li>Zamówienia składa się przez koszyk EasyCart dostępny na stronie.</li>
+      <li>Płatności obsługuje operator Stripe (karty, BLIK, Przelewy24).
+        Sprzedawca nie przechowuje danych płatniczych Kupującego.</li>
+      <li>Umowę uważa się za zawartą z chwilą opłacenia zamówienia. Kupujący
+        otrzymuje potwierdzenie na e-mail.</li>
+      <li>Kody rabatowe nie łączą się ze sobą, chyba że opis promocji stanowi
+        inaczej. Ceny przekreślone prezentowane przy promocjach są rzeczywistymi
+        cenami regularnymi stosowanymi przez Sprzedawcę.</li>
+      <li>Na żądanie Kupującego Sprzedawca wystawia rachunek lub fakturę bez VAT.</li>
+    </ol>
+
+    <h2>§4. Realizacja konsultacji</h2>
+    <ol>
+      <li>Po opłaceniu konsultacji Sprzedawca kontaktuje się w ciągu 48 godzin
+        (dni robocze) w celu ustalenia terminu sesji.</li>
+      <li>Sesja odbywa się online w uzgodnionym terminie. Link do spotkania
+        Kupujący otrzymuje najpóźniej 24 godziny przed sesją.</li>
+      <li>Bezpłatne przełożenie terminu jest możliwe najpóźniej 24 godziny przed
+        sesją. Nieobecność bez wcześniejszego zgłoszenia oznacza wykorzystanie sesji,
+        z zastrzeżeniem udokumentowanych zdarzeń losowych — te rozpatrywane są
+        indywidualnie na korzyść Kupującego.</li>
+      <li>Spóźnienie Kupującego do 15 minut skraca sesję o czas spóźnienia;
+        powyżej 15 minut Sprzedawca może uznać sesję za nieodbytą z winy Kupującego
+        (pkt 3 stosuje się odpowiednio).</li>
+    </ol>
+
+    <h2>§5. Dostarczanie treści cyfrowych</h2>
+    <ol>
+      <li>Treści cyfrowe dostarczane są niezwłocznie po opłaceniu, nie później
+        niż w ciągu 24 godzin, na adres e-mail z zamówienia.</li>
+      <li>Do korzystania z treści wystarczy urządzenie z przeglądarką i czytnikiem PDF.</li>
+      <li>Treści cyfrowe objęte są ochroną prawnoautorską i przeznaczone
+        do użytku własnego Kupującego.</li>
+    </ol>
+
+    <h2>§6. Prawo odstąpienia od umowy — polityka zwrotów</h2>
+    <ol>
+      <li>Kupującemu będącemu konsumentem przysługuje prawo odstąpienia od umowy
+        zawartej na odległość w terminie <strong>14 dni</strong> bez podania
+        przyczyny — z wyjątkami opisanymi w pkt 4 i 5.</li>
+      <li>Odstąpienie wymaga oświadczenia — wystarczy e-mail na
+        <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>;
+        można użyć wzoru z §9.</li>
+      <li>Zwrot płatności następuje niezwłocznie, nie później niż w ciągu 14 dni
+        od otrzymania oświadczenia, tą samą metodą płatności.</li>
+      <li><strong>Konsultacje (usługi):</strong> jeżeli Kupujący zażąda rozpoczęcia
+        świadczenia usługi przed upływem terminu odstąpienia (np. umówi i odbędzie
+        sesję), a usługa zostanie w pełni wykonana — prawo odstąpienia wygasa,
+        o czym Kupujący jest informowany przy zakupie. W przypadku odstąpienia
+        po częściowym wykonaniu (np. 1 z 3 sesji pakietu) Kupujący ponosi koszt
+        sesji zrealizowanych według cennika jednostkowego, a reszta podlega zwrotowi.</li>
+      <li><strong>Treści cyfrowe:</strong> prawo odstąpienia nie przysługuje, jeżeli
+        Sprzedawca dostarczył treść za wyraźną i uprzednią zgodą Kupującego przed
+        upływem terminu odstąpienia, a Kupujący przyjął do wiadomości utratę tego
+        prawa (odpowiedni checkbox w koszyku).</li>
+      <li>Niezależnie od powyższego: jeśli po pierwszej konsultacji Kupujący uzna,
+        że nie otrzymał wartości — Sprzedawca prosi o wiadomość. Sprawy rozpatrywane
+        są indywidualnie, z intencją uczciwego rozwiązania.</li>
+    </ol>
+
+    <h2>§7. Reklamacje</h2>
+    <ol>
+      <li>Reklamacje dotyczące usług i treści cyfrowych można składać na
+        <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>.</li>
+      <li>Sprzedawca odpowiada na reklamację w terminie 14 dni.</li>
+      <li>Sprzedawca ponosi odpowiedzialność za zgodność świadczenia z umową
+        na zasadach ustawy o prawach konsumenta.</li>
+    </ol>
+
+    <h2>§8. Dane osobowe i spory</h2>
+    <ol>
+      {/* ZMIANA 3 wobec draftu: link poprawiony. Draft odsyłał do
+          /polityka-prywatnosci, a taki adres na stronie nie istnieje (404). */}
+      <li>Zasady przetwarzania danych opisuje <a href="/prywatnosc">Polityka prywatności</a>.</li>
+      <li>Konsument może skorzystać z pozasądowych sposobów rozpatrywania reklamacji
+        i dochodzenia roszczeń, w tym platformy ODR:
+        <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">ec.europa.eu/consumers/odr</a>.</li>
+      <li>W sprawach nieuregulowanych stosuje się przepisy prawa polskiego,
+        w szczególności Kodeks cywilny i ustawę o prawach konsumenta.</li>
+      <li>Regulamin obowiązuje od {obowiazujeOd}. Zmiany regulaminu nie dotyczą
+        umów zawartych przed zmianą.</li>
+    </ol>
+
+    <h2>§9. Wzór oświadczenia o odstąpieniu</h2>
+    <p class="drobne">Do dobrowolnego użytku — wystarczy zwykły e-mail o tej treści.</p>
+    <blockquote class="wzor">„Ja, [imię i nazwisko], niniejszym odstępuję od umowy
+      zawartej dnia [data zakupu] dotyczącej [nazwa usługi lub produktu]. Proszę
+      o zwrot płatności na metodę, którą opłacono zamówienie. [Data, adres e-mail
+      użyty przy zakupie].”</blockquote>
+
+  </main>
+
+  <Stopka />
+</Layout>
+
+<style>
+.phead{padding:72px 0 28px}
+.phead h1{font-size:clamp(30px,4.6vw,44px);margin-bottom:14px}
+.lead{font-size:clamp(16px,2.1vw,19px);color:#4A5A55;max-width:60ch}
+.data{font-size:12.5px;color:#7C9E8E;margin-top:16px}
+.tresc{padding-bottom:72px;max-width:760px}
+.tresc h2{font-size:clamp(20px,2.6vw,26px);margin:36px 0 10px}
+.tresc p{margin-bottom:12px;color:#3A4A45}
+.tresc ol{margin:0 0 12px 22px;color:#3A4A45}
+.tresc li{margin-bottom:9px}
+.tresc a{color:var(--sygnal)}
+.drobne{font-size:13px;color:#5E6E68}
+.wzor{margin:0;padding:16px 18px;background:var(--mgla,#EDF1EF);
+  border-left:3px solid var(--sygnal);border-radius:0 10px 10px 0;
+  font-size:14.5px;line-height:1.6;color:#3A4A45}
+</style>
