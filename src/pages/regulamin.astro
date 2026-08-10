@@ -79,8 +79,15 @@ const obowiazujeOd = '10 sierpnia 2026';
     <h2>§3. Zamówienia i płatności</h2>
     <ol>
       <li>Zamówienia składa się przez koszyk EasyCart dostępny na stronie.</li>
-      <li>Płatności obsługuje operator Stripe (karty, BLIK, Przelewy24).
-        Sprzedawca nie przechowuje danych płatniczych Kupującego.</li>
+      {/* 10.08, po konfiguracji Stripe: draft wymieniał Przelewy24, ale P24 wymaga
+          NIP-u albo VAT ID i przy działalności nierejestrowanej nie da się ich włączyć.
+          Regulamin nie może obiecywać metody, której nie ma. Sformułowanie odsyłające
+          do koszyka jest prawdziwe dziś i pozostanie prawdziwe, gdy P24 dojdzie —
+          bez konieczności zmiany regulaminu i daty obowiązywania. */}
+      <li>Płatności obsługuje operator Stripe. Dostępne metody płatności —
+        w tym BLIK i karty płatnicze — są każdorazowo widoczne w koszyku przed
+        potwierdzeniem zamówienia. Sprzedawca nie przechowuje danych płatniczych
+        Kupującego.</li>
       <li>Umowę uważa się za zawartą z chwilą opłacenia zamówienia. Kupujący
         otrzymuje potwierdzenie na e-mail.</li>
       <li>Kody rabatowe nie łączą się ze sobą, chyba że opis promocji stanowi
