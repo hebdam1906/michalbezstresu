@@ -2,9 +2,14 @@
 // Etap 2: źródłem odcinków jest Supabase (tabela `odcinki`).
 // Fallback: lokalna lista src/data/odcinki.js — używana, gdy env Supabase
 // nie jest ustawiony (Etap 1) albo gdy zapytanie zawiedzie. Dzięki temu
-// strona ZAWSZE się zbuduje. Pobieranie odbywa się na etapie build — nowy
-// odcinek pojawi się po redeployu (Deploy Hook Vercela wołany z Make.com).
-import { odcinki as fallback } from '../data/odcinki.js';
+// strona ZAWSZE się zbuduje.
+//
+// ⚠️ Astro buduje statycznie, więc data jest „zamrożona" w momencie deployu.
+// Dlatego podział na opublikowane i zapowiedź robi się DWA RAZY: raz przy
+// budowaniu (żeby działało bez JS) i raz w przeglądarce (mały skrypt na dole).
+// Bez tego odcinek z datą 17.08 nie pokazałby się sam — ktoś musiałby
+// zrobić redeploy, a przez urlop nie ma kto.
+import { odcinki as fallback, ILE_KART, KANAL_YT, PODCAST } from '../data/odcinki.js';
 
 async function getOdcinki() {
   const url = import.meta.env.PUBLIC_SUPABASE_URL;
@@ -12,7 +17,7 @@ async function getOdcinki() {
   if (!url || !key) return fallback;
   try {
     const res = await fetch(
-      `${url}/rest/v1/odcinki?select=nr,tytul,opis,url&order=nr.desc`,
+      `${url}/rest/v1/odcinki?select=nr,data,tytul,opis,yt,spotify&order=nr.desc`,
       { headers: { apikey: key, Authorization: `Bearer ${key}` } }
     );
     if (!res.ok) return fallback;
@@ -23,35 +28,95 @@ async function getOdcinki() {
   }
 }
 
-const odcinki = await getOdcinki();
+const wszystkie = await getOdcinki();
+const dzis = new Date().toISOString().slice(0, 10);
+
+// karta = odcinek, który już wyszedł i ma link do filmu
+const wyszly = (o) => o.data <= dzis && !!o.yt;
+const karty = wszystkie.filter(wyszly).slice(0, ILE_KART);
+// zapowiedź = najbliższy odcinek, który jeszcze nie wyszedł
+const przyszle = wszystkie.filter((o) => o.data > dzis).sort((a, b) => a.data.localeCompare(b.data));
+const nastepny = przyszle[0] ?? null;
+
+const DNI = ['niedzielę', 'poniedziałek', 'wtorek', 'środę', 'czwartek', 'piątek', 'sobotę'];
+const MC = ['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
+function kiedy(iso) {
+  const d = new Date(iso + 'T08:00:00');
+  return `W ${DNI[d.getDay()]} ${d.getDate()} ${MC[d.getMonth()]}`;
+}
 ---
 <section class="odcinki" id="odcinki">
   <div class="wrap">
     <div class="eyebrow">Co tydzień nowy odcinek</div>
     <h2>Najnowsze odcinki</h2>
-    <p class="sub">Sytuacje, które znasz z własnego biurka — rozłożone na czynniki pierwsze przez kogoś, kto siedział po obu stronach stołu.</p>
-    <div class="cards">
-      {odcinki.map((o) => (
-        <article class="card">
+    <p class="sub">Sytuacje, które znasz z własnego biurka — rozłożone na czynniki pierwsze przez kogoś, kto siedział po obu stronach stołu. Każdy odcinek jest też podcastem.</p>
+
+    <div class="cards" data-karty>
+      {wszystkie.map((o) => (
+        <article class="card" data-od={o.data} data-ma-yt={o.yt ? '1' : '0'} hidden={!karty.includes(o)}>
           <div class="tag">Odcinek {o.nr}</div>
           <h3>{o.tytul}</h3>
           <p>{o.opis}</p>
-          <a href={o.url} target="_blank" rel="noopener">Obejrzyj na YouTube →</a>
+          <div class="linki">
+            {o.yt && <a class="glowny" href={o.yt} target="_blank" rel="noopener">Obejrzyj na YouTube →</a>}
+            {o.spotify && <a class="audio" href={o.spotify} target="_blank" rel="noopener">Posłuchaj →</a>}
+          </div>
         </article>
       ))}
     </div>
+
+    {nastepny && (
+      <div class="zapowiedz" data-zapowiedz data-od={nastepny.data}>
+        <span class="kiedy" data-kiedy>{kiedy(nastepny.data)}</span>
+        <span class="tytul" data-tytul>{nastepny.tytul}</span>
+      </div>
+    )}
+
+    <p class="wiecej">
+      Wszystkie odcinki: <a href={KANAL_YT} target="_blank" rel="noopener">na YouTube</a>
+      <span aria-hidden="true"> · </span>
+      <a href={PODCAST} target="_blank" rel="noopener">w podcaście</a>
+    </p>
   </div>
 </section>
+
+<script type="module" is:inline define:vars={{ ILE_KART }}>
+  // Korekta po stronie przeglądarki — patrz komentarz na górze pliku.
+  const dzis = new Date().toISOString().slice(0, 10);
+  const kontener = document.querySelector('[data-karty]');
+  if (kontener) {
+    let pokazane = 0;
+    for (const el of kontener.querySelectorAll('.card')) {
+      const wyszedl = el.dataset.od <= dzis && el.dataset.maYt === '1';
+      const mies = wyszedl && pokazane < ILE_KART;
+      el.hidden = !mies;
+      if (mies) pokazane++;
+    }
+  }
+  const zap = document.querySelector('[data-zapowiedz]');
+  if (zap && zap.dataset.od <= dzis) zap.hidden = true;
+</script>
 
 <style>
 .odcinki{background:var(--papier);border-top:1px solid var(--linia);border-bottom:1px solid var(--linia)}
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px}
 @media(max-width:880px){.cards{grid-template-columns:1fr}}
 .card{background:var(--mgla);border:1px solid var(--linia);border-radius:10px;padding:26px 24px;display:flex;flex-direction:column;transition:transform .15s}
+.card[hidden]{display:none}
 .card:hover{transform:translateY(-3px)}
 .card .tag{font-family:var(--mono);font-size:11.5px;color:var(--sygnal);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px}
 .card h3{font-size:21px;margin-bottom:10px}
 .card p{font-size:15px;color:#4A5A55;flex:1}
-.card a{margin-top:18px;font-weight:700;font-size:15px;color:var(--sygnal);text-decoration:none}
-.card a:hover{text-decoration:underline}
+.linki{margin-top:18px;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.linki a{font-weight:700;font-size:15px;color:var(--sygnal);text-decoration:none}
+.linki a:hover{text-decoration:underline}
+.linki .audio{font-weight:500;font-size:14px;color:#4A5A55}
+.zapowiedz{margin-top:28px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+  background:var(--mgla);border:1px dashed var(--szalwia);border-radius:10px;padding:18px 22px}
+.zapowiedz[hidden]{display:none}
+.zapowiedz .kiedy{font-family:var(--mono);font-size:11.5px;color:var(--sygnal);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.zapowiedz .tytul{font-size:16px;color:var(--atrament)}
+.wiecej{margin-top:22px;font-size:15px;color:#4A5A55}
+.wiecej a{color:var(--sygnal);font-weight:700;text-decoration:none}
+.wiecej a:hover{text-decoration:underline}
 </style>
