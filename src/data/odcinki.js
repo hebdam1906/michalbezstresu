@@ -30,7 +30,7 @@ export const odcinki = [
     tytul: 'Ocena roczna — dlaczego zapada, zanim usiądziesz do rozmowy',
     opis: 'Jak działa kalibracja, co naprawdę znaczy „meets expectations" i plan w czterech krokach, żeby pracować na ocenę cały rok, nie godzinę.',
     yt: 'https://youtu.be/IBgoUr40pXk',
-    spotify: null,
+    spotify: 'https://open.spotify.com/episode/6ZQx5wUsCdyp1gIC8OiC5x',
   },
   {
     nr: 4,
