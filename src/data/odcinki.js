@@ -22,7 +22,7 @@ export const odcinki = [
     tytul: 'Wypalenie — historia, której nie opowiedziałem nikomu w firmie',
     opis: 'Siedem sygnałów, test urlopu i uczciwa rozmowa o tym, kiedy samopomoc to za mało.',
     yt: 'https://youtu.be/3Cr2skUUb7Y',
-    spotify: null,
+    spotify: 'https://open.spotify.com/episode/0dLk6qy3gb4m48WWO2wHp8',
   },
   {
     nr: 5,
