@@ -14,7 +14,7 @@ const {
 // Bez tego Google widzi ten sam materiał pod kilkoma adresami i sam wybiera, który
 // uznać za główny.
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL('/og-michal-bez-stresu.png', Astro.site).href;
+const ogImage = new URL('/og-michal-bez-stresu.jpg', Astro.site).href;
 
 // Jeden graf na całą stronę: kim jest autor i czym jest serwis. Person spina
 // profile w social mediach (sameAs), dzięki czemu wyszukiwarki i modele językowe
@@ -76,7 +76,7 @@ const jsonLd = {
   <meta property="og:image" content={ogImage} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:alt" content="Michał bez Stresu — znam zasady gry w korporacji" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
