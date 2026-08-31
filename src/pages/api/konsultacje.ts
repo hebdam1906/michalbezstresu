@@ -48,6 +48,17 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const kod = String(b.kod || '').trim().slice(0, 40) || null;
   const zgoda = b.zgoda === true;
 
+  /* „Skąd o mnie wiesz?" — pole wymagane w formularzu (atrybut required),
+     ale tutaj celowo NIE blokuje wysyłki: gdyby ktoś miał w cache starszą
+     wersję strony albo wybór nie doszedł, wolimy stracić tę jedną daną niż
+     całe zapytanie o konsultację. Wartość spoza listy traktujemy jak brak. */
+  const SKAD_DOZWOLONE = ['youtube', 'newsletter', 'grupa-fb', 'polecenie', 'reklama', 'inne'];
+  const skad = String(b.skad || '').trim();
+  const skadInne = String(b.skad_inne || '').trim().slice(0, 120);
+  const skad_wiesz = SKAD_DOZWOLONE.includes(skad)
+    ? (skad === 'inne' && skadInne ? `inne: ${skadInne}` : skad)
+    : null;
+
   if (imie.length < 2 || imie.length > 80) return json({ error: 'Podaj imię (2–80 znaków).' }, 400);
   if (!czyMail(email) || email.length > 160) return json({ error: 'Sprawdź adres e-mail.' }, 400);
   if (sytuacja.length < 20) return json({ error: 'Napisz dwa, trzy zdania o sytuacji — inaczej nie będę wiedział, czy mogę pomóc.' }, 400);
@@ -68,7 +79,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   }
 
   const { error } = await supabaseAdmin.from('konsultacje_zapytania').insert({
-    imie, email, sytuacja, kod_rabatowy: kod, ip_hash,
+    imie, email, sytuacja, kod_rabatowy: kod, ip_hash, skad_wiesz,
     zrodlo: String(b.zrodlo || '').slice(0, 200) || null,
   });
   if (error) return json({ error: 'Nie udało się zapisać zapytania. Napisz proszę wprost na michal@michalbezstresu.pl.' }, 500);

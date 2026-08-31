@@ -19,8 +19,15 @@ create table if not exists konsultacje_zapytania (
   zrodlo        text,                       -- skąd przyszedł (utm / referer)
   status        text        not null default 'nowe',
   notatka       text,
-  ip_hash       text                        -- do ograniczania nadużyć, NIE samo IP
+  ip_hash       text,                       -- do ograniczania nadużyć, NIE samo IP
+  skad_wiesz    text                        -- odpowiedź z pola „Skąd o mnie wiesz?"
 );
+
+-- Kolumna dodana 31.08.2026, już po utworzeniu tabeli — stąd osobny ALTER
+-- (żeby ten plik dało się odpalić i na świeżej, i na istniejącej bazie).
+alter table konsultacje_zapytania add column if not exists skad_wiesz text;
+comment on column konsultacje_zapytania.skad_wiesz is
+  'YouTube / newsletter / grupa-fb / polecenie / reklama / „inne: <tekst>". UTM-y pokazują kliknięcie, to pokazuje decyzję — potrzebne na Checkpoint 1 (31.10.2026).';
 
 comment on table konsultacje_zapytania is
   'Zapytania z formularza /konsultacje. Dane osobowe — patrz polityka prywatności, cel: obsługa zapytań konsultacyjnych.';

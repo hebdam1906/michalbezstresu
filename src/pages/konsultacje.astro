@@ -145,6 +145,23 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
           <input id="kod" name="kod" type="text" maxlength="40" autocomplete="off" />
         </div>
 
+        <div class="pole">
+          <label for="skad">Skąd o mnie wiesz?</label>
+          <select id="skad" name="skad" required>
+            <option value="">— wybierz —</option>
+            <option value="youtube">YouTube</option>
+            <option value="newsletter">Newsletter / checklista</option>
+            <option value="grupa-fb">Grupa na Facebooku</option>
+            <option value="polecenie">Polecenie od kogoś</option>
+            <option value="reklama">Reklama</option>
+            <option value="inne">Inne</option>
+          </select>
+        </div>
+        <div class="pole" id="pole-skad-inne" hidden>
+          <label for="skad_inne">A dokładniej? <span class="opcjonalne">— jedno zdanie wystarczy</span></label>
+          <input id="skad_inne" name="skad_inne" type="text" maxlength="120" autocomplete="off" />
+        </div>
+
         {/* Pułapka na boty — ukryta przed człowiekiem, kuszące dla automatu. */}
         <div class="pulapka" aria-hidden="true">
           <label for="firma">Firma</label>
@@ -171,6 +188,16 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
       var kom = document.getElementById('komunikat');
       if (!f) return;
 
+      /* Pole „a dokładniej?" pokazuje się tylko po wybraniu „Inne" —
+         reszcie osób nie zawracamy głowy dodatkowym polem. */
+      var skad = document.getElementById('skad');
+      var poleInne = document.getElementById('pole-skad-inne');
+      if (skad && poleInne) {
+        skad.addEventListener('change', function () {
+          poleInne.hidden = skad.value !== 'inne';
+        });
+      }
+
       /* Zdarzenie „Contact" leci do Mety i Google TYLKO wtedy, gdy ktoś
          wcześniej zgodził się na ciasteczka. Bez zgody formularz działa
          normalnie, po prostu nikt się o tym nie dowiaduje poza nami. */
@@ -195,6 +222,8 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
               email: f.email.value,
               sytuacja: f.sytuacja.value,
               kod: f.kod.value,
+              skad: f.skad.value,
+              skad_inne: f.skad_inne ? f.skad_inne.value : '',
               firma: f.firma.value,
               zgoda: f.zgoda.checked,
               zrodlo: document.referrer || location.search || '',
@@ -252,10 +281,13 @@ form{max-width:560px}
 .pole{margin-bottom:18px}
 .pole label{display:block;font-size:14.5px;margin-bottom:6px;color:#3C4A46}
 .opcjonalne{color:#7A8A85;font-weight:400}
-.pole input,.pole textarea{width:100%;padding:12px 14px;border:1px solid var(--linia);
+.pole input,.pole textarea,.pole select{width:100%;padding:12px 14px;border:1px solid var(--linia);
   border-radius:8px;font:inherit;font-size:16px;background:#fff;color:var(--atrament)}
 .pole textarea{resize:vertical;line-height:1.5}
-.pole input:focus,.pole textarea:focus{outline:2px solid var(--sygnal);outline-offset:1px;border-color:transparent}
+.pole select{appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%237A8A85' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
+.pole input:focus,.pole textarea:focus,.pole select:focus{outline:2px solid var(--sygnal);outline-offset:1px;border-color:transparent}
 .pulapka{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .zgoda{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#4A5A55;margin:6px 0 22px;max-width:56ch}
 .zgoda input{margin-top:3px;flex:0 0 auto}
