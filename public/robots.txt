@@ -9,3 +9,5 @@ Disallow: /dziekuje
 # Panel i dashboard są za logowaniem, ale nie ma powodu, żeby w ogóle trafiały do indeksu.
 Disallow: /panel
 Disallow: /dashboard
+
+Sitemap: https://www.michalbezstresu.pl/sitemap-index.xml

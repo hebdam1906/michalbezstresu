@@ -1,8 +1,21 @@
 import { defineConfig } from 'astro/config';
 import vercel from '@astrojs/vercel';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://michalbezstresu.pl',
+  // WWW, nie goła domena: michalbezstresu.pl robi 308 na www.michalbezstresu.pl,
+  // więc to www jest adresem, który realnie zwraca 200. Z gołej domeny sitemapa
+  // i canonical wskazywałyby na adresy, które się przekierowują (31.08.2026).
+  site: 'https://www.michalbezstresu.pl',
+
+  // Sitemapa: /sitemap-index.xml + /sitemap-0.xml, zgłoszone w robots.txt.
+  // Wykluczone te same adresy, które blokuje robots.txt — inaczej wysyłalibyśmy
+  // Google sprzeczne sygnały (sitemapa: „indeksuj", robots: „nie wchodź").
+  integrations: [
+    sitemap({
+      filter: (page) => !/\/(dziekuje|panel|dashboard)\/?$/.test(page),
+    }),
+  ],
 
   // Astro 5: output:'static' (domyślny) obsługuje tryb mieszany.
   // Strony marketingowe (index, /ksiazka, /dla-firm, /media) są prerenderowane

@@ -9,6 +9,54 @@ const {
    *  wpadał tam z wyszukiwarki i nie generował fałszywych konwersji */
   noindex = false,
 } = Astro.props;
+
+// Adres kanoniczny liczony z Astro.site (www — patrz komentarz w astro.config.mjs).
+// Bez tego Google widzi ten sam materiał pod kilkoma adresami i sam wybiera, który
+// uznać za główny.
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/og-michal-bez-stresu.png', Astro.site).href;
+
+// Jeden graf na całą stronę: kim jest autor i czym jest serwis. Person spina
+// profile w social mediach (sameAs), dzięki czemu wyszukiwarki i modele językowe
+// wiedzą, że to jedna i ta sama osoba.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://www.michalbezstresu.pl/#website',
+      url: 'https://www.michalbezstresu.pl/',
+      name: 'Michał bez Stresu',
+      description:
+        'Konkretne odpowiedzi na trudne sytuacje w korporacji: feedback, ocena roczna, plan naprawczy, rozmowa z HR.',
+      inLanguage: 'pl-PL',
+      publisher: { '@id': 'https://www.michalbezstresu.pl/#person' },
+    },
+    {
+      '@type': 'Person',
+      '@id': 'https://www.michalbezstresu.pl/#person',
+      name: 'Michał Hebda',
+      url: 'https://www.michalbezstresu.pl/',
+      description:
+        'Praktyk z 20-letnim doświadczeniem operacyjnym w korporacji. Uczy, jak przechodzić przez trudne sytuacje w pracy — feedback, oceny, plany naprawcze, eskalacje.',
+      knowsAbout: [
+        'ocena roczna',
+        'plan naprawczy (PIP)',
+        'feedback w pracy',
+        'rozmowa 1:1 z managerem',
+        'wypalenie zawodowe',
+        'mobbing w pracy',
+      ],
+      sameAs: [
+        'https://www.youtube.com/@michalbezstresu',
+        'https://open.spotify.com/show/033Xdd4fISRZxTSUZhASOW',
+        'https://www.facebook.com/michalbezstresu',
+        'https://www.instagram.com/michalbezstresu',
+        'https://www.tiktok.com/@michalbezstresu.pl',
+      ],
+    },
+  ],
+};
 ---
 <!DOCTYPE html>
 <html lang="pl">
@@ -21,6 +69,18 @@ const {
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:site_name" content="Michał bez Stresu" />
+  <meta property="og:locale" content="pl_PL" />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Michał bez Stresu — znam zasady gry w korporacji" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
   <!-- Weryfikacja domeny w Meta (Business Settings → Domeny) — dodane 29.08.2026 -->
   <meta name="facebook-domain-verification" content="mxr92jaid3h26x4auxcate7jzwnsiv" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -29,6 +89,7 @@ const {
   <!-- Vercel Web Analytics (ruch na stronie) — bez ciasteczek, nie wymaga zgody -->
   <script is:inline>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments);};</script>
   <script defer src="/_vercel/insights/script.js"></script>
+  {!noindex && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
 </head>
 <body>
   <slot />
