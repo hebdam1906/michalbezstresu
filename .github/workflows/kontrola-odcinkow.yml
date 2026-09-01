@@ -1,0 +1,27 @@
+name: Kontrola odcinków na stronie
+
+# Sprawdza, czy najnowsze pełne odcinki z kanału YouTube są w src/data/odcinki.js.
+# Cisza przy zgodności, mail do właściciela repo przy rozjeździe.
+#
+# 9:00 UTC = 11:00 w Polsce latem, 10:00 zimą. Premiera jest o 8:00 czasu polskiego,
+# więc w obu wariantach czasu kontrola wypada co najmniej dwie godziny po niej —
+# RSS YouTube'a bywa spóźniony o kilkanaście minut.
+#
+# ⚠️ GitHub wyłącza zaplanowane workflow po 60 dniach bez commita w repo.
+# Przy tygodniowym rytmie publikacji to nam nie grozi, ale gdyby strona stanęła
+# na dłużej — trzeba je włączyć z powrotem w zakładce Actions.
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  sprawdz:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node scripts/sprawdz-odcinki.mjs
