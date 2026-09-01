@@ -20,8 +20,11 @@ jobs:
   sprawdz:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+      - uses: actions/checkout@v5
+      # Bez actions/setup-node: runner ubuntu-latest ma już wgranego Node'a,
+      # a skrypt korzysta wyłącznie z wbudowanych fetch i node:fs/promises.
+      # Jeden krok mniej = jedna akcja mniej do pilnowania przy kolejnych
+      # deprecacjach (v4 obu akcji chodziło jeszcze na Node 20, wycofanym
+      # z runnerów we wrześniu 2025).
+      - run: node --version
       - run: node scripts/sprawdz-odcinki.mjs
