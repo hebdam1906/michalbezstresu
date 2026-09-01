@@ -17,6 +17,14 @@
 
 export const odcinki = [
   {
+    nr: 7,
+    data: '2026-08-31',
+    tytul: 'Rozmowa 1:1 z managerem — najbardziej zmarnowane 15 minut w korporacji',
+    opis: 'Kto przychodzi z agendą, ten prowadzi spotkanie. Trzy zdania, które zamieniają status w rozmowę o Tobie.',
+    yt: 'https://youtu.be/mrXetPDAgGI',
+    spotify: 'https://open.spotify.com/episode/4vHTzKykNxKWd2mXGh4Vo4',
+  },
+  {
     nr: 6,
     data: '2026-08-24',
     tytul: 'Wypalenie — historia, której nie opowiedziałem nikomu w firmie',
