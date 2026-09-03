@@ -159,7 +159,7 @@ export const stronyOdcinkow = [
     // ⚠️ Pakietu PIP (749 zł) nie promujemy nigdzie, dopóki księgowa nie odpowie
     // w sprawie VAT. To jest strona, na której pokusa jest największa.
     konsultacje: false,
-    gotowa: false,
+    gotowa: true,   // ✅ zaakceptowane przez Michała 3.09
   },
   {
     nr: 1,
@@ -246,7 +246,7 @@ export const stronyOdcinkow = [
     transkrypcja: transkrypcje[1],
     powiazane: [2, 4],
     konsultacje: true,
-    gotowa: false,
+    gotowa: true,   // ✅ zaakceptowane przez Michała 3.09
   },
 
   // ── Kolejne strony. Zapytania i slugi zatwierdzone przez Klaudiusza 2.09,
