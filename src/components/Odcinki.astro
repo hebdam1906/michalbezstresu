@@ -10,6 +10,14 @@
 // Bez tego odcinek z datą 17.08 nie pokazałby się sam — ktoś musiałby
 // zrobić redeploy, a przez urlop nie ma kto.
 import { odcinki as fallback, ILE_KART, KANAL_YT, PODCAST } from '../data/odcinki.js';
+// Strony odcinków (warstwa SEO) mają własne adresy /odcinki/<slug> i do 3.09 nic
+// w serwisie do nich nie prowadziło — znajdowała je tylko sitemapa. Karta odcinka
+// jest naturalnym miejscem na ten link: człowiek dostaje trzecią opcję obok obejrzenia
+// i posłuchania, a strona dostaje link ze strony głównej, czyli z najmocniejszej
+// strony w serwisie.
+import { stronyGotowe } from '../data/strony-odcinkow.js';
+
+const doCzytania = new Map(stronyGotowe.map((s) => [s.nr, s.slug]));
 
 async function getOdcinki() {
   const url = import.meta.env.PUBLIC_SUPABASE_URL;
@@ -57,9 +65,12 @@ function kiedy(iso) {
           <div class="tag">Odcinek {o.nr}</div>
           <h3>{o.tytul}</h3>
           <p>{o.opis}</p>
-          <div class="linki">
+          <div class={doCzytania.has(o.nr) ? 'linki linki-3' : 'linki'}>
             {o.yt && <a class="glowny" href={o.yt} target="_blank" rel="noopener">Obejrzyj na YouTube →</a>}
             {o.spotify && <a class="audio" href={o.spotify} target="_blank" rel="noopener">Posłuchaj →</a>}
+            {doCzytania.has(o.nr) && (
+              <a class="audio" href={`/odcinki/${doCzytania.get(o.nr)}`}>Przeczytaj →</a>
+            )}
           </div>
         </article>
       ))}
@@ -77,6 +88,12 @@ function kiedy(iso) {
       <span aria-hidden="true"> · </span>
       <a href={PODCAST} target="_blank" rel="noopener">w podcaście</a>
     </p>
+
+    {doCzytania.size > 0 && (
+      <p class="wiecej">
+        Wolisz przeczytać? <a href="/odcinki">Wybrane odcinki rozpisane krok po kroku</a>.
+      </p>
+    )}
   </div>
 </section>
 
@@ -111,6 +128,10 @@ function kiedy(iso) {
 .linki a{font-weight:700;font-size:15px;color:var(--sygnal);text-decoration:none}
 .linki a:hover{text-decoration:underline}
 .linki .audio{font-weight:500;font-size:14px;color:#4A5A55}
+/* Przy trzech linkach karta jest za wąska, żeby zmieścić je w jednym rzędzie.
+   Zamiast pozwolić, żeby „Przeczytaj" zostało samo pod spodem, łamiemy rząd
+   po linku głównym — dwa drugoplanowe siadają wtedy obok siebie. */
+.linki-3 .glowny{flex-basis:100%}
 .zapowiedz{margin-top:28px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
   background:var(--mgla);border:1px dashed var(--szalwia);border-radius:10px;padding:18px 22px}
 .zapowiedz[hidden]{display:none}
