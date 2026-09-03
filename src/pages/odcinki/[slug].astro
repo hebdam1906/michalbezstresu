@@ -54,6 +54,29 @@ const transkrypcja = s.transkrypcja || [];
 
 const kanon = new URL(Astro.url.pathname, Astro.site).href;
 
+// FAQPage. H2 na tych stronach są pytaniami, a odpowiedź stoi bezpośrednio pod pytaniem —
+// schemat opisuje więc dokładnie to, co czytelnik widzi. Nic nie dublujemy i nic nie
+// dopisujemy niewidocznego, bo tego Google zabrania wprost.
+//
+// Uwaga na oczekiwania: od 2023 Google nie pokazuje z FAQPage wyników rozszerzonych dla
+// zwykłych stron (zostały tylko serwisy rządowe i medyczne). Robimy to dla asystentów
+// AI — ChatGPT, Perplexity, Przeglądy AI — które czytają pary pytanie–odpowiedź.
+const bezZnacznikow = (html) =>
+  String(html)
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+// Tylko sekcje, których H2 realnie jest pytaniem. „Pięć kroków" po znaku zapytania nie
+// przeszkadza — pytanie w nagłówku jest, więc para pytanie–odpowiedź trzyma się kupy.
+const pytania = (s.sekcje || []).filter((sek) => sek.h2?.includes('?') && (sek.tresc || []).length);
+
+
 // VideoObject + okruszki. Oba wchodzą do @graph z Layoutu, więc @id-y się spinają.
 const jsonLdExtra = [
   ...(vid
@@ -71,6 +94,22 @@ const jsonLdExtra = [
           publisher: { '@id': 'https://www.michalbezstresu.pl/#person' },
           // `transcript` w schema.org to Text — sklejamy akapity w jeden ciąg.
           ...(transkrypcja.length ? { transcript: transkrypcja.join('\n\n') } : {}),
+        },
+      ]
+    : []),
+  ...(pytania.length >= 2
+    ? [
+        {
+          '@type': 'FAQPage',
+          '@id': `${kanon}#faq`,
+          mainEntity: pytania.map((sek) => ({
+            '@type': 'Question',
+            name: bezZnacznikow(sek.h2),
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: sek.tresc.map(bezZnacznikow).join(' '),
+            },
+          })),
         },
       ]
     : []),
