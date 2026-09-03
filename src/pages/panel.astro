@@ -197,6 +197,7 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
           <div class="kpi"><div class="lbl">Zaplanowane publikacje</div><div class="val" id="kPub">—</div></div>
           <div class="kpi"><div class="lbl">Rozdziały gotowe</div><div class="val" id="kRoz">—</div></div>
           <div class="kpi"><div class="lbl">Subskrybenci</div><div class="val" id="kSub">—</div></div>
+          <div class="kpi"><div class="lbl">Zapytania firmowe</div><div class="val" id="kFirmy">—</div></div>
         </div>
 
         <div class="grid">
@@ -262,6 +263,19 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
               <input id="lNota" placeholder="Notatka (opcjonalnie)" />
               <button class="btn" id="lAdd">Dodaj</button>
             </div>
+          </section>
+
+          <!-- ZAPYTANIA FIRMOWE (/dla-firm) -->
+          <section class="card full" id="firmy">
+            <div class="card-head">
+              <div>
+                <h2>Zapytania firmowe</h2>
+                <div class="hint">Formularz na /dla-firm. Strona obiecuje odpowiedź w jeden dzień roboczy — „nowe" znaczy: jeszcze nikt nie odpisał.</div>
+              </div>
+            </div>
+            <div class="sync-info mono" id="firmyZrodla">—</div>
+            <table><thead><tr><th>Kiedy</th><th>Firma / osoba</th><th>Czego dotyczy</th><th>Skąd</th><th>Status</th></tr></thead>
+              <tbody id="firmyBody"></tbody></table>
           </section>
 
           <!-- STATYSTYKI: KANAŁY -->
@@ -773,7 +787,53 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
       }
 
       // init
-      loadZadania(); loadPub(); loadRoz(); loadLejek(); loadStat(); loadSubskrybenci();
+      // ---------- ZAPYTANIA FIRMOWE ----------
+      const FIRMY_STATUSY = ['nowe', 'w-kontakcie', 'oferta', 'wygrane', 'odpadlo'];
+      const TEMATY_ETYKIETY = {
+        'trudne-rozmowy': 'trudne rozmowy',
+        'ocena-feedback': 'ocena i feedback',
+        'rozmowy-1-1': 'rozmowy 1:1',
+        'inne': 'inne',
+      };
+      async function loadFirmy() {
+        let d;
+        try { d = await api('firmy'); } catch (e) { return; }
+        $('kFirmy').textContent = d.nowe > 0 ? d.nowe + ' nowe' : String(d.items.length);
+        $('firmyZrodla').textContent = d.zrodla.length
+          ? 'Skąd przyszli: ' + d.zrodla.map(function (z) { return z[0] + ' — ' + z[1]; }).join(' · ')
+          : 'Brak zapytań.';
+        $('firmyBody').innerHTML = d.items.map(function (z) {
+          const kiedy = String(z.utworzono).slice(0, 16).replace('T', ' ');
+          const tematy = (z.tematy || []).map(function (x) { return TEMATY_ETYKIETY[x] || x; }).join(', ');
+          const skad = z.utm_source
+            ? esc(z.utm_source + (z.utm_campaign ? ' / ' + z.utm_campaign : ''))
+            : z.referrer ? esc(z.referrer.replace(/^https?:\/\/(www\.)?/, '').split('/')[0])
+            : (z.skad_wiesz ? esc(z.skad_wiesz) + ' <span style="opacity:.6">(deklaracja)</span>' : '—');
+          const opcje = FIRMY_STATUSY.map(function (s) {
+            return '<option value="' + s + '"' + (z.status === s ? ' selected' : '') + '>' + s + '</option>';
+          }).join('');
+          return '<tr' + (z.status === 'nowe' ? ' style="background:rgba(212,175,55,.10)"' : '') + '>'
+            + '<td class="mono">' + esc(kiedy) + '</td>'
+            + '<td><strong>' + esc(z.firma) + '</strong><br/>' + esc(z.imie)
+              + (z.stanowisko ? ', ' + esc(z.stanowisko) : '')
+              + '<br/><a href="mailto:' + esc(z.email) + '">' + esc(z.email) + '</a></td>'
+            + '<td>' + esc(tematy || '—')
+              + (z.wielkosc_grupy ? '<br/><span style="opacity:.7">grupa: ' + esc(z.wielkosc_grupy) + '</span>' : '')
+              + (z.termin ? '<br/><span style="opacity:.7">termin: ' + esc(z.termin) + '</span>' : '')
+              + '<br/><span style="opacity:.75">' + esc(String(z.wiadomosc).slice(0, 180)) + (String(z.wiadomosc).length > 180 ? '…' : '') + '</span></td>'
+            + '<td>' + skad + '</td>'
+            + '<td><select data-firma-status="' + z.id + '">' + opcje + '</select></td>'
+            + '</tr>';
+        }).join('');
+      }
+      $('firmyBody').addEventListener('change', async (e) => {
+        const id = e.target.getAttribute('data-firma-status');
+        if (!id) return;
+        await api('firmy', 'PATCH', { id: +id, status: e.target.value });
+        loadFirmy();
+      });
+
+      loadZadania(); loadPub(); loadRoz(); loadLejek(); loadStat(); loadSubskrybenci(); loadFirmy();
     </script>
   </>
 )}

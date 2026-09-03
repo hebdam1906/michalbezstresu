@@ -1,0 +1,87 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+/**
+ * Strona po wysłaniu zapytania ze strony /dla-firm.
+ *
+ * ⚠️ DLACZEGO OSOBNA, A NIE `/dziekuje`:
+ * na `/dziekuje` siedzi `fbq('track','Lead')` i konwersja Google Ads przypisana
+ * do akcji „Checklista – zapis na listę". Zapytanie firmowe, które by tam trafiło,
+ * zawyżałoby liczbę leadów z checklisty i psuło optymalizację kampanii
+ * (uwaga Klaudiusza z 6.08, powtórzona w briefie z 3.09).
+ *
+ * Co się tu odpala zamiast tego:
+ *   • Meta: zdarzenie `Contact` — standardowe, ale INNE niż `Lead`, więc obie
+ *     rzeczy da się liczyć osobno w Menedżerze reklam.
+ *   • Google: zdarzenie `zapytanie_firmowe` bez `send_to`. Trafia do GA4 jako
+ *     osobne zdarzenie i już teraz da się je policzyć.
+ *     ⚠️ Żeby liczyło się jako KONWERSJA w Google Ads, Michał musi założyć
+ *     osobną akcję konwersji i podać etykietę — wtedy dopisujemy `send_to`
+ *     dokładnie tak jak w `dziekuje.astro`. Do tego czasu to jest pomiar,
+ *     nie konwersja, i tak trzeba to czytać.
+ *
+ * `noindex` + wykluczenie z sitemapy i robots.txt: strona ma być osiągalna
+ * wyłącznie przez przekierowanie z formularza. Wejście z wyszukiwarki
+ * generowałoby fałszywe zdarzenia.
+ */
+---
+<Layout
+  title="Dziękuję za zapytanie — Michał bez Stresu"
+  description="Zapytanie o warsztaty dotarło. Odpowiadam w ciągu jednego dnia roboczego."
+  noindex
+>
+  <main class="lp">
+    <div class="lp-wrap">
+      <div class="brand mono">Michał bez Stresu</div>
+
+      <div class="eyebrow">Zapytanie przyjęte</div>
+      <h1>Dziękuję — mam Wasze zapytanie</h1>
+
+      <p class="lp-lead">Odpowiadam osobiście, w ciągu jednego dnia roboczego. Napiszę
+        z adresu <strong>michal@michalbezstresu.pl</strong> — gdyby wiadomość nie dotarła,
+        warto sprawdzić folder ofert albo spam.</p>
+
+      <p class="lp-lead">W odpowiedzi zaproponuję krótką rozmowę, trzydzieści minut,
+        bez prezentacji i bez zobowiązań. Chcę najpierw zrozumieć, co się u Was
+        realnie dzieje — dopiero potem ma sens mówić o programie i wycenie.</p>
+
+      <p class="fineprint">Coś pilnego albo pomyłka w zgłoszeniu?
+        Piszcie wprost: <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a></p>
+    </div>
+  </main>
+
+  <script is:inline>
+    (function () {
+      var wyslane = false;
+      function zdarzenie() {
+        if (wyslane) return;
+        wyslane = true;
+        /* Celowo `Contact`, nie `Lead` — patrz komentarz na górze pliku. */
+        if (window.fbq) window.fbq('track', 'Contact');
+        /* Bez `send_to`: to jest zdarzenie pomiarowe w GA4, nie konwersja w Ads.
+           Po założeniu osobnej akcji konwersji dopisujemy tu send_to z etykietą. */
+        if (window.gtag) window.gtag('event', 'zapytanie_firmowe', {
+          event_category: 'b2b',
+          event_label: 'formularz /dla-firm',
+        });
+      }
+      document.addEventListener('mbs:trackery-gotowe', zdarzenie);
+      if (window.fbq || window.gtag) zdarzenie();
+    })();
+  </script>
+</Layout>
+
+<style>
+.lp{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:var(--sygnal);color:#F2F7F5;padding:56px 24px}
+.lp-wrap{width:100%;max-width:620px}
+.brand{font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--marker);margin-bottom:40px}
+.lp .eyebrow{color:var(--marker)}
+.lp h1{font-family:var(--disp);font-weight:500;color:#fff;
+  font-size:clamp(30px,5vw,46px);line-height:1.15;margin:10px 0 24px}
+.lp-lead{font-size:17px;line-height:1.65;color:#DCE8E4;margin-bottom:18px;max-width:56ch}
+.lp-lead strong{color:#fff}
+.fineprint{margin-top:34px;font-size:14px;color:#A9C2BA}
+.fineprint a{color:var(--marker)}
+</style>

@@ -1,0 +1,58 @@
+---
+/**
+ * Skąd przyszedł człowiek, który wypełnia formularz.
+ *
+ * Po co: deklaracja „skąd o mnie wiesz?" jest cenna, ale ludzie odpowiadają
+ * z pamięci. Przy kampaniach B2B trzeba móc powiedzieć nie tylko „mamy sześć
+ * zapytań", ale „cztery z LinkedIna, dwa z odezwy mailowej".
+ *
+ * Jak to działa: przy pierwszym wejściu W TEJ SESJI zapisujemy parametry
+ * kampanii, identyfikatory kliknięcia z reklam, witrynę odsyłającą i stronę
+ * wejścia. Kolejne przeładowania tego nie nadpisują — liczy się wejście, nie
+ * miejsce, w którym akurat stoi formularz. Formularz dokleja te dane do
+ * wysyłanego zapytania.
+ *
+ * Prywatność — świadome decyzje:
+ *   • `sessionStorage`, nie ciasteczko i nie `localStorage`. Dane giną razem
+ *     z zakładką, więc nie powstaje identyfikator śledzący człowieka między
+ *     wizytami.
+ *   • nic nie wychodzi na zewnątrz samo z siebie — dane lecą wyłącznie razem
+ *     z formularzem, który użytkownik świadomie wysyła.
+ *   • dlatego ten komponent NIE jest zależny od zgody na trackery: nie ustawia
+ *     ciasteczek i nie odpytuje żadnej firmy trzeciej. Piksele siedzą osobno,
+ *     w Trackery.astro, i tam zgoda obowiązuje.
+ */
+---
+<script is:inline>
+  (function () {
+    var KLUCZ = 'mbs_atr';
+    try {
+      if (!sessionStorage.getItem(KLUCZ)) {
+        var q = new URLSearchParams(location.search);
+        var ref = document.referrer || '';
+        /* Odsyłacz z tej samej domeny to nie źródło ruchu, tylko własna nawigacja. */
+        try { if (ref && new URL(ref).host === location.host) ref = ''; } catch (e) { ref = ''; }
+
+        var dane = {
+          utm_source: q.get('utm_source'),
+          utm_medium: q.get('utm_medium'),
+          utm_campaign: q.get('utm_campaign'),
+          utm_content: q.get('utm_content'),
+          utm_term: q.get('utm_term'),
+          gclid: q.get('gclid'),
+          fbclid: q.get('fbclid'),
+          referrer: ref || null,
+          strona_wejscia: location.pathname + (location.search || ''),
+          wejscie: new Date().toISOString(),
+        };
+        sessionStorage.setItem(KLUCZ, JSON.stringify(dane));
+      }
+    } catch (e) { /* tryb prywatny albo zablokowany storage — trudno, to dodatek */ }
+
+    /** Formularze wołają to przed wysyłką. Zawsze zwraca obiekt, nigdy nie rzuca. */
+    window.mbsAtrybucja = function () {
+      try { return JSON.parse(sessionStorage.getItem('mbs_atr') || '{}'); }
+      catch (e) { return {}; }
+    };
+  })();
+</script>

@@ -6,6 +6,9 @@ Allow: /
 # i Google Ads (uwaga Klaudiusza, 6.08).
 Disallow: /dziekuje
 
+# To samo dla podziękowania po zapytaniu firmowym — inne zdarzenie, ta sama zasada.
+Disallow: /dziekuje-firmy
+
 # Panel i dashboard są za logowaniem, ale nie ma powodu, żeby w ogóle trafiały do indeksu.
 Disallow: /panel
 Disallow: /dashboard
