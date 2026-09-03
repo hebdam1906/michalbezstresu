@@ -385,6 +385,10 @@ const jakTo = [
 .pola{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:700px){.pola{grid-template-columns:1fr}}
 .pole{display:flex;flex-direction:column;margin-bottom:16px}
+/* Pole „Doprecyzuj" ma byc ukryte, dopoki nie wybrano „Inne". Atrybut `hidden`
+   sam tego nie zalatwia: `display:flex` z reguly wyzej jest stylem autora i bije
+   domyslne `[hidden]{display:none}` przegladarki. Bez tej linijki pole widac zawsze. */
+.pole[hidden]{display:none}
 .pole label{font-size:14px;font-weight:500;color:#2C3A36;margin-bottom:6px}
 .pole input,.pole select,.pole textarea{font:inherit;font-size:15px;padding:11px 13px;border:1px solid var(--linia);border-radius:8px;background:#fff;color:#2C3A36}
 .pole textarea{resize:vertical;min-height:110px}
