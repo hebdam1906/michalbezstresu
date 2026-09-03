@@ -1,0 +1,234 @@
+---
+/**
+ * Strona pojedynczego odcinka — warstwa treściowa pod wyszukiwarkę.
+ * Plan: `Strony-odcinkow_mapa-fraz-i-struktura.md` (Klaudiusz, 2.09.2026).
+ *
+ * Buduje się TYLKO to, co ma `gotowa: true` w `strony-odcinkow.js`. Strona bez
+ * treści zaindeksowana raz jako pusta potrafi zostać w indeksie taka na tygodnie
+ * — dlatego przełącznik, a nie „opublikujemy i dopiszemy".
+ *
+ * Film jest wstawiany jako podmianka (miniatura + przycisk), a prawdziwy iframe
+ * dopiero po kliknięciu. Dwa powody: YouTube ustawia ciasteczka w momencie
+ * osadzenia, więc bez tego łamalibyśmy własny baner zgód; no i strona z
+ * osadzonym odtwarzaczem ładuje się zauważalnie wolniej, a szybkość jest
+ * czynnikiem rankingowym.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Stopka from '../../components/Stopka.astro';
+import { stronyGotowe, stronyOdcinkow } from '../../data/strony-odcinkow.js';
+import { odcinki } from '../../data/odcinki.js';
+
+export function getStaticPaths() {
+  return stronyGotowe.map((s) => ({ params: { slug: s.slug }, props: { s } }));
+}
+
+const { s } = Astro.props;
+const odc = odcinki.find((o) => o.nr === s.nr);
+
+/** ID filmu z dowolnej formy adresu YouTube (youtu.be/… albo watch?v=…). */
+const ytId = (url) => {
+  if (!url) return null;
+  const m = url.match(/(?:youtu\.be\/|v=|shorts\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+};
+const vid = ytId(odc?.yt);
+const miniatura = vid ? `https://i.ytimg.com/vi/${vid}/maxresdefault.jpg` : null;
+
+// Kontrola spójności: czy strony, do których mamy linkować, są już opublikowane.
+// Nic nie renderuje — służy do sprawdzenia w buildzie, czy plan linkowania ma pokrycie.
+const powiazaneGotowe = (s.powiazane || [])
+  .map((nr) => stronyOdcinkow.find((x) => x.nr === nr && x.gotowa))
+  .filter(Boolean);
+
+// Teksty CTA są per strona. Zaszyte na sztywno były feedbackowe — na stronie o PIP
+// wyświetliłaby się obietnica „10 zdań na niesprawiedliwy feedback". Wartości domyślne
+// zostają dla stron, które własnego tekstu jeszcze nie mają.
+const ctaGora = s.cta?.gora
+  || '<strong>Darmowa checklista:</strong> wzór notatki po trudnej rozmowie i gotowe zdania na trudne rozmowy w pracy.';
+const ctaDol = s.cta?.dol
+  || '<strong>Zacznij od checklisty.</strong> Dostaniesz ją mailem, za darmo.';
+
+const lead = Array.isArray(s.lead) ? s.lead : [s.lead].filter(Boolean);
+const transkrypcja = s.transkrypcja || [];
+
+const kanon = new URL(Astro.url.pathname, Astro.site).href;
+
+// VideoObject + okruszki. Oba wchodzą do @graph z Layoutu, więc @id-y się spinają.
+const jsonLdExtra = [
+  ...(vid
+    ? [
+        {
+          '@type': 'VideoObject',
+          '@id': `${kanon}#video`,
+          name: odc.tytul,
+          description: s.opis,
+          thumbnailUrl: miniatura,
+          uploadDate: odc.data,
+          embedUrl: `https://www.youtube-nocookie.com/embed/${vid}`,
+          contentUrl: odc.yt,
+          inLanguage: 'pl-PL',
+          publisher: { '@id': 'https://www.michalbezstresu.pl/#person' },
+          // `transcript` w schema.org to Text — sklejamy akapity w jeden ciąg.
+          ...(transkrypcja.length ? { transcript: transkrypcja.join('\n\n') } : {}),
+        },
+      ]
+    : []),
+  {
+    '@type': 'BreadcrumbList',
+    '@id': `${kanon}#okruszki`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Strona główna', item: 'https://www.michalbezstresu.pl/' },
+      { '@type': 'ListItem', position: 2, name: 'Odcinki', item: 'https://www.michalbezstresu.pl/odcinki' },
+      { '@type': 'ListItem', position: 3, name: s.h1 },
+    ],
+  },
+];
+---
+<Layout title={s.tytul} description={s.opis} jsonLdExtra={jsonLdExtra}>
+  <Nav />
+
+  <article>
+    <header class="ohead">
+      <div class="wrap">
+        <nav class="okruszki" aria-label="Ścieżka">
+          <a href="/">Start</a> <span aria-hidden="true">/</span>
+          <a href="/odcinki">Odcinki</a>
+        </nav>
+        <div class="eyebrow">Odcinek #{s.nr}</div>
+        <h1>{s.h1}</h1>
+        {lead.map((akapit) => <p class="lead">{akapit}</p>)}
+      </div>
+    </header>
+
+    <div class="wrap">
+      {vid && (
+        <div class="film">
+          <button class="film-btn" data-vid={vid} aria-label={`Odtwórz odcinek: ${odc.tytul}`}>
+            <img src={miniatura} alt="" width="1280" height="720" loading="lazy" decoding="async" />
+            <span class="film-play" aria-hidden="true">▶</span>
+            <span class="film-info">Odtwórz na YouTube — {odc.tytul}</span>
+          </button>
+          <p class="film-nota">
+            Kliknięcie uruchamia odtwarzacz YouTube, który ustawia własne pliki cookie.
+            {odc.spotify && <> Wolisz posłuchać? <a href={odc.spotify} target="_blank" rel="noopener">Ten odcinek na Spotify</a>.</>}
+          </p>
+        </div>
+      )}
+
+      <aside class="cta cta-gora">
+        <p set:html={ctaGora} />
+        <a class="btn btn-primary" href="/checklista">Pobierz checklistę</a>
+      </aside>
+
+      <div class="tresc">
+        {s.sekcje.map((sek) => (
+          <section class="sekcja">
+            <h2>{sek.h2}</h2>
+            {sek.tresc.map((p) => <p set:html={p} />)}
+          </section>
+        ))}
+
+        {s.zapamietaj.length > 0 && (
+          <section class="sekcja zapamietaj">
+            <h2>Co zapamiętać</h2>
+            <ul>{s.zapamietaj.map((p) => <li set:html={p} />)}</ul>
+          </section>
+        )}
+      </div>
+
+      {/* Listy „Powiązane odcinki" tu nie ma świadomie. Zasada Klaudiusza (2.09):
+          linkujemy w treści, naturalnym zdaniem, nie listą na końcu strony.
+          Pole `powiazane` w danych zostaje jako plan — linki siedzą w `tresc`. */}
+
+      {transkrypcja.length > 0 && (
+        <details class="transkrypcja">
+          <summary>Transkrypcja całego odcinka</summary>
+          <div>
+            <p class="transkrypcja-nota">
+              Zapis tego, co padło w nagraniu, po korekcie interpunkcji i literówek.
+              Historie są zanonimizowane tak samo jak w filmie.
+            </p>
+            {transkrypcja.map((akapit) => <p>{akapit}</p>)}
+          </div>
+        </details>
+      )}
+
+      <aside class="cta cta-dol">
+        <p set:html={ctaDol} />
+        <div class="cta-btny">
+          <a class="btn btn-primary" href="/checklista">Pobierz checklistę</a>
+          {s.konsultacje && <a class="btn btn-ghost" href="/konsultacje">Omów swoją sytuację</a>}
+        </div>
+      </aside>
+
+      {s.notaPrawna && (
+        <p class="nota-prawna" set:html={s.notaPrawna} />
+      )}
+    </div>
+  </article>
+
+  <Stopka />
+</Layout>
+
+<script is:inline>
+  // Podmianka → iframe. Autoplay dopiero po kliknięciu, więc to świadoma zgoda
+  // użytkownika na odtwarzacz, a nie coś, co startuje samo z siebie.
+  document.querySelectorAll('.film-btn').forEach((b) => {
+    b.addEventListener('click', () => {
+      const f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + b.dataset.vid + '?autoplay=1&rel=0';
+      f.title = 'Odtwarzacz YouTube';
+      f.allow = 'accelerometer; autoplay; encrypted-media; picture-in-picture';
+      f.allowFullscreen = true;
+      f.loading = 'lazy';
+      b.replaceWith(f);
+    }, { once: true });
+  });
+</script>
+
+<style>
+.ohead{padding:40px 0 24px}
+.okruszki{font-family:var(--mono);font-size:12px;color:#5E6E68;margin-bottom:18px}
+.okruszki a{text-decoration:none}
+.okruszki a:hover{color:var(--sygnal)}
+h1{font-size:clamp(30px,4.6vw,46px);margin-bottom:18px;max-width:20ch}
+.lead{font-size:19px;color:#3C4A46;max-width:62ch}
+
+.film{margin:32px 0 8px}
+.film-btn,.film :global(iframe){display:block;width:100%;aspect-ratio:16/9;border:0;border-radius:12px;background:#0d1512}
+.film-btn{position:relative;padding:0;cursor:pointer;overflow:hidden}
+.film-btn img{width:100%;height:100%;object-fit:cover;display:block}
+.film-play{position:absolute;inset:0;margin:auto;width:76px;height:76px;display:grid;place-items:center;
+  border-radius:50%;background:rgba(46,107,93,.94);color:#fff;font-size:26px;padding-left:5px}
+.film-btn:hover .film-play{background:var(--sygnal-c)}
+.film-btn:focus-visible{outline:3px solid var(--sygnal);outline-offset:3px}
+.film-info{position:absolute;left:0;right:0;bottom:0;padding:14px 18px;text-align:left;color:#fff;
+  font-size:14px;background:linear-gradient(transparent,rgba(0,0,0,.68))}
+.film-nota{font-size:13px;color:#5E6E68;margin-top:10px}
+
+.cta{background:var(--papier);border:1px solid var(--linia);border-radius:12px;padding:24px;
+  margin:32px 0;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.cta p{max-width:56ch}
+.cta-btny{display:flex;gap:12px;flex-wrap:wrap}
+
+.tresc{max-width:68ch}
+.sekcja{padding:28px 0 0}
+.sekcja h2{font-size:clamp(23px,2.8vw,30px);margin-bottom:14px}
+.sekcja p{margin-bottom:14px}
+.zapamietaj{background:var(--papier);border-left:3px solid var(--sygnal);border-radius:0 12px 12px 0;
+  padding:24px 26px;margin-top:36px}
+.zapamietaj ul{margin:0;padding-left:20px}
+.zapamietaj li{margin-bottom:10px}
+.powiazane{list-style:none;padding:0;display:grid;gap:10px;max-width:68ch}
+.powiazane a{color:var(--sygnal);text-decoration:none;font-weight:500}
+.powiazane a:hover{text-decoration:underline}
+
+.nota-prawna{max-width:68ch;margin:24px 0 0;padding:14px 18px;border-left:3px solid var(--linia);
+  font-size:14px;line-height:1.6;color:#5E6E68;background:var(--papier);border-radius:0 8px 8px 0}
+.transkrypcja{margin:40px 0;background:var(--papier);border:1px solid var(--linia);border-radius:12px;padding:20px 24px}
+.transkrypcja summary{cursor:pointer;font-family:var(--disp);font-size:20px}
+.transkrypcja div{margin-top:18px;max-width:68ch;color:#3C4A46}
+.transkrypcja-nota{font-size:13px;color:#5E6E68;font-style:italic;margin-bottom:16px}
+.transkrypcja :global(p){margin-bottom:12px}
+</style>

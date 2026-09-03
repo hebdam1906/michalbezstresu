@@ -15,3 +15,6 @@ dist/
 
 # vercel
 .vercel
+
+# katalogi robocze z porzadkow — nie wchodza do repo
+_DO-KASACJI/

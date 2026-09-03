@@ -1,0 +1,68 @@
+---
+/**
+ * Rozdroże dla stron odcinków. Trzy zadania:
+ *  1. daje Google jedną stronę, z której linkują wszystkie strony odcinków
+ *  2. daje człowiekowi listę pytań, w której znajdzie swoje
+ *  3. jest środkowym elementem okruszków (Start / Odcinki / …)
+ *
+ * ⚠️ Astro buduje tę stronę zawsze — to trasa statyczna, nie dynamiczna, więc
+ * `getStaticPaths` jej nie zatrzyma (sprawdzone przy pierwszym buildzie 2.09:
+ * /odcinki wyszło puste i wskoczyło do sitemapy). Dlatego dopóki nie ma ani
+ * jednej gotowej strony, rozdroże idzie z `noindex` i jest wycięte z sitemapy
+ * filtrem w `astro.config.mjs`. Oba warunki znikają same, gdy pierwsza strona
+ * dostanie `gotowa: true`.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Stopka from '../../components/Stopka.astro';
+import { stronyGotowe } from '../../data/strony-odcinkow.js';
+import { odcinki } from '../../data/odcinki.js';
+
+const lista = stronyGotowe
+  .map((s) => ({ ...s, odc: odcinki.find((o) => o.nr === s.nr) }))
+  .sort((a, b) => b.nr - a.nr);
+---
+<Layout
+  title="Odcinki — trudne sytuacje w korporacji, krok po kroku | Michał bez Stresu"
+  description="Plan naprawczy, negatywny feedback, ocena roczna, mobbing, wypalenie. Każdy odcinek to jedna sytuacja i konkretne kroki — do obejrzenia albo przeczytania."
+  noindex={lista.length === 0}
+>
+  <Nav />
+
+  <header class="lhead">
+    <div class="wrap">
+      <div class="eyebrow">Odcinki</div>
+      <h1>Jedna sytuacja, jeden odcinek, konkretne kroki</h1>
+      <p class="sub">Każdy odcinek odpowiada na jedno pytanie, które ktoś naprawdę zadał.
+        Możesz obejrzeć, posłuchać albo przeczytać — jak Ci wygodniej.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <ul class="karty">
+      {lista.map((s) => (
+        <li class="karta">
+          <a href={`/odcinki/${s.slug}`}>
+            <span class="karta-nr">#{s.nr}</span>
+            <h2>{s.h1}</h2>
+            <p>{s.opis}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </main>
+
+  <Stopka />
+</Layout>
+
+<style>
+.lhead{padding:48px 0 8px}
+h1{font-size:clamp(30px,4.6vw,46px);margin-bottom:16px;max-width:22ch}
+.karty{list-style:none;padding:0;margin:36px 0 72px;display:grid;gap:16px}
+.karta a{display:block;background:var(--papier);border:1px solid var(--linia);border-radius:12px;
+  padding:24px 26px;text-decoration:none;transition:border-color .15s,transform .15s}
+.karta a:hover{border-color:var(--szalwia);transform:translateY(-2px)}
+.karta-nr{font-family:var(--mono);font-size:12px;color:var(--sygnal)}
+.karta h2{font-size:23px;margin:6px 0 8px}
+.karta p{color:#4A5A55;font-size:15px;max-width:70ch}
+</style>
