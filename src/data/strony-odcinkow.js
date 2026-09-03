@@ -12,6 +12,15 @@
 // ⚠️ ZASADA NR 2: tekst rozdziału książki NIGDY nie trafia tutaj. W drugą stronę
 // jest bezpiecznie — strona może być szkicem, z którego wyrasta rozdział.
 //
+// ⚠️ ZASADA NR 3 (Klaudiusz, 3.09): obserwacje tak, opowiedziane historie nie.
+// Granica biegnie między obserwacją a opowieścią:
+//   ✅ obserwacja — jedno-dwa zdania, bez sceny, bez bohatera, bez przebiegu
+//      wydarzeń („Widziałem plan, który uratował człowieka, i plan, który był
+//      tylko odliczaniem"). Buduje wiarygodność, a Google premiuje treść,
+//      w której widać realne doświadczenie autora.
+//   ❌ opowiedziana historia — scena, konkretna osoba, dialog, przebieg w czasie,
+//      puenta. To zostaje w książce i to jest to, za co ludzie płacą.
+//
 // POLA:
 //   nr          numer odcinka; spina stronę z wpisem w `odcinki.js`
 //   slug        adres: /odcinki/<slug>. Raz opublikowany — nie zmieniamy.
@@ -25,6 +34,10 @@
 //   powiazane   dwa numery odcinków, do których ta strona ma linkować. UWAGA: to
 //               pole jest tylko planem — linki wstawiamy RĘCZNIE w `tresc`, jako
 //               naturalne zdanie. Zasada Klaudiusza: żadnej listy „zobacz też".
+//   pomost      JEDNO zdanie (HTML) pod sekcją „Co zapamiętać", otwierające
+//               następny temat, z linkiem wewnętrznym. Ma otwierać pytanie, a nie
+//               sprzedawać — decyzja Klaudiusza z 3.09. Podsumowania NIE zastępuje:
+//               „Co zapamiętać" zostaje, bo Google chętnie wyciąga je do wyników.
 //   konsultacje czy pokazujemy CTA do konsultacji obok checklisty
 //   cta         { gora, dol } — teksty CTA dla TEJ strony (HTML). Bez tego lecą
 //               teksty domyślne z szablonu, a te są feedbackowe: na stronie o PIP
@@ -156,6 +169,13 @@ export const stronyOdcinkow = [
       'z perspektywy managera. W konkretnej sprawie skontaktuj się z prawnikiem ' +
       'specjalizującym się w prawie pracy.',
     transkrypcja: transkrypcje[2],
+    // Zdanie pomostowe: tekst Klaudiusza z 3.09. Link do strony odcinka 8
+    // (/odcinki/spotkanie-z-hr-bez-tematu) DOPISZEMY, gdy ta strona powstanie —
+    // linkowanie do nieistniejącego adresu byłoby błędem 404 na opublikowanej stronie.
+    pomost:
+      'A jeśli mimo wszystko dojdzie do rozstania, na stole pojawia się inny dokument ' +
+      '— i wtedy różnica między wypowiedzeniem a porozumieniem stron zaczyna decydować ' +
+      'o pieniądzach. O tym będzie osobny odcinek.',
     // ⚠️ Pakietu PIP (749 zł) nie promujemy nigdzie, dopóki księgowa nie odpowie
     // w sprawie VAT. To jest strona, na której pokusa jest największa.
     konsultacje: false,
@@ -244,6 +264,12 @@ export const stronyOdcinkow = [
         'gotowych zdań na niesprawiedliwy feedback. Dostaniesz ją mailem, za darmo.',
     },
     transkrypcja: transkrypcje[1],
+    // Zdanie pomostowe: tekst Klaudiusza z 3.09. Tu link działa od razu, bo strona
+    // o planie naprawczym jest już opublikowana.
+    pomost:
+      'Bywa też tak, że pisemny feedback jest pierwszym krokiem do czegoś większego ' +
+      '— do planu naprawczego. <a href="/odcinki/plan-naprawczy-pip">Czym on naprawdę ' +
+      'jest, wyjaśniam tutaj</a>.',
     powiazane: [2, 4],
     konsultacje: true,
     gotowa: true,   // ✅ zaakceptowane przez Michała 3.09
