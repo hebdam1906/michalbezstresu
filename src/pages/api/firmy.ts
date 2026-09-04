@@ -22,6 +22,8 @@ import type { APIRoute } from 'astro';
 import { supabaseAdmin } from '../../lib/supabase';
 import { createHash } from 'node:crypto';
 
+import { powiadom } from '../../lib/powiadom';
+
 const json = (b: unknown, s = 200) =>
   new Response(JSON.stringify(b), { status: s, headers: { 'Content-Type': 'application/json' } });
 
@@ -126,6 +128,15 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       });
     } catch { /* zapytanie jest w bazie — to wystarczy */ }
   }
+
+  // Sygnał do Michała — patrz komentarz w src/lib/powiadom.ts.
+  await powiadom({
+    typ: 'firmy',
+    imie,
+    email,
+    tresc: wiadomosc,
+    extra: { firma, stanowisko, wielkosc_grupy, tematy, termin, skad_wiesz },
+  });
 
   return json({ ok: true });
 };

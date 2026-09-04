@@ -18,6 +18,8 @@ import type { APIRoute } from 'astro';
 import { supabaseAdmin } from '../../lib/supabase';
 import { createHash } from 'node:crypto';
 
+import { powiadom } from '../../lib/powiadom';
+
 const json = (b: unknown, s = 200) =>
   new Response(JSON.stringify(b), { status: s, headers: { 'Content-Type': 'application/json' } });
 
@@ -95,6 +97,16 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
       });
     } catch { /* zapytanie jest już w bazie — to wystarczy */ }
   }
+
+  // Sygnał do Michała. Bez tego zapytanie leży w bazie, dopóki ktoś nie zajrzy
+  // do panelu — patrz komentarz w src/lib/powiadom.ts.
+  await powiadom({
+    typ: 'konsultacje',
+    imie,
+    email,
+    tresc: sytuacja,
+    extra: { kod_rabatowy: kod, skad_wiesz },
+  });
 
   return json({ ok: true });
 };

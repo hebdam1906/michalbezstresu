@@ -169,13 +169,13 @@ export const stronyOdcinkow = [
       'z perspektywy managera. W konkretnej sprawie skontaktuj się z prawnikiem ' +
       'specjalizującym się w prawie pracy.',
     transkrypcja: transkrypcje[2],
-    // Zdanie pomostowe: tekst Klaudiusza z 3.09. Link do strony odcinka 8
-    // (/odcinki/spotkanie-z-hr-bez-tematu) DOPISZEMY, gdy ta strona powstanie —
-    // linkowanie do nieistniejącego adresu byłoby błędem 404 na opublikowanej stronie.
+    // Zdanie pomostowe: tekst Klaudiusza z 3.09. Link dopisany 4.09, razem
+    // z publikacją strony odcinka 8 — wcześniej wisiał bez linku, bo adres
+    // /odcinki/spotkanie-z-hr-bez-tematu jeszcze nie istniał (byłoby 404).
     pomost:
       'A jeśli mimo wszystko dojdzie do rozstania, na stole pojawia się inny dokument ' +
-      '— i wtedy różnica między wypowiedzeniem a porozumieniem stron zaczyna decydować ' +
-      'o pieniądzach. O tym będzie osobny odcinek.',
+      '— i wtedy różnica między <a href="/odcinki/spotkanie-z-hr-bez-tematu">wypowiedzeniem ' +
+      'a porozumieniem stron</a> zaczyna decydować o pieniądzach.',
     // ⚠️ Pakietu PIP (749 zł) nie promujemy nigdzie, dopóki księgowa nie odpowie
     // w sprawie VAT. To jest strona, na której pokusa jest największa.
     konsultacje: false,
@@ -311,10 +311,109 @@ export const stronyOdcinkow = [
     powiazane: [1, 5], konsultacje: true, gotowa: false,
   },
   {
-    nr: 8, slug: 'spotkanie-z-hr-bez-tematu',
-    zapytanie: 'zaproszenie na spotkanie z HR co to znaczy',
-    tytul: '', opis: '', h1: '', lead: '', sekcje: [], zapamietaj: [],
-    powiazane: [2, 4], konsultacje: true, gotowa: false,
+    nr: 8,
+    slug: 'spotkanie-z-hr-bez-tematu',
+    zapytanie: 'spotkanie z HR bez tematu co oznacza',
+    tytul: 'Spotkanie z HR bez tematu — co oznacza i jak się zachować',
+    opis:
+      'Zaproszenie bez tematu, za dwie godziny, a na liście gości ktoś z HR. Wyjaśniam, co zwykle znaczy taki wpis w kalendarzu i czego nie robić w sali.',
+    h1: 'Zaproszenie na spotkanie z HR, bez tematu. Co to znaczy?',
+    lead: [
+      "W kalendarzu pojawia się zaproszenie. Bez tematu, za dwie godziny, a na liście gości ktoś z HR. Każdy, kto pracował w dużej firmie, zna ten skok tętna.",
+      "Przez dwadzieścia lat pracowałem w korporacjach, od specjalisty po senior managera. Prowadziłem takie spotkania z drugiej strony stołu. Poniżej to, co wiem o tym, jak one powstają — i co realnie można zrobić w ciągu tych kilkudziesięciu minut.",
+    ],
+    sekcje: [
+      {
+        h2: "Co zwykle oznacza spotkanie bez tematu z kimś z HR?",
+        tresc: [
+          "Najczęściej nie oznacza nic dramatycznego. Wpis bez tematu bierze się z tego, że manager nie chce nazywać sprawy w kalendarzu, do którego zaglądają inni — a powodów jest sporo: zmiana w strukturze, przesunięcie do innego zespołu, rozmowa o wyniku zespołu, awans, czyjaś skarga, o której nie wiesz.",
+          "Obecność osoby z HR zmienia jednak jedną rzecz: to znaczy, że sprawa ma jakiś status formalny. HR nie chodzi na rozmowy o niczym. Może to być procedura, dokument do podpisania, sprawa pracownicza w toku albo etap czegoś, co zaczęło się wcześniej — na przykład <a href=\"/odcinki/plan-naprawczy-pip\">planu naprawczego</a>, który dobiega końca.",
+          "Nie warto z tego budować wyroku, zanim padnie pierwsze zdanie. Warto natomiast wejść na to spotkanie z założeniem, że to nie jest zwykła rozmowa — i zachować się odpowiednio do tego założenia.",
+        ],
+      },
+      {
+        h2: "Dlaczego druga strona nie jest zaskoczona?",
+        tresc: [
+          "To jest najważniejsza rzecz, którą zobaczyłem, siedząc po tamtej stronie stołu.",
+          "Kiedy Ty wchodzisz do sali zaskoczony, po drugiej stronie nikt zaskoczony nie jest. Takie spotkanie jest przygotowane — czasem od tygodni. Dokumenty są wydrukowane wcześniej, zwykle w kilku wariantach, bo nie wiadomo, którą drogą pójdzie rozmowa. Przy większych zmianach manager dostaje wręcz scenariusz: co powiedzieć, w jakiej kolejności, czego nie obiecywać.",
+          "To nie jest spisek. To jest proces — i firmy prowadzą go w ten sposób głównie po to, żeby nie popełnić błędu formalnego. Ale dla Ciebie wniosek jest praktyczny: wchodzisz w rozmowę, do której druga strona przygotowywała się tygodniami, a Ty miałeś dwie godziny. <strong>Wyrównanie tej różnicy nie polega na tym, żeby szybciej myśleć. Polega na tym, żeby nie decydować w sali.</strong>",
+        ],
+      },
+      {
+        h2: "Czy trzeba coś podpisać na tym spotkaniu?",
+        tresc: [
+          "Nie. I to jest zdanie, które warto zapamiętać w całości.",
+          "Usłyszysz — czasem wprost, czasem między wierszami — że najlepiej podpisać od razu. Że tak będzie prościej, szybciej, czyściej dla wszystkich. To zwykle nie jest próba oszustwa. To jest wygoda procesu: podpisany dokument zamyka sprawę i zdejmuje ją z listy.",
+          "Twoja wygoda jest inna. Dokumenty czyta się na spokojnie, poza salą, w której właśnie przestało się myśleć. Zdanie, które to załatwia, brzmi po prostu:",
+          "<strong>„Dziękuję. Chcę to przeczytać spokojnie i wrócę do Was z odpowiedzią.\"</strong>",
+          "Nie musisz go uzasadniać. Nie musisz podawać terminu na poczekaniu. Prośba o przeczytanie dokumentu przed podpisaniem nie jest niczym nadzwyczajnym i nikt kompetentny nie zareaguje na nią źle.",
+        ],
+      },
+      {
+        h2: "Czym różni się wypowiedzenie od porozumienia stron?",
+        tresc: [
+          "Różnicą, którą warto rozumieć, zanim cokolwiek podpiszesz.",
+          "<strong>Wypowiedzenie to komunikat.</strong> Jedna strona informuje drugą o swojej decyzji. Nie potrzebuje Twojej zgody i nie podlega negocjacji — obowiązuje okres wypowiedzenia, a Ty masz określony czas na to, żeby się od niego odwołać, jeśli uważasz je za bezpodstawne.",
+          "<strong>Porozumienie stron to negocjacja.</strong> Bez Twojego podpisu nie istnieje. A skoro nie istnieje bez Twojego podpisu, to znaczy, że wszystko w nim jest przedmiotem rozmowy: data rozwiązania umowy, zwolnienie ze świadczenia pracy, rozliczenie urlopu, treść świadectwa pracy, dodatkowe świadczenie, czasem referencje.",
+          "To jest cała asymetria tej rozmowy w jednym zdaniu: dokument, który wygląda na łagodniejszy, jest jedynym, przy którym masz coś do powiedzenia — i jedynym, który możesz podpisać za szybko.",
+          "<strong>Porozumienie stron ma też konsekwencje poza firmą</strong>, między innymi dla prawa do zasiłku. To jest dokładnie ten fragment, przy którym warto zapytać kogoś, kto zna Twoją sytuację, zanim postawisz podpis.",
+        ],
+      },
+      {
+        h2: "Co powiedzieć, kiedy nie wiadomo, co powiedzieć?",
+        tresc: [
+          "Trzy zdania wystarczą na całe spotkanie.",
+          "<strong>„Chcę się upewnić, że dobrze rozumiem — czego dotyczy to spotkanie?\"</strong> Zadane na początku porządkuje rozmowę i daje Ci kilkanaście sekund na złapanie oddechu.",
+          "<strong>„Rozumiem. Potrzebuję to przeczytać na spokojnie.\"</strong> Uniwersalna odpowiedź na każdy dokument położony na stole.",
+          "<strong>„Wrócę do Was z odpowiedzią.\"</strong> Bez daty, jeśli nie jesteś gotowy jej podać. Termin ustalisz mailem, kiedy będziesz wiedział, ile czasu realnie potrzebujesz.",
+          "Nie musisz w tej sali niczego wygrać. Musisz z niej wyjść bez podpisu i z kopią dokumentu.",
+        ],
+      },
+      {
+        h2: "Co zrobić w pierwszych 48 godzinach po takim spotkaniu?",
+        tresc: [
+          "Cztery rzeczy, w tej kolejności.",
+          "<strong>Zapisz przebieg, jeszcze tego samego dnia.</strong> Kto był, co padło, jakimi słowami, co Ci zaproponowano i czego nie powiedziano wprost. Pamięć przekłamuje szczegóły znacznie szybciej, niż nam się wydaje, a przy takich sprawach cała wartość siedzi w szczegółach. To ta sama zasada, która obowiązuje przy <a href=\"/odcinki/negatywny-feedback-od-szefa\">trudnym feedbacku od przełożonego</a>.",
+          "<strong>Zabezpiecz to, co Twoje.</strong> Kontakty prywatne, dokumenty, do których masz prawo, kopie własnych ocen i podsumowań. Nic, co należy do firmy — wyłącznie to, co dotyczy Ciebie.",
+          "<strong>Przeczytaj dokument dwa razy, w odstępie kilku godzin.</strong> Pierwsze czytanie jest emocjonalne i nic z niego nie wynika. Przy drugim zaczynasz widzieć daty i kwoty.",
+          "<strong>Ustal, z kim to skonsultujesz.</strong> Zanim odpiszesz. To nie musi być prawnik — czasem wystarczy ktoś, kto przeszedł to samo. Ale ta rozmowa ma się odbyć przed odpowiedzią, nie po.",
+        ],
+      },
+    ],
+    zapamietaj: [
+      "<strong>Spotkanie bez tematu z udziałem HR najczęściej nie jest wyrokiem</strong>, ale zawsze oznacza, że sprawa ma status formalny.",
+      "<strong>Druga strona jest przygotowana od tygodni.</strong> Ty nie musisz się z tym równać w sali — musisz tylko z niej wyjść bez podpisu.",
+      "<strong>Wypowiedzenie to komunikat. Porozumienie stron to negocjacja</strong> — i dlatego to właśnie ono wymaga spokojnej głowy.",
+      "<strong>Notatka z przebiegu spotkania powstaje tego samego dnia.</strong> Później to już jest odtwarzanie, nie zapis.",
+    ],
+    powiazane: [2, 1],
+    cta: {
+      gora:
+        '<strong>Darmowa checklista:</strong> wzór notatki po trudnej rozmowie ' +
+        'i dziesięć gotowych zdań na sytuacje, w których trzeba coś powiedzieć, ' +
+        'a głowa odmawia współpracy.',
+      dol:
+        '<strong>Darmowa checklista.</strong> Wzór notatki po trudnej rozmowie ' +
+        'i dziesięć gotowych zdań na sytuacje, w których trzeba coś powiedzieć, ' +
+        'a głowa odmawia współpracy. Dostaniesz ją mailem, za darmo.',
+    },
+    // Nota prawna obowiązkowa — tekst dotyka dokumentów i podpisów.
+    notaPrawna:
+      'To materiał edukacyjny oparty na doświadczeniu managerskim, a nie porada ' +
+      'prawna. Każda umowa i każda sytuacja są inne — przed podpisaniem ' +
+      'jakiegokolwiek dokumentu warto skonsultować go z prawnikiem albo ' +
+      'z inspekcją pracy.',
+    // ⚠️ Transkrypcji odcinka 8 jeszcze nie ma w `transkrypcje.js` — plik zawiera
+    // dziś tylko odcinki 1 i 2. Pole zostaje puste do czasu, aż transkrypcja
+    // przejdzie kontrolę anonimowości i zostanie tam dopisana.
+    pomost:
+      'Bywa też odwrotnie: rozmowa nie kończy współpracy, tylko ją formalizuje ' +
+      '— i wtedy z sali wychodzisz z <a href="/odcinki/plan-naprawczy-pip">planem ' +
+      'naprawczym</a> zamiast z dokumentem do podpisania. To jest inna sytuacja ' +
+      'i inna gra.',
+    // CTA wyłącznie do checklisty — decyzja Klaudiusza z 4.09.
+    konsultacje: false,
+    gotowa: true,   // ✅ zaakceptowane przez Michała 4.09
   },
   {
     nr: 9, slug: 'jak-rozmawiac-o-podwyzce',
