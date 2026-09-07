@@ -1,16 +1,17 @@
 User-agent: *
 Allow: /
 
-# Strona po zapisie na checklistę — ma być osiągalna tylko przez przekierowanie
-# z formularza. Wejście z wyszukiwarki generowałoby fałszywe konwersje w Meta
-# i Google Ads (uwaga Klaudiusza, 6.08).
-Disallow: /dziekuje
-
-# To samo dla podziękowania po zapytaniu firmowym — inne zdarzenie, ta sama zasada.
-Disallow: /dziekuje-firmy
-
-# Panel i dashboard są za logowaniem, ale nie ma powodu, żeby w ogóle trafiały do indeksu.
-Disallow: /panel
-Disallow: /dashboard
+# 7.09.2026: usunięte wszystkie reguły Disallow. Powód: odwołanie do Google Ads
+# w sprawie zawieszenia za „Circumventing Systems: Cloaking". Google wymienia
+# „robot nie może dotrzeć do strony docelowej" jako jeden z przykładów cloakingu,
+# więc nie chcemy mieć w serwisie ANI JEDNEJ ścieżki zablokowanej dla robotów.
+#
+# Strony, które wcześniej były tu blokowane (/dziekuje, /dziekuje-firmy, /panel,
+# /dashboard), i tak nie trafią do indeksu — każda z nich ma w <head> znacznik
+# `noindex, nofollow` (patrz Layout.astro, parametr `noindex`).
+#
+# ⚠️ To jest w dodatku POPRAWNIEJSZE niż poprzedni stan: `noindex` działa tylko
+# wtedy, gdy robot może stronę pobrać i ten znacznik zobaczyć. Blokada w
+# robots.txt sprawiała, że znacznik był dla Google niewidoczny.
 
 Sitemap: https://www.michalbezstresu.pl/sitemap-index.xml
