@@ -2,10 +2,15 @@
 /**
  * Baner zgody na cookies analityczno-marketingowe.
  *
- * Zasada: NIC nie ładuje się z wyprzedzeniem. Piksel Meta i tag Google startują
- * dopiero po kliknięciu „Zgadzam się" — i tylko wtedy. Vercel Web Analytics
- * zostaje bez zmian, bo nie używa ciasteczek ani identyfikatorów i zgody
- * nie wymaga.
+ * Zasada (od 7.09.2026): piksel Meta startuje dopiero po kliknięciu
+ * „Zgadzam się". Tag Google działa inaczej — ładuje się zawsze, ale w trybie
+ * Consent Mode v2 z domyślnym stanem zgody `denied`, więc bez zgody nie
+ * zapisuje ciasteczek ani identyfikatorów; kliknięcie „Zgadzam się" przestawia
+ * go na `granted`. Powód tej różnicy jest opisany w Trackery.astro —
+ * warunkowe ładowanie tagu Google dawało robotowi inną stronę niż
+ * użytkownikowi i było jednym z tropów przy zawieszeniu konta reklamowego.
+ * Vercel Web Analytics zostaje bez zmian, bo nie używa ciasteczek ani
+ * identyfikatorów i zgody nie wymaga.
  *
  * Wybór trzymamy w localStorage (`mbs-zgoda`), nie w ciasteczku — samo
  * zapamiętanie decyzji nie wymaga wtedy niczyjej zgody.

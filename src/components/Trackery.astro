@@ -1,31 +1,95 @@
 ---
 /**
- * Piksel Meta i tag Google — ładowane WYŁĄCZNIE po zgodzie z banera.
+ * Tag Google (Consent Mode v2) + piksel Meta.
  *
- * Identyfikatory biorą się ze zmiennych środowiskowych Vercela:
+ * ⚠️ ZMIANA 7.09.2026 — POWÓD JEST WAŻNY, NIE COFAĆ BEZ PRZECZYTANIA.
+ *
+ * Wcześniej tag Google ładował się DOPIERO po kliknięciu „Zgadzam się".
+ * Skutek uboczny: robot Google nigdy nie klika zgody, więc dostawał stronę
+ * BEZ tagu Google, a użytkownik po zgodzie — stronę Z tagiem i dodatkowymi
+ * skryptami. To jest realna różnica w treści między robotem a człowiekiem,
+ * i to akurat w obszarze, który Google monitoruje najuważniej (własne tagi).
+ * 6.09.2026 konto reklamowe 218-622-0741 zostało zawieszone za
+ * „Circumventing Systems: Cloaking"; to jeden z dwóch tropów, które
+ * znaleźliśmy po odrzuceniu pierwszego odwołania.
+ *
+ * Teraz jest tak, jak Google sam zaleca pod RODO — Consent Mode v2:
+ *   • `gtag.js` ładuje się ZAWSZE, dla wszystkich tak samo,
+ *   • domyślny stan zgody to `denied` — bez zgody tag nie zapisuje ciasteczek
+ *     ani identyfikatorów, wysyła tylko sygnał bez danych osobowych,
+ *   • kliknięcie „Zgadzam się" przestawia stan na `granted`.
+ * Robot i użytkownik dostają identyczny kod. Różni się wyłącznie stan zgody.
+ *
+ * Piksel Meta zostaje po staremu — ładowany dopiero po zgodzie. Meta nie ma
+ * odpowiednika Consent Mode, a sprawa Google go nie dotyczy.
+ *
+ * Identyfikatory ze zmiennych środowiskowych Vercela:
  *   PUBLIC_META_PIXEL_ID   np. 1234567890123456
  *   PUBLIC_GOOGLE_TAG_ID   np. AW-123456789  (albo G-XXXXXXX dla samego GA4)
- *
- * Dopóki zmienne są puste, ten komponent nie robi NIC — można go bezpiecznie
- * wdrożyć, zanim Michał założy konta. Wpisanie ID w Vercelu i redeploy
- * wystarczy, żeby ruszyło; nie trzeba wtedy dotykać kodu.
+ * Dopóki zmienne są puste, komponent nie robi NIC.
  *
  * Zdarzenia:
- *   PageView / page_view  — na każdej podstronie, po zgodzie
+ *   PageView / page_view  — na każdej podstronie
  *   Lead / generate_lead  — tylko na /dziekuje (patrz dziekuje.astro)
  */
 const metaId = import.meta.env.PUBLIC_META_PIXEL_ID ?? '';
 const googleId = import.meta.env.PUBLIC_GOOGLE_TAG_ID ?? '';
 ---
 
-{(metaId || googleId) && (
-  <script is:inline define:vars={{ metaId, googleId }}>
+{googleId && (
+  <script is:inline define:vars={{ googleId }}>
+    /* Consent Mode v2 — musi stać PRZED gtag.js, inaczej domyślny stan
+       zgody nie zdąży się ustawić i tag zapisze ciasteczka mimo braku zgody. */
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+
+    window.gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 500,
+    });
+
+    /* Zgoda z poprzedniej wizyty (localStorage `mbs-zgoda`) — odczytujemy ją
+       tutaj, a nie czekamy na zdarzenie, bo baner przy powracającym
+       użytkowniku w ogóle się nie pokazuje. */
+    try {
+      if (localStorage.getItem('mbs-zgoda') === 'tak') {
+        window.gtag('consent', 'update', {
+          ad_storage: 'granted',
+          ad_user_data: 'granted',
+          ad_personalization: 'granted',
+          analytics_storage: 'granted',
+        });
+      }
+    } catch (e) {}
+
+    window.gtag('js', new Date());
+    window.gtag('config', googleId);
+
+    /* Po kliknięciu „Zgadzam się" podnosimy stan zgody. Sam tag już działa. */
+    document.addEventListener('mbs:zgoda', function () {
+      window.gtag('consent', 'update', {
+        ad_storage: 'granted',
+        ad_user_data: 'granted',
+        ad_personalization: 'granted',
+        analytics_storage: 'granted',
+      });
+    });
+  </script>
+  <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${googleId}`}></script>
+)}
+
+{metaId && (
+  <script is:inline define:vars={{ metaId }}>
     (function () {
       var odpalone = false;
 
       function meta() {
-        if (!metaId) return;
-        /* standardowy snippet Meta, wstrzykiwany dopiero teraz */
+        if (odpalone) return;
+        odpalone = true;
+        /* standardowy snippet Meta, wstrzykiwany dopiero po zgodzie */
         !(function (f, b, e, v, n, t, s) {
           if (f.fbq) return; n = f.fbq = function () {
             n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
@@ -37,32 +101,21 @@ const googleId = import.meta.env.PUBLIC_GOOGLE_TAG_ID ?? '';
         })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
         window.fbq('init', metaId);
         window.fbq('track', 'PageView');
-      }
-
-      function google() {
-        if (!googleId) return;
-        var s = document.createElement('script');
-        s.async = true;
-        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + googleId;
-        document.head.appendChild(s);
-        window.dataLayer = window.dataLayer || [];
-        window.gtag = function () { window.dataLayer.push(arguments); };
-        window.gtag('js', new Date());
-        window.gtag('config', googleId);
-      }
-
-      function start() {
-        if (odpalone) return;
-        odpalone = true;
-        meta();
-        google();
         /* strony, które chcą wysłać własne zdarzenie (np. /dziekuje),
-           czekają na ten sygnał zamiast zgadywać, czy fbq/gtag już są */
+           czekają na ten sygnał zamiast zgadywać, czy fbq już jest */
         document.dispatchEvent(new CustomEvent('mbs:trackery-gotowe'));
       }
 
-      if (window.mbsZgoda && window.mbsZgoda.udzielona()) start();
-      document.addEventListener('mbs:zgoda', start);
+      if (window.mbsZgoda && window.mbsZgoda.udzielona()) meta();
+      document.addEventListener('mbs:zgoda', meta);
     })();
+  </script>
+)}
+
+{!metaId && googleId && (
+  <script is:inline>
+    /* Bez piksela Meta nikt nie wyśle `mbs:trackery-gotowe`, a /dziekuje na ten
+       sygnał czeka. Wysyłamy go od razu — tag Google jest już załadowany. */
+    document.dispatchEvent(new CustomEvent('mbs:trackery-gotowe'));
   </script>
 )}
