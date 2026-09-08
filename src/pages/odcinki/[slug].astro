@@ -35,6 +35,24 @@ const ytId = (url) => {
 const vid = ytId(odc?.yt);
 const miniatura = vid ? `https://i.ytimg.com/vi/${vid}/maxresdefault.jpg` : null;
 
+/**
+ * `uploadDate` w VideoObject musi być pełną datą ISO 8601 ZE STREFĄ czasową.
+ * Sama data („2026-08-31") to dla Google błąd — Search Console zgłosiło to
+ * 8.09.2026 jako „Invalid datetime value" i „missing a timezone".
+ *
+ * Odcinki wychodzą w poniedziałek o 8:00 czasu polskiego, więc doklejamy tę
+ * godzinę i przesunięcie strefy WYLICZONE dla konkretnej daty — latem +02:00,
+ * zimą +01:00. Wpisanie offsetu na sztywno psułoby połowę roku.
+ */
+const przesuniecieWarszawy = (data) =>
+  new Intl.DateTimeFormat('en-US', { timeZone: 'Europe/Warsaw', timeZoneName: 'longOffset' })
+    .formatToParts(data)
+    .find((cz) => cz.type === 'timeZoneName')
+    .value.replace('GMT', '') || '+00:00';
+
+const dataPublikacjiISO = (data) =>
+  `${data}T08:00:00${przesuniecieWarszawy(new Date(`${data}T08:00:00Z`))}`;
+
 // Kontrola spójności: czy strony, do których mamy linkować, są już opublikowane.
 // Nic nie renderuje — służy do sprawdzenia w buildzie, czy plan linkowania ma pokrycie.
 const powiazaneGotowe = (s.powiazane || [])
@@ -87,7 +105,7 @@ const jsonLdExtra = [
           name: odc.tytul,
           description: s.opis,
           thumbnailUrl: miniatura,
-          uploadDate: odc.data,
+          uploadDate: dataPublikacjiISO(odc.data),
           embedUrl: `https://www.youtube-nocookie.com/embed/${vid}`,
           contentUrl: odc.yt,
           inLanguage: 'pl-PL',
