@@ -57,6 +57,22 @@
 
 import { transkrypcje } from './transkrypcje.js';
 
+// ⚠️ KOLEJNOŚĆ I ADRESY — ustalone z Klaudiuszem 14.09, jedna strona co dwa tygodnie:
+//   1.10  odc. 5  niesprawiedliwa-ocena-roczna
+//   8.10  odc. 9  jak-rozmawiac-o-podwyzce
+//  15.10  odc.10  dlaczego-nie-dostalem-awansu
+//  29.10  odc. 3  mobbing-w-pracy-gdzie-granica
+//  12.11  odc. 6  wypalenie-czy-zmeczenie
+//  26.11  odc.11  nowy-szef-w-zespole
+//  10.12  odc.12  zmiana-pracy-kiedy-odejsc
+//   7.01  odc. 4  jak-dokumentowac-sytuacje-w-pracy
+//  styczeń odc. 7 rozmowa-1-na-1-z-szefem
+//
+// ⚠️ ZADANIE NA STYCZEŃ: dopóki strona o dokumentowaniu (odc. 4) nie istnieje,
+// NIE wstawiamy do niej linków z pozostałych tekstów — odsyłacz do nieistniejącej
+// strony jest gorszy niż jego brak. Po 7.01 wstawiamy je hurtem, przechodząc przez
+// strony 1–7. Bez tego kroku zostanie sierota: tekst-węzeł, do którego nikt nie linkuje.
+
 export const stronyOdcinkow = [
   {
     nr: 2,
@@ -422,10 +438,25 @@ export const stronyOdcinkow = [
     powiazane: [5, 10], konsultacje: true, gotowa: false,
   },
   {
-    nr: 10, slug: 'awans-w-korporacji',
-    zapytanie: 'kiedy zapada decyzja o awansie',
+    // Adres i fraza zmienione 14.09 (Klaudiusz). Było: `awans-w-korporacji`
+    // + „kiedy zapada decyzja o awansie" — to fraza kogoś ciekawego procesu.
+    // Nasz czytelnik jest PO odmowie i wpisuje „dlaczego nie dostałem awansu".
+    nr: 10, slug: 'dlaczego-nie-dostalem-awansu',
+    zapytanie: 'dlaczego nie dostałem awansu',
     tytul: '', opis: '', h1: '', lead: '', sekcje: [], zapamietaj: [],
     powiazane: [9, 5], konsultacje: true, gotowa: false,
+  },
+  {
+    nr: 11, slug: 'nowy-szef-w-zespole',
+    zapytanie: 'nowy szef w pracy jak się zachować',
+    tytul: '', opis: '', h1: '', lead: '', sekcje: [], zapamietaj: [],
+    powiazane: [4, 5, 9], konsultacje: true, gotowa: false,
+  },
+  {
+    nr: 12, slug: 'zmiana-pracy-kiedy-odejsc',
+    zapytanie: 'kiedy odejść z pracy',
+    tytul: '', opis: '', h1: '', lead: '', sekcje: [], zapamietaj: [],
+    powiazane: [9, 10, 8], konsultacje: true, gotowa: false,
   },
 ];
 
