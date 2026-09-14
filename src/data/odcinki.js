@@ -17,6 +17,22 @@
 
 export const odcinki = [
   {
+    nr: 9,
+    data: '2026-09-14',
+    tytul: 'Staraj się, staraj. Dlaczego podwyżka to nie jest decyzja Twojego szefa',
+    opis: 'Przez ile rąk przechodzi decyzja o podwyżce, zanim wróci do Ciebie jako „tak" albo „staraj się" — i kiedy trzeba zacząć rozmowę, żeby miała sens.',
+    yt: 'https://youtu.be/1zLZM7ofM6w',
+    spotify: 'https://open.spotify.com/episode/31AqP32O7c2S8hciRoZyB2',
+  },
+  {
+    nr: 8,
+    data: '2026-09-07',
+    tytul: 'Zaproszenie bez tematu. Co się dzieje, zanim wejdziesz na to spotkanie',
+    opis: 'Zaproszenie bez tematu, za dwie godziny, a na liście gości ktoś z HR. Co zwykle znaczy taki wpis w kalendarzu i czego nie robić w sali.',
+    yt: 'https://youtu.be/Ut8Gt5uM9yc',
+    spotify: 'https://open.spotify.com/episode/6NN8gE7c1HnHm5GEqTHkd8',
+  },
+  {
     nr: 7,
     data: '2026-08-31',
     tytul: 'Rozmowa 1:1 z managerem — najbardziej zmarnowane 15 minut w korporacji',
