@@ -10,7 +10,7 @@ import { braklujaceKrytyczne } from './checklist';
 const json = (b: unknown, s = 200) =>
   new Response(JSON.stringify(b), { status: s, headers: { 'Content-Type': 'application/json' } });
 
-const PLAT = ['yt', 'tt', 'ig', 'fb', 'newsletter', 'blog'];
+const PLAT = ['yt', 'tt', 'ig', 'fb', 'newsletter', 'blog', 'linkedin', 'podcast'];
 const STAT = ['pomysl', 'wprodukcji', 'zaplanowane', 'opublikowane'];
 
 function clean(b: any) {
