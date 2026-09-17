@@ -1,0 +1,209 @@
+---
+/**
+ * Ścieżka startowa — „W czym jesteś teraz?" (brief Klaudiusza z 16.09.2026).
+ * Zastępuje pomysł chatbota: trzy kafelki, bez AI, bez formularza, bez danych osobowych.
+ *
+ * PO CO NAPRAWDĘ: pomiar. Chcemy wiedzieć, z czym ludzie przychodzą —
+ * ile wyborów na kafelek i ile zapisów na checklistę z każdej ścieżki.
+ *
+ * Jak mierzymy (nic nowego nie instalujemy):
+ *   • Vercel Web Analytics, który już jest na stronie (plan Pro → zdarzenia własne).
+ *     Kolejka `window.va` jest w Layout.astro, więc wystarczy `va('event', …)`.
+ *   • wybór kafelka → zdarzenie `sciezka_wybor` { sciezka }
+ *   • klik w przycisk checklisty z panelu → `sciezka_checklista` { sciezka }
+ *   • wybrana ścieżka ląduje w sessionStorage (`mbs_sciezka`), a /dziekuje wysyła
+ *     `sciezka_zapis` { sciezka } — to jest liczba zapisów z danej ścieżki.
+ *   Bez ciasteczek i bez identyfikatora — ta sama zasada co w Atrybucja.astro.
+ *
+ * ⚠️ Świadomie NIE ma tu parametrów utm_* w linkach. UTM na linku wewnętrznym
+ * w GA4 nadpisuje źródło sesji — człowiek z reklamy Meta, który kliknie kafelek,
+ * zostałby policzony jako ruch „ze strony", a konwersje kampanii by zniknęły.
+ * Nazwy ścieżek są te same, co w briefie: sciezka-pip / -pieniadze / -zespol.
+ *
+ * Nowy odcinek w kafelku: dopisz numer w SCIEZKI. Link sam wybierze stronę
+ * odcinka (jeśli jest gotowa), a jak nie — YouTube. Odcinek z datą w przyszłości
+ * pokazuje się sam w dniu premiery (tak jak karty w Odcinki.astro).
+ */
+import { odcinki as fallback } from '../data/odcinki.js';
+import { stronyGotowe } from '../data/strony-odcinkow.js';
+
+const SCIEZKI = [
+  {
+    id: 'sciezka-pip',
+    wybor: 'Dostałem plan naprawczy albo negatywną ocenę',
+    glowny: 2,
+    potem: [1, 4],
+  },
+  {
+    id: 'sciezka-pieniadze',
+    wybor: 'Szykuję się na rozmowę o pieniądzach albo awansie',
+    glowny: 9,
+    potem: [5, 10],
+  },
+  {
+    id: 'sciezka-zespol',
+    wybor: 'Właśnie dostałem zespół i nie wiem, od czego zacząć',
+    glowny: 7, // ⚠️ docelowo #15 (trudny zespół z fotela menedżera), premiera 26.10
+    potem: [],
+    dopisek: 'Odcinek o pierwszym zespole wychodzi w październiku — zostaw maila, dam znać.',
+    cta: 'Zostaw maila',
+  },
+];
+
+// Te same dane co karty odcinków: Supabase, a gdy go nie ma — lokalna lista.
+async function getOdcinki() {
+  const url = import.meta.env.PUBLIC_SUPABASE_URL;
+  const key = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return fallback;
+  try {
+    const res = await fetch(`${url}/rest/v1/odcinki?select=nr,data,tytul,opis,yt&order=nr.desc`,
+      { headers: { apikey: key, Authorization: `Bearer ${key}` } });
+    if (!res.ok) return fallback;
+    const d = await res.json();
+    return Array.isArray(d) && d.length ? d : fallback;
+  } catch { return fallback; }
+}
+const wszystkie = await getOdcinki();
+const strona = new Map(stronyGotowe.map((s) => [s.nr, s.slug]));
+const dzis = new Date().toISOString().slice(0, 10);
+
+const odc = (nr) => {
+  const o = wszystkie.find((x) => x.nr === nr);
+  if (!o || (!o.yt && !strona.has(nr))) return null;
+  const naStronie = strona.has(nr);
+  return {
+    nr, data: o.data, tytul: o.tytul, opis: o.opis,
+    href: naStronie ? `/odcinki/${strona.get(nr)}` : o.yt,
+    zewn: !naStronie,
+    etykieta: naStronie ? 'Przeczytaj i obejrzyj →' : 'Obejrzyj na YouTube →',
+  };
+};
+const sciezki = SCIEZKI.map((s) => ({
+  ...s,
+  g: odc(s.glowny),
+  p: s.potem.map(odc).filter(Boolean),
+}));
+---
+<section class="sciezka" id="od-czego-zaczac" aria-labelledby="sciezka-h">
+  <div class="wrap">
+    <h2 id="sciezka-h">W czym jesteś teraz?</h2>
+    <p class="sub">Wybierz najbliższe — pokażę Ci, od czego zacząć.</p>
+
+    <div class="wybory" role="group" aria-label="Twoja sytuacja">
+      {sciezki.map((s, i) => (
+        <button type="button" class="wybor" data-sciezka={s.id}
+          aria-expanded="false" aria-controls={`panel-${s.id}`}>
+          <span class="nr mono">{String(i + 1).padStart(2, '0')}</span>
+          <span class="txt">{s.wybor}</span>
+        </button>
+      ))}
+    </div>
+
+    {sciezki.map((s) => (
+      <div class="panel" id={`panel-${s.id}`} data-panel={s.id}>
+        <p class="panel-tyt mono">{s.wybor}</p>
+        {s.g && (
+          <div class="start">
+            <div class="eyebrow">Zacznij od · odcinek {s.g.nr}</div>
+            <h3>{s.g.tytul}</h3>
+            <p>{s.g.opis}</p>
+            <a class="link-glowny" href={s.g.href}
+              {...(s.g.zewn ? { target: '_blank', rel: 'noopener' } : {})}>{s.g.etykieta}</a>
+          </div>
+        )}
+        {s.p.length > 0 && (
+          <div class="potem">
+            <div class="eyebrow">Potem</div>
+            <ul>
+              {s.p.map((o) => (
+                <li data-od={o.data} hidden={o.data > dzis}>
+                  <a href={o.href} {...(o.zewn ? { target: '_blank', rel: 'noopener' } : {})}>
+                    <span class="mono">#{o.nr}</span> {o.tytul}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {s.dopisek && <p class="dopisek">{s.dopisek}</p>}
+        <a class="btn btn-primary cta" href="#checklista" data-cta={s.id}>
+          {s.cta ?? 'Pobierz bezpłatną checklistę'}
+        </a>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    var dzis = new Date().toISOString().slice(0, 10);
+    var root = document.getElementById('od-czego-zaczac');
+    if (!root) return;
+    function ev(name, data) { try { if (window.va) window.va('event', { name: name, data: data }); } catch (e) {} }
+    function zapamietaj(id) { try { sessionStorage.setItem('mbs_sciezka', id); } catch (e) {} }
+
+    /* Odcinki z przyszłą datą same się odsłaniają w dniu premiery. */
+    root.querySelectorAll('li[data-od]').forEach(function (li) { li.hidden = li.dataset.od > dzis; });
+
+    var przyciski = root.querySelectorAll('.wybor');
+    var panele = root.querySelectorAll('[data-panel]');
+    /* Bez JS wszystkie panele są widoczne; z JS — tylko wybrany. */
+    root.classList.add('js');
+    panele.forEach(function (p) { p.hidden = true; });
+
+    var policzone = {};
+    przyciski.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var id = b.dataset.sciezka;
+        przyciski.forEach(function (x) { x.setAttribute('aria-expanded', String(x === b)); });
+        panele.forEach(function (p) {
+          p.hidden = p.dataset.panel !== id;
+          /* Na telefonie panel jest pod trzema przyciskami — przewiń do niego. */
+          if (!p.hidden && p.getBoundingClientRect().top > window.innerHeight * 0.6) {
+            p.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+        zapamietaj(id);
+        if (!policzone[id]) { policzone[id] = true; ev('sciezka_wybor', { sciezka: id }); }
+      });
+    });
+    root.querySelectorAll('[data-cta]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        zapamietaj(a.dataset.cta);
+        ev('sciezka_checklista', { sciezka: a.dataset.cta });
+      });
+    });
+  })();
+</script>
+
+<style>
+.sciezka{padding:64px 0 72px}
+.sciezka h2{margin-bottom:8px}
+.wybory{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+@media(max-width:880px){.wybory{grid-template-columns:1fr}}
+.wybor{display:flex;gap:14px;align-items:flex-start;text-align:left;background:var(--papier);
+  border:1.5px solid var(--linia);border-radius:10px;padding:20px 20px 22px;cursor:pointer;
+  font-family:var(--body);font-size:17px;font-weight:500;line-height:1.4;color:var(--atrament);
+  transition:border-color .2s,box-shadow .2s}
+.wybor:hover{border-color:var(--szalwia)}
+.wybor:focus-visible{outline:3px solid var(--sygnal);outline-offset:3px}
+.wybor[aria-expanded="true"]{border-color:var(--sygnal);box-shadow:0 0 0 1px var(--sygnal) inset;background:#F7FAF9}
+.wybor .nr{font-size:12px;color:var(--sygnal);padding-top:4px}
+.mono{font-family:var(--mono)}
+.panel{background:var(--papier);border:1px solid var(--linia);border-radius:12px;padding:28px;margin-top:18px}
+.panel-tyt{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#6B7B75;margin-bottom:18px}
+.sciezka.js .panel-tyt{display:none}
+.start h3{font-size:24px;margin-bottom:8px}
+.start p{color:#4A5A55;max-width:62ch;margin-bottom:12px}
+.link-glowny{color:var(--sygnal);font-weight:700;text-decoration:none}
+.link-glowny:hover{text-decoration:underline}
+.potem{margin-top:22px;padding-top:18px;border-top:1px solid var(--linia)}
+.potem ul{list-style:none}
+.potem li{margin-bottom:8px}
+.potem a{text-decoration:none;color:var(--atrament)}
+.potem a:hover{text-decoration:underline}
+.potem .mono{color:var(--sygnal);font-size:13px;margin-right:4px}
+.dopisek{margin-top:18px;background:var(--marker);display:inline-block;padding:6px 10px;border-radius:4px;font-size:15px}
+.cta{display:block;width:max-content;margin-top:22px}
+@media(max-width:520px){.cta{width:100%;text-align:center}}
+</style>
