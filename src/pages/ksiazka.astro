@@ -3,32 +3,29 @@ import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import Stopka from '../components/Stopka.astro';
 
-const rozdzialy = [
-  { nr: '01', t: 'Pierwszy dzień, pierwsze zasady', d: 'Czego nikt Ci nie powie na onboardingu — jak naprawdę działa firma i gdzie są prawdziwe reguły gry.' },
-  { nr: '02', t: 'Feedback, który nie niszczy', d: 'Jak słuchać oceny bez paniki, jak oddzielić fakt od emocji i co odpowiedzieć, gdy uwaga jest niesprawiedliwa.' },
-  { nr: '03', t: 'Ocena roczna bez dramatu', d: 'Przygotowanie, rozmowa, ustalenia. Jak wejść z konkretami i wyjść z jasnym planem, a nie z niepokojem.' },
-  { nr: '04', t: 'Plan naprawczy (PIP) na spokojnie', d: 'Co to naprawdę oznacza, jak czytać kryteria i jak przejść przez ten czas z podniesioną głową.' },
-  { nr: '05', t: 'Gdy robi się nieprzyjemnie', d: 'Granica między trudnym szefem a sytuacją, której nie wolno tolerować. Jak dokumentować i gdzie szukać wsparcia.' },
-  { nr: '06', t: 'Stres, który nie zjada wieczorów', d: 'Praktyczne sposoby na odcięcie się od pracy po godzinach — bez coachingowych sloganów.' },
-  { nr: '07', t: 'Odejście z klasą', d: 'Kiedy warto zostać, kiedy iść, i jak zamknąć rozdział tak, by móc wrócić po dobre referencje.' },
-];
+// 17.09.2026 — minimalna korekta (brief Klaudiusza): zdjęty roboczy tytuł
+// „Korporacja bez stresu" i roboczy spis 7 rozdziałów. Tytułu NIE podajemy do
+// decyzji 21.09 (głosowanie na liście), daty i ceny też nie. Pełne przepisanie
+// strony (tytuł, okładka, 15 rozdziałów, wersje, ISBN) — osobne zadanie po 21.09.
 ---
 <Layout
-  title="Korporacja bez stresu — książka | Michał bez Stresu"
-  description="Książka o tym, jak naprawdę działa korporacja: feedback, ocena roczna, plan naprawczy, trudne rozmowy — i jak przejść przez to z podniesioną głową. Zapisz się po fragmenty przedpremierowe."
+  title="Książka — Michał bez Stresu"
+  description="Książka o rozmowach, od których zależy Twoja praca — od negatywnego feedbacku i planu naprawczego po podwyżkę, awans i restrukturyzację. Z obu stron stołu. Tekst jest skończony, książka szykuje się do wydania."
 >
   <Nav />
 
   <header class="phead">
     <div class="wrap">
-      <div class="eyebrow">Książka · w przygotowaniu</div>
-      <h1>Korporacja bez stresu</h1>
-      <p class="lead">Praktyczny przewodnik po trudnych sytuacjach w pracy — feedback, oceny,
-        plan naprawczy, eskalacje, odejścia. Napisany przez praktyka, nie przez teoretyka.
-        Bez motywacyjnych sloganów. Konkret, spokój, po Twojej stronie.</p>
+      <div class="eyebrow">Książka</div>
+      <h1>Książka jest napisana.</h1>
+      <p class="lead">Piętnaście rozdziałów o tym, co dzieje się w rozmowach, od których zależy
+        Twoja praca — od negatywnego feedbacku i planu naprawczego, przez ocenę roczną,
+        podwyżkę i awans, aż po restrukturyzację i pierwszy własny zespół.
+        Wszystko z obu stron stołu.</p>
+      <p class="lead">Tekst jest skończony, książka szykuje się do wydania. Szczegóły — tytuł,
+        data i cena — pojawią się tutaj wkrótce.</p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="/#checklista">Chcę fragmenty przedpremierowe</a>
-        <span class="cta-note">Zapisani na newsletter dostają rozdziały jako pierwsi — za darmo.</span>
+        <a class="btn btn-primary" href="/#checklista">Chcę wiedzieć pierwszy — zapisz mnie na listę</a>
       </div>
     </div>
   </header>
@@ -46,26 +43,6 @@ const rozdzialy = [
     </div>
   </section>
 
-  <section>
-    <div class="wrap">
-      <div class="eyebrow">Co w środku</div>
-      <h2>Siedem rozdziałów, siedem trudnych momentów</h2>
-      <p class="sub">Każdy rozdział to jedna sytuacja rozłożona na czynniki pierwsze:
-        co się dzieje, dlaczego, i co możesz zrobić krok po kroku. Spis jest roboczy
-        i może się jeszcze zmienić.</p>
-      <ol class="chapters">
-        {rozdzialy.map((r) => (
-          <li>
-            <span class="cnr">{r.nr}</span>
-            <div>
-              <h3>{r.t}</h3>
-              <p>{r.d}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
 
   <section class="band author">
     <div class="wrap author-in">
@@ -85,14 +62,6 @@ const rozdzialy = [
     </div>
   </section>
 
-  <section class="closing">
-    <div class="wrap">
-      <h2>Bądź pierwszy, gdy ruszy przedsprzedaż</h2>
-      <p class="sub">Zapisz się na listę — dostaniesz darmowe fragmenty, informację o premierze
-        i specjalną cenę dla subskrybentów. Zero spamu, wypisujesz się jednym kliknięciem.</p>
-      <a class="btn btn-primary" href="/#checklista">Zapisz mnie na listę</a>
-    </div>
-  </section>
 
   <Stopka />
 </Layout>
@@ -100,6 +69,7 @@ const rozdzialy = [
 <style>
 .phead{padding:72px 0 60px;background:linear-gradient(180deg,var(--mgla),var(--papier))}
 .phead h1{font-family:var(--disp);font-weight:500;font-size:clamp(34px,5.5vw,58px);line-height:1.1;margin-bottom:18px}
+.phead .lead + .lead{margin-top:14px}
 .phead .lead{font-size:clamp(17px,2.2vw,20px);color:#3C4A46;max-width:60ch}
 .cta-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:32px}
 .cta-note{font-size:14px;color:#5E6E68;max-width:34ch}
