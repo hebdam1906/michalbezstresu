@@ -1,0 +1,69 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+/**
+ * Podziękowanie po głosie na tytuł książki (mail z 18.09.2026, brief Klaudiusza z 16.09).
+ *
+ * Jak liczymy głosy: każdy wariant w mailu to INNY adres (/glos?tytul=pokoj|decyzja|stol),
+ * więc raport kliknięć w MailerLite jest wynikiem głosowania. Ta strona niczego
+ * nie zapisuje — tylko potwierdza, że kliknięcie się liczy.
+ * Dodatkowo zdarzenie Vercel Analytics `glos_tytul` { tytul } jako kontrola
+ * (bez ciasteczek i bez danych osobowych).
+ *
+ * Celowo osobna strona, a nie /ksiazka: tam wisi jeszcze roboczy tytuł
+ * „Korporacja bez stresu" — głosujący zobaczyłby czwarty tytuł.
+ */
+---
+<Layout
+  title="Dzięki za głos — Michał bez Stresu"
+  description="Głos na tytuł książki został policzony."
+  noindex
+>
+  <main class="lp">
+    <div class="lp-wrap">
+      <div class="brand mono">Michał bez Stresu</div>
+      <div class="eyebrow">Głos policzony</div>
+      <h1>Dzięki — to mi naprawdę pomaga</h1>
+      <p class="sub" data-wybor hidden>Twój wybór: <strong data-tytul></strong></p>
+      <p class="sub">Liczę wszystkie głosy i decyzję o tytule podejmę w przyszłym tygodniu.
+        Jeśli masz ochotę dopisać jedno zdanie, dlaczego ten tytuł — po prostu odpowiedz
+        na maila. Czytam wszystkie odpowiedzi osobiście.</p>
+      <p class="dalej"><a href="/">Wróć na stronę główną</a></p>
+    </div>
+  </main>
+
+  <script is:inline>
+    (function () {
+      var TYTULY = {
+        pokoj: 'Pokój, w którym Cię nie ma',
+        decyzja: 'Decyzja zapadła, zanim usiadłeś do rozmowy',
+        stol: 'Z obu stron stołu',
+      };
+      var t = new URLSearchParams(location.search).get('tytul');
+      if (t && TYTULY[t]) {
+        document.querySelector('[data-tytul]').textContent = '„' + TYTULY[t] + '”';
+        document.querySelector('[data-wybor]').hidden = false;
+        try {
+          if (!sessionStorage.getItem('mbs_glos')) {
+            sessionStorage.setItem('mbs_glos', t);
+            if (window.va) window.va('event', { name: 'glos_tytul', data: { tytul: t } });
+          }
+        } catch (e) {}
+      }
+    })();
+  </script>
+</Layout>
+
+<style>
+.lp{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:var(--sygnal);color:#F2F7F5;padding:56px 24px}
+.lp-wrap{width:100%;max-width:620px}
+.brand{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--marker);margin-bottom:40px}
+.mono{font-family:var(--mono)}
+.lp .eyebrow{color:var(--marker)}
+.lp h1{font-family:var(--disp);font-weight:500;color:#fff;font-size:clamp(28px,5vw,44px);line-height:1.12;margin:6px 0 16px}
+.lp .sub{font-size:clamp(16px,2.2vw,19px);color:#CFE0DA;max-width:52ch;margin-bottom:14px}
+.lp .sub strong{color:#fff}
+.dalej{font-size:15.5px;margin-top:22px}
+.dalej a{color:var(--marker)}
+</style>

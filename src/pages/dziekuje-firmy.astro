@@ -57,7 +57,7 @@ import Layout from '../layouts/Layout.astro';
         if (wyslane) return;
         wyslane = true;
         /* Celowo `Contact`, nie `Lead` — patrz komentarz na górze pliku. */
-        if (window.fbq) window.fbq('track', 'Contact');
+        if (window.fbq) window.fbq('track', 'Contact', { content_category: 'firmy' });
         /* Bez `send_to`: to jest zdarzenie pomiarowe w GA4, nie konwersja w Ads.
            Po założeniu osobnej akcji konwersji dopisujemy tu send_to z etykietą. */
         if (window.gtag) window.gtag('event', 'zapytanie_firmowe', {

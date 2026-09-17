@@ -18,7 +18,7 @@ export default defineConfig({
         // `dziekuje-firmy` musi być wypisane osobno: stary wzorzec kończył się
         // zaraz po „dziekuje", więc adresu z myślnikiem by nie złapał i strona
         // podziękowania B2B weszłaby do indeksu.
-        if (/\/(dziekuje|dziekuje-firmy|panel|dashboard)\/?$/.test(page)) return false;
+        if (/\/(dziekuje|dziekuje-firmy|glos|panel|dashboard)\/?$/.test(page)) return false;
         // Rozdroże /odcinki istnieje w kodzie od 2.09, ale dopóki żadna strona
         // odcinka nie ma treści (`gotowa: true`), jest pustą listą. Pusta strona
         // raz zaindeksowana potrafi zostać w wynikach na tygodnie — więc do

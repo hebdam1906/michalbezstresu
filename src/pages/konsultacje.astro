@@ -202,7 +202,9 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
          wcześniej zgodził się na ciasteczka. Bez zgody formularz działa
          normalnie, po prostu nikt się o tym nie dowiaduje poza nami. */
       function zglosKonwersje() {
-        if (window.fbq) window.fbq('track', 'Contact');
+        /* content_category rozdziela konsultacje od zapytań firmowych (to samo
+           zdarzenie Contact wysyła /dziekuje-firmy) — decyzja Klaudiusza 17.09. */
+        if (window.fbq) window.fbq('track', 'Contact', { content_category: 'konsultacje' });
         if (window.gtag) window.gtag('event', 'generate_lead', { value: 299, currency: 'PLN' });
       }
 
