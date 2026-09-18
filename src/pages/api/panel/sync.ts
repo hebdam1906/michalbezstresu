@@ -250,6 +250,104 @@ async function syncTikTok(): Promise<Wynik> {
   };
 }
 
+// ── RUCH NA STRONIE (Vercel Web Analytics) ──────────────────────────────────
+// Panel czyta tabelę `panel_ruch`. Do 19.09.2026 NIKT jej nie zapisywał — ten
+// cron uzupełniał tylko panel_metryki / panel_lejek / panel_materialy — więc
+// kafelek „Ruch na stronie" i cały lejek pokazywały zera. Dane cały czas były,
+// tyle że wyłącznie w Vercel Web Analytics. To jest ten brakujący most.
+//
+// API: https://vercel.com/docs/analytics/web-analytics-api
+//   VERCEL_TOKEN      — Vercel → Account Settings → Tokens
+//   VERCEL_PROJECT_ID — Project → Settings → General → Project ID (prj_…)
+//   VERCEL_TEAM_ID    — Project → Settings → General → Team ID (team_…)
+//
+// „Zapisy" liczymy jako odwiedzających `/dziekuje` — to jedyna strona,
+// na którą wchodzi się wyłącznie po zapisaniu się na checklistę.
+const VA = 'https://api.vercel.com/v1/query/web-analytics/visits/aggregate';
+
+async function vercelRuch(
+  token: string,
+  projekt: string,
+  zespol: string | undefined,
+  by: string[],
+  od: string,
+  doDnia: string,
+  filtr?: string,
+): Promise<any[]> {
+  const q = new URLSearchParams({ projectId: projekt, since: od, until: doDnia, limit: '100' });
+  by.forEach((b) => q.append('by', b));
+  if (zespol) q.set('teamId', zespol);
+  if (filtr) q.set('filter', filtr);
+  const d = await pobierz(`${VA}?${q.toString()}`, { headers: { Authorization: `Bearer ${token}` } });
+  return Array.isArray(d?.data) ? d.data : [];
+}
+
+/** Nazwa pola z datą bywa różna między wersjami API — bierzemy pierwsze, które jest. */
+const dzienZ = (r: any): string | null => {
+  const v = r?.day ?? r?.date ?? r?.key ?? null;
+  return typeof v === 'string' ? v.slice(0, 10) : null;
+};
+const osobyZ = (r: any): number => Number(r?.visitors ?? r?.count ?? 0) || 0;
+
+async function syncRuch(db: NonNullable<typeof supabaseAdmin>): Promise<Wynik> {
+  const token = process.env.VERCEL_TOKEN;
+  const projekt = process.env.VERCEL_PROJECT_ID;
+  const zespol = process.env.VERCEL_TEAM_ID;
+  if (!token || !projekt)
+    return { platforma: 'ruch', status: 'pominieto', szczegoly: 'brak VERCEL_TOKEN / VERCEL_PROJECT_ID' };
+
+  // 8 dni wstecz: bieżąca doba jest niepełna, więc nadpisujemy ją przy każdym biegu
+  const dzien = (ile: number) => new Date(Date.now() - ile * 86400000).toISOString().slice(0, 10);
+  const od = dzien(8);
+  const doDnia = dzien(0);
+
+  const [wizytyD, zapisyD, zrodlaD] = await Promise.all([
+    vercelRuch(token, projekt, zespol, ['day'], od, doDnia),
+    vercelRuch(token, projekt, zespol, ['day'], od, doDnia, "requestPath eq '/dziekuje'"),
+    vercelRuch(token, projekt, zespol, ['day', 'referrerHostname'], od, doDnia),
+  ]);
+
+  const zapisyWg = new Map<string, number>();
+  zapisyD.forEach((r) => {
+    const d = dzienZ(r);
+    if (d) zapisyWg.set(d, osobyZ(r));
+  });
+
+  const zrodlaWg = new Map<string, Record<string, number>>();
+  zrodlaD.forEach((r) => {
+    const d = dzienZ(r);
+    if (!d) return;
+    const host = String(r?.referrerHostname ?? r?.referrer ?? '').trim() || 'wejscia-bezposrednie';
+    const m = zrodlaWg.get(d) ?? {};
+    m[host] = (m[host] ?? 0) + osobyZ(r);
+    zrodlaWg.set(d, m);
+  });
+
+  const wiersze = wizytyD
+    .map((r) => {
+      const d = dzienZ(r);
+      if (!d) return null;
+      return {
+        data: d,
+        wizyty: osobyZ(r),
+        zapisy: zapisyWg.get(d) ?? 0,
+        zrodla: zrodlaWg.get(d) ?? {},
+        zrodlo: 'api',
+      };
+    })
+    .filter((w): w is NonNullable<typeof w> => w !== null);
+
+  if (!wiersze.length)
+    return { platforma: 'ruch', status: 'blad', szczegoly: 'API Vercela nie zwrocilo zadnego dnia' };
+
+  const { error } = await db.from('panel_ruch').upsert(wiersze, { onConflict: 'data' });
+  if (error) throw new Error(error.message);
+
+  const suma = wiersze.reduce((s, w) => s + w.wizyty, 0);
+  const zap = wiersze.reduce((s, w) => s + w.zapisy, 0);
+  return { platforma: 'ruch', status: 'ok', szczegoly: `${wiersze.length} dni, ${suma} wizyt, ${zap} zapisow` };
+}
+
 // ────────────────────────────────────────────────────────────────────────────
 async function uruchom(): Promise<{ wyniki: Wynik[] }> {
   const db = supabaseAdmin!;
@@ -259,6 +357,7 @@ async function uruchom(): Promise<{ wyniki: Wynik[] }> {
     ['fb', () => syncFacebook(db)],
     ['ig', () => syncInstagram(db)],
     ['tt', () => syncTikTok()],
+    ['ruch', () => syncRuch(db)],
   ];
 
   const wyniki: Wynik[] = [];

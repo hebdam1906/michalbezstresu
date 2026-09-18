@@ -7,6 +7,11 @@
 // dane z Supabase (panel_metryki / panel_ruch), które zasila codzienny cron
 // /api/panel/sync. Ręczne wpisy robisz w /panel — tutaj tylko podgląd.
 //
+// 2026-09-19: do dziś `panel_ruch` była pusta — cron jej nie zapisywał, mimo
+// tego, co obiecywał komentarz wyżej. Kafelek „Ruch na stronie" i lejek
+// pokazywały przez to zera. Most z Vercel Web Analytics dokłada syncRuch()
+// w /api/panel/sync (wymaga VERCEL_TOKEN i VERCEL_PROJECT_ID).
+//
 // Strona pokazuje realne liczby biznesowe, więc jest za tym samym logowaniem
 // co panel. Bez cookie → przekierowanie na /panel.
 // ─────────────────────────────────────────────────────────────────────────────
