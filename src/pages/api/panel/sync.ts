@@ -257,9 +257,12 @@ async function syncTikTok(): Promise<Wynik> {
 // tyle że wyłącznie w Vercel Web Analytics. To jest ten brakujący most.
 //
 // API: https://vercel.com/docs/analytics/web-analytics-api
-//   VERCEL_TOKEN      — Vercel → Account Settings → Tokens
-//   VERCEL_PROJECT_ID — Project → Settings → General → Project ID (prj_…)
-//   VERCEL_TEAM_ID    — Project → Settings → General → Team ID (team_…)
+//   ANALYTICS_TOKEN      — Vercel → Account Settings → Tokens
+//   ANALYTICS_PROJECT_ID — Project → Settings → General → Project ID (prj_…)
+//   ANALYTICS_TEAM_ID    — Project → Settings → General → Team ID (team_…)
+//
+// ⚠️ Prefiks `VERCEL_` jest zarezerwowany dla zmiennych systemowych Vercela —
+// własnej zmiennej o takiej nazwie nie da się tam założyć. Stąd `ANALYTICS_`.
 //
 // „Zapisy" liczymy jako odwiedzających `/dziekuje` — to jedyna strona,
 // na którą wchodzi się wyłącznie po zapisaniu się na checklistę.
@@ -290,11 +293,16 @@ const dzienZ = (r: any): string | null => {
 const osobyZ = (r: any): number => Number(r?.visitors ?? r?.count ?? 0) || 0;
 
 async function syncRuch(db: NonNullable<typeof supabaseAdmin>): Promise<Wynik> {
-  const token = process.env.VERCEL_TOKEN;
-  const projekt = process.env.VERCEL_PROJECT_ID;
-  const zespol = process.env.VERCEL_TEAM_ID;
+  // Zmienne w Vercelu założone 19.09 jako `Vercel_token` / `Vercel_project_id` /
+  // `Vercel_Team_ID` (prefiks VERCEL_ wielkimi literami jest zarezerwowany),
+  // a Vercel nie pozwala zmienić nazwy zmiennej typu Secret. Czytamy więc
+  // najpierw docelowe ANALYTICS_*, potem nazwy, które faktycznie istnieją.
+  const env = process.env;
+  const token = env.ANALYTICS_TOKEN ?? env.Vercel_token;
+  const projekt = env.ANALYTICS_PROJECT_ID ?? env.Vercel_project_id;
+  const zespol = env.ANALYTICS_TEAM_ID ?? env.Vercel_Team_ID;
   if (!token || !projekt)
-    return { platforma: 'ruch', status: 'pominieto', szczegoly: 'brak VERCEL_TOKEN / VERCEL_PROJECT_ID' };
+    return { platforma: 'ruch', status: 'pominieto', szczegoly: 'brak ANALYTICS_TOKEN / ANALYTICS_PROJECT_ID' };
 
   // 8 dni wstecz: bieżąca doba jest niepełna, więc nadpisujemy ją przy każdym biegu
   const dzien = (ile: number) => new Date(Date.now() - ile * 86400000).toISOString().slice(0, 10);
