@@ -285,9 +285,14 @@ async function vercelRuch(
   return Array.isArray(d?.data) ? d.data : [];
 }
 
-/** Nazwa pola z datą bywa różna między wersjami API — bierzemy pierwsze, które jest. */
+/**
+ * Przy grupowaniu po czasie API zwraca datę w polu `timestamp`
+ * (np. "2026-09-18T00:00:00Z" — schemat odpowiedzi w dokumentacji Vercela).
+ * Pozostałe nazwy to zabezpieczenie na wypadek zmiany wersji API.
+ */
 const dzienZ = (r: any): string | null => {
-  const v = r?.day ?? r?.date ?? r?.key ?? null;
+  const v = r?.timestamp ?? r?.day ?? r?.date ?? r?.key ?? null;
+  if (typeof v === 'number') return new Date(v).toISOString().slice(0, 10);
   return typeof v === 'string' ? v.slice(0, 10) : null;
 };
 const osobyZ = (r: any): number => Number(r?.visitors ?? r?.count ?? 0) || 0;
@@ -345,8 +350,15 @@ async function syncRuch(db: NonNullable<typeof supabaseAdmin>): Promise<Wynik> {
     })
     .filter((w): w is NonNullable<typeof w> => w !== null);
 
-  if (!wiersze.length)
-    return { platforma: 'ruch', status: 'blad', szczegoly: 'API Vercela nie zwrocilo zadnego dnia' };
+  if (!wiersze.length) {
+    // Zamiast zgadywać: w logu ląduje liczba wierszy i nazwy pól z pierwszego.
+    const pola = wizytyD[0] ? Object.keys(wizytyD[0]).join(',') : '—';
+    return {
+      platforma: 'ruch',
+      status: 'blad',
+      szczegoly: `API zwrocilo ${wizytyD.length} wierszy bez rozpoznanej daty; pola: ${pola}`.slice(0, 300),
+    };
+  }
 
   const { error } = await db.from('panel_ruch').upsert(wiersze, { onConflict: 'data' });
   if (error) throw new Error(error.message);
