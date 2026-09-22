@@ -31,6 +31,14 @@
  * Zdarzenia:
  *   PageView / page_view  — na każdej podstronie
  *   Lead / generate_lead  — tylko na /dziekuje (patrz dziekuje.astro)
+ *
+ * ZAAWANSOWANE DOPASOWYWANIE (22.09.2026) — TYLKO CHECKLISTA.
+ * Automatyczne dopasowywanie w Menedzerze zdarzen jest WYLACZONE i ma takie
+ * zostac: dziala na calym pikselu, wiec zebraloby tez e-mail z formularza
+ * konsultacji, a polityka prywatnosci obiecuje wprost, ze dane z tego
+ * formularza nie ida do zadnych dzialan reklamowych.
+ * Zamiast tego robimy to recznie i waskim zakresem: LeadMagnet.astro zapisuje
+ * adres z formularza checklisty, a /dziekuje uzywa go przy zdarzeniu Lead.
  */
 const metaId = import.meta.env.PUBLIC_META_PIXEL_ID ?? '';
 const googleId = import.meta.env.PUBLIC_GOOGLE_TAG_ID ?? '';
@@ -101,6 +109,10 @@ const googleId = import.meta.env.PUBLIC_GOOGLE_TAG_ID ?? '';
         })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
         window.fbq('init', metaId);
         window.fbq('track', 'PageView');
+        /* /dziekuje potrzebuje tego identyfikatora, zeby przy zdarzeniu Lead
+           doinicjowac piksel z adresem e-mail (zaawansowane dopasowywanie).
+           Patrz dziekuje.astro. */
+        window.mbsMetaId = metaId;
         /* strony, które chcą wysłać własne zdarzenie (np. /dziekuje),
            czekają na ten sygnał zamiast zgadywać, czy fbq już jest */
         document.dispatchEvent(new CustomEvent('mbs:trackery-gotowe'));

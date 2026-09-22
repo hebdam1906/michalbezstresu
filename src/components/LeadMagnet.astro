@@ -28,6 +28,43 @@
 </script>
 <!-- End MailerLite Universal -->
 
+<!--
+  Zaawansowane dopasowywanie — krok 1 z 2 (22.09.2026).
+
+  Formularz checklisty jest osadzonym formularzem MailerLite, ale renderuje sie
+  jako zwykly <form> w naszym DOM (bez ramki iframe), z polem `fields[email]`.
+  Przechwytujemy adres w momencie wyslania i odkladamy na czas przeskoku na
+  /dziekuje, gdzie odpala sie zdarzenie Lead.
+
+  Dlaczego nie automatyczne dopasowywanie w Menedzerze zdarzen: dziala na calym
+  pikselu, wiec zebraloby tez adres z formularza konsultacji. Polityka
+  prywatnosci obiecuje, ze dane z tamtego formularza nie ida do dzialan
+  reklamowych — i ta obietnica zostaje.
+
+  Adresu NIE haszujemy sami. Piksel Meta normalizuje go i hashuje przed
+  wysylka; zahaszowanie po naszej stronie dalo by podwojny hash i zepsulo
+  dopasowanie.
+
+  sessionStorage, nie localStorage — ma zniknac wraz z karta.
+-->
+<script is:inline>
+  (function () {
+    document.addEventListener('submit', function (e) {
+      var form = e.target;
+      if (!form || !form.closest || !form.closest('.ml-embedded')) return;
+      /* bez zgody na ciasteczka marketingowe nie odkladamy niczego */
+      try {
+        if (!(window.mbsZgoda && window.mbsZgoda.udzielona())) return;
+      } catch (err) { return; }
+      try {
+        var pole = form.querySelector('input[type=email], input[name*="mail"]');
+        var adres = pole && pole.value ? pole.value.trim().toLowerCase() : '';
+        if (adres) sessionStorage.setItem('mbs_lead_em', adres);
+      } catch (err) {}
+    }, true);
+  })();
+</script>
+
 <style>
 .lead{background:var(--sygnal);color:#F2F7F5}
 .lead .eyebrow{color:var(--marker)}

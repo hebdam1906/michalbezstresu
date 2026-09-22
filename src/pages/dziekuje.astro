@@ -81,6 +81,21 @@ import Layout from '../layouts/Layout.astro';
       function konwersja() {
         if (wyslane) return;
         wyslane = true;
+        /* Zaawansowane dopasowywanie — krok 2 z 2 (22.09.2026).
+           LeadMagnet.astro odlozyl adres z formularza checklisty. Doinicjowanie
+           piksela tym adresem sprawia, ze Meta potrafi powiazac konwersje
+           z konkretna osoba — bez tego zostaja same ciasteczka.
+           Zakres jest waski celowo: dzieje sie to WYLACZNIE tutaj, przy
+           zdarzeniu Lead z checklisty. Formularz konsultacji nie jest objety
+           (patrz komentarz w Trackery.astro i polityka prywatnosci).
+           Adresu nie haszujemy — robi to piksel. Kasujemy go zaraz po uzyciu. */
+        var em = null;
+        try { em = sessionStorage.getItem('mbs_lead_em'); } catch (e) {}
+        if (window.fbq && em && window.mbsMetaId) {
+          window.fbq('init', window.mbsMetaId, { em: em });
+        }
+        try { sessionStorage.removeItem('mbs_lead_em'); } catch (e) {}
+
         if (window.fbq) window.fbq('track', 'Lead');
         /* Dokładny snippet z Google Ads dla akcji „Checklista - zapis na liste".
            Etykieta po ukośniku jest przypisana do TEJ akcji konwersji — bez niej
