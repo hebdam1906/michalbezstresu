@@ -14,12 +14,17 @@ import Stopka from '../components/Stopka.astro';
  *   3. §8 pkt 1 — link poprawiony na /prywatnosc (w draftzie był nieistniejący
  *      /polityka-prywatnosci).
  *
- * ⚠️ Dokument NIE przeszedł jeszcze przez prawnika. Konsultacja RODO + regulamin
- * jest zaplanowana przed 1.09. Po niej podmienić treść i datę obowiązywania.
+ * ⚠️ Dokument NIE przeszedł przez prawnika. Konsultacja RODO + regulamin została
+ * odwołana 21.09 (decyzja Michała, budżet). Jeśli kiedyś do niej wrócimy — podmienić
+ * treść i datę obowiązywania.
+ *
+ * 22.09.2026: §6 pkt 6 rozszerzony o treści cyfrowe. Powiązane z wyłączeniem
+ * przełącznika "Allow for refunds" w EasyCart — koszyk nie obiecuje już zwrotu,
+ * więc dobrowolna gwarancja musi mieć oparcie tutaj.
  * Świadomie NIE publikujemy tu adnotacji „wersja robocza” — regulamin jest umową
  * z konsumentem i taka adnotacja działałaby przeciwko obu stronom.
  */
-const obowiazujeOd = '10 sierpnia 2026';
+const obowiazujeOd = '22 września 2026';
 ---
 <Layout
   title="Regulamin sprzedaży | Michał bez Stresu"
@@ -140,8 +145,9 @@ const obowiazujeOd = '10 sierpnia 2026';
         Sprzedawca dostarczył treść za wyraźną i uprzednią zgodą Kupującego przed
         upływem terminu odstąpienia, a Kupujący przyjął do wiadomości utratę tego
         prawa (odpowiedni checkbox w koszyku).</li>
-      <li>Niezależnie od powyższego: jeśli po pierwszej konsultacji Kupujący uzna,
-        że nie otrzymał wartości — Sprzedawca prosi o wiadomość. Sprawy rozpatrywane
+      <li>Niezależnie od powyższego: jeśli po pierwszej konsultacji albo po lekturze
+        zakupionej treści cyfrowej Kupujący uzna, że nie otrzymał wartości —
+        Sprzedawca prosi o wiadomość. Sprawy rozpatrywane
         są indywidualnie, z intencją uczciwego rozwiązania.</li>
     </ol>
 
