@@ -19,7 +19,7 @@ import Stopka from '../components/Stopka.astro';
  * Całość nadal powinien przejrzeć ktoś, kto zna RODO — zwłaszcza sekcje
  * o podstawie prawnej i o przekazywaniu danych poza EOG.
  */
-const aktualizacja = '10 sierpnia 2026';
+const aktualizacja = '22 września 2026';
 ---
 <Layout
   title="Polityka prywatności | Michał bez Stresu"
@@ -38,12 +38,6 @@ const aktualizacja = '10 sierpnia 2026';
   </header>
 
   <main class="wrap tresc">
-    <div class="szkic">
-      <strong>Uwaga redakcyjna:</strong> ten dokument jest w wersji roboczej i czeka
-      na sprawdzenie. Jeśli coś w nim jest niejasne albo wygląda na pomyłkę —
-      napisz na <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>,
-      poprawimy.
-    </div>
 
     <h2>Kto jest administratorem</h2>
     {/* 10.08.2026: adres uzupełniony przez Michała (ten sam, co w regulaminie
@@ -167,7 +161,5 @@ const aktualizacja = '10 sierpnia 2026';
 .tresc ul{margin:0 0 12px 20px;color:#3A4A45}
 .tresc li{margin-bottom:8px}
 .tresc a{color:var(--sygnal)}
-.szkic{background:var(--marker);border-radius:10px;padding:16px 18px;
-  font-size:14.5px;line-height:1.55;margin-bottom:8px}
 .drobne{font-size:13px;color:#5E6E68}
 </style>
