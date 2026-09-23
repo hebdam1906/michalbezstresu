@@ -136,7 +136,7 @@ export const stronyOdcinkow = [
           "W tych pierwszych dwóch dobach ludzie popełniają błędy, których potem nie da się cofnąć. Są trzy najczęstsze.",
           "<strong>Błąd pierwszy: podpisanie czegokolwiek w trakcie spotkania.</strong><br />Masz prawo powiedzieć: „Chcę się z tym dokumentem spokojnie zapoznać. Wrócę z podpisem i ewentualnymi uwagami do końca tygodnia\". To jest normalne, profesjonalne zachowanie.",
           "Dla uczciwości: podpis pod planem naprawczym zwykle potwierdza, że dokument otrzymałeś, a nie że się z nim zgadzasz. Ale nawet wtedy — najpierw czytasz na spokojnie, potem podpisujesz. A jeśli cokolwiek budzi Twoje wątpliwości, to jest dokładnie ten moment na konsultację z prawnikiem specjalizującym się w prawie pracy. Nie „może kiedyś\". Teraz.",
-          "<strong>Błąd drugi: emocjonalna kontrofensywa.</strong><br />Długi mail o niesprawiedliwości, wysłany wieczorem w dniu otrzymania planu. Wszystko, co napiszesz, <a href=\"/odcinki/negatywny-feedback-od-szefa\">staje się dokumentem</a>. Twoja pisemna odpowiedź powstanie — ale za dwa, trzy dni, na zimno i z faktami.",
+          "<strong>Błąd drugi: emocjonalna kontrofensywa.</strong><br />Długi mail o niesprawiedliwości, wysłany wieczorem w dniu otrzymania planu. Wszystko, co napiszesz, <a href=\"/odcinki/negatywny-feedback-od-szefa/\">staje się dokumentem</a>. Twoja pisemna odpowiedź powstanie — ale za dwa, trzy dni, na zimno i z faktami.",
           "<strong>Błąd trzeci, najgroźniejszy: rzucenie papierami.</strong><br />„Skoro tak, to ja dziękuję\". Rozumiem tę emocję doskonale. Ale odejście z dnia na dzień, w gniewie, to zwykle najgorsza finansowo i strategicznie wersja odejścia. Jeśli masz odchodzić — odejdziesz na swoich warunkach, w swoim czasie, z przemyślaną poduszką finansową.",
           "<strong>Co robić zamiast tego?</strong> Przeczytaj dokument dwa razy. Tego samego dnia zrób notatkę z przebiegu spotkania: kto, co powiedział, jakimi słowami. I daj sobie czterdzieści osiem godzin, zanim na cokolwiek odpowiesz.",
         ],
@@ -149,7 +149,7 @@ export const stronyOdcinkow = [
           "<strong>Krok 3. Dokumentuj wykonanie celów na bieżąco.</strong><br />Osiągnąłeś coś z planu — miej na to dowód: raport, liczbę, mail. Folder prywatny, poza infrastrukturą firmy, uzupełniany co tydzień.",
           "<strong>Krok 4. Równolegle przygotuj plan B.</strong><br />Odśwież CV, uporządkuj kontakty, zorientuj się w rynku. Nie dlatego, że się poddajesz — dlatego, że opcje dają spokój, a spokój daje lepsze wyniki w planie A. To nie jest zdrada wobec pracodawcy. To jest dorosłość.",
           "<strong>Krok 5. Zadbaj o siebie fizycznie.</strong><br />Plan naprawczy to maraton stresu. Sen, ruch i ktoś bliski, komu mówisz na głos, co się dzieje, robią różnicę między przejściem przez to z godnością a wypaleniem po drodze. Jeśli czujesz, że przestajesz sobie radzić, rozmowa ze specjalistą jest siłą, nie słabością.",
-          "Cały ten mechanizm — dlaczego firmy dokumentują, co realnie zapisuje manager po rozmowie i jak wygląda gra o awans z drugiej strony stołu — opisuję szerzej w <a href=\"/ksiazka\">książce, nad którą pracuję</a>.",
+          "Cały ten mechanizm — dlaczego firmy dokumentują, co realnie zapisuje manager po rozmowie i jak wygląda gra o awans z drugiej strony stołu — opisuję szerzej w <a href=\"/ksiazka/\">książce, nad którą pracuję</a>.",
         ],
       },
       {
@@ -190,7 +190,7 @@ export const stronyOdcinkow = [
     // /odcinki/spotkanie-z-hr-bez-tematu jeszcze nie istniał (byłoby 404).
     pomost:
       'A jeśli mimo wszystko dojdzie do rozstania, na stole pojawia się inny dokument ' +
-      '— i wtedy różnica między <a href="/odcinki/spotkanie-z-hr-bez-tematu">wypowiedzeniem ' +
+      '— i wtedy różnica między <a href="/odcinki/spotkanie-z-hr-bez-tematu/">wypowiedzeniem ' +
       'a porozumieniem stron</a> zaczyna decydować o pieniądzach.',
     // ⚠️ Pakietu PIP (749 zł) nie promujemy nigdzie, dopóki księgowa nie odpowie
     // w sprawie VAT. To jest strona, na której pokusa jest największa.
@@ -259,8 +259,8 @@ export const stronyOdcinkow = [
           "W większości przypadków feedback to po prostu feedback. Nawet ten niezręczny, nawet ten niesprawiedliwy. Ale są sygnały, przy których warto mieć oczy szeroko otwarte:",
           "<ul><li>pisemny feedback, który pojawia się nagle, nie wiadomo skąd, po latach dobrych ocen,</li><li>prośby o potwierdzanie na piśmie rzeczy, które zawsze załatwiało się ustnie,</li><li>zmiana tonu, której nie umiesz sobie wytłumaczyć.</li></ul>",
           "Pojedynczy sygnał nie znaczy nic. Wzorzec znaczy dużo. A jeśli widzisz wzorzec, od dziś dokumentujesz wszystko systematycznie.",
-          "A jeśli ta sytuacja dzieje się u Ciebie właśnie teraz i wolisz omówić konkrety zamiast ogólnych zasad — <a href=\"/konsultacje\">tak wygląda konsultacja</a>.",
-          "Czasem pisemny feedback bywa też pierwszym krokiem do planu naprawczego — i wtedy warto wiedzieć, <a href=\"/odcinki/plan-naprawczy-pip\">czym taki plan naprawdę jest</a>.",
+          "A jeśli ta sytuacja dzieje się u Ciebie właśnie teraz i wolisz omówić konkrety zamiast ogólnych zasad — <a href=\"/konsultacje/\">tak wygląda konsultacja</a>.",
+          "Czasem pisemny feedback bywa też pierwszym krokiem do planu naprawczego — i wtedy warto wiedzieć, <a href=\"/odcinki/plan-naprawczy-pip/\">czym taki plan naprawdę jest</a>.",
         ],
       },
     ],
@@ -284,7 +284,7 @@ export const stronyOdcinkow = [
     // o planie naprawczym jest już opublikowana.
     pomost:
       'Bywa też tak, że pisemny feedback jest pierwszym krokiem do czegoś większego ' +
-      '— do planu naprawczego. <a href="/odcinki/plan-naprawczy-pip">Czym on naprawdę ' +
+      '— do planu naprawczego. <a href="/odcinki/plan-naprawczy-pip/">Czym on naprawdę ' +
       'jest, wyjaśniam tutaj</a>.',
     powiazane: [2, 4],
     konsultacje: true,
@@ -343,7 +343,7 @@ export const stronyOdcinkow = [
         h2: "Co zwykle oznacza spotkanie bez tematu z kimś z HR?",
         tresc: [
           "Najczęściej nie oznacza nic dramatycznego. Wpis bez tematu bierze się z tego, że manager nie chce nazywać sprawy w kalendarzu, do którego zaglądają inni — a powodów jest sporo: zmiana w strukturze, przesunięcie do innego zespołu, rozmowa o wyniku zespołu, awans, czyjaś skarga, o której nie wiesz.",
-          "Obecność osoby z HR zmienia jednak jedną rzecz: to znaczy, że sprawa ma jakiś status formalny. HR nie chodzi na rozmowy o niczym. Może to być procedura, dokument do podpisania, sprawa pracownicza w toku albo etap czegoś, co zaczęło się wcześniej — na przykład <a href=\"/odcinki/plan-naprawczy-pip\">planu naprawczego</a>, który dobiega końca.",
+          "Obecność osoby z HR zmienia jednak jedną rzecz: to znaczy, że sprawa ma jakiś status formalny. HR nie chodzi na rozmowy o niczym. Może to być procedura, dokument do podpisania, sprawa pracownicza w toku albo etap czegoś, co zaczęło się wcześniej — na przykład <a href=\"/odcinki/plan-naprawczy-pip/\">planu naprawczego</a>, który dobiega końca.",
           "Nie warto z tego budować wyroku, zanim padnie pierwsze zdanie. Warto natomiast wejść na to spotkanie z założeniem, że to nie jest zwykła rozmowa — i zachować się odpowiednio do tego założenia.",
         ],
       },
@@ -389,7 +389,7 @@ export const stronyOdcinkow = [
         h2: "Co zrobić w pierwszych 48 godzinach po takim spotkaniu?",
         tresc: [
           "Cztery rzeczy, w tej kolejności.",
-          "<strong>Zapisz przebieg, jeszcze tego samego dnia.</strong> Kto był, co padło, jakimi słowami, co Ci zaproponowano i czego nie powiedziano wprost. Pamięć przekłamuje szczegóły znacznie szybciej, niż nam się wydaje, a przy takich sprawach cała wartość siedzi w szczegółach. To ta sama zasada, która obowiązuje przy <a href=\"/odcinki/negatywny-feedback-od-szefa\">trudnym feedbacku od przełożonego</a>.",
+          "<strong>Zapisz przebieg, jeszcze tego samego dnia.</strong> Kto był, co padło, jakimi słowami, co Ci zaproponowano i czego nie powiedziano wprost. Pamięć przekłamuje szczegóły znacznie szybciej, niż nam się wydaje, a przy takich sprawach cała wartość siedzi w szczegółach. To ta sama zasada, która obowiązuje przy <a href=\"/odcinki/negatywny-feedback-od-szefa/\">trudnym feedbacku od przełożonego</a>.",
           "<strong>Zabezpiecz to, co Twoje.</strong> Kontakty prywatne, dokumenty, do których masz prawo, kopie własnych ocen i podsumowań. Nic, co należy do firmy — wyłącznie to, co dotyczy Ciebie.",
           "<strong>Przeczytaj dokument dwa razy, w odstępie kilku godzin.</strong> Pierwsze czytanie jest emocjonalne i nic z niego nie wynika. Przy drugim zaczynasz widzieć daty i kwoty.",
           "<strong>Ustal, z kim to skonsultujesz.</strong> Zanim odpiszesz. To nie musi być prawnik — czasem wystarczy ktoś, kto przeszedł to samo. Ale ta rozmowa ma się odbyć przed odpowiedzią, nie po.",
@@ -424,7 +424,7 @@ export const stronyOdcinkow = [
     // przejdzie kontrolę anonimowości i zostanie tam dopisana.
     pomost:
       'Bywa też odwrotnie: rozmowa nie kończy współpracy, tylko ją formalizuje ' +
-      '— i wtedy z sali wychodzisz z <a href="/odcinki/plan-naprawczy-pip">planem ' +
+      '— i wtedy z sali wychodzisz z <a href="/odcinki/plan-naprawczy-pip/">planem ' +
       'naprawczym</a> zamiast z dokumentem do podpisania. To jest inna sytuacja ' +
       'i inna gra.',
     // CTA wyłącznie do checklisty — decyzja Klaudiusza z 4.09.

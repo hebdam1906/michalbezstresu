@@ -69,7 +69,7 @@ function kiedy(iso) {
             {o.yt && <a class="glowny" href={o.yt} target="_blank" rel="noopener">Obejrzyj na YouTube →</a>}
             {o.spotify && <a class="audio" href={o.spotify} target="_blank" rel="noopener">Posłuchaj →</a>}
             {doCzytania.has(o.nr) && (
-              <a class="audio" href={`/odcinki/${doCzytania.get(o.nr)}`}>Przeczytaj →</a>
+              <a class="audio" href={`/odcinki/${doCzytania.get(o.nr)}/`}>Przeczytaj →</a>
             )}
           </div>
         </article>
@@ -91,7 +91,7 @@ function kiedy(iso) {
 
     {doCzytania.size > 0 && (
       <p class="wiecej">
-        Wolisz przeczytać? <a href="/odcinki">Wybrane odcinki rozpisane krok po kroku</a>.
+        Wolisz przeczytać? <a href="/odcinki/">Wybrane odcinki rozpisane krok po kroku</a>.
       </p>
     )}
   </div>

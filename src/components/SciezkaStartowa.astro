@@ -73,7 +73,7 @@ const odc = (nr) => {
   const naStronie = strona.has(nr);
   return {
     nr, data: o.data, tytul: o.tytul, opis: o.opis,
-    href: naStronie ? `/odcinki/${strona.get(nr)}` : o.yt,
+    href: naStronie ? `/odcinki/${strona.get(nr)}/` : o.yt,
     zewn: !naStronie,
     etykieta: naStronie ? 'Przeczytaj i obejrzyj →' : 'Obejrzyj na YouTube →',
   };
