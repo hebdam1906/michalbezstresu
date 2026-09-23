@@ -18,6 +18,7 @@ Nazwa pliku wynikowego MUSI zostać `checklista-dokumentowanie.pdf` — ten sam
 link chodzi w automatyzacji MailerLite i w starych mailach.
 
 Uruchomienie:  python3 gen-checklista.py [plik-wyjsciowy.pdf]
+               python3 gen-checklista.py --en   (wersja angielska, str. 1-2)
 """
 import sys, os
 from reportlab.lib.pagesizes import A4
@@ -46,6 +47,9 @@ for name, path in [("Lato", f"{L}/Lato-Regular.ttf"), ("Lato-B", f"{L}/Lato-Blac
     pdfmetrics.registerFont(TTFont(name, path))
 pdfmetrics.registerFontFamily("Lato", normal="Lato", bold="Lato-B",
                               italic="Lato", boldItalic="Lato-B")
+
+# etykieta numeru strony — podmieniana przez main() dla wersji EN
+STRONA = "str."
 
 W, H = A4
 MARG = 24 * mm
@@ -122,7 +126,7 @@ def rama(canvas, doc):
     canvas.setFillColor(SYGNAL);  canvas.rect(W * 0.29, H - 7, W * 0.71, 7, stroke=0, fill=1)
     canvas.setFont("Lato", 8.5); canvas.setFillColor(SZALWIA)
     canvas.drawRightString(W - MARG, 14 * mm,
-                           f"michalbezstresu.pl · str. {canvas.getPageNumber()}")
+                           f"michalbezstresu.pl · {STRONA} {canvas.getPageNumber()}")
     canvas.restoreState()
 
 # ════════════════════════════════════════════════════════════════════════════
@@ -313,19 +317,139 @@ def tresc():
             "„Staraj się, staraj”", "stopka")]
     return F
 
+# ════════════════════════════════════════════════════════════════════════════
+# WERSJA ANGIELSKA — strony 1–2 (dokumentowanie). Strony 3–4 (dodatek
+# z odcinka #9 o podwyżce) celowo NIE tłumaczone: odcinek jest po polsku,
+# więc dodatek bez niego wisi w próżni. Decyzja Klaudiusza i Michała, 23.09.
+# Tłumaczenie: Klaudiusz. Struktura wywołań identyczna jak w tresc().
+# ════════════════════════════════════════════════════════════════════════════
+def tresc_en():
+    F = []
+    F += [P("W O R K I N G &nbsp; I N &nbsp; A &nbsp; C O R P O R A T I O N &nbsp; · &nbsp; "
+            "D O C U M E N T I N G", "kicker"),
+          P("Checklist: how to document<br/>difficult situations at work", "h1"),
+          P("Michał bez Stresu · free material for subscribers", "sub"),
+          P("The company documents everything from your first day at work — emails, reviews, "
+            "agreements. That's normal. And you have exactly the same right to do so."),
+          P("Documenting is not informing on anyone and not preparing for war. It's calmly "
+            "writing down " + M("facts") + " so that six months from now you don't have to rely "
+            "on memory — yours or anyone else's. It takes 5 minutes after a difficult conversation. "
+            "Sometimes it's worth a great deal more."),
+          P("1 · The rule: a note within 5 minutes of the conversation", "h2"),
+          P("Right after a difficult conversation, write down the facts — while you still remember "
+            "them exactly. Not interpretations, not emotions. Facts."),
+          sp(3),
+          ramka(["DATE and TIME: 7 Jul 2026, approx. 2:30 pm",
+                 "WHO WAS PRESENT: me, [manager], [witnesses]",
+                 "WHERE / HOW: meeting room / online call / at the desk",
+                 "WHAT IT WAS ABOUT: (one or two sentences)", "",
+                 "WHAT WAS SAID (specifically):", "  - \"[quote or close paraphrase]\"", "",
+                 "AGREEMENTS / EXPECTATIONS:", "  - what, by when, by what criterion", "",
+                 "WHAT I SAID / WHAT I ASKED ABOUT:", "  - ...", "",
+                 "TO DO ON MY SIDE:", "  [ ] ..."]),
+          sp(7),
+          P("Why it works: a week later, memory plays tricks on both sides. A dated note, "
+            "written while it's fresh, " + M("sorts out the facts and calms things down") + "."),
+          P("2 · What to write down after every difficult situation", "h2")]
+    for x in ["Date and time — always, that's the basis",
+              "Who was present (and who saw/heard it)",
+              "Channel — conversation, meeting, email, messenger",
+              "Specific words / expectations — quotes, not generalities",
+              "Agreements — what, by when, by what criterion \"done\"",
+              "What you said / what you asked about",
+              "Your next steps after the conversation (and whether done)",
+              "Written trail — a short summary by email, if the conversation was verbal"]:
+        F.append(checkbox(x))
+    F += [sp(8),
+          P("The overriding rule: " + M("facts instead of judgements") + ". Instead of \"my boss was "
+            "unfair\" → \"I received feedback on X; no specific example was given\"."),
+          ]
+    # naglowek 3 trzymany razem z lista — inaczej zostaje sierota na dole str. 1
+    _s3 = [P("3 · Where to keep your documentation", "h2")]
+    for x in ["A copy outside company equipment and accounts — access to your work laptop "
+              "and email can be cut off overnight",
+              "Private space — private email, private cloud, a notebook",
+              "Don't copy confidential company data or other people's data — document your own "
+              "situation and your own agreements",
+              "Write as you go, not \"someday\" — an entry dated the same day is worth more"]:
+        _s3.append(checkbox(x))
+    F.append(KeepTogether(_s3))
+    F += [P("4 · 10 sentences: a calm reply to unfair feedback", "h2"),
+          P("Don't reply \"in the heat of the moment\". Wait, cool down, reply calmly and in writing. "
+            "You can combine the sentences.")]
+    grupy = [("To buy time:",
+              ["\"Thank you. I want to respond properly — I'll come back to you by [date].\"",
+               "\"I'll summarise what we agreed by email, so we have it in writing.\""]),
+             ("To pin things down (generality → specific):",
+              ["\"Could we go through this on a specific example?\"",
+               "\"What would a sufficient result look like in practice?\"",
+               "\"How will we know the expectation has been met?\""]),
+             ("To present your perspective:",
+              ["\"I understand the feedback. Let me add context that may matter: [facts].\"",
+               "\"I see this differently and I'd like to explain — I'm basing this on [specifics].\"",
+               "\"I want to improve. I'd like the assessment to be based on facts.\""]),
+             ("To leave a trail and close:",
+              ["\"For the record, here's a summary of what we agreed: [points]. Let me know "
+               "if I've captured anything differently.\"",
+               "\"If I understand correctly, by [date] I'm to [task] according to [criterion]. "
+               "Can you confirm?\""])]
+    for tytul, zdania in grupy:
+        F.append(P(tytul, "h3"))
+        for i, z in enumerate(zdania, 1):
+            F.append(numer(i, z))
+    F.append(P("5 · What NOT to do", "h2"))
+    for x in ["Don't reply to difficult feedback the same day, in the grip of emotion",
+              "Don't write labels (\"bullying\", \"spite\") where facts are enough",
+              "Don't record conversations without checking whether and when you're allowed to",
+              "Don't take confidential company materials or other people's data",
+              "Don't leave the only copy of your documentation on company equipment"]:
+        F.append(checkbox(x))
+    F += [sp(9),
+          Table([[P("<b>Important:</b> this is educational material, not legal advice. Every "
+                    "situation is different, and laws and internal regulations vary. If the matter "
+                    "is serious (suspected bullying, disciplinary action, a dispute over dismissal) — "
+                    "consult a lawyer or your labour inspectorate.", "small")]],
+                colWidths=[W - 2 * MARG],
+                style=TableStyle([("BOX", (0, 0), (-1, -1), 0.6, LINIA),
+                                  ("LEFTPADDING", (0, 0), (-1, -1), 10),
+                                  ("RIGHTPADDING", (0, 0), (-1, -1), 10),
+                                  ("TOPPADDING", (0, 0), (-1, -1), 8),
+                                  ("BOTTOMPADDING", (0, 0), (-1, -1), 8)])),
+          sp(12),
+          P("MICHAŁ BEZ STRESU · 20 years in corporate life. I know the rules of the game and "
+            "I teach how to play it.<br/>"
+            "Straight talk. Calm. On your side. · michalbezstresu.pl", "stopka")]
+    return F
+
+
 def main():
-    out = sys.argv[1] if len(sys.argv) > 1 else os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "checklista-dokumentowanie.pdf")
+    global STRONA
+    argv = [a for a in sys.argv[1:] if a != "--en"]
+    ang  = "--en" in sys.argv
+
+    if ang:
+        STRONA = "p."
+        domyslna = "checklist-documenting-EN.pdf"
+        tytul = "Checklist: documenting difficult situations at work"
+        zawartosc = tresc_en
+    else:
+        domyslna = "checklista-dokumentowanie.pdf"
+        tytul = "Checklista: dokumentowanie trudnych sytuacji w pracy"
+        zawartosc = tresc
+
+    out = argv[0] if argv else os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), domyslna)
     doc = BaseDocTemplate(out, pagesize=A4,
                           leftMargin=MARG, rightMargin=MARG,
                           topMargin=20 * mm, bottomMargin=20 * mm,
-                          title="Checklista: dokumentowanie trudnych sytuacji w pracy",
+                          title=tytul,
                           author="Michał bez Stresu")
     frame = Frame(MARG, 20 * mm, W - 2 * MARG, H - 40 * mm, id="tresc",
                   leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0)
     doc.addPageTemplates([PageTemplate(id="std", frames=[frame], onPage=rama)])
-    doc.build(tresc())
+    doc.build(zawartosc())
     print("zapisano:", out)
+
 
 if __name__ == "__main__":
     main()
