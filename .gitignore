@@ -18,3 +18,6 @@ dist/
 
 # katalogi robocze z porzadkow — nie wchodza do repo
 _DO-KASACJI/
+
+# podglady PNG generatora checklisty — robocze, odtwarzalne
+lead-magnet/_podglad/

@@ -1,3 +1,9 @@
+> **UWAGA — to nie jest plik źródłowy PDF-a.**
+> To szkic treści z 7.07.2026. Rozjechał się z faktycznym materiałem
+> (brak stron 3–4 z dodatkiem z odcinka 9, inne brzmienie akapitu otwierającego).
+> Źródłem PDF-a jest `gen-checklista.py` — polski tekst siedzi na twardo
+> w funkcji `tresc()`. Zmiany w treści checklisty robimy TAM, nie tutaj.
+
 # Checklista: jak dokumentować trudne sytuacje w pracy
 
 **Michał bez Stresu** · materiał bezpłatny dla subskrybentów
