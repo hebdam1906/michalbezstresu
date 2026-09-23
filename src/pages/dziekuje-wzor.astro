@@ -1,0 +1,104 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+/**
+ * Strona po pobraniu wzoru planu naprawczego z `/dla-firm/plan-naprawczy-wzor/`.
+ *
+ * DLACZEGO OSOBNA STRONA, A NIE KOMUNIKAT W FORMULARZU:
+ * formularz MailerLite pokazuje potwierdzenie na miejscu i nie daje pewnego
+ * haczyka w JS, na którym dałoby się odpalić zdarzenie. Cała reszta serwisu
+ * mierzy konwersje na osobnych stronach podziękowania (`/dziekuje`,
+ * `/dziekuje-firmy`) — ta idzie tym samym torem: formularz ma ustawioną
+ * „Custom success page" na ten adres.
+ *
+ * ⚠️ ZDARZENIE: `CompleteRegistration`, NIE `Lead`. Rozstrzygnięte 23.09.
+ * Pierwotna specyfikacja Klaudiusza mówiła `Lead` z `content_category:
+ * firmy_wzor`. Parametr rozdziela RAPORTY, ale NIE rozdziela optymalizacji:
+ * kampania na checklistę optymalizuje się na standardowe zdarzenie `Lead`
+ * i policzyłaby te pobrania jako swoje sukcesy — uczyłaby się na menedżerach
+ * zamiast na pracownikach. To ten sam powód, dla którego `/dziekuje-firmy`
+ * używa `Contact` (decyzja z 6.08, powtórzona 3.09).
+ * `CompleteRegistration` daje czysty rozdział od obu: od `Lead` (checklista)
+ * i od `Contact` (zapytania firmowe). Potwierdzone przez Klaudiusza
+ * w odpowiedzi na update-62 — NIE zmieniać z powrotem na `Lead`.
+ *
+ * Google: zdarzenie pomiarowe `wzor_planu_naprawczego` BEZ `send_to`. Trafia do
+ * GA4 jako osobne zdarzenie. Żeby liczyło się jako konwersja w Google Ads,
+ * Michał musi założyć osobną akcję konwersji i podać etykietę — wtedy
+ * dopisujemy `send_to` dokładnie jak w `dziekuje.astro`.
+ *
+ * Bez zaawansowanego dopasowywania (`fbq('init', …, {em})`): tamten mechanizm
+ * jest świadomie wąski i obejmuje wyłącznie checklistę — patrz komentarz
+ * w `Trackery.astro` i zapis w polityce prywatności.
+ *
+ * `noindex` + wykluczenie z sitemapy (astro.config.mjs): strona ma być
+ * osiągalna wyłącznie po wysłaniu formularza. Wejście z wyszukiwarki
+ * generowałoby fałszywe zdarzenia.
+ */
+---
+<Layout
+  title="Wzór planu naprawczego jest w drodze — Michał bez Stresu"
+  description="Wzór planu naprawczego wysłany. Sprawdź skrzynkę — mail z PDF-em przychodzi w ciągu kilku minut."
+  noindex
+>
+  <main class="lp">
+    <div class="lp-wrap">
+      <div class="brand mono">Michał bez Stresu</div>
+
+      <div class="eyebrow">Wzór wysłany</div>
+      <h1>Wzór jest w drodze</h1>
+
+      <p class="lp-lead">Mail z PDF-em przychodzi w ciągu kilku minut, z adresu
+        <strong>michal@michalbezstresu.pl</strong>. Gdyby go nie było — warto zajrzeć
+        do folderu ofert albo do spamu i przenieść wiadomość do odebranych.</p>
+
+      <p class="lp-lead">Wzór jest do wypełnienia: sześć pól i krótka instrukcja przy
+        każdym. To wzór struktury, nie dokument prawny — dostosuj go do regulaminów
+        obowiązujących w Twojej firmie.</p>
+
+      <p class="lp-lead">Jeśli chcesz, żeby Twoi menedżerowie umieli takie plany
+        prowadzić, a nie tylko wypełniać — <a href="/dla-firm/">tutaj są warsztaty</a>.</p>
+
+      <p class="fineprint">Coś nie dotarło albo literówka w adresie?
+        Napisz wprost: <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a></p>
+    </div>
+  </main>
+
+  <script is:inline>
+    (function () {
+      var wyslane = false;
+      function zdarzenie() {
+        if (wyslane) return;
+        wyslane = true;
+        /* ⚠️ `CompleteRegistration`, nie `Lead` — patrz komentarz na górze pliku.
+           `content_category` zostaje do raportowania w Menedżerze reklam. */
+        if (window.fbq) window.fbq('track', 'CompleteRegistration', {
+          content_category: 'firmy_wzor',
+        });
+        /* Bez `send_to`: pomiar w GA4, nie konwersja w Ads. */
+        if (window.gtag) window.gtag('event', 'wzor_planu_naprawczego', {
+          event_category: 'b2b',
+          event_label: 'formularz /dla-firm/plan-naprawczy-wzor',
+        });
+      }
+      document.addEventListener('mbs:trackery-gotowe', zdarzenie);
+      if (window.fbq || window.gtag) zdarzenie();
+    })();
+  </script>
+</Layout>
+
+<style>
+.lp{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:var(--sygnal);color:#F2F7F5;padding:56px 24px}
+.lp-wrap{width:100%;max-width:620px}
+.brand{font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--marker);margin-bottom:40px}
+.lp .eyebrow{color:var(--marker)}
+.lp h1{font-family:var(--disp);font-weight:500;color:#fff;
+  font-size:clamp(30px,5vw,46px);line-height:1.15;margin:10px 0 24px}
+.lp-lead{font-size:17px;line-height:1.65;color:#DCE8E4;margin-bottom:18px;max-width:56ch}
+.lp-lead strong{color:#fff}
+.lp-lead a{color:var(--marker)}
+.fineprint{margin-top:34px;font-size:14px;color:#A9C2BA}
+.fineprint a{color:var(--marker)}
+</style>

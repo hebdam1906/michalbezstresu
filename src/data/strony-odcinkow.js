@@ -78,9 +78,14 @@ export const stronyOdcinkow = [
     nr: 2,
     slug: 'plan-naprawczy-pip',
     zapytanie: 'plan naprawczy w pracy co to jest',
-    tytul: 'Plan naprawczy w pracy — co oznacza PIP i co teraz zrobić',
+    // title/description podmienione 23.09.2026 razem z nową sekcją „Jak czytać plan
+    // naprawczy, który dostałeś". Copy: Klaudiusz. ⚠️ „zanim podpiszesz cokolwiek"
+    // zostaje — jest spójne z tym, co odcinek i książka mówią o podpisie (potwierdzenie
+    // odbioru ≠ zgoda). Nie zmieniać na „zanim zaakceptujesz". Poprzednia wersja:
+    // 'Plan naprawczy w pracy — co oznacza PIP i co teraz zrobić'.
+    tytul: 'Plan naprawczy (PIP) — jak go czytać, zanim podpiszesz cokolwiek',
     opis:
-      'Dostałeś plan naprawczy? Wyjaśniam, czym jest PIP, kto go naprawdę pisze i po co — z perspektywy managera, który takie plany prowadził. Plus pierwsze kroki.',
+      'Sześć elementów, które ma dobry plan naprawczy — i sześć pytań, które zadajesz, gdy ich brakuje. Jak odróżnić plan od dokumentacji decyzji, która już zapadła.',
     h1: 'Dostałem plan naprawczy. Co to naprawdę znaczy?',
     lead: [
       "Zaproszenie w kalendarzu: Ty, Twój szef i ktoś z HR. Temat: „rozmowa o wynikach\". Na stole leży dokument, a ktoś wypowiada zdanie, które zapamiętasz na długo — „przygotowaliśmy dla Ciebie plan poprawy\".",
@@ -161,6 +166,29 @@ export const stronyOdcinkow = [
           "Warto też przedefiniować, czym jest wygrana. Nie zawsze oznacza „zostaję w firmie\". Czasem wygrana to „odchodzę w swoim tempie, na wynegocjowanych warunkach, prosto do lepszego miejsca\". Obie wersje widziałem i obie są zwycięstwem.",
         ],
       },
+      // Sekcja dopisana 23.09.2026. Tekst: Klaudiusz,
+      // `Sekcja_jak-czytac-plan-naprawczy_odcinek-02_tresc.md`.
+      // Reszta odcinka bez zmian. Ostatni akapit linkuje do nowej strony B2B
+      // — obie strony wchodzą jednym commitem, żeby link nie prowadził w pustkę.
+      // Śródtytuł „Co z tego wynika" jest pogrubionym akapitem, nie <h3>:
+      // renderer `[slug].astro` opakowuje każdy element `tresc` w <p>.
+      {
+        h2: "Jak czytać plan naprawczy, który dostałeś — punkt po punkcie",
+        tresc: [
+          "Dostałeś dokument. Zanim zrobisz cokolwiek innego, przeczytaj go tak, jak czytałby go ktoś, kto takie dokumenty pisał. Dobry plan naprawczy ma sześć elementów. Sprawdź, ile z nich jest w Twoim — bo od tego zależy, czy masz przed sobą plan, czy dokumentację decyzji, która już zapadła.",
+          "<strong>1. Cel.</strong> Czy jest napisane jednym zdaniem, co ma się zmienić? „Poprawa wyników\" to nie cel, to nastrój. Jeśli celu nie ma albo jest ogólny — Twoje pierwsze pytanie brzmi: <em>„Po czym poznamy, że plan się udał?\"</em>",
+          "<strong>2. Kryteria.</strong> Czy da się je zmierzyć? „Terminowość 95% w ujęciu tygodniowym\" — tak. „Większe zaangażowanie\" — nie. Kryterium, którego nie da się sprawdzić na koniec, jest kryterium, o które będzie spór na koniec. Pytanie: <em>„Jaka jest wartość dziś, jaka docelowa i skąd weźmiemy liczby?\"</em>",
+          "<strong>3. Termin.</strong> Czy jest data zakończenia — konkretna, nie „około sześciu tygodni\"? Jeśli jej nie ma, plan może trwać, dopóki komuś jest to wygodne. Pytanie: <em>„Do kiedy dokładnie?\"</em>",
+          "<strong>4. Wsparcie.</strong> Co firma daje, a nie tylko czego oczekuje: szkolenie, mentor, zmiana zakresu, narzędzie. Plan bez wsparcia to test — a test ma sens tylko wtedy, gdy wynik nie jest znany z góry. Jeśli tej rubryki nie ma, poproś, żeby była: <em>„Co dostanę, żeby to osiągnąć?\"</em>",
+          "<strong>5. Spotkania kontrolne.</strong> Czy są zaplanowane z góry, z datami? Jeśli plan mówi „będziemy się spotykać\", a nie mówi kiedy — spotkania nie będą. I to Ty po nich będziesz pisał notatkę: co omówione, co ustalone, wysłaną tego samego dnia. Nie czekaj, aż zrobi to szef.",
+          "<strong>6. Co się dzieje na końcu.</strong> Obie wersje, na piśmie: co oznacza spełnienie kryteriów i co oznacza ich niespełnienie. Jeśli dokument mówi tylko o jednej — wiesz, którą stronę ktoś już wybrał.",
+          "<strong>Co z tego wynika</strong>",
+          "Jeśli w Twoim planie jest pięć albo sześć z tych elementów — masz plan. Traktuj go poważnie, bo ktoś włożył w niego pracę i realnie daje Ci szansę.",
+          "Jeśli są dwa albo trzy — masz dokument, który ma wyglądać jak plan. To nie znaczy, że masz się poddać. Znaczy, że Twoim pierwszym ruchem jest doprowadzenie do tego, żeby brakujące elementy się w nim znalazły — na piśmie, po Twoim mailu, z datą. Prośba o kryteria i termin nie jest konfrontacją. Jest jedyną rzeczą, która zamienia teatr w coś, co da się wygrać.",
+          "A jeśli nie ma prawie nic — przeczytaj jeszcze raz część tego odcinka o tym, jak wygląda plan, w którym decyzja zapadła wcześniej. I policz, ile jest Cię stać na to, żeby to sprawdzić.",
+          "<em>Jeśli jesteś po drugiej stronie tego stołu i to Ty masz wręczyć plan — <a href=\"/dla-firm/plan-naprawczy-wzor/\">tu jest wzór, który jest planem, a nie wyrokiem</a>.</em>",
+        ],
+      },
     ],
     zapamietaj: [
       "<strong>Plan naprawczy to proces, nie wyrok.</strong> Za dokumentem stoi historia rozmów, konsultacji i procedur — a proces ma zasady, które można poznać.",
@@ -201,9 +229,14 @@ export const stronyOdcinkow = [
     nr: 1,
     slug: 'negatywny-feedback-od-szefa',
     zapytanie: 'jak reagować na krytykę od szefa',
-    tytul: 'Negatywny feedback od szefa — jak zareagować i odpowiedzieć',
+    // title/description podmienione 23.09.2026. Search Console pokazało na tej
+    // stronie dużo wyświetleń przy niskim CTR — treść strony zostaje bez zmian,
+    // zmieniamy tylko to, co widać w wynikach. Copy: Klaudiusz. Cel: CTR > 5%,
+    // odczyt w Search Console za 2–3 tygodnie (ok. 14.10). Poprzednia wersja:
+    // 'Negatywny feedback od szefa — jak zareagować i odpowiedzieć'.
+    tytul: 'Negatywny feedback od szefa — co zrobić w pierwszych 48 h',
     opis:
-      'Dostałeś krytykę od przełożonego? Wyjaśniam, skąd naprawdę bierze się feedback, czego nie mówić w pierwszej reakcji i jak odpowiedzieć na piśmie.',
+      'Nie odpowiadaj tego samego dnia. Zapytaj o kryteria, nie o szansę. Zapisz fakty w 5 minut. Trzy kroki po trudnej rozmowie — z perspektywy byłego menedżera.',
     h1: 'Negatywny feedback od szefa. Jak zareagować?',
     lead: [
       "Dostałeś od szefa maila z krytyką i palce już wiszą nad klawiaturą, żeby odpisać. Zatrzymaj się — bo ten mail przed chwilą stał się dokumentem. I Twoja odpowiedź też nim będzie.",

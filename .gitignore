@@ -21,3 +21,6 @@ _DO-KASACJI/
 
 # podglady PNG generatora checklisty — robocze, odtwarzalne
 lead-magnet/_podglad/
+
+# Python: od 23.09 generatory PDF importuja marka.py, wiec powstaje cache
+__pycache__/

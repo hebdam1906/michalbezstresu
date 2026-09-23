@@ -1,0 +1,230 @@
+---
+/**
+ * /dla-firm/plan-naprawczy-wzor — wzór planu naprawczego do pobrania (B2B).
+ *
+ * Tekst: Klaudiusz, `Strona-B2B_plan-naprawczy-wzor_tresc-i-PDF.md` (23.09.2026).
+ * Decyzja Michała z 23.09: publikujemy teraz, nie po premierze książki.
+ * Wdrożenie: Marcin.
+ *
+ * ⚠️ Odbiorca: menedżer, HR, szef operacji — NIE pracownik w trudnej sytuacji.
+ * Stąd, tak samo jak na `/dla-firm` i w artykule B2B:
+ *   • NIE MA CTA do checklisty (inny odbiorca, inny cel),
+ *   • formularz zapisuje do OSOBNEJ grupy `Plan naprawczy — B2B`, bez sekwencji
+ *     powitalnej dla pracowników — to pierwsza lista B2B w projekcie,
+ *   • grupa jest wykluczona z wysyłek newslettera PL (tak samo jak grupa EN).
+ *
+ * ⚠️ Zasady od Klaudiusza, których NIE wolno tu naruszyć:
+ *   • na stronie wyraźnie: to wzór struktury, NIE dokument prawny,
+ *   • bez podpisu „prawnik sprawdził" — nie sprawdził,
+ *   • nazwa pliku i URL bez słowa „zwolnienie" — ta strona ma być o planie,
+ *     nie o instrukcji zwalniania.
+ *
+ * Treść strony jest otwarta i indeksowana (bez `noindex`). Za adresem e-mail
+ * jest wyłącznie plik PDF — nie tekst.
+ *
+ * Formularz MailerLite: konto 2494941, formularz `cyWujb`, grupa
+ * `Plan naprawczy — B2B`, double opt-in WYŁĄCZONY (jak w PL i EN), „Custom
+ * success page" ustawiona na `/dziekuje-wzor/` — tam odpala się zdarzenie.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Stopka from '../../components/Stopka.astro';
+
+const kanon = 'https://www.michalbezstresu.pl/dla-firm/plan-naprawczy-wzor';
+
+const tytul = 'Plan naprawczy dla pracownika — wzór (PDF) i 6 pól, bez których staje się teatrem';
+const opis =
+  'Wzór planu naprawczego do pobrania: cel, kryteria, termin, wsparcie, spotkania, ' +
+  'zakończenie. Dlaczego bez każdego z nich PIP nie działa — od byłego menedżera.';
+
+const jsonLdExtra = [
+  {
+    '@type': 'BreadcrumbList',
+    '@id': `${kanon}#okruszki`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Start', item: 'https://www.michalbezstresu.pl/' },
+      { '@type': 'ListItem', position: 2, name: 'Dla firm', item: 'https://www.michalbezstresu.pl/dla-firm' },
+      { '@type': 'ListItem', position: 3, name: 'Plan naprawczy — wzór', item: kanon },
+    ],
+  },
+];
+
+/* Sześć pól wzoru. Numer jest częścią nagłówka, żeby struktura strony zgadzała
+   się ze strukturą PDF-a — czytelnik ma znaleźć w pliku to samo, co przeczytał. */
+const pola = [
+  {
+    h: '1. Cel planu — jedno zdanie',
+    t: 'Nie „poprawa wyników", tylko: <em>co konkretnie ma się zmienić i po czym to poznamy.</em> ' +
+       'Jeśli nie da się tego napisać w jednym zdaniu, plan nie ma celu, ma nastrój.',
+  },
+  {
+    h: '2. Kryteria — mierzalne, nie opisowe',
+    t: '„Terminowość dostaw na poziomie 95% w ujęciu tygodniowym" — tak. „Większe zaangażowanie" ' +
+       '— nie. Kryterium, którego nie da się sprawdzić na koniec planu, jest kryterium, o które ' +
+       'będzie spór na koniec planu.',
+  },
+  {
+    h: '3. Termin — z datą, nie z „około"',
+    t: 'Sześć do ośmiu tygodni to zwykła długość. Ważniejsze od długości jest to, że data ' +
+       'końcowa jest znana w dniu wręczenia — obu stronom.',
+  },
+  {
+    h: '4. Wsparcie — co firma daje, nie tylko czego oczekuje',
+    t: 'Szkolenie, mentor, zmiana zakresu, dostęp do narzędzia. Plan bez wsparcia to test, ' +
+       'nie plan. A test ma sens tylko wtedy, gdy wynik nie jest znany z góry.',
+  },
+  {
+    h: '5. Spotkania kontrolne — daty ustalone przy wręczeniu',
+    t: 'Cotygodniowe, z krótką notatką po każdym, wysłaną tego samego dnia do pracownika. ' +
+       'Notatka po spotkaniu robi trzy rzeczy naraz: zamyka spór o to, co powiedziano, ' +
+       'pokazuje postęp albo jego brak i buduje dokumentację, której nie trzeba odtwarzać ' +
+       'po fakcie.',
+  },
+  {
+    h: '6. Co się dzieje na końcu — obie wersje, na piśmie',
+    t: 'Co oznacza spełnienie kryteriów. Co oznacza ich niespełnienie. Napisane w dniu ' +
+       'wręczenia, nie w dniu zakończenia. Pracownik, który zna obie odpowiedzi od pierwszego ' +
+       'dnia, pracuje. Pracownik, który zgaduje — szuka.',
+  },
+];
+
+const zanim = [
+  ['Czy decyzja już zapadła?',
+   'Jeśli tak — uczciwa rozmowa o rozstaniu jest krótsza, tańsza i bardziej ludzka niż ' +
+   'osiem tygodni teatru.'],
+  ['Czy ta osoba wie, że jest problem?',
+   'Zdumiewająco często nie wie. Plan naprawczy nie może być pierwszą rozmową o problemie.'],
+  ['Czy masz czas na sześć cotygodniowych spotkań?',
+   'Jeśli nie, plan zawali się na czwartym tygodniu — i będzie to wyglądało jak wina pracownika.'],
+];
+---
+
+<Layout title={tytul} description={opis} jsonLdExtra={jsonLdExtra}>
+  <Nav />
+
+  <article>
+    <header class="ahead">
+      <div class="wrap">
+        <nav class="okruszki" aria-label="Ścieżka">
+          <a href="/">Start</a> <span aria-hidden="true">/</span>
+          <a href="/dla-firm/">Dla firm</a>
+        </nav>
+        <div class="eyebrow">Wzór do pobrania · dla menedżerów i HR</div>
+        <h1>Plan naprawczy dla pracownika — wzór, który jest planem, a nie wyrokiem</h1>
+        <p class="lead">
+          Przez dwadzieścia lat w operacjach finansowych wręczałem plany naprawcze i widziałem,
+          jak wręczają je inni. W większości firm działają one w jednym z dwóch trybów: jako
+          realny plan z kryteriami i wsparciem — albo jako dokumentacja decyzji, która już
+          zapadła. Ten drugi tryb kosztuje firmę więcej niż uczciwa rozmowa o rozstaniu.
+          Policzyłem to <a href="/artykuly/koszt-trudnych-rozmow/">tutaj</a>.
+        </p>
+        <p class="lead">
+          Poniżej jest wzór planu w pierwszym trybie. Sześć pól. Przy każdym — dlaczego bez
+          niego plan zamienia się w teatr.
+        </p>
+      </div>
+    </header>
+
+    <div class="wrap">
+      <div class="tresc">
+
+        {pola.map((p) => (
+          <section class="pole">
+            <h2>{p.h}</h2>
+            <p set:html={p.t} />
+          </section>
+        ))}
+
+        {/* Bramka. Tekst strony zostaje otwarty — za adresem jest wyłącznie plik. */}
+        <section class="pobierz" id="wzor">
+          <h2>Pobierz wzór</h2>
+          <p>Dokument do wypełnienia, z tymi sześcioma polami i krótką instrukcją przy każdym.</p>
+
+          <div class="form-embed">
+            <div class="ml-embedded" data-form="cyWujb"></div>
+          </div>
+
+          <p class="fineprint">Wzór trafi na podany adres. Zapisujesz się jednocześnie na krótką
+            listę dla menedżerów i HR — bez newslettera dla pracowników. Wypisanie jednym
+            kliknięciem.</p>
+        </section>
+
+        <section class="sekcja">
+          <h2>Zanim wręczysz plan</h2>
+          <p>Trzy pytania, które warto sobie zadać:</p>
+          <ul class="pytania">
+            {zanim.map(([p, o]) => (<li><strong>{p}</strong> {o}</li>))}
+          </ul>
+        </section>
+
+        <section class="sekcja">
+          <h2>Jeśli chcesz, żeby Twoi menedżerowie umieli to przeprowadzić</h2>
+          <p>
+            Wręczenie planu naprawczego to jedna z trzech najtrudniejszych rozmów, jakie
+            prowadzi menedżer — obok odmowy podwyżki i rozmowy o zwolnieniu. Prowadzę warsztaty
+            dla menedżerów i HR w centrach usług: jak przygotować, wręczyć i prowadzić plan
+            tak, żeby był planem. <a href="/dla-firm/">Szczegóły i kontakt</a>.
+          </p>
+        </section>
+
+        <p class="nota">
+          To jest wzór struktury, nie dokument prawny. Plan naprawczy nie ma w polskim prawie
+          ustawowej formy; jego skutki zależą od regulaminów obowiązujących w firmie i od
+          Kodeksu pracy. W sprawach spornych skonsultuj się z prawnikiem.
+        </p>
+
+      </div>
+    </div>
+  </article>
+
+  <Stopka />
+
+  <!-- MailerLite Universal -->
+  <script is:inline>
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '2494941');
+  </script>
+  <!-- End MailerLite Universal -->
+</Layout>
+
+<style>
+.ahead{padding:40px 0 24px}
+.okruszki{font-family:var(--mono);font-size:12px;color:#5E6E68;margin-bottom:18px}
+.okruszki a{text-decoration:none}
+.okruszki a:hover{color:var(--sygnal)}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--sygnal);margin-bottom:12px}
+h1{font-size:clamp(30px,4.6vw,46px);margin-bottom:18px;max-width:24ch}
+.lead{font-size:19px;color:#3C4A46;max-width:66ch;margin-bottom:14px}
+.lead a{color:var(--sygnal)}
+
+.tresc{max-width:68ch;padding-bottom:56px}
+
+/* Sześć pól: nagłówki mniejsze niż w artykule — jest ich sześć pod rząd
+   i w rozmiarze h2 z artykułu strona wyglądałaby jak spis treści. */
+.pole{padding:24px 0 0}
+.pole h2{font-size:clamp(19px,2.1vw,23px);margin-bottom:8px}
+.pole p{margin:0}
+
+.sekcja{padding:28px 0 0}
+.sekcja h2{font-size:clamp(23px,2.8vw,30px);margin-bottom:14px}
+.sekcja p{margin-bottom:14px}
+
+.pytania{list-style:none;margin:0}
+.pytania li{padding-left:22px;position:relative;margin-bottom:12px}
+.pytania li::before{content:"—";position:absolute;left:0;color:var(--sygnal)}
+
+.pobierz{margin:44px 0 8px;padding:28px 26px;background:var(--papier);
+  border:1px solid var(--linia);border-radius:12px}
+.pobierz h2{font-size:clamp(23px,2.8vw,30px);margin-bottom:10px}
+.pobierz > p{margin-bottom:18px}
+.form-embed{margin-bottom:6px}
+.fineprint{font-size:13.5px;line-height:1.6;color:#5E6E68;margin:0}
+
+.nota{max-width:68ch;margin:36px 0 0;padding:16px 20px;border-left:3px solid var(--linia);
+  font-size:14.5px;line-height:1.65;color:#5E6E68;background:var(--papier);
+  border-radius:0 8px 8px 0;font-style:italic}
+</style>
