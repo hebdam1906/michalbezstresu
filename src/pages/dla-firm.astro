@@ -92,6 +92,18 @@ const jakTo = [
         <a class="btn btn-primary" href="#kontakt">Porozmawiajmy</a>
         <span class="cta-note">Odpowiadam w ciągu jednego dnia roboczego.</span>
       </div>
+      {/* Akapit po angielsku dodany 23.09.2026: angielski artykul
+          /en/articles/cost-of-difficult-conversations konczy sie CTA prowadzacym tutaj,
+          a cala ta strona jest po polsku. To jest minimum, zeby osoba, ktora przeczytala
+          tekst po angielsku, wiedziala gdzie trafila i jak sie odezwac — NIE jest to
+          angielska wersja strony oferty. Formularz ponizej zostaje po polsku. */}
+      <p class="lead en" lang="en">
+        <strong>Workshops for managers and HR</strong> — on the conversations nobody trains
+        managers for: annual reviews, performance improvement plans, corrective feedback,
+        parting ways. Delivered in Polish or English.
+        <a href="#kontakt">Get in touch</a> — the form below is in Polish, but you can write
+        to me in English and I will reply in English.
+      </p>
     </div>
   </header>
 
@@ -354,6 +366,9 @@ const jakTo = [
 .phead h1{font-family:var(--disp);font-weight:500;font-size:clamp(32px,5vw,54px);line-height:1.12;margin-bottom:22px}
 .phead .lead{font-size:clamp(16px,2vw,18.5px);color:#3C4A46;max-width:64ch;margin-bottom:14px}
 .phead .lead.mocne{color:var(--sygnal);font-weight:500}
+.phead .lead.en{font-size:15.5px;color:#5E6E68;margin-top:20px;padding-top:16px;
+  border-top:1px solid var(--linia);max-width:64ch}
+.phead .lead.en a{color:var(--sygnal)}
 .cta-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:30px}
 .cta-note{font-size:14px;color:#5E6E68}
 .dlakogo{list-style:none;padding:0;margin-top:26px;max-width:70ch;display:grid;gap:14px}
