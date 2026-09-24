@@ -19,6 +19,7 @@ import Stopka from '../components/Stopka.astro';
  */
 const PRZEKRESLENIA = false;
 const CENA = { baza: 299, subskrybent: 254, startowa: 199, pakiet: 749, pakietOsobno: 897 };
+const TERMIN_STARTOWEJ = '31 października 2026';
 const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
 ---
 <Layout
@@ -35,6 +36,8 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
         Ale Twoja sytuacja nie jest ogólna. Ma nazwiska, daty, konkretny dokument na stole
         i konkretną rozmowę w kalendarzu. Jeśli chcesz przegadać ją z kimś, kto siedział
         po obu stronach tego stołu — jestem tu.</p>
+      <p class="pilnosc">Jeśli rozmowa o podwyżce albo ocena roczna czeka Cię w najbliższych
+        tygodniach, najlepszy moment na przygotowanie jest teraz — nie tydzień przed.</p>
       <a class="btn btn-primary" href="#formularz">Napisz o swojej sytuacji</a>
     </div>
   </header>
@@ -68,6 +71,9 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
 
     <section class="blok" id="cennik">
       <h2>Ile to kosztuje</h2>
+      <p class="kotwica">Godzina rozmowy z kimś, kto przez dwadzieścia lat siedział po obu
+        stronach tego stołu. Dla porównania: dzień szkolenia otwartego z trudnych rozmów
+        to zwykle 900–1300 zł netto od osoby — i mówi się na nim do sali, nie o Tobie.</p>
       <div class="ceny">
         <article class="cena">
           <div class="kwota">{CENA.baza} zł</div>
@@ -88,7 +94,7 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
         </article>
 
         <article class="cena wyroznione">
-          <span class="etykieta">Cena startowa · pierwsze 5 osób</span>
+          <span class="etykieta">Cena startowa · do 31 października</span>
           <div class="kwota">
             {PRZEKRESLENIA && <s class="stara">{CENA.baza} zł</s>}
             {CENA.startowa} zł
@@ -97,15 +103,17 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
           <h3>W zamian za anonimową opinię</h3>
           <p>Mówię wprost dlaczego taniej: dopiero otwieram ten format i potrzebuję
             wiedzieć, co w nim działa, a co nie.</p>
+          <p class="termin">Cena {CENA.startowa} zł w zamian za anonimową opinię obowiązuje
+            do {TERMIN_STARTOWEJ}. Później konsultacja kosztuje {CENA.baza} zł
+            (dla subskrybentów newslettera — {CENA.subskrybent} zł).</p>
         </article>
 
-        <article class="cena">
-          <div class="kwota">{CENA.pakiet} zł</div>
-          <h3>Pakiet „Przetrwaj PIP”</h3>
-          <p>Trzy sesje w rytmie planu naprawczego: analiza dokumentu → strategia →
-            przygotowanie do rozmów kontrolnych. Między sesjami przerabiam Twój PIP
-            na piśmie. Osobno te trzy sesje kosztowałyby {CENA.pakietOsobno} zł.</p>
-        </article>
+        {/* Pakiet „Przetrwaj PIP” ({CENA.pakiet} zł) zdjęty z cennika 24.09.2026
+            — decyzja Michała. Powód: cztery ceny naraz na ekranie telefonu
+            (93% ruchu) to za dużo. Produkt ZOSTAJE w EasyCart i wolno go
+            promować — schowana jest wyłącznie pozycja w tym cenniku.
+            Wraca po analizie strony po 4.10, możliwe że jako link
+            „masz PIP? zobacz pakiet” w sekcji „Z czym ludzie przychodzą”. */}
       </div>
     </section>
 
@@ -266,6 +274,12 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
   border-radius:99px;background:var(--sygnal);color:#fff;display:grid;place-items:center;
   font-family:var(--mono);font-size:13px}
 .ceny{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+/* trzy karty w siatce 2-kolumnowej: wyroznione zajmuje caly drugi wiersz */
+@media(min-width:761px){.ceny .wyroznione{grid-column:1 / -1}}
+.kotwica{font-size:16px;color:#4A5A55;max-width:64ch;margin-bottom:22px}
+.pilnosc{font-size:16px;color:#3C4A46;max-width:58ch;margin:0 0 22px;
+  padding-left:14px;border-left:3px solid var(--sygnal)}
+.cena .termin{margin-top:10px;font-size:14px;color:#5A6A65}
 @media(max-width:760px){.ceny{grid-template-columns:1fr}}
 .cena{background:var(--papier);border:1px solid var(--linia);border-radius:10px;padding:26px 24px}
 .cena.wyroznione{border-color:var(--sygnal);box-shadow:0 0 0 1px var(--sygnal) inset}
