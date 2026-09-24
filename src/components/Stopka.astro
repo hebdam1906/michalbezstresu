@@ -1,6 +1,27 @@
+---
+/**
+ * Stopka. Domyślnie polska; `lang="en"` przełącza na angielską (24.09.2026).
+ *
+ * ⚠️ „Press", „Privacy" i „Terms" prowadzą do POLSKICH dokumentów i jest to
+ * powiedziane wprost w nawiasie. Tłumaczenie polityki prywatności i regulaminu
+ * to osobna decyzja Michała i Klaudiusza — do tego czasu uczciwiej jest
+ * uprzedzić niż wpuścić kogoś w polski tekst prawny bez ostrzeżenia.
+ */
+interface Props { lang?: 'pl' | 'en' }
+const { lang = 'pl' } = Astro.props;
+---
+
 <footer>
   <div class="wrap foot">
-    <div>© 2026 Michał bez Stresu · <a href="mailto:kontakt@michalbezstresu.pl">Kontakt</a> · <a href="/media/">Dla mediów</a> · <a href="/prywatnosc/">Prywatność</a> · <a href="/regulamin/">Regulamin</a></div>
+    {lang === 'en' ? (
+      <div>© 2026 Michał bez Stresu · <a href="mailto:kontakt@michalbezstresu.pl">Contact</a> ·
+        <a href="/media/" hreflang="pl" lang="pl">Press</a> ·
+        <a href="/prywatnosc/" hreflang="pl" lang="pl">Privacy</a> ·
+        <a href="/regulamin/" hreflang="pl" lang="pl">Terms</a>
+        <span class="drobne">(these three are in Polish)</span></div>
+    ) : (
+      <div>© 2026 Michał bez Stresu · <a href="mailto:kontakt@michalbezstresu.pl">Kontakt</a> · <a href="/media/">Dla mediów</a> · <a href="/prywatnosc/">Prywatność</a> · <a href="/regulamin/">Regulamin</a></div>
+    )}
     <div class="socials">
       <a href="https://www.youtube.com/@michalbezstresu" target="_blank" rel="noopener">YouTube</a>
       <a href="https://www.tiktok.com/@michalbezstresu.pl" target="_blank" rel="noopener">TikTok</a>
@@ -17,4 +38,5 @@ footer{padding:56px 0 40px;border-top:1px solid var(--linia)}
 .foot a{text-decoration:none}
 .foot a:hover{color:var(--sygnal)}
 .socials{display:flex;gap:18px;font-family:var(--mono);font-size:13px}
+.foot .drobne{color:#84948F}
 </style>

@@ -20,23 +20,49 @@
  *
  * ⚠️ To jest warstwa techniczna, nie opinia prawna. Treść banera i polityki
  * powinien przejrzeć ktoś, kto zna się na RODO.
+ *
+ * Język (24.09.2026): Layout podaje `lang` ze strony, więc na stronach `/en/*`
+ * baner jest po angielsku automatycznie — nie trzeba o tym pamiętać przy
+ * każdej nowej podstronie. Mechanika (localStorage, Consent Mode) jest ta sama
+ * w obu językach; tłumaczymy wyłącznie teksty.
  */
+interface Props { lang?: 'pl' | 'en' }
+const { lang = 'pl' } = Astro.props;
+
+const t = lang === 'en'
+  ? {
+      tytul: 'Before we go on',
+      opis1: 'I want to know whether my materials reach the right people. That needs tools from Meta and Google, which store cookies. ',
+      opis2: 'Without your consent I do not load them at all — the site works normally. Details in the ',
+      polityka: 'privacy policy',
+      politykaUwaga: ' (in Polish)',
+      nie: 'Essential only',
+      tak: 'I agree',
+    }
+  : {
+      tytul: 'Zanim ruszymy dalej',
+      opis1: 'Chcemy wiedzieć, czy nasze materiały trafiają do właściwych osób. Do tego potrzebujemy narzędzi Meta i Google, które zapisują ciasteczka. ',
+      opis2: 'Bez Twojej zgody nie uruchamiamy ich w ogóle — strona działa normalnie. Szczegóły w ',
+      polityka: 'polityce prywatności',
+      politykaUwaga: '',
+      nie: 'Tylko niezbędne',
+      tak: 'Zgadzam się',
+    };
 ---
 
 <div id="zgody" class="zgody" hidden role="dialog" aria-live="polite"
      aria-labelledby="zgody-tytul" aria-describedby="zgody-opis">
   <div class="zgody-tresc">
-    <p id="zgody-tytul" class="zgody-naglowek">Zanim ruszymy dalej</p>
+    <p id="zgody-tytul" class="zgody-naglowek">{t.tytul}</p>
     <p id="zgody-opis">
-      Chcemy wiedzieć, czy nasze materiały trafiają do właściwych osób. Do tego
-      potrzebujemy narzędzi Meta i Google, które zapisują ciasteczka.
-      Bez Twojej zgody nie uruchamiamy ich w ogóle — strona działa normalnie.
-      Szczegóły w <a href="/prywatnosc/">polityce prywatności</a>.
+      {t.opis1}{t.opis2}<a href="/prywatnosc/"
+        hreflang={lang === 'en' ? 'pl' : undefined}
+        lang={lang === 'en' ? 'pl' : undefined}>{t.polityka}</a>{t.politykaUwaga}.
     </p>
   </div>
   <div class="zgody-przyciski">
-    <button type="button" id="zgody-nie" class="btn btn-ghost">Tylko niezbędne</button>
-    <button type="button" id="zgody-tak" class="btn btn-primary">Zgadzam się</button>
+    <button type="button" id="zgody-nie" class="btn btn-ghost">{t.nie}</button>
+    <button type="button" id="zgody-tak" class="btn btn-primary">{t.tak}</button>
   </div>
 </div>
 
