@@ -19,6 +19,9 @@ export default defineConfig({
         // wzorzec kończył się zaraz po „dziekuje", więc adresów z myślnikiem by
         // nie złapał i strony podziękowania weszłyby do indeksu.
         if (/\/(dziekuje|dziekuje-firmy|dziekuje-wzor|glos|panel|dashboard)\/?$/.test(page)) return false;
+        // Angielska strona podziękowania (24.09) — ta sama zasada co wyżej:
+        // osiągalna tylko przez przekierowanie z formularza /en/contact.
+        if (/\/en\/thank-you\/?$/.test(page)) return false;
         // Rozdroże /odcinki istnieje w kodzie od 2.09, ale dopóki żadna strona
         // odcinka nie ma treści (`gotowa: true`), jest pustą listą. Pusta strona
         // raz zaindeksowana potrafi zostać w wynikach na tygodnie — więc do

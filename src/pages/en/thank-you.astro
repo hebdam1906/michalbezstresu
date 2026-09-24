@@ -1,0 +1,87 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+/**
+ * /en/thank-you — po wysłaniu angielskiego formularza z /en/contact (24.09.2026).
+ *
+ * Odpowiednik `/dziekuje-firmy`, w tej samej roli: `noindex`, poza sitemapą,
+ * osiągalna wyłącznie przez przekierowanie z formularza.
+ *
+ * Zdarzenie: `Contact` z `content_category: 'firmy_en'` — to samo zdarzenie co
+ * polska strona firmowa (żeby zapytania B2B liczyły się razem), ale z innym
+ * parametrem, żeby w raportach dało się rozdzielić ruch anglojęzyczny.
+ * ⚠️ NIE `Lead` — na `/dziekuje` siedzi Lead z checklisty i kampania optymalizuje
+ * się na tym zdarzeniu (decyzja z 6.08, potwierdzona 23.09).
+ *
+ * ⚠️ Zdanie o odpowiedzi w ciągu jednego dnia roboczego jest OBIETNICĄ, a nie
+ * ozdobnikiem: dla zapytań EN świadomie nie ma autorespondera (API pomija
+ * MailerLite dla `jezyk: 'en'`, bo automat w grupie „Firmy — zapytania" pisze
+ * po polsku). Jeśli kiedyś powstanie angielski automat, to zdanie trzeba
+ * przejrzeć razem z nim.
+ */
+---
+<Layout
+  lang="en"
+  title="Thank you — your enquiry has arrived | Michał bez Stresu"
+  description="Your enquiry about workshops has arrived. I reply personally within one business day."
+  noindex
+>
+  <main class="lp">
+    <div class="lp-wrap">
+      <div class="brand mono">Michał bez Stresu</div>
+
+      <div class="eyebrow">Enquiry received</div>
+      <h1>Thank you — I have your enquiry</h1>
+
+      <p class="lp-lead">I reply personally, within one business day, from
+        <strong>michal@michalbezstresu.pl</strong>. If nothing arrives, it is worth checking
+        your spam or promotions folder.</p>
+
+      <p class="lp-lead">In my reply I will suggest a short call — thirty minutes, no slides
+        and no commitment. I want to understand what is actually happening in your team
+        before talking about a programme or a price.</p>
+
+      <p class="lp-lead">While you wait, the article that probably brought you here is
+        <a href="/en/articles/cost-of-difficult-conversations/">still worth the five minutes</a>
+        — it is the arithmetic behind the workshops.</p>
+
+      <p class="fineprint">Something urgent, or a mistake in your enquiry?
+        Write to me directly: <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a></p>
+    </div>
+  </main>
+
+  <script is:inline>
+    (function () {
+      var wyslane = false;
+      function zdarzenie() {
+        if (wyslane) return;
+        wyslane = true;
+        /* Celowo `Contact`, nie `Lead` — patrz komentarz na górze pliku. */
+        if (window.fbq) window.fbq('track', 'Contact', { content_category: 'firmy_en' });
+        /* Bez `send_to`: to jest zdarzenie pomiarowe w GA4, nie konwersja w Ads. */
+        if (window.gtag) window.gtag('event', 'zapytanie_firmowe_en', {
+          event_category: 'b2b',
+          event_label: 'formularz /en/contact',
+        });
+      }
+      document.addEventListener('mbs:trackery-gotowe', zdarzenie);
+      if (window.fbq || window.gtag) zdarzenie();
+    })();
+  </script>
+</Layout>
+
+<style>
+.lp{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:var(--sygnal);color:#F2F7F5;padding:56px 24px}
+.lp-wrap{width:100%;max-width:620px}
+.brand{font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--marker);margin-bottom:40px}
+.lp .eyebrow{color:var(--marker)}
+.lp h1{font-family:var(--disp);font-weight:500;color:#fff;
+  font-size:clamp(30px,5vw,46px);line-height:1.15;margin:10px 0 24px}
+.lp-lead{font-size:17px;line-height:1.65;color:#DCE8E4;margin-bottom:18px;max-width:56ch}
+.lp-lead strong{color:#fff}
+.lp-lead a{color:var(--marker)}
+.fineprint{margin-top:34px;font-size:14px;color:#A9C2BA}
+.fineprint a{color:var(--marker)}
+</style>

@@ -1,0 +1,299 @@
+---
+/**
+ * /en/contact — angielska strona kontaktowa dla firm (24.09.2026).
+ *
+ * Powód: angielski artykuł B2B `/en/articles/cost-of-difficult-conversations`
+ * kończy się CTA do warsztatów, a prowadziło ono na polską stronę `/dla-firm`
+ * z polskim formularzem. Od 24.09 na LinkedIna idzie post po angielsku, więc
+ * ten szew stał się widoczny dla realnego ruchu.
+ *
+ * ⚠️ To NIE jest angielska wersja strony oferty — decyzja Klaudiusza z update-57
+ * (`/dla-firm` zostaje po polsku) nadal obowiązuje. Tu są cztery zdania
+ * kontekstu i formularz, nic więcej. Trzy warsztaty, wycena i „jak to wygląda"
+ * zostają wyłącznie po polsku.
+ *
+ * Zakres ustalony z Michałem 24.09:
+ *   • strona kontaktowa z kontekstem (nie goły formularz, nie pełna oferta)
+ *   • BEZ autorespondera EN — API pomija MailerLite dla `jezyk: 'en'`, bo
+ *     automatyzacja w grupie „Firmy — zapytania" wysyła polski mail. Michał
+ *     odpisuje osobiście i tak mówi strona podziękowania.
+ *   • zgoda po angielsku, link do polskiej polityki prywatności z wyraźną
+ *     adnotacją, że dokument jest po polsku (pełne tłumaczenie polityki to
+ *     osobna decyzja Michała i Klaudiusza)
+ *
+ * Formularz posyła do tego samego `/api/firmy` co polski, z dodanym
+ * `jezyk: 'en'`. Struktura pól, pułapka na boty (`www`) i style są 1:1
+ * z `/dla-firm` — świadomie, żeby oba formularze zostały jednym układem
+ * w dwóch językach.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Stopka from '../../components/Stopka.astro';
+
+const kanon = 'https://www.michalbezstresu.pl/en/contact';
+
+const tytul = 'Workshops for managers and HR — get in touch | Michał bez Stresu';
+const opis =
+  'Workshops on the conversations nobody trains managers for: performance improvement ' +
+  'plans, annual reviews, corrective feedback, parting ways. Delivered in English or Polish.';
+
+const jsonLdExtra = [
+  {
+    '@type': 'BreadcrumbList',
+    '@id': `${kanon}#breadcrumb`,
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.michalbezstresu.pl/' },
+      { '@type': 'ListItem', position: 2, name: 'Contact', item: kanon },
+    ],
+  },
+];
+---
+
+<Layout lang="en" title={tytul} description={opis} jsonLdExtra={jsonLdExtra}>
+  <Nav />
+
+  <header class="chead">
+    <div class="wrap">
+      <nav class="okruszki" aria-label="Breadcrumb">
+        <a href="/">Home</a> <span aria-hidden="true">/</span>
+        <span>Contact</span>
+      </nav>
+      <p class="jezyk">
+        <span aria-hidden="true">🇵🇱</span>
+        <a href="/dla-firm/" hreflang="pl" lang="pl">Ta strona po polsku, z pełną ofertą</a>
+      </p>
+      <div class="eyebrow">For companies</div>
+      <h1>Workshops for managers and HR</h1>
+      <p class="lead">
+        Most conflict inside teams does not come from bad intentions. It comes from
+        conversations nobody trained people to have — because organisations assume that a
+        manager will simply know how to deliver difficult news, run an annual review, or
+        react when someone stops coping.
+      </p>
+      <p class="lead">
+        I spent twenty years in financial operations at international corporations, from
+        specialist to senior manager. I ran teams in a multinational environment, wrote
+        performance improvement plans, sat through calibration meetings and on both sides of
+        the conversations nobody wants to remember.
+      </p>
+      <p class="lead mocne">
+        These workshops are built from that experience — not from management theory.
+      </p>
+      <p class="lead">
+        Three programmes: <strong>difficult conversations for managers</strong>,
+        <strong>annual reviews and feedback that do not generate conflict</strong>, and
+        <strong>one-to-ones that are not a waste of time</strong>. Groups of 8–15 people,
+        on site near Kraków or online, in <strong>English or Polish</strong>. I adapt the
+        programme to your organisation — a team going through reorganisation needs something
+        different from a team preparing for review season.
+      </p>
+    </div>
+  </header>
+
+  <section class="band" id="contact">
+    <div class="wrap">
+      <div class="eyebrow">Get in touch</div>
+      <h2>Tell me what you need</h2>
+      <p class="sub">A few sentences are enough. I reply personally, within one business day.</p>
+
+      <form id="cform" class="fform" novalidate>
+        <div class="pola">
+          <div class="pole">
+            <label for="imie">Full name *</label>
+            <input id="imie" name="imie" type="text" autocomplete="name" required maxlength="80" />
+          </div>
+          <div class="pole">
+            <label for="firma">Company *</label>
+            <input id="firma" name="firma" type="text" autocomplete="organization" required maxlength="120" />
+          </div>
+          <div class="pole">
+            <label for="email">Work email *</label>
+            <input id="email" name="email" type="email" autocomplete="email" required maxlength="160" />
+          </div>
+          <div class="pole">
+            <label for="stanowisko">Job title</label>
+            <input id="stanowisko" name="stanowisko" type="text" autocomplete="organization-title" maxlength="120" />
+          </div>
+          <div class="pole">
+            <label for="wielkosc_grupy">Group size</label>
+            <select id="wielkosc_grupy" name="wielkosc_grupy">
+              <option value="">— select —</option>
+              <option value="do-10">up to 10 people</option>
+              <option value="10-20">10–20 people</option>
+              <option value="20-50">20–50 people</option>
+              <option value="powyzej-50">more than 50 people</option>
+              <option value="nie-wiem">not sure yet</option>
+            </select>
+          </div>
+          <div class="pole">
+            <label for="termin">Preferred timing</label>
+            <input id="termin" name="termin" type="text" maxlength="120" placeholder="e.g. October, before review season" />
+          </div>
+        </div>
+
+        <fieldset class="tematy">
+          <legend>What this is about</legend>
+          <label><input type="checkbox" name="tematy" value="trudne-rozmowy" /> Difficult conversations</label>
+          <label><input type="checkbox" name="tematy" value="ocena-feedback" /> Annual reviews and feedback</label>
+          <label><input type="checkbox" name="tematy" value="rozmowy-1-1" /> One-to-ones</label>
+          <label><input type="checkbox" name="tematy" value="inne" /> Something else / not sure</label>
+        </fieldset>
+
+        <div class="pole">
+          <label for="wiadomosc">Message *</label>
+          <textarea id="wiadomosc" name="wiadomosc" rows="5" required maxlength="4000"
+            placeholder="What is happening in your team and what do you want to change? Two or three sentences are enough."></textarea>
+        </div>
+
+        <div class="pole">
+          <label for="skad">How did you hear about me? *</label>
+          <select id="skad" name="skad" required>
+            <option value="">— select —</option>
+            <option value="youtube">YouTube</option>
+            <option value="newsletter">Newsletter / checklist</option>
+            <option value="grupa-fb">Facebook group</option>
+            <option value="polecenie">Someone recommended me</option>
+            <option value="reklama">An ad</option>
+            <option value="inne">Other</option>
+          </select>
+        </div>
+        <div class="pole" id="pole-skad-inne" hidden>
+          <label for="skad_inne">Please specify</label>
+          <input id="skad_inne" name="skad_inne" type="text" maxlength="120" autocomplete="off" />
+        </div>
+
+        {/* Pułapka na boty. NIE nazywać jej `firma` — „Company" to realne, wymagane
+            pole. Patrz komentarz na górze src/pages/api/firmy.ts. */}
+        <div class="pulapka" aria-hidden="true">
+          <label for="www">Leave this field empty</label>
+          <input id="www" name="www" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <label class="zgoda">
+          <input id="zgoda" name="zgoda" type="checkbox" required />
+          <span>I agree that Michał Hebda may contact me about this enquiry. Your data will be
+            used for that purpose only — details in the
+            <a href="/prywatnosc/" hreflang="pl" lang="pl">privacy policy</a>
+            <span class="drobne">(in Polish)</span>.</span>
+        </label>
+
+        <button class="btn btn-primary" type="submit">Send enquiry</button>
+        <p class="komunikat" id="ckom" role="status" aria-live="polite"></p>
+      </form>
+
+      <p class="mail-alt">Prefer email? <a href="mailto:kontakt@michalbezstresu.pl?subject=Workshops%20for%20our%20team">kontakt@michalbezstresu.pl</a></p>
+    </div>
+  </section>
+
+  <Stopka />
+</Layout>
+
+<script is:inline>
+  (function () {
+    var f = document.getElementById('cform');
+    if (!f) return;
+    var kom = document.getElementById('ckom');
+    var skad = document.getElementById('skad');
+    var poleInne = document.getElementById('pole-skad-inne');
+
+    skad.addEventListener('change', function () {
+      poleInne.hidden = skad.value !== 'inne';
+    });
+
+    f.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      kom.className = 'komunikat';
+      kom.textContent = '';
+
+      if (!f.checkValidity()) { f.reportValidity(); return; }
+
+      var btn = f.querySelector('button[type=submit]');
+      btn.disabled = true;
+      var etykieta = btn.textContent;
+      btn.textContent = 'Sending…';
+
+      var tematy = Array.prototype.slice
+        .call(f.querySelectorAll('input[name=tematy]:checked'))
+        .map(function (i) { return i.value; });
+
+      try {
+        var r = await fetch('/api/firmy', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            imie: f.imie.value,
+            firma: f.firma.value,
+            email: f.email.value,
+            stanowisko: f.stanowisko.value,
+            wielkosc_grupy: f.wielkosc_grupy.value,
+            tematy: tematy,
+            termin: f.termin.value,
+            wiadomosc: f.wiadomosc.value,
+            skad: f.skad.value,
+            skad_inne: f.skad_inne ? f.skad_inne.value : '',
+            www: f.www.value,
+            zgoda: f.zgoda.checked,
+            /* Dzięki temu API zwraca błędy po angielsku i POMIJA polską
+               autoodpowiedź z MailerLite. Patrz komentarz w src/pages/api/firmy.ts. */
+            jezyk: 'en',
+            atrybucja: window.mbsAtrybucja ? window.mbsAtrybucja() : {},
+          }),
+        });
+        var d = await r.json();
+        if (!r.ok) throw new Error(d.error || 'Something went wrong.');
+        location.href = '/en/thank-you/';
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = etykieta;
+        kom.className = 'komunikat blad';
+        kom.textContent = (err && err.message)
+          ? err.message
+          : 'Something went wrong. Please write to kontakt@michalbezstresu.pl.';
+      }
+    });
+  })();
+</script>
+
+<style>
+.chead{padding:40px 0 24px}
+.okruszki{font-family:var(--mono);font-size:12px;color:#5E6E68;margin-bottom:18px}
+.okruszki a{text-decoration:none}
+.okruszki a:hover{color:var(--sygnal)}
+.jezyk{font-family:var(--mono);font-size:12.5px;margin-bottom:14px}
+.jezyk a{color:var(--sygnal)}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--sygnal);margin-bottom:12px}
+h1{font-size:clamp(30px,4.6vw,46px);margin-bottom:18px;max-width:24ch}
+.lead{font-size:19px;color:#3C4A46;max-width:66ch;margin-bottom:14px}
+.lead.mocne{color:var(--atrament);font-weight:500}
+
+.band{background:var(--papier);border-top:1px solid var(--linia);padding:48px 0 56px;margin-top:32px}
+.band h2{font-size:clamp(23px,2.8vw,30px);margin-bottom:12px}
+.sub{font-size:17px;color:#3C4A46;max-width:60ch}
+
+/* Formularz — style 1:1 z /dla-firm, żeby oba były tym samym układem. */
+.fform{margin-top:32px;max-width:70ch}
+.pola{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.pola{grid-template-columns:1fr}}
+.pole{display:flex;flex-direction:column;margin-bottom:16px}
+/* Bez tej linijki pole „Please specify" widać zawsze: `display:flex` wyżej jest
+   stylem autora i bije domyślne `[hidden]{display:none}` przeglądarki. */
+.pole[hidden]{display:none}
+.pole label{font-size:14px;font-weight:500;color:#2C3A36;margin-bottom:6px}
+.pole input,.pole select,.pole textarea{font:inherit;font-size:15px;padding:11px 13px;
+  border:1px solid var(--linia);border-radius:8px;background:#fff;color:#2C3A36}
+.pole textarea{resize:vertical;min-height:110px}
+.pole input:focus,.pole select:focus,.pole textarea:focus{outline:2px solid var(--sygnal);outline-offset:1px}
+.tematy{border:1px solid var(--linia);border-radius:8px;padding:14px 16px;margin:4px 0 18px;background:#fff}
+.tematy legend{font-size:14px;font-weight:500;color:#2C3A36;padding:0 6px}
+.tematy label{display:block;font-size:15px;color:#3C4A46;margin:7px 0}
+.pulapka{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.zgoda{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#4A5A55;margin:6px 0 22px;max-width:60ch}
+.zgoda input{margin-top:3px;flex:0 0 auto}
+.zgoda a{color:var(--sygnal)}
+.zgoda .drobne{color:#7C8B86}
+.komunikat{margin-top:14px;font-size:15px}
+.komunikat.blad{color:#8C2F2F}
+.mail-alt{margin-top:22px;font-size:14px;color:#5E6E68}
+.mail-alt a{color:var(--sygnal);text-decoration:none}
+</style>

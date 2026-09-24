@@ -15,6 +15,20 @@
 // i ona decyduje o odpowiedzi. Autoodpowiedź wysyła MailerLite z osobnej grupy
 // „Firmy — zapytania"; grupa jest transakcyjna, nie newsletterowa (patrz
 // update-32 do Klaudiusza). Jak MailerLite padnie, zapytanie i tak jest zapisane.
+//
+// 🇬🇧 JĘZYK (24.09.2026): ten sam endpoint obsługuje polski formularz z /dla-firm
+// i angielski z /en/contact. Formularz EN wysyła `jezyk: 'en'` i wtedy:
+//   • komunikaty błędów wracają PO ANGIELSKU — inaczej Brytyjczyk dostaje
+//     „Podaj nazwę firmy" i nie wie, co poprawić,
+//   • POMIJAMY MailerLite. Automatyzacja w grupie „Firmy — zapytania" wysyła
+//     polską autoodpowiedź; wysłanie jej anglojęzycznej osobie wyglądałoby
+//     gorzej niż brak odpowiedzi. Decyzja Michała z 24.09: na razie bez
+//     autorespondera EN, Michał odpisuje osobiście (tak mówi strona
+//     podziękowania /en/thank-you).
+//   • język leci do powiadomienia i do `atrybucja.jezyk`, żeby było widać
+//     w bazie, w jakim języku odpisać.
+// Gdyby kiedyś powstała grupa „Firmy — zapytania EN" z angielskim automatem,
+// wystarczy podać jej id w `MAILERLITE_GRUPA_FIRMY_EN` i odkomentować gałąź niżej.
 // ============================================================================
 export const prerender = false;
 
@@ -37,6 +51,34 @@ function czyMail(s: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s);
 }
 const tekst = (v: unknown, max: number) => String(v ?? '').trim().slice(0, max);
+
+/* Komunikaty w dwóch językach. Klucz jest po polsku, bo polski formularz był
+   pierwszy i jest głównym. `m(jezyk).klucz` zwraca gotowy tekst. */
+const KOMUNIKATY = {
+  pl: {
+    niedostepny: 'Formularz chwilowo niedostępny.',
+    zledane: 'Nieprawidłowe dane.',
+    imie: 'Podaj imię i nazwisko.',
+    firma: 'Podaj nazwę firmy.',
+    email: 'Sprawdź adres e-mail.',
+    wiadomosc: 'Napisz dwa, trzy zdania o tym, czego potrzebujecie — inaczej nie przygotuję sensownej propozycji.',
+    zgoda: 'Bez zgody na kontakt nie mogę odpisać.',
+    limit: 'Dostałem już od Was kilka wiadomości — odpiszę na pierwszą. Jeśli to pomyłka, napiszcie wprost na kontakt@michalbezstresu.pl.',
+    zapis: 'Nie udało się zapisać zapytania. Napiszcie proszę wprost na kontakt@michalbezstresu.pl.',
+  },
+  en: {
+    niedostepny: 'The form is temporarily unavailable.',
+    zledane: 'Invalid data.',
+    imie: 'Please give your full name.',
+    firma: 'Please give your company name.',
+    email: 'Please check the email address.',
+    wiadomosc: 'Two or three sentences about what you need — without them I cannot put together a sensible proposal.',
+    zgoda: 'Without your consent to be contacted I cannot reply.',
+    limit: 'I have already received a few messages from you — I will reply to the first one. If this is a mistake, write to me directly at kontakt@michalbezstresu.pl.',
+    zapis: 'Saving your enquiry failed. Please write to me directly at kontakt@michalbezstresu.pl.',
+  },
+} as const;
+const m = (j: 'pl' | 'en') => KOMUNIKATY[j];
 
 /* Listy wartości. Cokolwiek spoza listy traktujemy jak brak — nie blokujemy
    przez to zapytania, bo strata jednej danej jest tańsza niż stracony lead. */
@@ -62,13 +104,22 @@ function atrybucja(a: any) {
 }
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
-  if (!supabaseAdmin) return json({ error: 'Formularz chwilowo niedostępny.' }, 503);
+  // Tu jeszcze nie znamy języka (body nieodczytane), więc komunikat jest dwujęzyczny.
+  if (!supabaseAdmin) {
+    return json({ error: 'Formularz chwilowo niedostępny. · The form is temporarily unavailable.' }, 503);
+  }
 
   let b: any;
-  try { b = await request.json(); } catch { return json({ error: 'Nieprawidłowe dane.' }, 400); }
+  try { b = await request.json(); } catch {
+    return json({ error: 'Nieprawidłowe dane. · Invalid data.' }, 400);
+  }
 
   // Pułapka na boty. NIE `firma` — patrz komentarz na górze pliku.
   if (tekst(b.www, 200) !== '') return json({ ok: true });
+
+  // Język formularza. Wszystko poza 'en' traktujemy jak polski.
+  const jezyk: 'pl' | 'en' = tekst(b.jezyk, 2).toLowerCase() === 'en' ? 'en' : 'pl';
+  const k = m(jezyk);
 
   const imie = tekst(b.imie, 80);
   const firma = tekst(b.firma, 120);
@@ -78,11 +129,11 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const wiadomosc = tekst(b.wiadomosc, 4000);
   const zgoda = b.zgoda === true;
 
-  if (imie.length < 2) return json({ error: 'Podaj imię i nazwisko.' }, 400);
-  if (firma.length < 2) return json({ error: 'Podaj nazwę firmy.' }, 400);
-  if (!czyMail(email)) return json({ error: 'Sprawdź adres e-mail.' }, 400);
-  if (wiadomosc.length < 20) return json({ error: 'Napisz dwa, trzy zdania o tym, czego potrzebujecie — inaczej nie przygotuję sensownej propozycji.' }, 400);
-  if (!zgoda) return json({ error: 'Bez zgody na kontakt nie mogę odpisać.' }, 400);
+  if (imie.length < 2) return json({ error: k.imie }, 400);
+  if (firma.length < 2) return json({ error: k.firma }, 400);
+  if (!czyMail(email)) return json({ error: k.email }, 400);
+  if (wiadomosc.length < 20) return json({ error: k.wiadomosc }, 400);
+  if (!zgoda) return json({ error: k.zgoda }, 400);
 
   const wielkosc_grupy = WIELKOSC.includes(tekst(b.wielkosc_grupy, 40)) ? tekst(b.wielkosc_grupy, 40) : null;
   const tematy = Array.isArray(b.tematy)
@@ -104,22 +155,26 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     .eq('ip_hash', ip_hash)
     .gte('utworzono', godzine_temu);
   if ((count ?? 0) >= 3) {
-    return json({ error: 'Dostałem już od Was kilka wiadomości — odpiszę na pierwszą. Jeśli to pomyłka, napiszcie wprost na kontakt@michalbezstresu.pl.' }, 429);
+    return json({ error: k.limit }, 429);
   }
 
   const atr = atrybucja(b.atrybucja);
   const { error } = await supabaseAdmin.from('firmy_zapytania').insert({
     imie, firma, email, stanowisko, wielkosc_grupy, tematy, termin, wiadomosc,
     skad_wiesz, ip_hash, ...atr,
-    atrybucja: b.atrybucja && typeof b.atrybucja === 'object' ? b.atrybucja : null,
+    /* `jezyk` wchodzi do JSON-a atrybucji, a nie osobną kolumną — nie wymaga
+       migracji tabeli, a w Supabase widać go w `atrybucja->>jezyk`. */
+    atrybucja: { ...(b.atrybucja && typeof b.atrybucja === 'object' ? b.atrybucja : {}), jezyk },
   });
   if (error) {
-    return json({ error: 'Nie udało się zapisać zapytania. Napiszcie proszę wprost na kontakt@michalbezstresu.pl.' }, 500);
+    return json({ error: k.zapis }, 500);
   }
 
   // Autoodpowiedź: dopisujemy do grupy, resztę robi automatyzacja w MailerLite.
   // Grupa jest transakcyjna — nie jest newsletterem i nie miesza się z checklistą.
-  if (KLUCZ_ML && GRUPA_ML) {
+  // ⚠️ TYLKO PL. Automatyzacja w tej grupie wysyła polską autoodpowiedź — patrz
+  // komentarz o języku na górze pliku. Dla EN świadomie nie robimy nic.
+  if (jezyk === 'pl' && KLUCZ_ML && GRUPA_ML) {
     try {
       await fetch('https://connect.mailerlite.com/api/subscribers', {
         method: 'POST',
@@ -135,7 +190,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     imie,
     email,
     tresc: wiadomosc,
-    extra: { firma, stanowisko, wielkosc_grupy, tematy, termin, skad_wiesz },
+    extra: { firma, stanowisko, wielkosc_grupy, tematy, termin, skad_wiesz, jezyk },
   });
 
   return json({ ok: true });

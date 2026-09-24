@@ -13,8 +13,17 @@
  * ⚠️ Ten sam odbiorca co w wersji polskiej: HR, L&D, szefowie operacji w SSC/BPO.
  * Stad tak samo:
  *   • NIE MA CTA do checklisty — checklista jest dla pracownikow, nie dla HR,
- *   • jedyne wyjscie z tekstu prowadzi do /dla-firm,
- *   • okruszki wracaja do /dla-firm, nie do strony glownej.
+ *   • jedyne wyjscie z tekstu prowadzi do oferty B2B,
+ *   • okruszki wracaja do oferty B2B, nie do strony glownej.
+ *
+ * 24.09.2026: wszystkie trzy linki wyjsciowe (okruszki, przycisk CTA, nota
+ * o autorze) prowadza teraz na `/en/contact` zamiast na polska `/dla-firm`.
+ * Powod: od 24.09 na LinkedIna idzie post po angielsku i angielski czytelnik
+ * ladowal na polskiej stronie z polskim formularzem. `/en/contact` to strona
+ * kontaktowa z kontekstem, NIE angielska wersja oferty — pelna oferta zostaje
+ * po polsku (decyzja Klaudiusza z update-57).
+ * ⚠️ `item` w BreadcrumbList zostaje na /dla-firm: schemat opisuje strukture
+ * serwisu, a rodzicem tego artykulu jest polska strona dla firm.
  *
  * ⚠️ Nawigacja (Nav) jest po polsku — swiadomie. Pelne angielskie menu to osobny
  * temat, nie na test popytu. Jesli test wyjdzie, wtedy rozmawiamy o wersji EN
@@ -94,7 +103,7 @@ const jsonLdExtra = [
       <div class="wrap">
         <nav class="okruszki" aria-label="Breadcrumb">
           <a href="/">Home</a> <span aria-hidden="true">/</span>
-          <a href="/dla-firm/">For companies</a>
+          <a href="/en/contact/">For companies</a>
         </nav>
         <p class="jezyk">
           <span aria-hidden="true">🇵🇱</span>
@@ -347,7 +356,7 @@ const jsonLdExtra = [
             conversation about parting ways.
           </p>
           <div class="cta-btny">
-            <a class="btn btn-primary" href="/dla-firm/">Workshops for companies</a>
+            <a class="btn btn-primary" href="/en/contact/">Workshops for companies</a>
           </div>
         </aside>
 
@@ -356,7 +365,7 @@ const jsonLdExtra = [
           international corporations, including more than a decade in managerial roles. Lean Six
           Sigma Black Belt. Hosts the podcast and series &bdquo;Michał bez Stresu&rdquo; on
           difficult situations at work &mdash; from both sides of the table. Workshops for
-          managers and HR: <a href="/dla-firm/">michalbezstresu.pl/dla-firm</a>.
+          managers and HR: <a href="/en/contact/">get in touch</a>.
         </p>
 
         <p class="jezyk jezyk-dol">
