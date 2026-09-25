@@ -4,7 +4,7 @@
 // Ruch 2 z planu 25.09 („Zadaj pytanie”). Teksty: Klaudiusz,
 // `Zadaj-pytanie_teksty-strony-i-polityki_dla-Marcina_25-09.md`.
 // Zabezpieczenia jak w /api/konsultacje: limity długości, pole-pułapka `firma`,
-// limit 3 wiadomości na godzinę z jednego (zahaszowanego) IP. Bez webhooka Make — patrz niżej.
+// limit 3 wiadomości na godzinę z jednego (zahaszowanego) IP.
 // E-mail jest OPCJONALNY i celowo NIE trafia do MailerLite — polityka obiecuje,
 // że pytający nie ląduje na żadnej liście.
 // Zdarzenia Meta/Google: żadne (to nie jest lead ani Contact).
@@ -14,6 +14,7 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 import { supabaseAdmin } from '../../lib/supabase';
 import { createHash } from 'node:crypto';
+import { powiadom } from '../../lib/powiadom';
 
 const json = (b: unknown, s = 200) =>
   new Response(JSON.stringify(b), { status: s, headers: { 'Content-Type': 'application/json' } });
@@ -53,10 +54,6 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   });
   if (error) return json({ error: 'Coś nie zadziałało. Spróbuj za chwilę albo napisz wprost: michal@michalbezstresu.pl.' }, 500);
 
-  // BEZ powiadomienia przez webhook Make (25.09): scenariusz „MbS powiadomienie
-  // o nowym zapytaniu” zna tylko typy konsultacje/firmy i wymaga e-maila —
-  // pierwsze pytanie (test, bez e-maila) zatrzymało go na błędzie, a z nim
-  // powiadomienia o konsultacjach. Na pytania odpowiadamy raz w tygodniu,
-  // więc wystarczy lista w panelu. Wrócić do tego, jeśli scenariusz dostanie gałąź „pytanie”.
+  await powiadom({ typ: 'pytanie', imie: '(anonim)', email: email || '', tresc });
   return json({ ok: true });
 };
