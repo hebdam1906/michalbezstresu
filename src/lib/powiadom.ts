@@ -24,7 +24,7 @@
 const WEBHOOK = import.meta.env.POWIADOMIENIA_WEBHOOK;
 
 export type Powiadomienie = {
-  typ: 'konsultacje' | 'firmy';
+  typ: 'konsultacje' | 'firmy' | 'pytanie';
   imie: string;
   email: string;
   tresc: string;

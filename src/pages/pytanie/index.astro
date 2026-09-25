@@ -1,0 +1,133 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Stopka from '../../components/Stopka.astro';
+
+/**
+ * „Zadaj pytanie” — ruch 2 z planu 25.09.2026 (krok pośredni przed konsultacją).
+ * Teksty: Klaudiusz, `Zadaj-pytanie_teksty-strony-i-polityki_dla-Marcina_25-09.md`.
+ * Zapis: /api/pytanie → Supabase `pytania`. E-mail opcjonalny, NIE idzie do MailerLite.
+ * Zdarzenia reklamowe: żadne. Vercel: `pytanie_wyslane` na /pytanie/dziekuje.
+ * Tekst ↔ konfiguracja: akapit „Formularz «Zadaj pytanie»” w /prywatnosc — ten sam commit.
+ */
+---
+<Layout
+  title="Zadaj pytanie — Michał bez Stresu"
+  description="Masz sytuację w pracy, o której nie ma z kim pogadać? Zadaj pytanie anonimowo. Odpowiadam w newsletterze albo w krótkim wideo."
+>
+  <Nav />
+
+  <header class="khead">
+    <div class="wrap">
+      <div class="eyebrow">Anonimowo</div>
+      <h1>Zadaj pytanie</h1>
+      <p class="lead">Masz sytuację w pracy, o której nie ma z kim pogadać? Nowy szef, dziwny
+        feedback, obietnica, która wyparowała, rozmowa, której się boisz?</p>
+      <p class="lead">Napisz, co się dzieje. Bez nazwisk, bez nazwy firmy. Na jedno pytanie
+        w tygodniu odpowiadam w newsletterze albo w krótkim wideo. Anonimowo, ale konkretnie.</p>
+      <p class="uwaga">To nie jest konsultacja i nie jest porada prawna. To spojrzenie kogoś,
+        kto przez 20 lat siedział po obu stronach stołu.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="blok">
+      <form id="f-pytanie" novalidate>
+        <div class="pole">
+          <label for="tresc">Co się dzieje?</label>
+          <textarea id="tresc" name="tresc" rows="7" required minlength="50" maxlength="2000"
+            placeholder="Opisz sytuację tak, jak opowiedziałbyś ją znajomemu. Bez nazwisk i nazwy firmy."></textarea>
+        </div>
+        <div class="pole">
+          <label for="email">Twój e-mail <span class="opcjonalne">(opcjonalnie)</span></label>
+          <input id="email" name="email" type="email" autocomplete="email" maxlength="160" />
+          <p class="pomoc">Jeśli chcesz dostać znać, kiedy odpowiem. Nie trafiasz na żadną listę.</p>
+        </div>
+
+        <div class="pulapka" aria-hidden="true">
+          <label for="firma">Firma</label>
+          <input id="firma" name="firma" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <label class="zgoda">
+          <input id="zgoda" name="zgoda" type="checkbox" required />
+          <span>Zgadzam się, żeby moje pytanie zostało anonimowo wykorzystane w newsletterze,
+            wideo lub na stronie michalbezstresu.pl. Wiem, że mogę tę zgodę cofnąć, pisząc na
+            michal@michalbezstresu.pl.</span>
+        </label>
+
+        <button class="btn btn-primary" type="submit">Wyślij pytanie</button>
+        <p class="komunikat" id="komunikat" role="status" aria-live="polite"></p>
+        <p class="drobne">Wysyłając pytanie, akceptujesz zasady opisane w
+          <a href="/prywatnosc/">polityce prywatności</a>. Jeśli Twoja sytuacja wymaga rozmowy,
+          a nie jednej odpowiedzi, jest <a href="/konsultacje/">konsultacja</a>.</p>
+      </form>
+    </section>
+  </main>
+
+  <Stopka />
+
+  <script is:inline>
+    (function () {
+      var f = document.getElementById('f-pytanie');
+      var kom = document.getElementById('komunikat');
+      if (!f) return;
+      f.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        var btn = f.querySelector('button[type=submit]');
+        kom.className = 'komunikat'; kom.textContent = '';
+        if (f.tresc.value.trim().length < 50) {
+          kom.className = 'komunikat blad';
+          kom.textContent = 'Napisz trochę więcej — przynajmniej dwa, trzy zdania, żebym rozumiał sytuację.';
+          return;
+        }
+        if (!f.zgoda.checked) {
+          kom.className = 'komunikat blad';
+          kom.textContent = 'Bez tej zgody nie mogę odpowiedzieć publicznie. Jeśli wolisz prywatnie, napisz na michal@michalbezstresu.pl.';
+          return;
+        }
+        btn.disabled = true; btn.textContent = 'Wysyłam…';
+        try {
+          var r = await fetch('/api/pytanie', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              tresc: f.tresc.value, email: f.email.value, firma: f.firma.value,
+              zgoda: f.zgoda.checked,
+              zrodlo: new URLSearchParams(location.search).get('utm_source') || '',
+            }),
+          });
+          var d = await r.json();
+          if (!r.ok) throw new Error(d.error || 'Coś nie zadziałało.');
+          location.href = '/pytanie/dziekuje/';
+        } catch (err) {
+          kom.className = 'komunikat blad';
+          kom.textContent = err.message || 'Coś nie zadziałało. Spróbuj za chwilę albo napisz wprost: michal@michalbezstresu.pl.';
+          btn.disabled = false; btn.textContent = 'Wyślij pytanie';
+        }
+      });
+    })();
+  </script>
+</Layout>
+
+<style>
+.khead{padding:64px 0 36px;border-bottom:1px solid var(--linia)}
+.khead h1{font-family:var(--disp);font-weight:500;font-size:clamp(30px,5vw,46px);line-height:1.12;margin:6px 0 18px}
+.lead{font-size:clamp(16px,2.2vw,19px);color:#3C4A46;max-width:60ch;margin-bottom:16px}
+.uwaga{background:var(--papier);border-left:3px solid var(--sygnal);padding:14px 18px;border-radius:0 8px 8px 0;max-width:60ch;font-size:15.5px}
+.blok{padding:40px 0}
+form{max-width:600px}
+.pole{margin-bottom:18px}
+.pole label{display:block;font-size:14.5px;margin-bottom:6px;color:#3C4A46}
+.opcjonalne{color:#7A8A85;font-weight:400}
+.pomoc{font-size:13.5px;color:#7A8A85;margin-top:6px}
+.pole input,.pole textarea{width:100%;padding:12px 14px;border:1px solid var(--linia);border-radius:8px;font:inherit;font-size:16px;background:#fff;color:var(--atrament)}
+.pole textarea{resize:vertical;line-height:1.5}
+.pole input:focus,.pole textarea:focus{outline:2px solid var(--sygnal);outline-offset:1px;border-color:transparent}
+.pulapka{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.zgoda{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#4A5A55;margin:6px 0 22px;max-width:58ch}
+.zgoda input{margin-top:3px;flex:0 0 auto}
+.komunikat{margin-top:16px;font-size:15.5px}
+.komunikat.blad{color:#B4553F}
+.drobne{font-size:13.5px;color:#7A8A85;margin-top:18px;max-width:58ch}
+</style>

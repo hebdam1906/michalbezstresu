@@ -1,0 +1,43 @@
+---
+import Layout from '../../layouts/Layout.astro';
+/**
+ * Podziękowanie po wysłaniu pytania z /pytanie. noindex + poza sitemapą (jak /glos).
+ * Zdarzenie Vercel `pytanie_wyslane` (raz na sesję). Meta/Google: żadne — celowo.
+ */
+---
+<Layout title="Dziękuję — Michał bez Stresu" description="Pytanie dotarło." noindex>
+  <main class="lp">
+    <div class="lp-wrap">
+      <div class="brand mono">Michał bez Stresu</div>
+      <div class="eyebrow">Pytanie przyjęte</div>
+      <h1>Dziękuję</h1>
+      <p class="sub">Mam Twoje pytanie. Jeśli zostawiłeś e-mail, dostaniesz wiadomość, kiedy odpowiem.</p>
+      <p class="sub">Odpowiadam na jedno pytanie w tygodniu, więc może to potrwać. W międzyczasie:</p>
+      <ul class="dalej">
+        <li><a href="/odcinki/">Odcinki</a> — być może Twoja sytuacja już tam jest</li>
+        <li><a href="/checklista/">Checklista</a> — wzór notatki po trudnej rozmowie</li>
+      </ul>
+    </div>
+  </main>
+  <script is:inline>
+    try {
+      if (!sessionStorage.getItem('mbs_pytanie')) {
+        sessionStorage.setItem('mbs_pytanie', '1');
+        if (window.va) window.va('event', { name: 'pytanie_wyslane' });
+      }
+    } catch (e) {}
+  </script>
+</Layout>
+
+<style>
+.lp{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--sygnal);color:#F2F7F5;padding:56px 24px}
+.lp-wrap{width:100%;max-width:620px}
+.brand{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--marker);margin-bottom:40px}
+.mono{font-family:var(--mono)}
+.lp .eyebrow{color:var(--marker)}
+.lp h1{font-family:var(--disp);font-weight:500;color:#fff;font-size:clamp(28px,5vw,44px);line-height:1.12;margin:6px 0 16px}
+.lp .sub{font-size:clamp(16px,2.2vw,19px);color:#CFE0DA;max-width:52ch;margin-bottom:14px}
+.dalej{font-size:16px;margin-top:10px;padding-left:18px;color:#CFE0DA}
+.dalej li{margin-bottom:8px}
+.dalej a{color:var(--marker)}
+</style>
