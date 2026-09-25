@@ -8,6 +8,7 @@ w repo została tylko treść `CHECKLISTA_dokumentowanie.md` i sam plik wynikowy
 Układ, fonty, pasek u góry i stopka odwzorowane 1:1 ze starej wersji.
 
 Strony 1–2: dotychczasowa checklista (dokumentowanie) — bez zmian merytorycznych.
+Strona 5:   DODATEK · ODCINEK #13 — status tygodniowy (25.09.2026).
 Strony 3–4: DODATEK · ODCINEK #9 — mapa cyklu budżetowego i formuła rozmowy
             o podwyżkę. Treść: Klaudiusz, `Checklista_dodatek-odc-09_...md`.
             Wariant A (decyzja Michała 8.09): tytuł całości zostaje, nowe strony
@@ -211,7 +212,46 @@ def tresc():
             "na stole") + "."),
           sp(3),
           P("MICHAŁ BEZ STRESU · michalbezstresu.pl · dodatek do odcinka #9 "
-            "„Staraj się, staraj”", "stopka")]
+            "„Staraj się, staraj”", "stopka"),
+          PageBreak()]
+
+    # ── STRONA 5: status tygodniowy (dodatek do odc. #13, 25.09.2026) ───────
+    # Outro #13 obiecuje „szablon cotygodniowego statusu” w checkliście.
+    # Treść: Klaudiusz, `Checklista_strona-3_status-tygodniowy_dla-Marcina_25-09.md`.
+    F += [P("D O D A T E K &nbsp; · &nbsp; O D C I N E K &nbsp; # 1 3 &nbsp; · &nbsp; "
+            "B U D O W A N I E &nbsp; P O Z Y C J I", "kicker"),
+          P("Status tygodniowy w trzech linijkach", "h1"),
+          P("Pięć minut w piątek. Nie raport — trzy linijki.", "sub"),
+          P("Twój szef nie wie, co robisz. Nie z braku zainteresowania, tylko dlatego, że "
+            "widzi wycinek. Trzy linijki w piątek zapełniają resztę. Po roku masz pięćdziesiąt "
+            "maili, które opisują Twoją pracę tydzień po tygodniu —" + M("materiał na rozmowę "
+            "o podwyżce") + ", którego nikt nie odtworzy z pamięci."),
+          sp(3),
+          KeepTogether([
+              ramka(["Temat: Status — tydzień [data]", "",
+                     "ZROBIONE",
+                     "  • [co zamknięte, jednym zdaniem, z efektem: „…, dwa dni przed terminem”]",
+                     "  • …", "",
+                     "W TOKU",
+                     "  • [co się dzieje, na jakim etapie, kiedy koniec]",
+                     "  • …", "",
+                     "ZAGROŻONE",
+                     "  • [co może nie wyjść, dlaczego, co proponuję]",
+                     "  • …"]),
+              sp(7),
+              P("Trzy zasady", "h2"),
+              numer(1, "<b>Mów o pracy, nie o sobie.</b> „Migracja zamknięta, został jeden punkt "
+                       "po stronie klienta” zamiast „świetnie sobie poradziłem z migracją”. "
+                       "Drugie zdanie mówi o Tobie tyle samo."),
+              numer(2, "<b>Zagrożone jest najważniejsze.</b> Szef, którego nigdy nie zaskoczyłeś, "
+                       "zaczyna Ci ufać w sprawach, o których nie ma pojęcia. Ryzyko z propozycją "
+                       "rozwiązania buduje pozycję szybciej niż same dobre wiadomości."),
+              numer(3, "<b>Jeśli masz cotygodniowe 1:1, to jest agenda. Jeśli nie masz, wyślij "
+                       "mailem w piątek.</b> Pięć minut. Nie raport, trzy linijki."),
+          ]),
+          sp(8),
+          P("MICHAŁ BEZ STRESU · michalbezstresu.pl · dodatek do odcinka #13 "
+            "„Budowanie pozycji” · cały odcinek: michalbezstresu.pl/odcinki", "stopka")]
     return F
 
 # ════════════════════════════════════════════════════════════════════════════
