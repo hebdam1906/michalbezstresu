@@ -17,6 +17,14 @@
 
 export const odcinki = [
   {
+    nr: 10,
+    data: '2026-09-21',
+    tytul: 'Decyzja o Twoim awansie już zapadła (a nikt Ci nie powiedział)',
+    opis: 'Awans to pozycja w budżecie, nie nagroda za staż. Kiedy naprawdę zapada decyzja, dlaczego najlepsi specjaliści stoją w miejscu i co zrobić, zanim usiądziesz do rozmowy.',
+    yt: 'https://youtu.be/qVzky1OGens',
+    spotify: 'https://open.spotify.com/episode/3TNt2ip3ycg8emdNJUzrqT',
+  },
+  {
     nr: 9,
     data: '2026-09-14',
     tytul: 'Staraj się, staraj. Dlaczego podwyżka to nie jest decyzja Twojego szefa',
