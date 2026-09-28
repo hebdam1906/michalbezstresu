@@ -17,6 +17,14 @@
 
 export const odcinki = [
   {
+    nr: 13,
+    data: '2026-10-12',
+    tytul: 'Twój szef nie wie, co robisz (i to nie jest jego wina)',
+    opis: 'Czym widoczność nie jest, trzy poziomy, na których trzeba istnieć, i cztery narzędzia na kilkanaście minut tygodniowo. Do tego trzy historie, w tym moja: nie dostałem awansu, bo senior management mnie nie znał.',
+    yt: 'https://youtu.be/MZv87-uKN5c',
+    spotify: null,
+  },
+  {
     nr: 12,
     data: '2026-10-05',
     tytul: 'Ludzie odchodzą z pracy za wcześnie albo za późno. Po czym poznać, że to ten moment',
