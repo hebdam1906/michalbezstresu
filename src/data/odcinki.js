@@ -17,6 +17,14 @@
 
 export const odcinki = [
   {
+    nr: 14,
+    data: '2026-10-19',
+    tytul: 'Restrukturyzacja rzadko wygląda jak ogłoszenie. Częściej jak cisza',
+    opis: 'Które sygnały znaczą dużo, a które nic, co jest pod Twoją kontrolą i czego nie robić, kiedy wszyscy już wiedzą. Do tego trzy historie z obu stron stołu, w tym etaty, które zniknęły bez jednego zwolnienia.',
+    yt: 'https://youtu.be/CNOrUMTwJ8U',
+    spotify: null,
+  },
+  {
     nr: 13,
     data: '2026-10-12',
     tytul: 'Twój szef nie wie, co robisz (i to nie jest jego wina)',
