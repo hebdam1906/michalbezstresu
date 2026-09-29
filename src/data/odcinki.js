@@ -21,7 +21,7 @@ export const odcinki = [
     data: '2026-10-26',
     tytul: 'Dostałem zespół, który wolałby kogoś innego',
     opis: 'Cztery rodzaje trudnego zespołu, kolejność, która działa, i trzy błędy nowego szefa. Do tego trzy historie z mojego pierwszego zespołu, w którym każdy chciał być na moim miejscu.',
-    yt: 'https://youtu.be/BxVIXp7MISA',
+    yt: 'https://youtu.be/BxVlXp7MISA',
     spotify: null,
   },
   {
