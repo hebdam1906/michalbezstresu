@@ -9,6 +9,14 @@ export default defineConfig({
   // i canonical wskazywałyby na adresy, które się przekierowują (31.08.2026).
   site: 'https://www.michalbezstresu.pl',
 
+  // Ukośnik na końcu adresu wszędzie (1.10.2026, Search Console): do tej pory
+  // /konsultacje i /konsultacje/ zwracały oba 200, canonical wskazywał wersję
+  // z ukośnikiem, a Google indeksował tę bez — 6 stron wisiało w „Discovered –
+  // currently not indexed”. Adapter Vercela zamienia to na 308 z /x na /x/.
+  // ⚠️ Wywołania API w kodzie piszemy z ukośnikiem (/api/konsultacje/), żeby
+  // POST nie szedł przez przekierowanie. Ścieżka crona w vercel.json też.
+  trailingSlash: 'always',
+
   // Sitemapa: /sitemap-index.xml + /sitemap-0.xml, zgłoszone w robots.txt.
   // Wykluczone te same adresy, które blokuje robots.txt — inaczej wysyłalibyśmy
   // Google sprzeczne sygnały (sitemapa: „indeksuj", robots: „nie wchodź").

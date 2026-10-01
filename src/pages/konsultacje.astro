@@ -236,7 +236,7 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
         btn.disabled = true;
         btn.textContent = 'Wysyłam…';
         try {
-          var r = await fetch('/api/konsultacje', {
+          var r = await fetch('/api/konsultacje/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

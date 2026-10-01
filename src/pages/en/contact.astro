@@ -217,7 +217,7 @@ const jsonLdExtra = [
         .map(function (i) { return i.value; });
 
       try {
-        var r = await fetch('/api/firmy', {
+        var r = await fetch('/api/firmy/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

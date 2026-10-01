@@ -329,10 +329,77 @@ export const stronyOdcinkow = [
   //    Ocena roczna (#5) wchodzi jako TRZECIA, w pierwszym tygodniu października
   //    — ma być wysoko w grudniu, kiedy zaczyna się sezon ocen.
   {
-    nr: 5, slug: 'niesprawiedliwa-ocena-roczna',
-    zapytanie: 'niesprawiedliwa ocena roczna co zrobić',
-    tytul: '', opis: '', h1: '', lead: '', sekcje: [], zapamietaj: [],
-    powiazane: [1, 2], konsultacje: true, gotowa: false,
+    nr: 5, slug: "niesprawiedliwa-ocena-roczna",
+    zapytanie: "niesprawiedliwa ocena roczna co zrobić",
+    tytul: "Niesprawiedliwa ocena roczna — co zrobić, zanim potwierdzisz formularz",
+    opis: "Dostałeś ocenę, która nie pasuje do Twojego roku? Wyjaśniam, gdzie ta ocena naprawdę zapadła, czego nie robić na rozmowie i jak pracować na następną.",
+    h1: "Niesprawiedliwa ocena roczna. Co możesz z nią zrobić?",
+    lead: [
+      "Rok pracy, nadgodziny, projekty, które się udały — i w formularzu środek skali. Albo niżej. Pierwszy odruch jest zawsze ten sam: udowodnić na rozmowie, że to pomyłka.",
+      "Przez dwadzieścia lat pracowałem w korporacjach, od specjalisty po senior managera. Oceny dostawałem i wystawiałem, siedziałem też w salach, w których się je ustala. Poniżej to, co wiem o tym, jak ocena powstaje naprawdę — i co z nią realnie da się zrobić.",
+    ],
+    sekcje: [
+      {
+        h2: "Gdzie naprawdę zapada Twoja ocena roczna?",
+        tresc: [
+          "W większości dużych firm nie na rozmowie z szefem. Zapada wcześniej, na spotkaniu, które nazywa się kalibracją: przełożeni kilku zespołów siadają razem i porównują ludzi między sobą, zwykle w odniesieniu do z góry ustalonego rozkładu ocen.",
+          "Rozkład oznacza, że wysokich ocen jest ograniczona liczba. Jeśli w jednym zespole jest trzech świetnych ludzi, a w puli są dwie najwyższe oceny, ktoś dostanie niższą, chociaż na nią nie zasłużył. Nie dlatego, że ktoś go nie lubi. Dlatego, że system liczy procenty.",
+          "Na tej sali Twój przełożony ma na Ciebie kilka minut i broni Cię tym, co ma w ręku. <strong>Rozmowa oceniająca, na którą siadasz kilka tygodni później, jest zwykle zakomunikowaniem decyzji, a nie jej podejmowaniem.</strong>",
+        ],
+      },
+      {
+        h2: "Czy „spełnia oczekiwania” to zła ocena?",
+        tresc: [
+          "Środek skali frustruje najbardziej, bo brzmi jak „przeciętny”. W praktyce w wielu firmach to ocena, którą dostaje większość zespołu — w tym ludzie, których przełożony bardzo ceni.",
+          "To informacja o tym, jak działa system, a nie wyrok o Tobie. Znaczenia nabiera dopiero wtedy, gdy łączy się z czymś jeszcze: z podwyżką, z awansem albo z tym, co wpisano Ci w „obszary rozwoju”.",
+        ],
+      },
+      {
+        h2: "Czy warto kłócić się o ocenę na rozmowie?",
+        tresc: [
+          "Nie. To najczęstszy i najdroższy błąd.",
+          "Twój szef zwykle nie może zmienić oceny na tym spotkaniu — musiałby wrócić na kalibrację i otworzyć temat przy wszystkich. Prosząc go o to, prosisz o coś, czego nie zrobi, a jedyny trwały efekt to wrażenie, że ocenę przyjąłeś emocjonalnie.",
+          "Pierwsza reakcja ma być pytaniem, nie obroną — dokładnie tak jak przy <a href=\"/odcinki/negatywny-feedback-od-szefa/\">negatywnym feedbacku od szefa</a>. Pytanie, które naprawdę coś daje, brzmi: <strong>„Co konkretnie musi się wydarzyć, żeby następna ocena była wyższa?”</strong>",
+        ],
+      },
+      {
+        h2: "Co sprawdzić w formularzu, zanim go potwierdzisz?",
+        tresc: [
+          "Formularz oceny to dokument. Wraca przy podwyżce, przy awansie, przy zmianach w strukturze. Zanim klikniesz „potwierdzam”, przeczytaj każdą sekcję.",
+          "Najuważniej czytaj „obszary rozwoju”. To jedyna część formularza, która patrzy w przyszłość — i jeśli kiedyś powstanie <a href=\"/odcinki/plan-naprawczy-pip/\">plan naprawczy</a>, to zwykle wyrasta właśnie z tego, co przez kolejne cykle tam wpisywano.",
+          "W wielu systemach możesz dodać własny komentarz. Nie musisz. Ale jeśli zgadzasz się z czymś tylko częściowo, krótki, rzeczowy komentarz z faktami jest lepszy niż milczenie.",
+        ],
+      },
+      {
+        h2: "Kiedy niesprawiedliwa ocena to sygnał ostrzegawczy?",
+        tresc: [
+          "Zwykle ocena roczna jest po prostu rytuałem systemu — czasem niesprawiedliwym, często frustrującym, ale rytuałem. Są jednak trzy sytuacje, w których warto mieć oczy otwarte.",
+          "<strong>Nagła obniżka po latach dobrych ocen</strong>, bez wcześniejszej rozmowy i bez konkretów. <strong>Ocena sprzeczna z tym, co słyszałeś przez cały rok</strong> — feedback był dobry, wynik nagle nie jest. <strong>Sformułowania w „obszarach rozwoju”, których nikt z Tobą nie omawiał</strong>, a które brzmią, jakby ktoś budował uzasadnienie.",
+          "Pojedynczo każda z tych rzeczy może nic nie znaczyć. Razem to wzorzec — a wzorzec warto zacząć spokojnie dokumentować.",
+        ],
+      },
+      {
+        h2: "Jak pracować na następną ocenę?",
+        tresc: [
+          "Cały rok, nie godzinę. Twoim zadaniem jest dać przełożonemu to, czego potrzebuje na kalibracji: liczby, skalę, efekt. Manager z konkretami w ręku wygrywa rozmowę o Twojej ocenie. Manager z „on naprawdę dobrze pracuje” przegrywa.",
+          "<strong>Raz w miesiącu, pięć minut:</strong> trzy rzeczy, które dowiozłeś, każda z liczbą. W grudniu nie piszesz samooceny z pamięci, tylko składasz ją z gotowych klocków.",
+          "<strong>Samoocenę pisz dla ludzi, którzy Cię nie znają.</strong> Twój szef wie, co robiłeś. Samoocenę czytają — czasem cytują — inni przełożeni na kalibracji. Zamiast „byłem zaangażowany”: co, ile i z jakim efektem dla firmy.",
+          "<strong>Po rozmowie oceniającej wyślij krótki mail</strong> z tym, co ustaliliście. Obietnica złożona ustnie ma tendencję do znikania przed kolejnym cyklem. Na piśmie nie znika.",
+        ],
+      },
+    ],
+    zapamietaj: [
+      "<strong>Ocena zapada na kalibracji, nie na rozmowie.</strong> Na rozmowie dowiadujesz się o decyzji.",
+      "<strong>Nie negocjuj oceny w sali.</strong> Zapytaj, co musi się wydarzyć, żeby następna była wyższa.",
+      "<strong>„Obszary rozwoju” czytaj najuważniej</strong> — to jedyna część formularza, która patrzy w przyszłość.",
+      "<strong>Na następną ocenę pracujesz cały rok:</strong> liczby co miesiąc, samoocena dla obcych, mail po rozmowie.",
+    ],
+    powiazane: [1, 2],
+    pomost: "Ocena rzadko jest celem sama w sobie — zwykle po kilku tygodniach wraca jako argument w <a href=\"/odcinki/jak-rozmawiac-o-podwyzce/\">rozmowie o podwyżce</a>, która toczy się według bardzo podobnych zasad.",
+    cta: { gora: "<strong>Darmowa checklista:</strong> wzór notatki po trudnej rozmowie i dziesięć gotowych zdań na sytuacje, w których ocena albo feedback wydają Ci się niesprawiedliwe.", dol: "<strong>Darmowa checklista.</strong> Wzór notatki po trudnej rozmowie i dziesięć gotowych zdań na sytuacje, w których ocena albo feedback wydają Ci się niesprawiedliwe. Dostaniesz ją mailem, za darmo." },
+    notaPrawna: "To materiał edukacyjny oparty na doświadczeniu managerskim, a nie porada prawna. Zasady oceniania różnią się między firmami — przed potwierdzeniem lub zakwestionowaniem formularza warto sprawdzić wewnętrzne procedury, a w sprawach spornych skonsultować się z prawnikiem.",
+    konsultacje: true,
+    gotowa: true,   // treść Klaudiusz 1.10, publikacja na prośbę Michała 1.10
   },
   {
     nr: 3, slug: 'mobbing-w-pracy-gdzie-granica',
@@ -465,19 +532,148 @@ export const stronyOdcinkow = [
     gotowa: true,   // ✅ zaakceptowane przez Michała 4.09
   },
   {
-    nr: 9, slug: 'jak-rozmawiac-o-podwyzce',
-    zapytanie: 'jak rozmawiać o podwyżce z szefem',
-    tytul: '', opis: '', h1: '', lead: '', sekcje: [], zapamietaj: [],
-    powiazane: [5, 10], konsultacje: true, gotowa: false,
+    nr: 9, slug: "jak-rozmawiac-o-podwyzce",
+    zapytanie: "jak rozmawiać o podwyżce z szefem",
+    tytul: "Jak rozmawiać o podwyżce z szefem — i kiedy zacząć, żeby zdążyć",
+    opis: "Rozmowa o podwyżce w grudniu jest zwykle spóźniona. Wyjaśniam, skąd bierze się pula na podwyżki, co Twój szef musi mieć w ręku i co odpowiedzieć na „nie ma budżetu”.",
+    h1: "Jak rozmawiać o podwyżce z szefem, żeby to miało sens?",
+    lead: [
+      "Większość ludzi przygotowuje się do rozmowy o podwyżce tak, jakby decyzja zapadała w tej rozmowie. Lista argumentów, odwaga zebrana na jeden dzień, a potem „nie ma budżetu”.",
+      "Przez dwadzieścia lat pracowałem w korporacjach, od specjalisty po senior managera. Słyszałem to zdanie po obu stronach stołu: najpierw jako odpowiedź na własną prośbę, potem jako zdanie, które sam musiałem komuś powiedzieć. Poniżej to, co widać z drugiej strony — i co z tego wynika dla Ciebie.",
+    ],
+    sekcje: [
+      {
+        h2: "Skąd bierze się pula na podwyżki?",
+        tresc: [
+          "Zanim jakiekolwiek pieniądze trafią do Ciebie, firma musi wykonać swój rok budżetowy. Bez tego puli na podwyżki po prostu nie ma i żaden argument tego nie zmieni.",
+          "Potem pula jest dzielona między działy i zespoły. Twój przełożony negocjuje dla swojego zespołu jak największy kawałek — i w tych negocjacjach Twoja podwyżka konkuruje z podwyżkami ludzi, których nigdy nie spotkałeś. Dalej przychodzi kalibracja, na której przełożony musi obronić Twoją ocenę, a na końcu rynek.",
+          "<strong>Z pięciu ogniw tego łańcucha cztery są poza Twoim zasięgiem. Jedno kontrolujesz w stu procentach.</strong>",
+        ],
+      },
+      {
+        h2: "Co Twój szef musi mieć w ręku, żeby wywalczyć Ci podwyżkę?",
+        tresc: [
+          "To jest właśnie to jedno ogniwo. O podziale puli decyduje się zwykle razem z ocenami — w sali, w której Ciebie nie ma. Twój przełożony broni Cię tam tym, co ma: konkretami albo dobrym wrażeniem.",
+          "Dobre wrażenie przegrywa z liczbami. Dlatego najważniejsza praca nad podwyżką nie dzieje się w dniu rozmowy, tylko przez cały rok: co dowiozłeś, ile to dało, o ile zwiększył się Twój zakres od ostatniej zmiany pensji. Jak zbierać taki materiał i dlaczego ocena i podwyżka to w praktyce jedna gra — piszę przy <a href=\"/odcinki/niesprawiedliwa-ocena-roczna/\">niesprawiedliwej ocenie rocznej</a>.",
+          "Jest też rzecz niewygodna: budżet podwyżkowy to inwestycja, a nie nagroda. Przy ograniczonej puli firma częściej inwestuje w ludzi, w których widzi przyszłość, niż w solidnych wykonawców tego, co już jest.",
+        ],
+      },
+      {
+        h2: "Kiedy zacząć rozmowę o podwyżce?",
+        tresc: [
+          "Wcześniej, niż wszyscy zaczynają. Jeśli o podwyżkę prosisz w grudniu, zwykle jesteś spóźniony: budżet na kolejny rok jest już policzony, a pula rozdzielona.",
+          "Lepszy moment to taki, w którym decyzje jeszcze nie zapadły — przed zamknięciem budżetu, nie po. Wtedy rozmowa o Twoich oczekiwaniach jest informacją, którą przełożony może jeszcze gdzieś wnieść.",
+        ],
+      },
+      {
+        h2: "Jakich argumentów używać, a jakich nie?",
+        tresc: [
+          "Firmy nie płacą za potrzeby — płacą za wartość i za rynek. Argumenty, które działają: wyniki z liczbami, zakres odpowiedzialności, który urósł od ostatniej podwyżki, i widełki rynkowe dla Twojej roli, podane rzeczowo, nie jako groźba.",
+          "Argumenty, które pogrążają: <strong>„mam kredyt”, „koledzy zarabiają więcej”, „należy mi się za staż”.</strong> Żaden z nich nie daje przełożonemu niczego, z czym mógłby pójść wyżej. Nie przekona swojego szefa zdaniem „bo ma kredyt”.",
+          "Osobna sprawa to oferta z innej firmy. Traktuj ją jako decyzję o odejściu, nie jako dźwignię. Jeśli jesteś gotów odejść, możesz o niej uczciwie porozmawiać. Jeśli nie jesteś — nie wyciągaj tej karty, bo od tej chwili firma widzi w Tobie ryzyko.",
+        ],
+      },
+      {
+        h2: "Co odpowiedzieć na „nie ma budżetu”?",
+        tresc: [
+          "„Nie ma budżetu” zwykle nie jest wymówką, tylko opisem stanu faktycznego na poziomie, którego nie widać z dołu. Kłótnia z tym zdaniem niczego nie zmieni.",
+          "Zmienić możesz to, z czym wychodzisz z rozmowy. Zamiast samego „nie” poproś o kryteria i termin: <strong>„Rozumiem. Co konkretnie musiałoby się wydarzyć, żeby w przyszłym roku to było możliwe — i kiedy wrócimy do tej rozmowy?”</strong>",
+          "Po rozmowie wyślij krótki mail z tym, co ustaliliście. Obietnica „wrócimy do tego” bez daty i bez kryteriów ma zwyczaj znikać. Zapisana — wraca.",
+        ],
+      },
+      {
+        h2: "A jeśli to Ty musisz powiedzieć „nie”?",
+        tresc: [
+          "Jeśli jesteś po drugiej stronie stołu: „nie ma budżetu” jest prawdziwe, ale niewystarczające. Człowiek, który słyszy samo to zdanie, wychodzi z przekonaniem, że go zbyto.",
+          "Ten sam człowiek, który usłyszy, na czym konkretnie polegał problem i co musiałoby się zmienić do przyszłego roku, wychodzi z planem. To jest różnica między odmową a rozmową — i kosztuje jedną minutę więcej.",
+        ],
+      },
+    ],
+    zapamietaj: [
+      "<strong>O podwyżce decyduje łańcuch, nie jedna rozmowa.</strong> Kontrolujesz jedno ogniwo: to, z czym Twój szef wchodzi na kalibrację.",
+      "<strong>Prośba w grudniu jest zwykle spóźniona.</strong> Rozmawiaj, zanim budżet zostanie zamknięty.",
+      "<strong>Argumentem są wartość i rynek</strong> — nigdy potrzeby, staż ani porównania z kolegami.",
+      "<strong>Na „nie ma budżetu” odpowiadaj pytaniem o kryteria i termin</strong> — i zapisz odpowiedź mailem.",
+    ],
+    powiazane: [5, 10],
+    pomost: "Czasem odmowa nie dotyczy pieniędzy, tylko stanowiska — i wtedy pytanie brzmi już inaczej: <a href=\"/odcinki/dlaczego-nie-dostalem-awansu/\">dlaczego nie dostałem awansu</a>.",
+    cta: { gora: "<strong>Darmowa checklista:</strong> wzór notatki po trudnej rozmowie — w tym maila „potwierdzam ustalenia”, który zamienia ustną obietnicę w coś, do czego można wrócić.", dol: "<strong>Darmowa checklista.</strong> Wzór notatki po trudnej rozmowie i maila „potwierdzam ustalenia”, który zamienia ustną obietnicę w coś, do czego można wrócić. Dostaniesz ją mailem, za darmo." },
+    konsultacje: true,
+    gotowa: true,   // treść Klaudiusz 1.10, publikacja na prośbę Michała 1.10
   },
   {
     // Adres i fraza zmienione 14.09 (Klaudiusz). Było: `awans-w-korporacji`
     // + „kiedy zapada decyzja o awansie" — to fraza kogoś ciekawego procesu.
     // Nasz czytelnik jest PO odmowie i wpisuje „dlaczego nie dostałem awansu".
-    nr: 10, slug: 'dlaczego-nie-dostalem-awansu',
-    zapytanie: 'dlaczego nie dostałem awansu',
-    tytul: '', opis: '', h1: '', lead: '', sekcje: [], zapamietaj: [],
-    powiazane: [9, 5], konsultacje: true, gotowa: false,
+    nr: 10, slug: "dlaczego-nie-dostalem-awansu",
+    zapytanie: "dlaczego nie dostałem awansu",
+    tytul: "Dlaczego nie dostałem awansu? Co dzieje się, zanim usłyszysz decyzję",
+    opis: "Awans to nie decyzja jednego szefa, tylko pozycja w budżecie. Wyjaśniam, kiedy naprawdę zapada decyzja, dlaczego najlepsi specjaliści awansują najrzadziej i o co zapytać po odmowie.",
+    h1: "Dlaczego nie dostałem awansu, skoro pracuję dobrze?",
+    lead: [
+      "Awans poszedł do kogoś innego. Albo nie poszedł do nikogo, a Ty usłyszałeś, że „to jeszcze nie ten moment”. Pierwsza myśl brzmi zwykle tak samo: ktoś mnie nie docenia.",
+      "Przez dwadzieścia lat pracowałem w korporacjach, od specjalisty po senior managera. Siedziałem w salach, w których zapadały decyzje o awansach ludzi, którzy o tych spotkaniach nie mieli pojęcia. Poniżej to, co z tamtej perspektywy widać — i co z tego wynika dla Ciebie.",
+    ],
+    sekcje: [
+      {
+        h2: "Kto naprawdę decyduje o awansie?",
+        tresc: [
+          "Rzadko sam Twój szef. Awans w dużej firmie to pozycja w budżecie: wyższe stanowisko kosztuje więcej, więc musi być zaplanowane, zanim ktokolwiek o nim powie.",
+          "Do tego dochodzi łańcuch akceptacji. Zgodę muszą dać wszyscy managerowie w danej linii budżetowej — a tych poziomów bywa kilka — oraz HR. Twój szef może być Twoim największym zwolennikiem i mimo to nie mieć tej decyzji w swoich rękach.",
+          "Z tego wynika rzecz, którą wiele osób odbiera jako niewygodną: <strong>ludzie, którzy mają zaakceptować Twój awans, muszą wiedzieć, kim jesteś.</strong> Widoczność poza własnym zespołem to nie lizusostwo, tylko warunek.",
+        ],
+      },
+      {
+        h2: "Kiedy zapada decyzja o awansie?",
+        tresc: [
+          "Dużo wcześniej, niż ją słyszysz. Budżet na kolejny rok powstaje jesienią, a żeby go zbudować, ktoś musi wcześniej powiedzieć, kto w przyszłym roku zmieni stanowisko. Te prognozy powstają często przy ocenach półrocznych, w okolicach sierpnia.",
+          "Swoją ocenę roczną dostajesz w styczniu albo w lutym. Ale prawdziwa rozmowa o Tobie — ta między przełożonymi — mogła się odbyć pół roku wcześniej. Korekta po fakcie jest bardzo trudna, bo burzy budżet, który już policzono i zatwierdzono.",
+          "<strong>Jeśli rozmowę o awansie zaczynasz w grudniu, jesteś zwykle pół roku spóźniony.</strong>",
+        ],
+      },
+      {
+        h2: "Dlaczego najlepsi specjaliści awansują najrzadziej?",
+        tresc: [
+          "Bo są niezastąpieni. Wielokrotnie chciałem awansować świetnych specjalistów i wielokrotnie słyszałem to samo pytanie: „Jeśli ją awansujemy, kto będzie prowadził proces?”",
+          "Jeśli jesteś najlepszą osobą w zespole i nie dostajesz awansu, to nie musi znaczyć, że ktoś Cię nie docenia. Może znaczyć, że jesteś niezastąpiony. A to gorsza pozycja, niż brzmi: niezastąpiony pracownik jest wygodny dla wszystkich poza sobą samym.",
+        ],
+      },
+      {
+        h2: "Co decyduje częściej niż wyniki?",
+        tresc: [
+          "Proces, motywacja, zaangażowanie, inicjatywa — to wszystko usłyszysz na każdym szkoleniu z rozwoju kariery. Ale czynnik, który w mojej praktyce decydował najczęściej, był inny: <strong>nastawienie</strong>.",
+          "Można mieć najlepsze liczby w zespole i nie awansować, jeśli przy każdej zmianie pierwsze, co się mówi, to „i tak nie zadziała”. Jedna reakcja na spotkaniu potrafi zaważyć na opinii budowanej przez rok.",
+          "To jedyny czynnik z tej listy, który w całości zależy od Ciebie.",
+        ],
+      },
+      {
+        h2: "O co zapytać po odmowie awansu?",
+        tresc: [
+          "Nie o to, dlaczego wybrano kogoś innego — tej odpowiedzi rzadko usłyszysz w całości. Zapytaj o przyszłość: <strong>„Co konkretnie musiałoby się zmienić, żebym był kandydatem przy następnej okazji — i kiedy ta okazja może się pojawić?”</strong>",
+          "Odpowiedź zapisz w krótkim mailu po rozmowie. Kryteria, które padły ustnie, lubią się zmieniać, kiedy przychodzi kolejny cykl.",
+          "Jeśli odpowiedzią jest wyłącznie „zobaczymy”, to też jest informacja. Wtedy warto spokojnie sprawdzić, czy ten awans jest w tym zespole w ogóle możliwy, czy tylko obiecywany.",
+        ],
+      },
+      {
+        h2: "Jak przygotować się do następnej szansy?",
+        tresc: [
+          "Pracuj na moment, w którym zapadają prognozy, a nie na moment ogłoszenia. Rozmowę o swoich ambicjach zacznij na początku roku, przy ustalaniu celów — nie w grudniu przy ocenie.",
+          "Daj przełożonemu argumenty, które obronią się w łańcuchu akceptacji: wyniki z liczbami i przykłady pracy na poziomie stanowiska, o które się starasz. To w praktyce ten sam materiał, który zbierasz na <a href=\"/odcinki/niesprawiedliwa-ocena-roczna/\">ocenę roczną</a>.",
+          "I zadbaj o to, żeby Twoja praca nie zatrzymała się w dniu, w którym przejdziesz wyżej. Pytanie „kto poprowadzi proces” najłatwiej rozbroić, zanim ktoś je zada.",
+        ],
+      },
+    ],
+    zapamietaj: [
+      "<strong>Awans to pozycja w budżecie</strong>, a nie decyzja jednej osoby — zgodzić się musi cały łańcuch.",
+      "<strong>Decyzja zapada przy prognozach w połowie roku.</strong> Ogłoszenie przychodzi pół roku później.",
+      "<strong>Niezastąpiony specjalista awansuje najrzadziej</strong>, a nastawienie decyduje częściej niż liczby.",
+      "<strong>Po odmowie pytaj o kryteria i termin,</strong> nie o powody — i zapisz odpowiedź.",
+    ],
+    powiazane: [9, 5],
+    pomost: "Zanim pojawi się kolejna szansa na awans, często szybciej da się wygrać inną rozmowę — tę o <a href=\"/odcinki/jak-rozmawiac-o-podwyzce/\">podwyżce</a>.",
+    cta: { gora: "<strong>Darmowa checklista:</strong> wzór notatki po trudnej rozmowie — w tym maila „potwierdzam ustalenia”, który zamienia ustną obietnicę w coś, do czego można wrócić.", dol: "<strong>Darmowa checklista.</strong> Wzór notatki po trudnej rozmowie i maila „potwierdzam ustalenia”, który zamienia ustną obietnicę w coś, do czego można wrócić. Dostaniesz ją mailem, za darmo." },
+    konsultacje: true,
+    gotowa: true,   // treść Klaudiusz 1.10, publikacja na prośbę Michała 1.10
   },
   {
     nr: 11, slug: 'nowy-szef-w-zespole',

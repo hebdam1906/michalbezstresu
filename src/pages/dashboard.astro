@@ -23,7 +23,7 @@ import Stopka from '../components/Stopka.astro';
 import { supabaseAdmin } from '../lib/supabase';
 import { readSession } from '../lib/panel-auth';
 
-if (!readSession(Astro.cookies)) return Astro.redirect('/panel');
+if (!readSession(Astro.cookies)) return Astro.redirect('/panel/');
 
 const DZIS = new Date();
 const dzien = (przesuniecie: number) =>
