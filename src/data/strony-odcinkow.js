@@ -690,6 +690,25 @@ export const stronyOdcinkow = [
     tytul: '', opis: '', h1: '', lead: '', sekcje: [], zapamietaj: [],
     powiazane: [9, 10, 8], konsultacje: true, gotowa: false,
   },
+  // #13–#15: slugi i zapytania Klaudiusz 1.10 (sprawdzone z całą mapą).
+  {
+    nr: 13, slug: 'jak-budowac-pozycje-w-pracy',
+    zapytanie: 'jak budować swoją pozycję w pracy',
+    tytul: '', opis: '', h1: '', lead: '', sekcje: [], zapamietaj: [],
+    powiazane: [10, 7], konsultacje: true, gotowa: false,
+  },
+  {
+    nr: 14, slug: 'restrukturyzacja-w-firmie-co-robic',
+    zapytanie: 'restrukturyzacja w firmie co robić',
+    tytul: '', opis: '', h1: '', lead: '', sekcje: [], zapamietaj: [],
+    powiazane: [8, 12], konsultacje: true, gotowa: false,
+  },
+  {
+    nr: 15, slug: 'trudny-pracownik-w-zespole',
+    zapytanie: 'jak rozmawiać z trudnym pracownikiem',
+    tytul: '', opis: '', h1: '', lead: '', sekcje: [], zapamietaj: [],
+    powiazane: [2, 7], konsultacje: true, gotowa: false,
+  },
 ];
 
 /** Strony realnie budowane — tylko te z kompletną treścią. */
