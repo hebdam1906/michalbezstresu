@@ -529,6 +529,8 @@ export const stronyOdcinkow = [
       'i inna gra.',
     // CTA wyłącznie do checklisty — decyzja Klaudiusza z 4.09.
     konsultacje: false,
+    // 1.10: transkrypcja odcinka 8 dopisana przez Marcina (commit 8207566, po kontroli anonimizacji).
+    transkrypcja: transkrypcje[8],
     gotowa: true,   // ✅ zaakceptowane przez Michała 4.09
   },
   {
@@ -672,6 +674,7 @@ export const stronyOdcinkow = [
     powiazane: [9, 5],
     pomost: "Zanim pojawi się kolejna szansa na awans, często szybciej da się wygrać inną rozmowę — tę o <a href=\"/odcinki/jak-rozmawiac-o-podwyzce/\">podwyżce</a>.",
     cta: { gora: "<strong>Darmowa checklista:</strong> wzór notatki po trudnej rozmowie — w tym maila „potwierdzam ustalenia”, który zamienia ustną obietnicę w coś, do czego można wrócić.", dol: "<strong>Darmowa checklista.</strong> Wzór notatki po trudnej rozmowie i maila „potwierdzam ustalenia”, który zamienia ustną obietnicę w coś, do czego można wrócić. Dostaniesz ją mailem, za darmo." },
+    transkrypcja: transkrypcje[10],
     konsultacje: true,
     gotowa: true,   // treść Klaudiusz 1.10, publikacja na prośbę Michała 1.10
   },
