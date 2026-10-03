@@ -1,0 +1,77 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+/* Lista oczekujących na angielskie wydanie książki — test popytu, październik 2026.
+ * Brief: Klaudiusz, `Klaudiusz-do-Marcina_EN-waitlist-ksiazki_strona-i-teksty_03-10.md`
+ * (tytuł „Both Sides of the Table" zatwierdzony przez Michała 3.10).
+ * Próg decyzji 30.11: lista EN (checklista EN + waitlist) > ~200 osób → wydanie EN w grudniu.
+ * Układ i style 1:1 z `/en/checklist`.
+ *
+ * Formularz MailerLite: konto 2494941, formularz ukePWT („Book EN — waitlist"),
+ * grupa `Book EN — waitlist`, double opt-in WYŁĄCZONY, bez automatyzacji powitalnej
+ * (obiecujemy jeden mail).
+ */
+---
+<Layout
+  lang="en"
+  title="Both Sides of the Table — English edition waitlist | Michał bez Stresu"
+  description="Fifteen difficult conversations at work — the improvement plan, the annual review, the pay rise, the promotion, the restructuring — described from both sides of the table. Join the waitlist for the English edition."
+>
+  <main class="lp">
+    <div class="lp-wrap">
+      <div class="brand mono">Michał bez Stresu</div>
+
+      <div class="eyebrow">Book · English edition in preparation</div>
+      <h1>Both Sides of the Table</h1>
+      <p class="sub">What really happens in the conversations your career depends on.</p>
+
+      <p class="lead">Fifteen difficult conversations from twenty years in corporate finance
+        operations — each described from both sides of the table: the employee's and the
+        manager's. The book comes out in Polish on 30 October. The English edition is being
+        adapted, not just translated, because some chapters touch on local employment law.</p>
+
+      <ul class="benefits">
+        <li>How annual reviews are really decided — and why the meeting with your manager is usually not where it happens</li>
+        <li>Why the best specialists get promoted least often, and what to do about it</li>
+        <li>What to say when you hear “there's no budget” — and what to ask instead</li>
+        <li>What to do in the first 48 hours after an unexpected meeting with HR</li>
+      </ul>
+
+      <!-- Formularz MailerLite (embedded) — konto 2494941, formularz ukePWT -->
+      <div class="form-embed">
+        <div class="ml-embedded" data-form="ukePWT"></div>
+      </div>
+
+      <p class="fineprint">No spam. One email when the English edition is ready. Unsubscribe with one click.</p>
+    </div>
+  </main>
+
+  <!-- MailerLite Universal -->
+  <script is:inline>
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '2494941');
+  </script>
+  <!-- End MailerLite Universal -->
+</Layout>
+
+<style>
+.lp{min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:var(--sygnal);color:#F2F7F5;padding:56px 24px}
+.lp-wrap{width:100%;max-width:620px}
+.brand{font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--marker);margin-bottom:40px}
+.lp .eyebrow{color:var(--marker)}
+.lp h1{font-family:var(--disp);font-weight:500;color:#fff;
+  font-size:clamp(28px,5vw,44px);line-height:1.12;margin:6px 0 16px}
+.lp .sub{font-size:clamp(16px,2.2vw,19px);color:#CFE0DA;max-width:52ch}
+.lp .lead{font-size:16px;color:#E3EEEA;max-width:60ch;margin-top:22px}
+.benefits{list-style:none;margin:26px 0 34px}
+.benefits li{padding-left:30px;position:relative;margin-bottom:14px;font-size:16px}
+.benefits li::before{content:"✓";position:absolute;left:0;color:var(--marker);font-weight:700}
+.form-embed{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+  border-radius:12px;padding:26px 24px}
+.fineprint{margin-top:16px;font-size:12.5px;color:#B9CFC8;text-align:center}
+</style>
