@@ -1,0 +1,249 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Stopka from '../../components/Stopka.astro';
+import { ROZMOWCA, RUNDY, WYNIKI } from '../../data/symulator-podwyzka.js';
+
+/**
+ * Symulator rozmowy o podwyżce — v0 (brief Klaudiusza 5.10.2026).
+ * Bez AI, bez frameworka, bez zapisu danych: cała logika w skrypcie na dole,
+ * treść w `src/data/symulator-podwyzka.js`.
+ *
+ * Rundy są w HTML od początku (dla wyszukiwarki i na wypadek wyłączonego JS
+ * widać kwestie przełożonej), skrypt pokazuje je po kolei i losuje kolejność
+ * odpowiedzi. Rozegrane rundy zostają na ekranie — komunikat wyniku 4–7 pkt
+ * odsyła do „przewiń w górę”.
+ *
+ * Pomiar: GA4 `symulator_start`, `symulator_koniec` (wynik), `symulator_cta` (cel).
+ * Meta `ViewContent` na starcie — tylko gdy piksel jest załadowany, czyli po
+ * zgodzie (Trackery.astro wstrzykuje fbq dopiero po `mbs:zgoda`).
+ */
+const MAX = RUNDY.length * 2;
+---
+<Layout
+  title="Symulator rozmowy o podwyżce — przećwicz ją, zanim pójdziesz do szefa | Michał bez Stresu"
+  description="5 sytuacji, które padają w prawie każdej rozmowie o podwyżce. Wybierz, co odpowiesz, i zobacz, jak to słyszy przełożony po drugiej stronie stołu. 3 minuty, bez rejestracji."
+>
+  <Nav />
+
+  <main class="sym wrap">
+    <header class="sym-head">
+      <div class="eyebrow">Symulator · rozmowa o podwyżce</div>
+      <h1>Przećwicz rozmowę o podwyżce — zanim pójdziesz do szefa</h1>
+      <p class="lead">5 sytuacji, które padają w prawie każdej takiej rozmowie. Wybierz, co
+        odpowiesz — a ja pokażę Ci, jak to słyszy osoba po drugiej stronie stołu.
+        Zajmie Ci to 3 minuty.</p>
+      <p class="kto">Rozmawiasz z: <strong>{ROZMOWCA.imie}</strong>, {ROZMOWCA.rola}.</p>
+      <button class="btn btn-primary btn-duzy" id="start" type="button">Zaczynam</button>
+    </header>
+
+    <div class="postep" id="postep" hidden>
+      <span id="postep-txt">Runda 1 z {RUNDY.length}</span>
+      <div class="pasek"><div class="pasek-in" id="pasek"></div></div>
+    </div>
+
+    <ol class="rundy" id="rundy">
+      {RUNDY.map((r, i) => (
+        <li class="runda" data-i={i} hidden>
+          <p class="kwestia"><span class="kto-mowi">{ROZMOWCA.imie}:</span> „{r.kwestia}”</p>
+          <div class="odp">
+            {r.odpowiedzi.map((o) => (
+              <button type="button" class="opcja" data-pkt={o.pkt}>
+                <span class="opcja-txt">„{o.tekst}”</span>
+                <span class="ocena" hidden>
+                  <span class="pkt">{o.pkt} pkt</span>
+                  <span class="kom">{o.komentarz}</span>
+                  <span class="druga"><strong>Z drugiej strony stołu:</strong> {o.drugaStrona}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+          <button type="button" class="btn btn-primary dalej" hidden>
+            {i < RUNDY.length - 1 ? 'Dalej' : 'Zobacz wynik'}
+          </button>
+        </li>
+      ))}
+    </ol>
+
+    <section class="wynik" id="wynik" hidden>
+      <p class="wynik-pkt"><span id="suma">0</span> / {MAX} pkt</p>
+      {WYNIKI.map((w) => (
+        <div class="wynik-war" data-od={w.od} hidden>
+          <h2>{w.tytul}</h2>
+          <p>{w.tekst}</p>
+          <div class="wynik-cta">
+            {w.cta.map((c) => (
+              <a class={`btn ${c.typ === 'primary' ? 'btn-primary' : 'btn-ghost'}`} href={c.href} data-cel={c.cel}>{c.etykieta}</a>
+            ))}
+          </div>
+        </div>
+      ))}
+      <button type="button" class="btn btn-ghost" id="znowu">Zagraj jeszcze raz</button>
+      <p class="nota">Symulator to ćwiczenie, nie porada prawna ani płacowa.</p>
+    </section>
+
+    <p class="odcinek-link">Skąd te odpowiedzi? Cały mechanizm podwyżek — kto decyduje,
+      kiedy i na jakiej podstawie — wyjaśniam w odcinku
+      <a href="/odcinki/jak-rozmawiac-o-podwyzce/">Jak rozmawiać o podwyżce z szefem</a>.</p>
+  </main>
+
+  <Stopka />
+</Layout>
+
+<script is:inline>
+(function () {
+  var rundy = Array.prototype.slice.call(document.querySelectorAll('.runda'));
+  var start = document.getElementById('start');
+  var postep = document.getElementById('postep');
+  var postepTxt = document.getElementById('postep-txt');
+  var pasek = document.getElementById('pasek');
+  var wynik = document.getElementById('wynik');
+  var suma = 0;
+  var N = rundy.length;
+
+  function ga(nazwa, params) {
+    try { if (window.gtag) window.gtag('event', nazwa, params || {}); } catch (e) {}
+  }
+  function vc() {
+    try { if (window.fbq) window.fbq('track', 'ViewContent', { content_name: 'symulator_podwyzka' }); } catch (e) {}
+  }
+
+  function tasuj(el) {
+    var box = el.querySelector('.odp');
+    var opcje = Array.prototype.slice.call(box.children);
+    for (var i = opcje.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = opcje[i]; opcje[i] = opcje[j]; opcje[j] = t;
+    }
+    opcje.forEach(function (o) { box.appendChild(o); });
+  }
+
+  function pokazRunde(i) {
+    var r = rundy[i];
+    tasuj(r);
+    r.hidden = false;
+    postepTxt.textContent = 'Runda ' + (i + 1) + ' z ' + N;
+    pasek.style.width = (i / N * 100) + '%';
+    r.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function reset() {
+    suma = 0;
+    rundy.forEach(function (r) {
+      r.hidden = true;
+      r.classList.remove('rozegrana');
+      r.querySelector('.dalej').hidden = true;
+      r.querySelectorAll('.opcja').forEach(function (o) {
+        o.disabled = false;
+        o.classList.remove('wybrana', 'p0', 'p1', 'p2');
+        o.querySelector('.ocena').hidden = true;
+      });
+    });
+    wynik.hidden = true;
+  }
+
+  start.addEventListener('click', function () {
+    reset();
+    start.hidden = true;
+    postep.hidden = false;
+    pokazRunde(0);
+    ga('symulator_start', { symulator: 'podwyzka' });
+    if (window.fbq) vc();
+    else document.addEventListener('mbs:trackery-gotowe', function f() {
+      document.removeEventListener('mbs:trackery-gotowe', f); vc();
+    });
+  });
+
+  rundy.forEach(function (r, i) {
+    r.querySelectorAll('.opcja').forEach(function (o) {
+      o.addEventListener('click', function () {
+        if (r.classList.contains('rozegrana')) return;
+        r.classList.add('rozegrana');
+        var pkt = parseInt(o.getAttribute('data-pkt'), 10);
+        suma += pkt;
+        o.classList.add('wybrana', 'p' + pkt);
+        o.querySelector('.ocena').hidden = false;
+        r.querySelectorAll('.opcja').forEach(function (x) { x.disabled = true; });
+        var d = r.querySelector('.dalej');
+        d.hidden = false;
+        d.focus({ preventScroll: true });
+      });
+    });
+    r.querySelector('.dalej').addEventListener('click', function () {
+      this.hidden = true;
+      if (i < N - 1) { pokazRunde(i + 1); return; }
+      koniec();
+    });
+  });
+
+  function koniec() {
+    pasek.style.width = '100%';
+    postepTxt.textContent = 'Koniec';
+    document.getElementById('suma').textContent = suma;
+    var war = Array.prototype.slice.call(wynik.querySelectorAll('.wynik-war'));
+    var pokazany = false;
+    war.forEach(function (w) {
+      var od = parseInt(w.getAttribute('data-od'), 10);
+      w.hidden = pokazany || suma < od;
+      if (!w.hidden) pokazany = true;
+    });
+    wynik.hidden = false;
+    wynik.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    ga('symulator_koniec', { symulator: 'podwyzka', wynik: suma });
+  }
+
+  document.getElementById('znowu').addEventListener('click', function () {
+    start.click();
+  });
+
+  wynik.querySelectorAll('a[data-cel]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      ga('symulator_cta', { symulator: 'podwyzka', cel: a.getAttribute('data-cel'), wynik: suma });
+    });
+  });
+})();
+</script>
+
+<style>
+.sym [hidden]{display:none!important}
+.sym{padding-top:48px;padding-bottom:64px;max-width:720px}
+.sym-head{margin-bottom:32px}
+.sym-head h1{font-family:var(--disp);font-weight:500;font-size:clamp(28px,5vw,42px);line-height:1.15;margin:6px 0 16px}
+.sym .lead{font-size:clamp(17px,2.3vw,19px);color:#3C4A46;max-width:58ch;margin-bottom:14px}
+.kto{font-size:16px;color:#4A5A55;margin-bottom:22px}
+.btn-duzy{font-size:18px;padding:16px 32px}
+.postep{position:sticky;top:64px;z-index:5;background:rgb(237,241,239);padding:12px 0 10px;margin-bottom:12px;
+  font-family:var(--mono);font-size:13px;letter-spacing:.06em;color:#4A5A55}
+.pasek{height:6px;background:var(--linia);border-radius:3px;margin-top:8px;overflow:hidden}
+.pasek-in{height:100%;width:0;background:var(--sygnal);transition:width .3s}
+.rundy{list-style:none;padding:0;margin:0}
+.runda{padding:22px 0 26px;border-bottom:1px solid var(--linia);scroll-margin-top:130px}
+.kwestia{font-size:clamp(18px,2.6vw,21px);line-height:1.45;margin-bottom:18px}
+.kto-mowi{font-weight:700;color:var(--sygnal)}
+.odp{display:grid;gap:12px}
+.opcja{display:block;width:100%;text-align:left;font:inherit;font-size:17px;line-height:1.45;
+  background:var(--papier);border:2px solid var(--linia);border-radius:12px;padding:16px 18px;
+  min-height:56px;cursor:pointer;color:inherit;transition:border-color .15s}
+.opcja:hover:not(:disabled){border-color:var(--sygnal)}
+.opcja:disabled{cursor:default}
+.runda.rozegrana .opcja:not(.wybrana){opacity:.55}
+.opcja.wybrana{opacity:1}
+.opcja.p2{border-color:#2E7D5B;background:#EEF7F1}
+.opcja.p1{border-color:#C08A1E;background:#FBF5E6}
+.opcja.p0{border-color:#B4483C;background:#FBEEEC}
+.ocena{display:block;margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,0,0,.08);font-size:16px}
+.pkt{display:inline-block;font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;
+  background:#fff;border:1px solid currentColor;border-radius:20px;padding:2px 10px;margin-bottom:8px}
+.p2 .pkt{color:#2E7D5B}.p1 .pkt{color:#9A6C10}.p0 .pkt{color:#B4483C}
+.kom{display:block;margin-bottom:8px}
+.druga{display:block;color:#3C4A46}
+.dalej{margin-top:18px}
+.wynik{margin-top:36px;padding:28px 24px;background:var(--papier);border:1px solid var(--linia);border-radius:14px;scroll-margin-top:130px}
+.wynik-pkt{font-family:var(--disp);font-size:44px;color:var(--sygnal);margin-bottom:6px}
+.wynik h2{font-size:clamp(22px,3.2vw,28px);margin-bottom:10px}
+.wynik-war p{max-width:58ch;margin-bottom:18px}
+.wynik-cta{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;max-width:460px}
+.wynik-cta .btn{text-align:center}
+.nota{margin-top:16px;font-size:13px;color:#6A7A75}
+.odcinek-link{margin-top:36px;font-size:15.5px;color:#4A5A55;max-width:62ch}
+</style>

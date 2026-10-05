@@ -74,6 +74,22 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
       </ol>
     </section>
 
+    <section class="blok przyklad">
+      <h2>Przykład: jak przygotowujemy rozmowę o podwyżce</h2>
+      <p class="przyklad-nota"><em>To ilustracja przebiegu konsultacji, a nie opinia klienta.</em></p>
+      <dl class="przyklad-kroki">
+        <dt>Przed spotkaniem</dt>
+        <dd>Opisujesz sytuację w formularzu — stanowisko, kiedy rozmowa, co już padło.</dd>
+        <dt>Na spotkaniu (60 min)</dt>
+        <dd>Przechodzimy rozmowę z obu stron stołu: czego będzie potrzebował Twój przełożony,
+          żeby „sprzedać” podwyżkę wyżej, jakie pytania padną i jak na nie odpowiesz.
+          Ćwiczymy trzy najtrudniejsze momenty.</dd>
+        <dt>Po spotkaniu</dt>
+        <dd>Dostajesz na maila notatkę: Twoje 3 argumenty z liczbami, kwotę i jej uzasadnienie,
+          plan na „budżety są zamknięte”.</dd>
+      </dl>
+    </section>
+
     <section class="blok" id="cennik">
       <h2>Ile to kosztuje</h2>
       <p class="kotwica">Godzina rozmowy z kimś, kto przez dwadzieścia lat siedział po obu
@@ -122,7 +138,8 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
       </div>
       <p class="uwaga pomost">Nie jesteś gotowy na rozmowę albo 199 zł to dziś za dużo?
         <a href="/pytanie/">Zadaj pytanie anonimowo</a> — odpowiadam na jedno w tygodniu
-        w newsletterze. Bez nazwisk, bez nazwy firmy, bez zobowiązań.</p>
+        w newsletterze. Bez nazwisk, bez nazwy firmy, bez zobowiązań. Albo
+        <a href="/symulator/podwyzka/">przećwicz rozmowę o podwyżce w symulatorze</a> — 3 minuty.</p>
       <p class="pomost-ksiazka">30 października wychodzi mój ebook <em>„Z obu stron stołu.
         Co dzieje się w rozmowach, od których zależy Twoja praca”</em>. Subskrybenci
         newslettera dowiedzą się pierwsi i dostaną kod rabatowy na tydzień premiery —
@@ -304,6 +321,10 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
 .cena h3{font-size:18px;margin-bottom:8px}
 .cena p{font-size:15px;color:#4A5A55}
 .kim p{max-width:64ch;margin-bottom:14px}
+.przyklad-nota{font-size:14.5px;color:#5A6A65;margin:-8px 0 18px}
+.przyklad-kroki{max-width:64ch}
+.przyklad-kroki dt{font-weight:700;color:var(--sygnal);margin-top:14px}
+.przyklad-kroki dd{margin:4px 0 0}
 .uwaga{background:var(--papier);border-left:3px solid var(--sygnal);padding:16px 18px;border-radius:0 8px 8px 0}
 .pomost{margin-top:22px;font-size:16px}
 .pomost a{font-weight:600}
