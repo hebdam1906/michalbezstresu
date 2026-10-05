@@ -46,7 +46,7 @@ export const odcinki = [
     tytul: 'Ludzie odchodzą z pracy za wcześnie albo za późno. Po czym poznać, że to ten moment',
     opis: 'Trzy powody do odejścia, które da się sprawdzić, a nie tylko poczuć. Co sprawdzić w umowie, zanim komukolwiek powiesz, rozmowa z szefem w trzech zdaniach i jak odejść, żeby móc wrócić.',
     yt: 'https://youtu.be/TF6fsXyhqOY',
-    spotify: null,
+    spotify: 'https://open.spotify.com/episode/5t08WREHvXJwwBDSwwGmRm',
   },
   {
     nr: 11,
@@ -54,7 +54,7 @@ export const odcinki = [
     tytul: 'Nowy szef ma o Tobie zdanie, zanim Cię pozna',
     opis: 'Co nowy przełożony wie o Tobie przed pierwszym spotkaniem, trzy błędy na pierwszym 1:1 i co zrobić z ustaleniami, które miałeś z poprzednim szefem.',
     yt: 'https://youtu.be/GJEvEtHqcEQ',
-    spotify: null,
+    spotify: 'https://open.spotify.com/episode/4mcPT46NdyCR6Uy1pzmyxZ',
   },
   {
     nr: 10,
