@@ -2,6 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import Stopka from '../components/Stopka.astro';
+import { Image } from 'astro:assets';
+import zdjecie from '../assets/michal-hebda.jpg';
 
 /**
  * BRIEF-11 (Klaudiusz, 6.08). Treść wg sekcji A briefu, ceny wg aktualizacji
@@ -148,9 +150,12 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
 
     <section class="blok kim">
       <h2>Kim jestem — i kim nie jestem</h2>
+      <div class="kim-wiersz">
+      <Image src={zdjecie} alt="Michał Hebda" widths={[320, 480]} sizes="180px" loading="lazy" class="portret" />
       <p>Przez 20 lat pracowałem w korporacjach: od specjalisty po senior managera w finansach.
         Dawałem oceny i je dostawałem. Pisałem plany naprawcze i widziałem z bliska, jak kończą się
         jedne i drugie. Siedziałem na kalibracjach, negocjowałem porozumienia.</p>
+      </div>
       <p class="uwaga"><strong>Nie jestem psychologiem ani prawnikiem</strong> — i nie udaję żadnego z nich.
         Jeśli Twoja sytuacja wymaga pomocy prawnej albo wsparcia psychologicznego, pomogę Ci ją
         uporządkować i powiem wprost, do kogo się zwrócić. Konsultacja ze mną to praktyczna wiedza
@@ -321,6 +326,10 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
 .cena h3{font-size:18px;margin-bottom:8px}
 .cena p{font-size:15px;color:#4A5A55}
 .kim p{max-width:64ch;margin-bottom:14px}
+.kim-wiersz{display:flex;gap:24px;align-items:flex-start;margin-bottom:14px}
+.portret{width:180px;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:center 30%;flex-shrink:0;
+  border-radius:12px;border:1px solid var(--linia)}
+@media(max-width:640px){.kim-wiersz{flex-direction:column;gap:16px}}
 .przyklad-nota{font-size:14.5px;color:#5A6A65;margin:-8px 0 18px}
 .przyklad-kroki{max-width:64ch}
 .przyklad-kroki dt{font-weight:700;color:var(--sygnal);margin-top:14px}
