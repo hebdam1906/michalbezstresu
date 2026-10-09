@@ -19,10 +19,12 @@ import { ROZMOWCA, RUNDY, WYNIKI } from '../../data/symulator-podwyzka.js';
  * zgodzie (Trackery.astro wstrzykuje fbq dopiero po `mbs:zgoda`).
  */
 const MAX = RUNDY.length * 2;
+// Schema FAQPage — te same pytania co w sekcji „Najczęstsze pytania” (Klaudiusz, 9.10).
+const FAQ_LD = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Czy symulator jest bezpłatny?", "acceptedAnswer": {"@type": "Answer", "text": "Tak. Nie wymaga rejestracji ani podawania maila i nie zapisuje Twoich odpowiedzi."}}, {"@type": "Question", "name": "Ile trwa symulacja rozmowy o podwyżce?", "acceptedAnswer": {"@type": "Answer", "text": "Około trzech minut — pięć sytuacji, w każdej trzy odpowiedzi do wyboru i krótki komentarz."}}, {"@type": "Question", "name": "Czy symulator mówi, ile powinienem zarabiać?", "acceptedAnswer": {"@type": "Answer", "text": "Nie. Pomaga przećwiczyć sposób prowadzenia rozmowy. Kwotę warto oprzeć na raportach płacowych dla Twojego stanowiska i regionu. Symulator nie jest poradą prawną ani płacową."}}, {"@type": "Question", "name": "Kiedy najlepiej rozmawiać o podwyżce?", "acceptedAnswer": {"@type": "Answer", "text": "Zanim firma zamknie budżet na kolejny rok — często kilka miesięcy przed oceną roczną. Zapytaj przełożonego, kiedy w Twojej firmie zaczyna się planowanie."}}]};
 ---
 <Layout
   title="Symulator rozmowy o podwyżce — przećwicz ją, zanim pójdziesz do szefa | Michał bez Stresu"
-  description="5 sytuacji, które padają w prawie każdej rozmowie o podwyżce. Wybierz, co odpowiesz, i zobacz, jak to słyszy przełożony po drugiej stronie stołu. 3 minuty, bez rejestracji."
+  description="Bezpłatny symulator rozmowy o podwyżce: 5 sytuacji, które padają w każdej takiej rozmowie, i to, jak Twoje odpowiedzi słyszy przełożony. 3 minuty, bez rejestracji."
 >
   <Nav />
 
@@ -82,9 +84,38 @@ const MAX = RUNDY.length * 2;
       <p class="nota">Symulator to ćwiczenie, nie porada prawna ani płacowa.</p>
     </section>
 
-    <p class="odcinek-link">Skąd te odpowiedzi? Cały mechanizm podwyżek — kto decyduje,
-      kiedy i na jakiej podstawie — wyjaśniam w odcinku
-      <a href="/odcinki/jak-rozmawiac-o-podwyzce/">Jak rozmawiać o podwyżce z szefem</a>.</p>
+    <section class="poradnik">
+      <h2>Jak przygotować się do rozmowy o podwyżce</h2>
+      <p>Rozmowa o podwyżce rzadko rozstrzyga się w pokoju, w którym siedzisz z szefem. Rozstrzyga się
+        wcześniej — w tym, z czym na nią przychodzisz — i później, kiedy Twój przełożony musi Twoją prośbę
+        obronić wyżej. Dlatego przygotowanie jest ważniejsze niż sama rozmowa.</p>
+      <p><strong>Trzy rzeczy do zrobienia przed rozmową:</strong></p>
+      <ol class="poradnik-lista">
+        <li><strong>Zbierz konkrety z ostatniego roku.</strong> Nie „dużo pracuję”, tylko co się zmieniło: nowe
+          obowiązki, projekty, liczby. Dwa, trzy zdania, które przełożony może przepisać wprost do wniosku.</li>
+        <li><strong>Sprawdź, ile płaci rynek.</strong> Raporty płacowe i ogłoszenia dla Twojego stanowiska
+          w Twoim regionie. Przychodzisz z kwotą i jej źródłem, a nie z prośbą „o cokolwiek”.</li>
+        <li><strong>Zapytaj o kalendarz budżetu.</strong> W wielu firmach pula na podwyżki jest ustalana miesiące
+          wcześniej. Lepiej wejść do planowania, niż prosić, gdy budżet jest zamknięty.</li>
+      </ol>
+      <p><strong>Dlaczego warto przećwiczyć rozmowę, a nie tylko ją przemyśleć?</strong> Bo najtrudniejsze
+        momenty są przewidywalne — „budżety są zamknięte”, „ile chciałbyś dostać?”, „muszę to przemyśleć” —
+        a mimo to większość osób słyszy je pierwszy raz dopiero przy stole. Odpowiedź wypowiedziana wcześniej
+        choć raz, nawet do siebie, przychodzi spokojniej. Symulator powyżej służy właśnie temu: w trzy minuty
+        przechodzisz przez pięć takich momentów i widzisz, jak Twoje słowa brzmią z drugiej strony stołu.</p>
+      <p><strong>Po symulatorze:</strong> wróć do rund, w których wybrałeś/aś odpowiedź za 0 punktów,
+        i przeczytaj komentarz „Z drugiej strony stołu”. Zapisz jedno zdanie, którego chcesz użyć w prawdziwej
+        rozmowie. Jeśli chcesz zrozumieć, jak wygląda cała droga podwyżki w firmie — od budżetu po kalibrację —
+        obejrzyj <a href="/odcinki/jak-rozmawiac-o-podwyzce/">odcinek o rozmowie o podwyżce</a>. A jeśli masz
+        przed sobą konkretną rozmowę, zacznij od <a href="/checklista/">checklisty „Przygotuj się do trudnej rozmowy”</a>.</p>
+
+      <h2>Najczęstsze pytania</h2>
+        <details class="faq-item"><summary>Czy symulator jest bezpłatny?</summary><p>Tak. Nie wymaga rejestracji ani podawania maila i nie zapisuje Twoich odpowiedzi.</p></details>
+        <details class="faq-item"><summary>Ile trwa symulacja rozmowy o podwyżce?</summary><p>Około trzech minut — pięć sytuacji, w każdej trzy odpowiedzi do wyboru i krótki komentarz.</p></details>
+        <details class="faq-item"><summary>Czy symulator mówi, ile powinienem zarabiać?</summary><p>Nie. Pomaga przećwiczyć sposób prowadzenia rozmowy. Kwotę warto oprzeć na raportach płacowych dla Twojego stanowiska i regionu. Symulator nie jest poradą prawną ani płacową.</p></details>
+        <details class="faq-item"><summary>Kiedy najlepiej rozmawiać o podwyżce?</summary><p>Zanim firma zamknie budżet na kolejny rok — często kilka miesięcy przed oceną roczną. Zapytaj przełożonego, kiedy w Twojej firmie zaczyna się planowanie.</p></details>
+    </section>
+    <script type="application/ld+json" set:html={JSON.stringify(FAQ_LD)} />
   </main>
 
   <Stopka />
@@ -245,5 +276,13 @@ const MAX = RUNDY.length * 2;
 .wynik-cta{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;max-width:460px}
 .wynik-cta .btn{text-align:center}
 .nota{margin-top:16px;font-size:13px;color:#6A7A75}
-.odcinek-link{margin-top:36px;font-size:15.5px;color:#4A5A55;max-width:62ch}
+.poradnik{margin-top:48px;padding-top:32px;border-top:1px solid var(--linia);max-width:66ch}
+.poradnik h2{font-size:clamp(22px,3vw,28px);margin:0 0 14px}
+.poradnik h2:not(:first-child){margin-top:36px}
+.poradnik p{margin-bottom:14px;font-size:16.5px;line-height:1.6}
+.poradnik-lista{padding-left:22px;margin:0 0 16px}
+.poradnik-lista li{margin-bottom:10px;font-size:16.5px;line-height:1.55}
+.faq-item{border-bottom:1px solid var(--linia);padding:14px 0}
+.faq-item summary{cursor:pointer;font-weight:600;font-size:16.5px}
+.faq-item p{margin:10px 0 0}
 </style>
