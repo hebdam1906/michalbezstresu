@@ -23,6 +23,12 @@ const {
    *  Musi byc wzajemna: jesli PL wskazuje na EN, to EN musi wskazywac na PL,
    *  inaczej Google ignoruje caly zestaw. */
   alternatywy = [],
+  /** Grafika podglądu linku (og:image), ścieżka od korzenia, 1200×630 JPG.
+   *  Dodane 12.10.2026: angielskie strony pokazywały na LinkedInie polską
+   *  grafikę „Znam zasady gry w korporacji”. Strona EN bez własnej grafiki
+   *  dostaje ogólną angielską (/og/og-en-home.jpg), PL — dotychczasową. */
+  ogObraz = undefined,
+  ogAlt = undefined,
 } = Astro.props;
 
 const ogLocale = lang === 'en' ? 'en_GB' : 'pl_PL';
@@ -31,7 +37,11 @@ const ogLocale = lang === 'en' ? 'en_GB' : 'pl_PL';
 // Bez tego Google widzi ten sam materiał pod kilkoma adresami i sam wybiera, który
 // uznać za główny.
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL('/og-michal-bez-stresu.jpg', Astro.site).href;
+const ogSciezka = ogObraz ?? (lang === 'en' ? '/og/og-en-home.jpg' : '/og-michal-bez-stresu.jpg');
+const ogImage = new URL(ogSciezka, Astro.site).href;
+const ogImageAlt = ogAlt ?? (lang === 'en'
+  ? 'Michał bez Stresu — difficult conversations at work, from both sides of the table'
+  : 'Michał bez Stresu — znam zasady gry w korporacji');
 
 // Jeden graf na całą stronę: kim jest autor i czym jest serwis. Person spina
 // profile w social mediach (sameAs), dzięki czemu wyszukiwarki i modele językowe
@@ -99,7 +109,7 @@ const jsonLd = {
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:type" content="image/jpeg" />
-  <meta property="og:image:alt" content="Michał bez Stresu — znam zasady gry w korporacji" />
+  <meta property="og:image:alt" content={ogImageAlt} />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
