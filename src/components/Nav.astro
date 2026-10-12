@@ -9,8 +9,10 @@
  * ⚠️ Angielskie menu prowadzi WYŁĄCZNIE do stron, które istnieją po angielsku.
  * Nie ma tu odpowiedników „Odcinki", „Konsultacje" czy „Książka" — te treści
  * są po polsku i nie udajemy, że jest inaczej. Ostatnia pozycja, „Polski",
- * mówi to wprost, więc kliknięcie logo (które prowadzi na polską stronę
- * główną) nie jest dla nikogo zaskoczeniem.
+ * mówi to wprost.
+ *
+ * 12.10.2026: doszła angielska strona powitalna `/en/` — pozycja „Home”,
+ * a logo w wersji EN prowadzi teraz na `/en/`, nie na polską główną.
  *
  * Dochodzi nowa angielska strona → dopisujemy ją TUTAJ, nie w kopii komponentu.
  */
@@ -19,6 +21,7 @@ const { lang = 'pl' } = Astro.props;
 
 const pozycje = lang === 'en'
   ? [
+      { href: '/en/', etykieta: 'Home' },
       { href: '/en/articles/cost-of-difficult-conversations/', etykieta: 'Article' },
       { href: '/en/checklist/', etykieta: 'Free checklist' },
       { href: '/en/contact/', etykieta: 'Workshops' },
@@ -36,7 +39,7 @@ const pozycje = lang === 'en'
 
 <nav>
   <div class="wrap nav-in">
-    <a class="logo" href="/">Michał <span>bez Stresu</span></a>
+    <a class="logo" href={lang === 'en' ? '/en/' : '/'}>Michał <span>bez Stresu</span></a>
     <ul class="nav-links">
       {pozycje.map((x) => (
         <li>

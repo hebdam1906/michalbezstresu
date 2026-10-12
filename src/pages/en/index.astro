@@ -1,0 +1,125 @@
+---
+/**
+ * /en/ — angielska strona powitalna z dwiema ścieżkami (12.10.2026).
+ *
+ * Brief Klaudiusza `Klaudiusz-do-Marcina_strona-EN-i-seria-maili-EN_12-10.md`.
+ * Cel: od posta 27.10 linki z grup LinkedIn (po angielsku, wt i pt 9:00)
+ * idą tutaj, a nie wprost na checklistę i artykuł.
+ *
+ * Zasady jak w ścieżce EN z 24.09: lang="en", og:locale en_GB, brytyjska
+ * pisownia, Nav i Stopka z lang="en". hreflang en ↔ pl (strona główna),
+ * x-default = PL. Odpowiednik dopisany na `/` w index.astro.
+ *
+ * ⚠️ W „About” NIE ma „Lean Six Sigma Black Belt”, choć jest w briefie:
+ * Michał tego certyfikatu nie ma (usunięty ze strony w commicie 478a005).
+ *
+ * Świadomie BEZ: konsultacji indywidualnych i cen (konsultacje są po polsku),
+ * odcinków, polskiego newslettera.
+ */
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Stopka from '../../components/Stopka.astro';
+import zdjecie from '../../assets/michal-hebda.jpg';
+
+const kanon = 'https://www.michalbezstresu.pl/en/';
+const tytul = 'Michał bez Stresu — difficult conversations at work, from both sides of the table';
+const opis =
+  'Twenty years in corporate operations, on both sides of the table. Practical help for the ' +
+  'conversations your career depends on — for employees and for managers.';
+
+const alternatywy = [
+  { hreflang: 'pl', href: 'https://www.michalbezstresu.pl/' },
+  { hreflang: 'en', href: kanon },
+  { hreflang: 'x-default', href: 'https://www.michalbezstresu.pl/' },
+];
+---
+
+<Layout lang="en" title={tytul} description={opis} alternatywy={alternatywy}>
+  <Nav lang="en" />
+
+  <header class="en-hero">
+    <div class="wrap">
+      <div class="eyebrow mono">Michał bez Stresu</div>
+      <h1>The conversations your career depends on</h1>
+      <p class="lead">I spent twenty years in financial operations at international banks — first
+        being reviewed, then running reviews, promotions and exits as a manager. Now I write about
+        what actually happens in those conversations, and what you can do about it.</p>
+    </div>
+  </header>
+
+  <section class="sciezki">
+    <div class="wrap kafle">
+      <article class="kafel">
+        <h2>I'm facing a difficult conversation at work</h2>
+        <p>A performance review, an improvement plan, a restructuring, a manager who changed
+          overnight. Start with the free checklist: what to write down after a hard conversation,
+          and where to keep it.</p>
+        <div class="akcje">
+          <a class="btn btn-main" href="/en/checklist/">Get the free checklist</a>
+        </div>
+      </article>
+
+      <article class="kafel">
+        <h2>I lead people or work in HR / L&amp;D</h2>
+        <p>One badly handled conversation costs a company 20–50 hours. Here is how to estimate it
+          in your own organisation, and what brings it down.</p>
+        <div class="akcje">
+          <a class="btn btn-main" href="/en/articles/cost-of-difficult-conversations/">Read the article</a>
+          <a class="btn btn-sec" href="/en/contact/">Workshops for managers</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="ksiazka">
+    <div class="wrap waska">
+      <div class="eyebrow mono">The book</div>
+      <h2><em>Both Sides of the Table</em></h2>
+      <p>What really happens in the conversations your job depends on. The Polish edition comes
+        out on 2 November; the English edition is in preparation.</p>
+      <a class="btn btn-main" href="/en/book/">Join the waitlist</a>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="wrap waska about-in">
+      <Image src={zdjecie} alt="Michał Hebda" width={160} height={160} class="foto" />
+      <div>
+        <div class="eyebrow mono">About</div>
+        <p><strong>Michał Hebda.</strong> Twenty years in corporate operations — settlement, fund
+          accounting, team leadership — at international financial institutions. Based in Kraków,
+          working in Polish and English.</p>
+      </div>
+    </div>
+  </section>
+
+  <Stopka lang="en" />
+</Layout>
+
+<style>
+.en-hero{background:var(--sygnal);color:#F2F7F5;padding:72px 0 64px}
+.en-hero .eyebrow{color:var(--marker);font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:18px}
+.en-hero h1{font-family:var(--disp);font-weight:500;color:#fff;font-size:clamp(32px,5.5vw,54px);line-height:1.08;max-width:22ch;margin:0 0 20px}
+.en-hero .lead{font-size:clamp(17px,2.2vw,20px);color:#CFE0DA;max-width:58ch}
+.sciezki{padding:56px 0}
+.kafle{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:760px){.kafle{grid-template-columns:1fr}}
+.kafel{background:#fff;border:1px solid var(--linia);border-radius:14px;padding:30px 28px;display:flex;flex-direction:column}
+.kafel h2{font-family:var(--disp);font-weight:500;font-size:clamp(22px,2.6vw,27px);line-height:1.2;margin:0 0 12px}
+.kafel p{color:#3C4A46;flex:1;margin:0 0 22px}
+.akcje{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-block;padding:13px 20px;border-radius:10px;font-weight:700;font-size:15.5px;text-decoration:none;text-align:center}
+.btn-main{background:var(--sygnal);color:#fff}
+.btn-sec{border:1.5px solid var(--sygnal);color:var(--sygnal)}
+.waska > *{max-width:760px}
+.ksiazka{padding:8px 0 56px}
+.ksiazka .eyebrow,.about .eyebrow{color:var(--sygnal);font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.ksiazka h2{font-family:var(--disp);font-weight:500;font-size:clamp(26px,3.4vw,36px);margin:0 0 10px}
+.ksiazka p{color:#3C4A46;margin:0 0 20px;max-width:56ch}
+.about{padding:40px 0 72px;border-top:1px solid var(--linia)}
+.about-in{display:flex;gap:26px;align-items:center}
+@media(max-width:560px){.about-in{flex-direction:column;align-items:flex-start}}
+.about :global(.foto){width:120px;height:120px;border-radius:50%;object-fit:cover;flex:none}
+.about p{color:#3C4A46;margin:0}
+</style>

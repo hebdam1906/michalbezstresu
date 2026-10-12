@@ -9,8 +9,15 @@ import Produkty from '../components/Produkty.astro';
 import PoCoToRobie from '../components/PoCoToRobie.astro';
 import OMnie from '../components/OMnie.astro';
 import Stopka from '../components/Stopka.astro';
+
+/* hreflang z angielską stroną powitalną /en/ (12.10.2026) — para musi być wzajemna. */
+const alternatywy = [
+  { hreflang: 'pl', href: 'https://www.michalbezstresu.pl/' },
+  { hreflang: 'en', href: 'https://www.michalbezstresu.pl/en/' },
+  { hreflang: 'x-default', href: 'https://www.michalbezstresu.pl/' },
+];
 ---
-<Layout>
+<Layout alternatywy={alternatywy}>
   <Nav />
   <Hero />
   {/* Ścieżka startowa: pod powitaniem, nad listą odcinków (brief Klaudiusza 16.09) */}
