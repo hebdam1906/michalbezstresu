@@ -1,0 +1,94 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+/**
+ * /witaj/ — wideo powitalne dla nowych subskrybentów (12.10.2026).
+ *
+ * Brief Klaudiusza z 5.10 + aktualizacja 12.10. Ruch przychodzi WYŁĄCZNIE
+ * z maila powitalnego (MailerLite, „Simple welcome email”), z linku
+ * ?utm_source=mailerlite&utm_medium=email&utm_campaign=powitanie-wideo.
+ *
+ * - `noindex` + wykluczenie w astro.config.mjs (sitemap) — strona tylko dla
+ *   subskrybentów. robots.txt celowo bez Disallow (patrz komentarz tam).
+ * - Dwa pliki wideo: pion 9:16 na telefon, poziom 16:9 od 720 px. Oba
+ *   `preload="metadata"`, więc przeglądarka nie ściąga drugiego filmu.
+ * - Napisy wgrane w obraz (oglądanie bez dźwięku). Bez autoplay.
+ * - Pomiar: Vercel Web Analytics (odsłona) + event `witaj_play` przy
+ *   pierwszym odtworzeniu. Odczyt ok. 3.11.
+ * - Nagranie: Scenki/Newsletter - powitanie.mov, jedno ujęcie 5,9–31,0 s.
+ */
+const CHECKLISTA = 'https://www.michalbezstresu.pl/checklista-dokumentowanie.pdf';
+const YT = 'https://www.youtube.com/@michalbezstresu';
+---
+<Layout
+  title="Cześć, tu Michał — Michał bez Stresu"
+  description="Krótkie powitanie od Michała dla nowych subskrybentów."
+  noindex
+>
+  <main class="wt">
+    <div class="wt-wrap">
+      <div class="brand mono">Michał bez Stresu</div>
+      <h1>Cześć, tu Michał <span aria-hidden="true">👋</span></h1>
+
+      <div class="wideo">
+        <video class="v-pion" controls playsinline preload="metadata"
+          poster="/witaj/witaj-poster-9x16.jpg" width="1080" height="1920">
+          <source src="/witaj/witaj-9x16.mp4" type="video/mp4" />
+        </video>
+        <video class="v-poziom" controls playsinline preload="metadata"
+          poster="/witaj/witaj-poster-16x9.jpg" width="1920" height="1080">
+          <source src="/witaj/witaj-16x9.mp4" type="video/mp4" />
+        </video>
+      </div>
+
+      <p class="sub">Dziękuję, że jesteś. Przez lata siedziałem po obu stronach stołu —
+        jako pracownik i jako manager. Co środę piszę, jak przejść przez trudne rozmowy
+        w pracy spokojniej.</p>
+      <p class="sub">Na początek: checklista, a potem dowolny odcinek na YouTube.</p>
+
+      <div class="cta">
+        <a class="btn btn-main" href={CHECKLISTA}>Pobierz checklistę (PDF)</a>
+        <a class="btn btn-sec" href={YT} target="_blank" rel="noopener">Obejrzyj odcinek na YouTube</a>
+      </div>
+      <p class="maly"><a href="/konsultacje/">Konsultacje 1:1</a></p>
+    </div>
+  </main>
+
+  <script is:inline>
+    (function () {
+      var raz = false;
+      document.querySelectorAll('.wideo video').forEach(function (v) {
+        v.addEventListener('play', function () {
+          if (raz) return; raz = true;
+          try { if (window.va) window.va('event', { name: 'witaj_play', data: { format: v.className } }); } catch (e) {}
+        });
+      });
+    })();
+  </script>
+</Layout>
+
+<style>
+.wt{min-height:100vh;background:var(--sygnal);color:#F2F7F5;padding:40px 20px 56px;
+  display:flex;justify-content:center}
+.wt-wrap{width:100%;max-width:640px}
+.brand{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--marker);margin-bottom:24px}
+.wt h1{font-family:var(--disp);font-weight:500;color:#fff;font-size:clamp(28px,5vw,42px);
+  line-height:1.12;margin:0 0 20px}
+.wideo{margin:0 0 24px}
+.wideo video{display:block;width:100%;height:auto;border-radius:14px;background:#16211D}
+.v-pion{max-width:400px;margin:0 auto}
+.v-poziom{display:none !important}
+@media (min-width:720px){
+  .v-pion{display:none !important}
+  .v-poziom{display:block !important}
+}
+.wt .sub{font-size:clamp(16px,2.2vw,19px);color:#CFE0DA;max-width:52ch;margin:0 0 12px}
+.cta{display:flex;flex-direction:column;gap:12px;margin:24px 0 18px}
+@media (min-width:720px){.cta{flex-direction:row}}
+.btn{display:inline-block;text-align:center;padding:15px 22px;border-radius:10px;
+  font-weight:700;font-size:16.5px;text-decoration:none}
+.btn-main{background:var(--marker);color:#16211D}
+.btn-sec{border:1.5px solid #CFE0DA;color:#fff}
+.maly{font-size:14px}
+.maly a{color:#CFE0DA}
+</style>
