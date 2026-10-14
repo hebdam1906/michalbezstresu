@@ -2,30 +2,94 @@
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import Stopka from '../components/Stopka.astro';
+import { Image } from 'astro:assets';
+import zdjecie from '../assets/michal-hebda.jpg';
 
-// 17.09.2026 — minimalna korekta (brief Klaudiusza): zdjęty roboczy tytuł
-// „Korporacja bez stresu" i roboczy spis 7 rozdziałów. Tytułu NIE podajemy do
-// decyzji 21.09 (głosowanie na liście), daty i ceny też nie. Pełne przepisanie
-// strony (tytuł, okładka, 15 rozdziałów, wersje, ISBN) — osobne zadanie po 21.09.
+/**
+ * /ksiazka/ — „Z obu stron stołu”, lista premierowa (14.10.2026).
+ *
+ * Plan premiery (Klaudiusz, 09.10 i 13.10): nowa /ksiazka/ z fragmentem
+ * i miejscem na opinie, zapis = grupa MailerLite „Ksiazka-premiera”
+ * (endpoint /api/ksiazka). Okładka NB1 (decyzja Michała 14.10).
+ *
+ * ⚠️ BEZ CENY I BEZ SPRZEDAŻY do 2.11 (status PUP Michała do 31.10).
+ *    2.11: przycisk „Kup” → EasyCart (produkt 4) — osobna zmiana.
+ * ⚠️ W „O autorze” nie ma Lean Six Sigma — Michał nie ma tego certyfikatu.
+ *
+ * OPINIE: tablica `opinie` niżej. Pusta = sekcja się nie wyświetla.
+ * Dopisujemy cytaty recenzentów (termin opinii 29.10) — imię, rola, tekst.
+ */
+const opinie: { tekst: string; kto: string; rola: string }[] = [];
+
+const czesci = [
+  {
+    nazwa: 'Część I. Przetrwanie',
+    rozdzialy: [
+      'Ten mail właśnie stał się dokumentem',
+      'Przygotowaliśmy dla Ciebie plan poprawy',
+      'Czy to już mobbing',
+      'Firma notuje od pierwszego dnia',
+      'Twoja ocena została napisana, zanim usiadłeś do rozmowy',
+      'Budzę się o trzeciej nad ranem',
+      'Najbardziej zmarnowane piętnaście minut',
+      'Zaproszenie bez tematu',
+    ],
+  },
+  {
+    nazwa: 'Część II. Gra o rozwój',
+    rozdzialy: [
+      'Staraj się, staraj',
+      'Pokój, w którym Cię nie ma',
+      'Nowy tylko dla Ciebie',
+      'Zmiana pracy',
+      'Budowanie pozycji',
+      'Restrukturyzacja',
+      'Trudny zespół z fotela menedżera',
+    ],
+  },
+];
+let nr = 0;
 ---
 <Layout
-  title="Książka — Michał bez Stresu"
-  description="Książka o rozmowach, od których zależy Twoja praca — od negatywnego feedbacku i planu naprawczego po podwyżkę, awans i restrukturyzację. Z obu stron stołu. Tekst jest skończony, książka szykuje się do wydania."
+  title="Z obu stron stołu — książka Michała Hebdy | premiera 2 listopada"
+  description="Co dzieje się w rozmowach, od których zależy Twoja praca: feedback, plan naprawczy, ocena roczna, podwyżka, awans, restrukturyzacja. E-book ukaże się 2 listopada — zapisz się na listę premierową."
+  ogObraz="/og/og-ksiazka.jpg"
+  ogAlt="Z obu stron stołu — książka Michała Hebdy, premiera 2 listopada"
 >
   <Nav />
 
-  <header class="phead">
-    <div class="wrap">
-      <div class="eyebrow">Książka</div>
-      <h1>Książka jest napisana.</h1>
-      <p class="lead">Piętnaście rozdziałów o tym, co dzieje się w rozmowach, od których zależy
-        Twoja praca — od negatywnego feedbacku i planu naprawczego, przez ocenę roczną,
-        podwyżkę i awans, aż po restrukturyzację i pierwszy własny zespół.
-        Wszystko z obu stron stołu.</p>
-      <p class="lead">Tekst jest skończony, książka szykuje się do wydania. Szczegóły — tytuł,
-        data i cena — pojawią się tutaj wkrótce.</p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="/#checklista">Chcę wiedzieć pierwszy — zapisz mnie na listę</a>
+  <header class="khero">
+    <div class="wrap khero-in">
+      <div class="khero-txt">
+        <div class="eyebrow">Książka · premiera e-booka 2 listopada</div>
+        <h1>Z obu stron stołu</h1>
+        <p class="podtytul">Co dzieje się w rozmowach, od których zależy Twoja praca</p>
+        <p class="lead">Piętnaście rozdziałów o rozmowach, które zmieniają kariery: od maila,
+          który właśnie stał się dokumentem, przez plan naprawczy, ocenę roczną, podwyżkę
+          i awans, aż po restrukturyzację i własny trudny zespół. Każda z nich opisana
+          z obu stron stołu — tak, jak ją widzi pracownik, i tak, jak ją widzi menedżer.</p>
+
+        <form class="zapis" id="zapis" novalidate>
+          <div class="zapis-tytul">Zapisz się na listę premierową</div>
+          <p class="zapis-opis">2 listopada dostaniesz maila jako pierwszy — razem z ceną premierową.
+            Jeden mail o premierze, bez spamu.</p>
+          <div class="pola">
+            <input type="text" name="imie" placeholder="Imię (opcjonalnie)" autocomplete="given-name" maxlength="80" />
+            <input type="email" name="email" placeholder="Twój e-mail" autocomplete="email" required maxlength="160" />
+          </div>
+          <input type="text" name="www" class="pulapka" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <label class="zgoda">
+            <input type="checkbox" name="zgoda" required />
+            <span>Chcę dostać od Michała bez Stresu informację o premierze książki.
+              Wypiszesz się jednym kliknięciem. <a href="/prywatnosc/">Polityka prywatności</a>.</span>
+          </label>
+          <button class="btn btn-primary" type="submit">Zapisz mnie na listę</button>
+          <p class="komunikat" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+      <div class="okladka">
+        <img src="/ksiazka/okladka-nb1-600x960.jpg" width="600" height="960"
+          alt="Okładka książki „Z obu stron stołu” Michała Hebdy" loading="eager" />
       </div>
     </div>
   </header>
@@ -35,60 +99,170 @@ import Stopka from '../components/Stopka.astro';
       <div class="eyebrow">Dla kogo</div>
       <h2>Jeśli poznajesz choć jedno zdanie — to książka dla Ciebie</h2>
       <div class="quotes">
-        <blockquote>„Dostałem feedback i do wieczora nie mogłem się pozbierać.”</blockquote>
+        <blockquote>„Dostałem plan naprawczy i nie wiem, czy mam go podpisać.”</blockquote>
         <blockquote>„Boję się oceny rocznej, choć robię swoje dobrze.”</blockquote>
-        <blockquote>„Nie wiem, czy to, co się dzieje, jest jeszcze normalne.”</blockquote>
-        <blockquote>„Chcę odejść, ale bez palenia mostów.”</blockquote>
+        <blockquote>„Pracuję więcej niż inni, a awansują inni.”</blockquote>
+        <blockquote>„Dostałem zespół, który wolałby kogoś innego.”</blockquote>
       </div>
     </div>
   </section>
 
+  <section>
+    <div class="wrap waska">
+      <div class="eyebrow">Fragment · rozdział 2</div>
+      <h2>Pierwsze 48 godzin: trzy błędy, których nie da się cofnąć</h2>
+      <div class="fragment">
+        <p>Dostałeś dokument. Emocje robią swoje. I właśnie w tych pierwszych dwóch dobach ludzie
+          popełniają błędy, które ustawiają cały dalszy przebieg.</p>
+        <p><strong>Błąd pierwszy: podpisanie czegokolwiek w trakcie spotkania.</strong>
+          Masz prawo powiedzieć: „Chcę się z tym dokumentem spokojnie zapoznać. Wrócę z podpisem
+          i ewentualnymi uwagami do końca tygodnia.” To jest normalne, profesjonalne zachowanie —
+          nikt rozsądny nie odczyta go jako wrogości. Dla uczciwości: podpis pod PIP-em zwykle
+          potwierdza, że dokument otrzymałeś, a nie że się z nim zgadzasz. Ale nawet wtedy:
+          najpierw czytasz na spokojnie, potem podpisujesz.</p>
+        <p><strong>Błąd drugi: emocjonalna kontrofensywa.</strong>
+          Długi mail o niesprawiedliwości, wysłany wieczorem w dniu otrzymania planu. Wszystko,
+          co napiszesz, staje się dokumentem. Twoja pisemna odpowiedź powstanie — ale za dwa,
+          trzy dni, na zimno, z faktami.</p>
+        <p><strong>Błąd trzeci, najgroźniejszy: rzucenie papierami.</strong>
+          „Skoro tak, to ja dziękuję.” Rozumiem tę emocję doskonale — w tym pokoju ona jest
+          najgłośniejsza.</p>
+        <p>Opowiem Ci, jak to wygląda z drugiej strony stołu, bo mam w pamięci jeden PIP, którego
+          nie zapomnę. Wręczałem go osobiście. Plan był z tych pisanych pod sukces — chodziło
+          o realną poprawę jakości pracy, cele były do zrobienia, a ja siedziałem na tym spotkaniu
+          po to, żeby to wszystko wyjaśnić. Nie zdążyłem. W momencie, w którym padło słowo „plan
+          naprawczy”, ta osoba tak się zdenerwowała, że przestała słuchać. Stwierdziła, że w takim
+          razie rezygnuje i składa wypowiedzenie. (…)</p>
+        <p class="dalej">W książce dalej: <strong>test pięciu pytań</strong> — jak w kwadrans
+          rozpoznać, czy dostałeś plan pisany pod sukces, czy pod formalność — i gotowe zdania
+          na każdy etap planu.</p>
+      </div>
+    </div>
+  </section>
 
-  <section class="band author">
-    <div class="wrap author-in">
+  <section class="band">
+    <div class="wrap waska">
+      <div class="eyebrow">Spis treści</div>
+      <h2>Piętnaście rozmów, od których zależy Twoja praca</h2>
+      {czesci.map((c) => (
+        <div class="czesc">
+          <h3>{c.nazwa}</h3>
+          <ol class="spis">
+            {c.rozdzialy.map((r) => { nr += 1; return (<li><span class="cnr">{String(nr).padStart(2, '0')}</span>{r}</li>); })}
+          </ol>
+        </div>
+      ))}
+      <p class="sub uwaga">Do tego wstęp, zakończenie „Co z tym zrobić w poniedziałek” i słowniczek
+        pojęć. Książka ukaże się jako e-book (EPUB i PDF).</p>
+    </div>
+  </section>
+
+  {opinie.length > 0 && (
+    <section>
+      <div class="wrap">
+        <div class="eyebrow">Opinie</div>
+        <h2>Co mówią pierwsi czytelnicy</h2>
+        <div class="quotes">
+          {opinie.map((o) => (
+            <blockquote>„{o.tekst}”<footer><strong>{o.kto}</strong>, {o.rola}</footer></blockquote>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section>
+    <div class="wrap waska autor">
+      <Image src={zdjecie} alt="Michał Hebda" width={180} height={180} class="foto" />
       <div>
         <div class="eyebrow">Autor</div>
-        <h2>20 lat w korporacji. Znam zasady gry i uczę w nią grać.</h2>
-        <p class="sub">Przeszedłem przez feedbacki, oceny, plany naprawcze, reorganizacje
-          i trudne rozstania — z obu stron stołu. Piszę o tym, co przeżyłem i czego
-          nauczyłem innych, w formie, którą sam chciałbym dostać na początku drogi.</p>
-        <a class="btn btn-ghost" href="/#omnie">Poznaj mnie bliżej</a>
-      </div>
-      <div class="badge">
-        <span class="mono">notatka służbowa</span>
-        <p>„Nie napiszę Ci, że w korporacji jest łatwo.<br/>Napiszę, jak przejść przez trudne
-          momenty tak, żeby nie kosztowały Cię zdrowia.”</p>
+        <h2>Michał Hebda</h2>
+        <p class="sub">Przez dwadzieścia lat pracowałem w operacjach finansowych międzynarodowych
+          instytucji — najpierw jako specjalista, potem przez kilkanaście lat jako menedżer
+          prowadzący zespoły i działy. Siedziałem po obu stronach stołu: dostawałem oceny
+          i plany, a potem sam je wystawiałem i wręczałem. Ta książka jest tym, co chciałbym
+          dostać na początku tej drogi.</p>
       </div>
     </div>
   </section>
 
+  <section class="band koniec">
+    <div class="wrap waska">
+      <h2>Premiera 2 listopada</h2>
+      <p class="sub">Zapisz się na listę — dostaniesz maila w dniu premiery, razem z ceną premierową.</p>
+      <a class="btn btn-primary" href="#zapis">Zapisz mnie na listę</a>
+    </div>
+  </section>
 
   <Stopka />
+
+  <script is:inline>
+    (function () {
+      var f = document.getElementById('zapis');
+      if (!f) return;
+      var kom = f.querySelector('.komunikat');
+      var btn = f.querySelector('button[type=submit]');
+      f.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var email = f.email.value.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { kom.textContent = 'Sprawdź adres e-mail.'; kom.className = 'komunikat blad'; return; }
+        if (!f.zgoda.checked) { kom.textContent = 'Zaznacz zgodę, żebym mógł wysłać informację o premierze.'; kom.className = 'komunikat blad'; return; }
+        btn.disabled = true; kom.textContent = 'Zapisuję…'; kom.className = 'komunikat';
+        fetch('/api/ksiazka', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, imie: f.imie.value.trim(), zgoda: true, www: f.www.value })
+        }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+          .then(function (x) {
+            if (x.ok && x.d.ok) {
+              f.innerHTML = '<div class="zapis-ok"><strong>Jesteś na liście ✓</strong><br>2 listopada dostaniesz ode mnie maila o premierze — jako jeden z pierwszych.</div>';
+              try { if (window.va) window.va('event', { name: 'ksiazka_zapis' }); } catch (e) {}
+            } else { kom.textContent = (x.d && x.d.error) || 'Nie udało się zapisać. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; }
+          })
+          .catch(function () { kom.textContent = 'Brak połączenia. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; });
+      });
+    })();
+  </script>
 </Layout>
 
 <style>
-.phead{padding:72px 0 60px;background:linear-gradient(180deg,var(--mgla),var(--papier))}
-.phead h1{font-family:var(--disp);font-weight:500;font-size:clamp(34px,5.5vw,58px);line-height:1.1;margin-bottom:18px}
-.phead .lead + .lead{margin-top:14px}
-.phead .lead{font-size:clamp(17px,2.2vw,20px);color:#3C4A46;max-width:60ch}
-.cta-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:32px}
-.cta-note{font-size:14px;color:#5E6E68;max-width:34ch}
+.khero{padding:64px 0 56px;background:linear-gradient(180deg,var(--mgla),var(--papier))}
+.khero-in{display:grid;grid-template-columns:1.25fr .75fr;gap:48px;align-items:center}
+@media(max-width:860px){.khero-in{grid-template-columns:1fr}.okladka{order:-1;max-width:260px}}
+.khero h1{font-family:var(--disp);font-weight:500;font-size:clamp(36px,6vw,62px);line-height:1.05;margin:6px 0 8px}
+.podtytul{font-family:var(--disp);font-size:clamp(19px,2.4vw,24px);color:var(--sygnal);margin-bottom:18px}
+.khero .lead{font-size:clamp(16px,2vw,18.5px);color:#3C4A46;max-width:60ch}
+.okladka img{width:100%;height:auto;border-radius:6px;box-shadow:0 18px 40px rgba(22,33,29,.28)}
+.zapis{margin-top:30px;background:#fff;border:1px solid var(--linia);border-radius:14px;padding:24px;max-width:560px}
+.zapis-tytul{font-weight:700;font-size:19px;margin-bottom:4px}
+.zapis-opis{font-size:15px;color:#4A5A55;margin-bottom:14px}
+.pola{display:grid;grid-template-columns:1fr 1.3fr;gap:10px}
+@media(max-width:560px){.pola{grid-template-columns:1fr}}
+.zapis input[type=text],.zapis input[type=email]{width:100%;padding:13px 14px;border:1px solid #C9D6D1;border-radius:9px;font-size:16px;font-family:inherit}
+.pulapka{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.zgoda{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:#4A5A55;margin:14px 0 16px}
+.zgoda input{margin-top:3px}
+.zgoda a{color:var(--sygnal)}
+.komunikat{font-size:14px;margin-top:10px;min-height:1em}
+.komunikat.blad{color:#B3261E}
+.zapis-ok{font-size:16px;line-height:1.6;color:var(--atrament)}
 .band{background:var(--papier);border-top:1px solid var(--linia);border-bottom:1px solid var(--linia)}
-.quotes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:36px}
+.quotes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:30px}
 @media(max-width:680px){.quotes{grid-template-columns:1fr}}
 .quotes blockquote{background:var(--mgla);border-left:3px solid var(--szalwia);border-radius:0 10px 10px 0;padding:20px 22px;font-family:var(--disp);font-size:19px;color:var(--atrament)}
-.chapters{list-style:none;margin-top:40px;display:grid;gap:4px}
-.chapters li{display:flex;gap:22px;padding:22px 0;border-bottom:1px solid var(--linia)}
-.chapters li:last-child{border-bottom:none}
-.cnr{font-family:var(--mono);font-size:14px;color:var(--szalwia);padding-top:4px;min-width:34px}
-.chapters h3{font-size:21px;margin-bottom:6px}
-.chapters p{font-size:15.5px;color:#4A5A55;max-width:64ch}
-.author-in{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center}
-@media(max-width:820px){.author-in{grid-template-columns:1fr}}
-.badge{background:var(--sygnal);color:#F2F7F5;border-radius:14px;padding:30px 28px}
-.badge .mono{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--marker);display:block;margin-bottom:14px}
-.badge p{font-family:var(--disp);font-size:20px;line-height:1.45}
-.closing{text-align:center}
-.closing .sub{margin:0 auto 28px}
-.closing h2{margin-bottom:14px}
+.quotes footer{font-family:inherit;font-size:14px;margin-top:10px;color:#4A5A55}
+.waska{max-width:820px}
+.fragment{margin-top:24px;font-family:var(--disp);font-size:clamp(17px,2vw,19px);line-height:1.7;color:var(--atrament)}
+.fragment p{margin-bottom:16px}
+.fragment .dalej{font-family:inherit;font-size:16px;color:#4A5A55;border-top:1px solid var(--linia);padding-top:16px}
+.czesc{margin-top:28px}
+.czesc h3{font-size:16px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--sygnal);margin-bottom:6px}
+.spis{list-style:none;margin:0;padding:0}
+.spis li{display:flex;gap:18px;padding:12px 0;border-bottom:1px solid var(--linia);font-size:17px}
+.cnr{font-family:var(--mono);font-size:14px;color:var(--szalwia);min-width:28px;padding-top:2px}
+.uwaga{margin-top:20px}
+.autor{display:flex;gap:30px;align-items:center}
+@media(max-width:620px){.autor{flex-direction:column;align-items:flex-start}}
+.autor :global(.foto){width:140px;height:140px;border-radius:50%;object-fit:cover;flex:none}
+.koniec{text-align:center}
+.koniec .sub{margin:10px auto 24px}
 </style>
