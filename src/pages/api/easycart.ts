@@ -7,7 +7,7 @@
 //    losowania 16.11: kolumna zgoda_konkurs).
 // 2. Przy zakupie (product_assigned / single_product_bought) sprawdzamy prawo
 //    do dedykacji (lib/dedykacja: okno 2–8.11, lista premierowa, jeden PDF na
-//    zamówienie). Jeśli tak: PDF → prywatny bucket → link ważny 30 dni →
+//    zamówienie). Jeśli tak: PDF → prywatny bucket → link ważny rok →
 //    scenariusz Make (sekret „make_dedykacja_hook”) wysyła mail z Zoho (michal@).
 // Struktura payloadu EasyCart nie jest udokumentowana co do pola, więc pola
 // wyciągamy odpornie (szukamy po nazwach w całym JSON-ie); surowy JSON zostaje.
@@ -78,13 +78,13 @@ export const POST: APIRoute = async ({ request, url }) => {
   const sciezka = `dedykacje/${zamowienie.replace(/[^a-zA-Z0-9_-]/g, '_')}.pdf`;
   const up = await supabaseAdmin.storage.from('ksiazka-prywatne').upload(sciezka, w.pdf, { contentType: 'application/pdf', upsert: true });
   if (up.error) return ok({ ok: false, dedykacja: 'blad-zapisu' });
-  const { data: link } = await supabaseAdmin.storage.from('ksiazka-prywatne').createSignedUrl(sciezka, 60 * 60 * 24 * 30);
+  const { data: link } = await supabaseAdmin.storage.from('ksiazka-prywatne').createSignedUrl(sciezka, 60 * 60 * 24 * 365);
 
   const hook = await sekret('make_dedykacja_hook');
   if (hook && link?.signedUrl) {
     await fetch(hook, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, imie: w.imie ?? '', link: link.signedUrl, zamowienie, plik: 'Z-obu-stron-stolu_z-dedykacja.pdf' }),
+      body: JSON.stringify({ email, imie: w.imie ?? '', link: link.signedUrl, zamowienie }),
     }).catch(() => {});
   }
   return ok({ ok: true, dedykacja: 'wyslano-do-make' });
