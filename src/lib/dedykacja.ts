@@ -97,3 +97,27 @@ export async function pdfZDedykacja(imie: string | null): Promise<Uint8Array> {
   doc.setSubject(`Egzemplarz z dedykacją${imie ? ' dla ' + imie : ''}`);
   return await doc.save();
 }
+
+// ---------------------------------------------------------------------------
+// Wspólna logika prawa do dedykacji (używają /api/dedykacja i /api/easycart).
+// ---------------------------------------------------------------------------
+const OD = Date.parse('2026-11-02T00:00:00+01:00');
+const DO = Date.parse('2026-11-09T00:00:00+01:00');
+
+export async function przygotujDedykacje(a: { email: string; imie?: string; zamowienie: string; data?: string; test?: boolean }):
+  Promise<{ powod: string; pdf?: Uint8Array; imie?: string | null }> {
+  if (!supabaseAdmin) return { powod: 'brak-supabase' };
+  const email = a.email.trim().toLowerCase();
+  const kiedy = a.data ? Date.parse(a.data) : Date.now();
+  if (!a.test && !(kiedy >= OD && kiedy < DO)) return { powod: 'poza-okresem' };
+  const { data: osoba } = await supabaseAdmin.from('premiera_lista').select('email, imie').eq('email', email).maybeSingle();
+  if (!osoba && !a.test) return { powod: 'nie-na-liscie' };
+  if (!a.test) {
+    const { data: byl } = await supabaseAdmin.from('dedykacje_log').select('id').eq('zamowienie', a.zamowienie).maybeSingle();
+    if (byl) return { powod: 'juz-wyslano' };
+  }
+  const imie = normalizujImie(a.imie) ?? normalizujImie(osoba?.imie);
+  const pdf = await pdfZDedykacja(imie);
+  if (!a.test) await supabaseAdmin.from('dedykacje_log').insert({ zamowienie: a.zamowienie, email, imie_uzyte: imie, wynik: 'wygenerowano' });
+  return { powod: 'wygenerowano', pdf, imie };
+}

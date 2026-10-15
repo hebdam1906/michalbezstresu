@@ -16,10 +16,8 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 import { supabaseAdmin } from '../../lib/supabase';
 import { isAuthorized } from '../../lib/panel-auth';
-import { normalizujImie, pdfZDedykacja } from '../../lib/dedykacja';
+import { przygotujDedykacje } from '../../lib/dedykacja';
 
-const OD = Date.parse('2026-11-02T00:00:00+01:00');
-const DO = Date.parse('2026-11-09T00:00:00+01:00');
 
 const json = (b: unknown, s = 200) =>
   new Response(JSON.stringify(b), { status: s, headers: { 'Content-Type': 'application/json' } });
@@ -36,25 +34,11 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   const test = b.test === true; // test: pomija datę i log (tylko do sprawdzania wyglądu)
   if (!email || !zamowienie) return json({ error: 'Wymagane: email, zamowienie' }, 400);
 
-  const kiedy = b.data ? Date.parse(String(b.data)) : Date.now();
-  if (!test && !(kiedy >= OD && kiedy < DO)) return nic('poza-okresem');
-
-  const { data: osoba } = await supabaseAdmin.from('premiera_lista').select('email, imie').eq('email', email).maybeSingle();
-  if (!osoba && !test) return nic('nie-na-liscie');
-
-  if (!test) {
-    const { data: byl } = await supabaseAdmin.from('dedykacje_log').select('id').eq('zamowienie', zamowienie).maybeSingle();
-    if (byl) return nic('juz-wyslano');
-  }
-
-  const imie = normalizujImie(b.imie) ?? normalizujImie(osoba?.imie);
-  let pdf: Uint8Array;
-  try { pdf = await pdfZDedykacja(imie); }
+  let w;
+  try { w = await przygotujDedykacje({ email, imie: b.imie, zamowienie, data: b.data, test }); }
   catch (e: any) { return json({ error: 'Nie udało się wygenerować PDF', szczegoly: String(e?.message || e).slice(0, 200) }, 500); }
-
-  if (!test) {
-    await supabaseAdmin.from('dedykacje_log').insert({ zamowienie, email, imie_uzyte: imie, wynik: 'wygenerowano' });
-  }
+  if (!w.pdf) return nic(w.powod);
+  const pdf = w.pdf, imie = w.imie ?? null;
   return new Response(pdf, {
     status: 200,
     headers: {
