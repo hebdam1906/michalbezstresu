@@ -4,6 +4,10 @@
     {
       "path": "/api/panel/sync/",
       "schedule": "0 5 * * *"
+    },
+    {
+      "path": "/api/panel/premiera-zrzut/",
+      "schedule": "0 6 2 11 *"
     }
   ],
   "redirects": [
