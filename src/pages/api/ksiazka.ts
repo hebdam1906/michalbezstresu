@@ -16,6 +16,7 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
+import { przepusc, zaDuzo } from '../../lib/ratelimit';
 
 const GRUPA = '201320469525169413'; // „Ksiazka-premiera” (id grupy nie jest sekretem)
 const KLUCZ_ML = import.meta.env.MAILERLITE_API_KEY;
@@ -25,7 +26,8 @@ const json = (b: unknown, s = 200) =>
 const tekst = (v: unknown, max: number) => String(v ?? '').trim().slice(0, max);
 const czyMail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s);
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, clientAddress }) => {
+  if (!(await przepusc('ksiazka', clientAddress))) return zaDuzo();
   if (!KLUCZ_ML) return json({ error: 'Zapis chwilowo niedostępny. Spróbuj za kilka minut.' }, 503);
 
   let b: any;

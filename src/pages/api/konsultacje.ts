@@ -15,6 +15,7 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
+import { przepusc, zaDuzo } from '../../lib/ratelimit';
 import { supabaseAdmin } from '../../lib/supabase';
 import { createHash } from 'node:crypto';
 
@@ -36,6 +37,7 @@ function czyMail(s: string) {
 }
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
+  if (!(await przepusc('konsultacje', clientAddress))) return zaDuzo();
   if (!supabaseAdmin) return json({ error: 'Formularz chwilowo niedostępny.' }, 503);
 
   let b: any;

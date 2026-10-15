@@ -44,10 +44,13 @@ export default defineConfig({
     }),
   ],
 
-  // Astro 5: output:'static' (domyślny) obsługuje tryb mieszany.
+  // Astro 5/7: output:'static' (domyślny) obsługuje tryb mieszany.
   // Strony marketingowe (index, /ksiazka, /dla-firm, /media) są prerenderowane
   // statycznie. /panel i /api/* mają `export const prerender = false` → są
   // renderowane po stronie serwera (funkcje Vercel).
+  // Astro 7 (15.10.2026): domyślna kompresja HTML zjadała spacje między tekstem
+  // a linkiem/pogrubieniem („opisane wpolityce”). Wyłączona — strony 1:1 jak w Astro 5.
+  compressHTML: false,
   output: 'static',
   adapter: vercel(),
 

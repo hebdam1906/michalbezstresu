@@ -12,6 +12,7 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
+import { przepusc, zaDuzo } from '../../lib/ratelimit';
 import { supabaseAdmin } from '../../lib/supabase';
 import { createHash } from 'node:crypto';
 import { powiadom } from '../../lib/powiadom';
@@ -23,6 +24,7 @@ const hashIp = (ip: string) => createHash('sha256').update(`mbs:${ip}`).digest('
 const czyMail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s);
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
+  if (!(await przepusc('pytanie', clientAddress))) return zaDuzo();
   if (!supabaseAdmin) return json({ error: 'Coś nie zadziałało. Spróbuj za chwilę albo napisz wprost: michal@michalbezstresu.pl.' }, 503);
 
   let b: any;

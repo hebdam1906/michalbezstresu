@@ -33,6 +33,7 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
+import { przepusc, zaDuzo } from '../../lib/ratelimit';
 import { supabaseAdmin } from '../../lib/supabase';
 import { createHash } from 'node:crypto';
 
@@ -104,6 +105,7 @@ function atrybucja(a: any) {
 }
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
+  if (!(await przepusc('firmy', clientAddress))) return zaDuzo();
   // Tu jeszcze nie znamy języka (body nieodczytane), więc komunikat jest dwujęzyczny.
   if (!supabaseAdmin) {
     return json({ error: 'Formularz chwilowo niedostępny. · The form is temporarily unavailable.' }, 503);
