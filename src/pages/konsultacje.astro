@@ -279,6 +279,7 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
           kom.className = 'komunikat ok';
           kom.textContent = 'Dostałem. Odpowiadam w ciągu 48 godzin — sprawdź też zakładkę „Oferty” i spam, gdyby moja odpowiedź tam wpadła.';
           zglosKonwersje();
+          try { if (window.va) window.va('event', { name: 'konsultacje_wyslane' }); } catch (e) {}
         } catch (err) {
           kom.className = 'komunikat blad';
           kom.textContent = err.message;

@@ -1,0 +1,69 @@
+---
+/**
+ * Pomiar kliknięć i formularzy (Vercel Web Analytics, zdarzenia własne).
+ * 16.10.2026 — prośba Michała po analizie ruchu: widać wejścia na /konsultacje
+ * (1,7 tys./30 dni), ale nie widać, gdzie ludzie odpadają.
+ *
+ * Jeden nasłuchiwacz na całą stronę, bez zmian w poszczególnych podstronach.
+ * Bez ciasteczek i danych osobowych — zapisujemy tylko stronę, nazwę formularza
+ * albo cel linku. Treści wpisanej w pola NIGDY nie wysyłamy.
+ *
+ * Zdarzenia:
+ *   formularz_start   — pierwsze kliknięcie w pole formularza   {strona, formularz}
+ *   formularz_wyslij  — kliknięcie „Wyślij" (submit)            {strona, formularz}
+ *   klik              — kliknięcie przycisku/CTA na stronie     {strona, cel}
+ *   wyjscie           — kliknięcie linku na zewnątrz            {strona, cel: domena}
+ *   przewiniecie      — przewinięcie 50% / 90% strony           {strona, proc}
+ * Sukces wysyłki: /dziekuje*, ksiazka_zapis, konsultacje_wyslane, pytanie_wyslane.
+ */
+---
+<script is:inline>
+(function () {
+  var p = location.pathname;
+  if (/^\/(panel|dashboard)/.test(p)) return;
+  function ev(n, d) { try { if (window.va) window.va('event', { name: n, data: d }); } catch (e) {} }
+  function nazwa(f) { return (f.id || (f.className || '').split(' ')[0] || 'formularz').slice(0, 40); }
+
+  var ruszone = {};
+  document.addEventListener('focusin', function (e) {
+    var f = e.target && e.target.closest && e.target.closest('form');
+    if (!f) return;
+    var n = nazwa(f);
+    if (ruszone[n]) return;
+    ruszone[n] = 1;
+    ev('formularz_start', { strona: p, formularz: n });
+  });
+  document.addEventListener('submit', function (e) {
+    ev('formularz_wyslij', { strona: p, formularz: nazwa(e.target) });
+  }, true);
+
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest && e.target.closest('a,button');
+    if (!a || a.type === 'submit') return;
+    if (a.tagName === 'A') {
+      var h = a.getAttribute('href') || '';
+      if (/^https?:/i.test(h) && a.hostname && a.hostname.replace(/^www\./, '') !== location.hostname.replace(/^www\./, '')) {
+        ev('wyjscie', { strona: p, cel: a.hostname.replace(/^www\./, '') });
+        return;
+      }
+      if (/^(mailto|tel):/i.test(h)) { ev('klik', { strona: p, cel: h.split(':')[0] }); return; }
+      if (!/\bbtn\b/.test(a.className) && !a.dataset.ev) return;
+      ev('klik', { strona: p, cel: (a.dataset.ev || h).slice(0, 80) });
+    } else {
+      if (!a.dataset.ev && !/\bbtn\b/.test(a.className)) return;
+      ev('klik', { strona: p, cel: (a.dataset.ev || a.textContent.trim()).slice(0, 60) });
+    }
+  }, true);
+
+  var progi = [50, 90], zrobione = {};
+  window.addEventListener('scroll', function () {
+    var h = document.documentElement.scrollHeight - innerHeight;
+    if (h < 400) return;
+    var proc = (scrollY / h) * 100;
+    for (var i = 0; i < progi.length; i++) {
+      var t = progi[i];
+      if (proc >= t && !zrobione[t]) { zrobione[t] = 1; ev('przewiniecie', { strona: p, proc: t }); }
+    }
+  }, { passive: true });
+})();
+</script>
