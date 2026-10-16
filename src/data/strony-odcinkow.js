@@ -84,9 +84,11 @@ export const stronyOdcinkow = [
     // zostaje — jest spójne z tym, co odcinek i książka mówią o podpisie (potwierdzenie
     // odbioru ≠ zgoda). Nie zmieniać na „zanim zaakceptujesz". Poprzednia wersja:
     // 'Plan naprawczy w pracy — co oznacza PIP i co teraz zrobić'.
-    tytul: 'Plan naprawczy (PIP) — jak go czytać, zanim podpiszesz cokolwiek',
+    // 16.10.2026: druga wersja pod CTR (Klaudiusz, zatw. Michał) — fraza „czy muszę podpisać" z badania Apify. Nie zmieniać do 13.11.
+    // Poprzednia: 'Plan naprawczy (PIP) — jak go czytać, zanim podpiszesz cokolwiek'.
+    tytul: 'Plan naprawczy (PIP): czy musisz podpisać i co sprawdzić najpierw',
     opis:
-      'Sześć elementów, które ma dobry plan naprawczy — i sześć pytań, które zadajesz, gdy ich brakuje. Jak odróżnić plan od dokumentacji decyzji, która już zapadła.',
+      'Dostałeś plan naprawczy? Nie podpisuj na spotkaniu. 6 elementów dobrego PIP, 6 pytań, gdy ich brakuje, i test: plan pod sukces czy pod zwolnienie. Były menedżer wyjaśnia.',
     h1: 'Dostałem plan naprawczy. Co to naprawdę znaczy?',
     lead: [
       "Zaproszenie w kalendarzu: Ty, Twój szef i ktoś z HR. Temat: „rozmowa o wynikach\". Na stole leży dokument, a ktoś wypowiada zdanie, które zapamiętasz na długo — „przygotowaliśmy dla Ciebie plan poprawy\".",
@@ -235,9 +237,11 @@ export const stronyOdcinkow = [
     // zmieniamy tylko to, co widać w wynikach. Copy: Klaudiusz. Cel: CTR > 5%,
     // odczyt w Search Console za 2–3 tygodnie (ok. 14.10). Poprzednia wersja:
     // 'Negatywny feedback od szefa — jak zareagować i odpowiedzieć'.
-    tytul: 'Negatywny feedback od szefa — co zrobić w pierwszych 48 h',
+    // 16.10.2026: druga wersja pod CTR (Klaudiusz, zatw. Michał). Pomiar GSC 30.10 i 13.11 — nie zmieniać do 13.11.
+    // Poprzednia: 'Negatywny feedback od szefa — co zrobić w pierwszych 48 h'.
+    tytul: 'Negatywny feedback od szefa: 3 kroki w pierwszych 48 godzin',
     opis:
-      'Nie odpowiadaj tego samego dnia. Zapytaj o kryteria, nie o szansę. Zapisz fakty w 5 minut. Trzy kroki po trudnej rozmowie — z perspektywy byłego menedżera.',
+      'Negatywny feedback od szefa? Nie odpowiadaj dziś. Zapytaj o kryteria, zapisz fakty w 5 minut, wróć z planem. Co robić krok po kroku — od byłego menedżera, który sam takie rozmowy prowadził.',
     h1: 'Negatywny feedback od szefa. Jak zareagować?',
     lead: [
       "Dostałeś od szefa maila z krytyką i palce już wiszą nad klawiaturą, żeby odpisać. Zatrzymaj się — bo ten mail przed chwilą stał się dokumentem. I Twoja odpowiedź też nim będzie.",
@@ -890,8 +894,9 @@ export const stronyOdcinkow = [
     // Nasz czytelnik jest PO odmowie i wpisuje „dlaczego nie dostałem awansu".
     nr: 10, slug: "dlaczego-nie-dostalem-awansu",
     zapytanie: "dlaczego nie dostałem awansu",
-    tytul: "Dlaczego nie dostałem awansu? Co dzieje się, zanim usłyszysz decyzję",
-    opis: "Awans to nie decyzja jednego szefa, tylko pozycja w budżecie. Wyjaśniam, kiedy naprawdę zapada decyzja, dlaczego najlepsi specjaliści awansują najrzadziej i o co zapytać po odmowie.",
+    // 16.10.2026: wersja pod CTR (Klaudiusz, zatw. Michał). Nie zmieniać do 13.11.
+    tytul: "Dlaczego nie dostałem awansu? Decyzja zapadła pół roku wcześniej",
+    opis: "Awans to pozycja w budżecie, nie decyzja szefa. Kiedy naprawdę zapada, dlaczego najlepsi specjaliści awansują najrzadziej i o co zapytać po odmowie. Były menedżer, 20 lat w korporacji.",
     h1: "Dlaczego nie dostałem awansu, skoro pracuję dobrze?",
     lead: [
       "Awans poszedł do kogoś innego. Albo nie poszedł do nikogo, a Ty usłyszałeś, że „to jeszcze nie ten moment”. Pierwsza myśl brzmi zwykle tak samo: ktoś mnie nie docenia.",
