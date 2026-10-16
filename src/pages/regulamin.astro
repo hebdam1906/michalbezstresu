@@ -24,7 +24,7 @@ import Stopka from '../components/Stopka.astro';
  * Świadomie NIE publikujemy tu adnotacji „wersja robocza” — regulamin jest umową
  * z konsumentem i taka adnotacja działałaby przeciwko obu stronom.
  */
-const obowiazujeOd = '22 września 2026';
+const obowiazujeOd = '16 października 2026';
 ---
 <Layout
   title="Regulamin sprzedaży | Michał bez Stresu"
@@ -51,9 +51,16 @@ const obowiazujeOd = '22 września 2026';
       {/* ZMIANA 1 wobec draftu: adres kontaktowy kontakt@ zamiast michal@ —
           to adres podany w stopce, na /konsultacje i w polityce prywatności.
           Jeden adres w całym serwisie zamiast dwóch. */}
-      <li>Sprzedawcą jest <strong>Michał Hebda</strong>, prowadzący działalność
-        nierejestrowaną w rozumieniu art. 5 ustawy Prawo przedsiębiorców,
-        adres do korespondencji: <strong>ul. Czeczów 36/65, 30-798 Kraków</strong>,
+      {/* 16.10.2026: JDG wpisana do CEIDG z datą rozpoczęcia 3.11.2026 (decyzja Michała).
+          Do 2.11 włącznie sprzedaż (konsultacje) idzie jeszcze w działalności nierejestrowanej,
+          dlatego zapis obejmuje oba okresy i jest prawdziwy zarówno dziś, jak i po 3.11.
+          Po 3.11 można skrócić do samej firmy. REGON dopisać po nadaniu. */}
+      <li>Sprzedawcą jest <strong>Michał Hebda</strong>, prowadzący od 3 listopada 2026 r.
+        działalność gospodarczą pod firmą <strong>MH Consulting - Michał Hebda</strong>,
+        ul. Henryka i Karola Czeczów 36, 30-798 Kraków, <strong>NIP 6772240049</strong>
+        (wpis do CEIDG), a do tego dnia — działalność nierejestrowaną w rozumieniu
+        art. 5 ustawy Prawo przedsiębiorców. Adres do korespondencji:
+        <strong>ul. Czeczów 36/65, 30-798 Kraków</strong>,
         e-mail: <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>.</li>
       <li>Kontakt ze Sprzedawcą: <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>.
         Sprzedawca odpowiada na wiadomości w terminie do 48 godzin w dni robocze.</li>
