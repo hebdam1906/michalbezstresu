@@ -86,9 +86,9 @@ export const stronyOdcinkow = [
     // 'Plan naprawczy w pracy — co oznacza PIP i co teraz zrobić'.
     // 16.10.2026: druga wersja pod CTR (Klaudiusz, zatw. Michał) — fraza „czy muszę podpisać" z badania Apify. Nie zmieniać do 13.11.
     // Poprzednia: 'Plan naprawczy (PIP) — jak go czytać, zanim podpiszesz cokolwiek'.
-    tytul: 'Plan naprawczy (PIP): czy musisz podpisać i co sprawdzić najpierw',
+    tytul: 'Plan naprawczy (PIP): czy musisz podpisać i co sprawdzić',
     opis:
-      'Dostałeś plan naprawczy? Nie podpisuj na spotkaniu. 6 elementów dobrego PIP, 6 pytań, gdy ich brakuje, i test: plan pod sukces czy pod zwolnienie. Były menedżer wyjaśnia.',
+      'Dostałeś plan naprawczy? Nie podpisuj na spotkaniu. 6 elementów dobrego PIP, 6 pytań, gdy ich brakuje, i test: plan pod sukces czy pod zwolnienie.',
     h1: 'Dostałem plan naprawczy. Co to naprawdę znaczy?',
     lead: [
       "Zaproszenie w kalendarzu: Ty, Twój szef i ktoś z HR. Temat: „rozmowa o wynikach\". Na stole leży dokument, a ktoś wypowiada zdanie, które zapamiętasz na długo — „przygotowaliśmy dla Ciebie plan poprawy\".",
@@ -241,7 +241,7 @@ export const stronyOdcinkow = [
     // Poprzednia: 'Negatywny feedback od szefa — co zrobić w pierwszych 48 h'.
     tytul: 'Negatywny feedback od szefa: 3 kroki w pierwszych 48 godzin',
     opis:
-      'Negatywny feedback od szefa? Nie odpowiadaj dziś. Zapytaj o kryteria, zapisz fakty w 5 minut, wróć z planem. Co robić krok po kroku — od byłego menedżera, który sam takie rozmowy prowadził.',
+      'Negatywny feedback od szefa? Nie odpowiadaj dziś. Zapytaj o kryteria, zapisz fakty w 5 minut, wróć z planem. Krok po kroku — od byłego menedżera.',
     h1: 'Negatywny feedback od szefa. Jak zareagować?',
     lead: [
       "Dostałeś od szefa maila z krytyką i palce już wiszą nad klawiaturą, żeby odpisać. Zatrzymaj się — bo ten mail przed chwilą stał się dokumentem. I Twoja odpowiedź też nim będzie.",
@@ -895,8 +895,8 @@ export const stronyOdcinkow = [
     nr: 10, slug: "dlaczego-nie-dostalem-awansu",
     zapytanie: "dlaczego nie dostałem awansu",
     // 16.10.2026: wersja pod CTR (Klaudiusz, zatw. Michał). Nie zmieniać do 13.11.
-    tytul: "Dlaczego nie dostałem awansu? Decyzja zapadła pół roku wcześniej",
-    opis: "Awans to pozycja w budżecie, nie decyzja szefa. Kiedy naprawdę zapada, dlaczego najlepsi specjaliści awansują najrzadziej i o co zapytać po odmowie. Były menedżer, 20 lat w korporacji.",
+    tytul: "Dlaczego nie dostałem awansu? Decyzja zapadła pół roku temu",
+    opis: "Awans to pozycja w budżecie, nie decyzja szefa. Kiedy naprawdę zapada, czemu najlepsi awansują najrzadziej i o co zapytać po odmowie. Były menedżer.",
     h1: "Dlaczego nie dostałem awansu, skoro pracuję dobrze?",
     lead: [
       "Awans poszedł do kogoś innego. Albo nie poszedł do nikogo, a Ty usłyszałeś, że „to jeszcze nie ten moment”. Pierwsza myśl brzmi zwykle tak samo: ktoś mnie nie docenia.",
