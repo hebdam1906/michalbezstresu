@@ -20,7 +20,12 @@ const stan = stanOferty(Date.now(), import.meta.env.OFERTA_DZIEKUJE_STAN);
  * ✅ 6.08: przekierowanie ustawione w MailerLite (formularz `by0euU`,
  * Success message → Settings → Custom success page → Redirect URL).
  *
- * ⚠️ FORMULARZ MA WŁĄCZONE PODWÓJNE POTWIERDZENIE (double opt-in), więc ta
+ * ✅ 18.10: double opt-in na formularzu `by0euU` jest WYŁĄCZONY od 3.09
+ * (MailerLite_naprawa-double-opt-in_03-09). Checklista wychodzi od razu
+ * (automatyzacja „Simple welcome email”, trigger: wejście do grupy), więc treść
+ * mówi „checklista jest w drodze”. Poniżej historyczny opis stanu sprzed 3.09.
+ *
+ * (historycznie) FORMULARZ MIAŁ WŁĄCZONE PODWÓJNE POTWIERDZENIE (double opt-in), więc ta
  * strona pokazuje się PO WYSŁANIU formularza, a nie po potwierdzeniu adresu.
  * Dwie konsekwencje, obie policzone świadomie:
  *   1. Treść mówi „został jeden klik", a nie „checklista jest w drodze" —
@@ -36,20 +41,19 @@ const stan = stanOferty(Date.now(), import.meta.env.OFERTA_DZIEKUJE_STAN);
  */
 ---
 <Layout
-  title="Potwierdź zapis — Michał bez Stresu"
-  description="Sprawdź skrzynkę i potwierdź zapis, a checklista przyjdzie od razu potem."
+  title="Checklista jest w drodze — Michał bez Stresu"
+  description="Checklista jest już w Twojej skrzynce albo dotrze za kilka minut."
   noindex
 >
   <main class="lp">
     <div class="lp-wrap">
       <div class="brand mono">Michał bez Stresu</div>
 
-      <div class="eyebrow">Prawie gotowe</div>
-      <h1>Został jeden klik</h1>
-      <p class="sub">Wysłałem Ci maila <strong>„Potwierdź zapis i odbierz checklistę”</strong>.
-        Kliknij w nim przycisk potwierdzenia — checklista przyjdzie od razu potem.
-        Bez tego kliknięcia nic nie wyślę; tak działa podwójne potwierdzenie i dzięki
-        niemu nikt nie zapisze Cię na listę bez Twojej wiedzy.</p>
+      <div class="eyebrow">Gotowe</div>
+      <h1>Checklista jest w drodze</h1>
+      <p class="sub">Wysłałem Ci maila <strong>„Twoja checklista: jak dokumentować trudne
+        sytuacje w pracy”</strong> — w środku jest link do pobrania PDF-a.
+        Zwykle dochodzi w ciągu minuty.</p>
       <p class="sub">Nie widzisz maila w ciągu kilku minut? Zajrzyj do zakładki „Oferty”
         albo do spamu i przenieś wiadomość do odebranych — dzięki temu kolejne trafią
         już tam, gdzie trzeba.</p>
