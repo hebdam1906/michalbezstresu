@@ -1,5 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { stanOferty, LINK_EBOOK } from '../data/oferta-dziekuje.js';
+
+/* Oferta książki (brief Klaudiusza 18.10): stan A/B/C liczony przy każdym
+   wejściu, po czasie Warszawy — patrz src/data/oferta-dziekuje.js.
+   Renderowanie na serwerze, żeby przed 2.11 w HTML-u nie było ceny ani linku
+   do EasyCart. */
+export const prerender = false;
+const stan = stanOferty(Date.now(), import.meta.env.OFERTA_DZIEKUJE_STAN);
 
 /**
  * Strona po zapisie na checklistę.
@@ -62,6 +70,41 @@ import Layout from '../layouts/Layout.astro';
       </p>
 
       <p class="fineprint">Zero spamu. Wypisujesz się jednym kliknięciem.</p>
+
+      <section class="oferta" data-stan={stan} aria-labelledby="oferta-tytul">
+        <img class="oferta-okladka" src="/ksiazka/okladka-nb1-600x960.jpg" width="600" height="960"
+          alt="Okładka e-booka „Z obu stron stołu” Michała Hebdy" loading="lazy" decoding="async" />
+        <div class="oferta-txt">
+          {stan === 'A' ? (
+            <>
+              <h2 id="oferta-tytul">A jeśli rozmowa jest bliżej, niż myślisz…</h2>
+              <p>2 listopada wydaję e-booka <strong>„Z obu stron stołu”</strong> — o rozmowach
+                o podwyżce, ocenie, planie naprawczym i odejściu, opowiedzianych z perspektywy
+                pracownika i menedżera. Osoby z listy premierowej, które kupią go w pierwszym
+                tygodniu (2–8 listopada), dostaną egzemplarz z imienną dedykacją.</p>
+              <a class="oferta-btn" href="/ksiazka/#zapis" data-cta="A">Zapisuję się na listę premierową</a>
+              <p class="oferta-pod"><a href="/ksiazka/#fragment" data-cta-fragment>Najpierw przeczytaj fragment</a></p>
+            </>
+          ) : (
+            <>
+              <h2 id="oferta-tytul">Chcesz pełny plan na tę rozmowę?</h2>
+              <p><strong>„Z obu stron stołu”</strong> to e-book o rozmowach, od których zależy kariera:
+                podwyżka, ocena roczna, plan naprawczy, odejście. Każda rozmowa opisana z obu stron
+                stołu — co myśli menedżer i co możesz zrobić, zanim usiądziesz.</p>
+              <ul class="oferta-punkty">
+                <li>Co zapytać, gdy szef mówi, że nie ma budżetu</li>
+                <li>Pierwszy tydzień planu naprawczego — zanim coś podpiszesz</li>
+                <li>Jak wyjść z firmy i nie zostawić niczego na stole</li>
+              </ul>
+              <p class="oferta-cena">{stan === 'B' ? '39 zł do 15 listopada' : '49 zł'}</p>
+              <a class="oferta-btn" href={LINK_EBOOK} data-cta={stan}>Kupuję e-book za {stan === 'B' ? '39' : '49'} zł</a>
+              <p class="oferta-pod">EPUB + PDF, od razu na maila. · <a href="/ksiazka/#fragment" data-cta-fragment>Przeczytaj fragment</a></p>
+              {/* Opinie recenzentów: dopiero po zgodach (po 29.10), z dopiskiem
+                  „otrzymał(a) egzemplarz recenzencki od autora”. Do tego czasu brak sekcji. */}
+            </>
+          )}
+        </div>
+      </section>
     </div>
   </main>
 
@@ -116,6 +159,22 @@ import Layout from '../layouts/Layout.astro';
       if (window.fbq || window.gtag) konwersja();
     })();
   </script>
+  <script is:inline>
+    /* Kliknięcie w ofertę książki (brief 18.10): GA4 `ksiazka_cta_dziekuje`
+       ze `stan` = A/B/C — tylko przy zgodzie (gtag działa w Consent Mode).
+       Równolegle Vercel Web Analytics (bez ciasteczek), żeby liczba była też
+       bez zgody. Zdarzenia Meta tu NIE dokładamy — kampania uczy się na Lead. */
+    (function () {
+      var a = document.querySelector('.oferta [data-cta]');
+      if (!a) return;
+      a.addEventListener('click', function () {
+        var stan = a.getAttribute('data-cta');
+        try { if (window.gtag) window.gtag('event', 'ksiazka_cta_dziekuje', { stan: stan }); } catch (e) {}
+        try { if (window.va) window.va('event', { name: 'ksiazka_cta_dziekuje', data: { stan: stan } }); } catch (e) {}
+      });
+    })();
+  </script>
+
 </Layout>
 
 <style>
@@ -134,4 +193,25 @@ import Layout from '../layouts/Layout.astro';
 .dalej{font-size:15.5px;color:#CFE0DA}
 .dalej a{color:var(--marker)}
 .fineprint{margin-top:22px;font-size:12.5px;color:#B9CFC8}
+
+/* Oferta książki (18.10) — pod treścią o checkliście, nie zamiast niej. */
+.oferta{margin-top:44px;padding-top:32px;border-top:1px solid rgba(255,255,255,.18);
+  display:grid;grid-template-columns:120px 1fr;gap:24px;align-items:start}
+.oferta-okladka{width:120px;height:auto;border-radius:4px;box-shadow:0 8px 24px rgba(0,0,0,.28)}
+.oferta h2{font-family:var(--disp);font-weight:500;color:#fff;font-size:clamp(21px,3.2vw,27px);
+  line-height:1.2;margin:0 0 10px}
+.oferta p{font-size:15.5px;color:#CFE0DA;margin-bottom:14px}
+.oferta-punkty{list-style:none;margin:0 0 16px}
+.oferta-punkty li{padding-left:24px;position:relative;margin-bottom:8px;font-size:15px;color:#E4EEEA}
+.oferta-punkty li::before{content:"→";position:absolute;left:0;color:var(--marker)}
+.oferta .oferta-cena{font-weight:700;color:#fff;font-size:17px;margin-bottom:12px}
+.oferta-btn{display:inline-block;background:var(--marker);color:var(--atrament);font-weight:700;
+  text-decoration:none;padding:13px 20px;border-radius:9px;font-size:16px}
+.oferta-btn:hover{filter:brightness(.95)}
+.oferta .oferta-pod{margin-top:12px;font-size:14px;color:#B9CFC8}
+.oferta-pod a{color:var(--marker)}
+@media (max-width:560px){
+  .oferta{grid-template-columns:1fr;gap:16px}
+  .oferta-okladka{width:96px}
+}
 </style>
