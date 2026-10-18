@@ -19,7 +19,7 @@ import Stopka from '../components/Stopka.astro';
  * Całość nadal powinien przejrzeć ktoś, kto zna RODO — zwłaszcza sekcje
  * o podstawie prawnej i o przekazywaniu danych poza EOG.
  */
-const aktualizacja = '16 października 2026';
+const aktualizacja = '18 października 2026';
 ---
 <Layout
   title="Polityka prywatności | Michał bez Stresu"
@@ -113,6 +113,28 @@ const aktualizacja = '16 października 2026';
       dodawany do listy newslettera. Pytania przechowuję do 12 miesięcy od wysłania, a następnie
       usuwam lub anonimizuję.</p>
 
+    <h2>Zakupy: e-book i konsultacje</h2>
+    <p>Kiedy kupujesz e-book albo konsultację, zbieramy dane potrzebne do zawarcia
+      i wykonania umowy: imię i nazwisko, adres e-mail, a jeśli chcesz fakturę — dane
+      do faktury (np. nazwę firmy i NIP). Podstawą jest umowa (art. 6 ust. 1 lit. b RODO),
+      a w zakresie faktur i ewidencji sprzedaży — obowiązek prawny wynikający z przepisów
+      podatkowych (art. 6 ust. 1 lit. c RODO).</p>
+    <p>Przy zakupie korzystamy z zewnętrznych narzędzi, które przetwarzają te dane w naszym imieniu:</p>
+    <ul>
+      <li><strong>EasyCart (Easytools)</strong> — koszyk, obsługa zamówienia i dostarczenie plików;</li>
+      <li><strong>Stripe</strong> i <strong>Przelewy24</strong> — obsługa płatności. Danych karty ani
+        logowania do banku nie widzimy i nie przechowujemy;</li>
+      <li><strong>iFirma</strong> — wystawianie faktur i przekazywanie ich do Krajowego Systemu
+        e-Faktur (KSeF), gdy wymagają tego przepisy.</li>
+    </ul>
+    <p>Potwierdzenie zamówienia (Twoje imię, e-mail, kupiony produkt i ewentualna zgoda na udział
+      w konkursie) zapisujemy też w naszej bazie <strong>Supabase</strong> (serwery w Unii Europejskiej).
+      Jeśli przysługuje Ci egzemplarz z dedykacją, na tej podstawie przygotowujemy PDF z Twoim imieniem
+      i wysyłamy go mailem z adresu michal@michalbezstresu.pl.</p>
+    <p>Dane o zakupach i faktury przechowujemy przez okres wymagany przepisami podatkowymi —
+      5 lat, licząc od końca roku, w którym minął termin płatności podatku za dany rok.
+      Udział w konkursie opisuje jego regulamin.</p>
+
     <h2>Statystyki odwiedzin</h2>
     <p>Liczymy odwiedziny przez <strong>Vercel Web Analytics</strong>. To narzędzie
       nie zapisuje ciasteczek i nie tworzy profilu — pokazuje nam wyłącznie zbiorcze
@@ -160,6 +182,8 @@ const aktualizacja = '16 października 2026';
 
     <h2>Jak długo trzymamy dane</h2>
     <p>Adres e-mail — do czasu, aż wypiszesz się z listy. Potem znika z MailerLite.</p>
+    <p>Dane o zakupach i faktury — 5 lat od końca roku, w którym minął termin płatności
+      podatku (wymóg przepisów podatkowych).</p>
     <p>Danych z pikseli reklamowych nie trzymamy u siebie w ogóle — trafiają one wprost
       do Meta i Google i to te firmy decydują o okresach przechowywania, opisanych
       w ich własnych politykach:
