@@ -7,12 +7,12 @@ import Stopka from '../components/Stopka.astro';
  * /live/ — LinkedIn Live 5.11.2026, 19:00–20:00 (brief Klaudiusza i20, 19.10).
  * Zapis: /api/live → MailerLite „Live-5-11” + „Checklista — lead magnet”.
  * Link z UTM utm_campaign=live-5-11 idzie do newslettera 28.10, maila 2.11, newslettera 4.11.
- * ⚠️ Opis wydarzenia od Klaudiusza (do 22.10) — podmienić akapit `lead`.
+ * Teksty: Klaudiusz 19.10 (`Klaudiusz-do-Marcina_live-5-11_teksty-…`).
  * ⚠️ Bez ceny na stronie (cena pada dopiero na żywo, od 2.11).
  */
 ---
 <Layout
-  title="Szef mówi, że nie ma budżetu na podwyżkę — co dalej? | LinkedIn Live 5 listopada"
+  title="Szef mówi, że nie ma budżetu na podwyżkę. Co dalej? | Live 5 listopada"
   description="Bezpłatna transmisja na LinkedInie z Michałem Hebdą: czwartek 5 listopada, 19:00. 40 minut o rozmowie o podwyżce i 20 minut na Twoje pytania. Zapisz się, a przypomnę Ci o starcie."
   ogObraz="/og/og-ksiazka.jpg"
   ogAlt="LinkedIn Live z Michałem Hebdą — 5 listopada, 19:00"
@@ -22,16 +22,21 @@ import Stopka from '../components/Stopka.astro';
   <header class="khero">
     <div class="wrap khero-in">
       <div class="khero-txt">
-        <div class="eyebrow">LinkedIn Live · czwartek 5 listopada, 19:00–20:00</div>
-        <h1>Szef mówi, że nie ma budżetu na podwyżkę — co dalej?</h1>
-        <p class="lead">Godzina na żywo na LinkedInie: 40 minut o tym, co naprawdę znaczy
-          „nie ma budżetu”, jakie pytanie zadać zaraz potem i co zrobić tydzień później.
-          Potem 20 minut na Twoje pytania. Bezpłatnie.</p>
+        <div class="eyebrow">Darmowy live na LinkedInie · czwartek 5 listopada, 19:00 · 60 minut</div>
+        <h1>Szef mówi, że nie ma budżetu na podwyżkę. Co dalej?</h1>
+        <p class="lead">„Nie ma budżetu” to jedno z najczęstszych zdań w rozmowie o podwyżce. I jedno
+          z najczęściej źle rozumianych. Przez 20 lat słyszałem je jako pracownik i mówiłem jako menedżer.
+          Rzadko oznaczało koniec rozmowy.</p>
+        <p class="lead">Przez 40 minut pokażę, co zwykle stoi za tym zdaniem, co możesz powiedzieć od razu
+          i co zrobić w tygodniu po rozmowie, żeby temat nie umarł. Ostatnie 20 minut to Twoje pytania.
+          Możesz je zadać na żywo albo wcześniej, odpisując na mail z potwierdzeniem zapisu.</p>
+        <p class="lead">Zapisz się, a dzień przed i w dniu live'a wyślę Ci przypomnienie z linkiem.
+          Dostaniesz też checklistę z narzędziami z całej serii.</p>
 
         <form class="zapis" id="zapis" novalidate>
           <div class="zapis-tytul">Zapisz się na transmisję</div>
-          <p class="zapis-opis">Dostaniesz potwierdzenie, a 5 listopada o 17:00 — przypomnienie z linkiem
-            do wydarzenia. Przy okazji wyślę Ci checklistę przygotowania do trudnej rozmowy.</p>
+          <p class="zapis-opis">Potwierdzenie dostaniesz od razu, a przypomnienie z linkiem — 4 listopada
+            i 5 listopada o 17:00.</p>
           <div class="pola">
             <input type="text" name="imie" placeholder="Imię (opcjonalnie)" autocomplete="given-name" maxlength="80" />
             <input type="email" name="email" placeholder="Twój e-mail" autocomplete="email" required maxlength="160" />
@@ -42,7 +47,7 @@ import Stopka from '../components/Stopka.astro';
             <span>Chcę dostać od Michała bez Stresu link do transmisji i checklistę z newsletterem.
               Wypiszesz się jednym kliknięciem. <a href="/prywatnosc/">Polityka prywatności</a>.</span>
           </label>
-          <button class="btn btn-primary" type="submit">Zapisz mnie</button>
+          <button class="btn btn-primary" type="submit">Zapisuję się</button>
           <p class="komunikat" role="status" aria-live="polite"></p>
         </form>
       </div>
@@ -69,7 +74,7 @@ import Stopka from '../components/Stopka.astro';
         }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
           .then(function (x) {
             if (x.ok && x.d.ok) {
-              f.innerHTML = '<div class="zapis-ok"><strong>Jesteś zapisany ✓</strong><br>Za chwilę dostaniesz maila z potwierdzeniem, a 5 listopada o 17:00 — przypomnienie z linkiem.</div>';
+              f.innerHTML = '<div class="zapis-ok"><strong>Jesteś zapisany ✓</strong><br>Za chwilę dostaniesz maila z potwierdzeniem, a link do transmisji — 4 i 5 listopada.</div>';
               try { if (window.va) window.va('event', { name: 'live_zapis' }); } catch (e) {}
             } else { kom.textContent = (x.d && x.d.error) || 'Nie udało się zapisać. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; }
           })
