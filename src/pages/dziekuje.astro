@@ -100,7 +100,7 @@ const stan = stanOferty(Date.now(), import.meta.env.OFERTA_DZIEKUJE_STAN);
                 <li>Pierwszy tydzień planu naprawczego — zanim coś podpiszesz</li>
                 <li>Jak wyjść z firmy i nie zostawić niczego na stole</li>
               </ul>
-              <p class="oferta-cena">{stan === 'B' ? '39 zł do 15 listopada' : '49 zł'}</p>
+              <p class="oferta-cena">{stan === 'B' ? '39 zł (z VAT) do 15 listopada' : '49 zł (z VAT)'}</p>
               <a class="oferta-btn" href={LINK_EBOOK} data-cta={stan}>Kupuję e-book za {stan === 'B' ? '39' : '49'} zł</a>
               <p class="oferta-pod">EPUB + PDF, od razu na maila. · <a href="/ksiazka/#fragment" data-cta-fragment>Przeczytaj fragment</a></p>
               {/* Opinie recenzentów: dopiero po zgodach (po 29.10), z dopiskiem
