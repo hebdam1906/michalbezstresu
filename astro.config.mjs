@@ -29,6 +29,8 @@ export default defineConfig({
         if (/\/(dziekuje|dziekuje-firmy|dziekuje-wzor|glos|panel|dashboard)\/?$/.test(page)) return false;
         // /witaj (12.10) — strona wideo powitalnego, tylko z maila powitalnego (noindex).
         if (/\/witaj\/?$/.test(page)) return false;
+        // /ksiazka/regulamin-konkursu (21.10) — noindex, niepodlinkowany do akceptacji prawniczki.
+        if (/\/ksiazka\/regulamin-konkursu\/?$/.test(page)) return false;
         // /pytanie/dziekuje (25.09) — podziękowanie po formularzu „Zadaj pytanie”.
         if (/\/pytanie\/dziekuje\/?$/.test(page)) return false;
         // Angielska strona podziękowania (24.09) — ta sama zasada co wyżej:

@@ -1,0 +1,138 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Stopka from '../../components/Stopka.astro';
+
+/**
+ * REGULAMIN KONKURSU „10 egzemplarzy z dedykacją” — wersja 2 (konkurs z zadaniem).
+ * 21.10.2026, źródło: Klaudiusz, `Regulamin-konkursu_10-egzemplarzy_v2-konkurs-z-zadaniem_21-10.md`.
+ * Zastępuje losowanie (loteria promocyjna wymaga zezwolenia IAS).
+ *
+ * ⚠️ NIEPODLINKOWANY i noindex do akceptacji prawniczki. Wykluczony z sitemapy.
+ * ⚠️ Do uzupełnienia: § 4 ust. 3 cena druku (decyzja 23.10), § 4 ust. 6 PIT (doradca).
+ * ⚠️ Do decyzji: druga osoba w komisji (§ 4 ust. 1) — realny człowiek, szuka Michał.
+ * 21.10 (decyzja Michała): start konkursu 3.11 8:00 (JDG od 3.11); zakupy liczą się od 2.11 8:00 (premiera).
+ */
+const CENA_DRUKU = '[do uzupełnienia]';
+---
+<Layout
+  title="Regulamin konkursu „10 egzemplarzy z dedykacją” | Michał bez Stresu"
+  description="Zasady konkursu dla kupujących e-book „Z obu stron stołu”: zadanie, kryteria oceny, nagrody, dane osobowe."
+  noindex={true}
+>
+  <Nav />
+
+  <header class="phead">
+    <div class="wrap">
+      <div class="eyebrow">Regulamin konkursu</div>
+      <h1>„10 egzemplarzy z dedykacją”</h1>
+      <p class="lead">Kup e-book „Z obu stron stołu”, odpowiedz w 500 znakach na jedno pytanie
+        i zdobądź drukowany egzemplarz z odręczną dedykacją autora.</p>
+    </div>
+  </header>
+
+  <main class="wrap tresc">
+
+    <h2>§ 1. Organizator</h2>
+    <ol>
+      <li>Organizatorem konkursu jest Michał Hebda, prowadzący działalność gospodarczą pod firmą
+        MH Consulting - Michał Hebda, ul. Henryka i Karola Czeczów 36, 30-798 Kraków,
+        NIP 6772240049, REGON 122905620, e-mail:
+        <a href="mailto:michal@michalbezstresu.pl">michal@michalbezstresu.pl</a> (dalej: „Organizator”).</li>
+      <li>Konkurs nie jest grą losową, loterią fantową, zakładem wzajemnym, loterią promocyjną
+        ani grą, której wynik zależy od przypadku, w rozumieniu ustawy z 19 listopada 2009 r.
+        o grach hazardowych. O przyznaniu nagród decyduje ocena odpowiedzi na zadanie
+        konkursowe (§ 4).</li>
+    </ol>
+
+    <h2>§ 2. Czas trwania</h2>
+    <ol>
+      <li>Konkurs trwa od 3 listopada 2026 r., godz. 8:00, do 15 listopada 2026 r., godz. 23:59
+        (czas polski).</li>
+      <li>Konkurs prowadzony jest na stronie www.michalbezstresu.pl.</li>
+    </ol>
+
+    <h2>§ 3. Warunki udziału</h2>
+    <ol>
+      <li>W konkursie może wziąć udział pełnoletnia osoba fizyczna, która:
+        <br>a) w okresie od 2 listopada 2026 r., godz. 8:00, do 15 listopada 2026 r., godz. 23:59
+        kupi w sklepie Organizatora e-book „Z obu stron stołu”;
+        <br>b) w czasie trwania konkursu wyśle odpowiedź na zadanie konkursowe na adres
+        <a href="mailto:michal@michalbezstresu.pl">michal@michalbezstresu.pl</a>, z tematem „Konkurs”,
+        z adresu e-mail podanego przy zakupie.</li>
+      <li><strong>Zadanie konkursowe:</strong> w maksymalnie 500 znakach odpowiedz na pytanie:
+        „Jaką rozmowę w pracy przeprowadził(a)byś dziś inaczej i dlaczego?”</li>
+      <li>Odpowiedź musi być własna i wcześniej niepublikowana. Nie może zawierać nazw firm
+        ani danych pozwalających zidentyfikować inne osoby.</li>
+      <li>Każdy uczestnik może zgłosić jedną odpowiedź. Kolejne zakupy nie zwiększają liczby zgłoszeń.</li>
+      <li>W konkursie nie mogą brać udziału Organizator, członkowie jego najbliższej rodziny
+        ani osoby, które otrzymały egzemplarz recenzencki.</li>
+      <li>Cena e-booka jest taka sama dla osób, które biorą udział w konkursie, i dla tych,
+        które nie biorą.</li>
+    </ol>
+
+    <h2>§ 4. Komisja, kryteria i nagrody</h2>
+    <ol>
+      <li>Odpowiedzi ocenia komisja: Michał Hebda i jedna osoba spoza rodziny Organizatora.
+        Komisja ocenia odpowiedzi według trzech kryteriów: szczerość i konkretność; trafność
+        wniosku, czyli czego ta rozmowa uczy; przydatność dla innych czytelników.</li>
+      <li>Komisja wybiera <strong>10 najlepszych odpowiedzi</strong> do 18 listopada 2026 r.
+        i sporządza krótki protokół.</li>
+      <li>Każdy z 10 laureatów otrzyma drukowany egzemplarz książki „Z obu stron stołu”
+        z odręczną dedykacją autora, o wartości {CENA_DRUKU} zł. Nagrody nie można wymienić
+        na pieniądze.</li>
+      <li>Laureaci zostaną powiadomieni e-mailem do 20 listopada 2026 r. Laureat ma 7 dni
+        na podanie adresu do wysyłki na terenie Polski. Jeśli tego nie zrobi, nagrodę otrzyma
+        autor kolejnej najwyżej ocenionej odpowiedzi.</li>
+      <li>Nagrody zostaną wysłane do 15 grudnia 2026 r., po premierze wydania drukowanego.
+        Koszt wysyłki pokrywa Organizator.</li>
+      <li>Wartość pojedynczej nagrody nie przekracza 2000 zł, dlatego nagroda jest zwolniona
+        z podatku dochodowego na podstawie art. 21 ust. 1 pkt 68 ustawy o podatku dochodowym
+        od osób fizycznych.</li>
+    </ol>
+
+    <h2>§ 5. Odpowiedzi i ich publikacja</h2>
+    <ol>
+      <li>Organizator może cytować odpowiedzi w newsletterze, w mediach społecznościowych
+        i podczas transmisji na żywo. Cytuje wyłącznie anonimowo i wyłącznie za wyraźną zgodą
+        autora, wyrażoną w odpowiedzi na osobną prośbę.</li>
+      <li>Bez takiej zgody odpowiedź służy tylko do rozstrzygnięcia konkursu.</li>
+    </ol>
+
+    <h2>§ 6. Dane osobowe</h2>
+    <ol>
+      <li>Administratorem danych osobowych jest Organizator.</li>
+      <li>Dane uczestników przetwarzane są wyłącznie w celu przeprowadzenia konkursu, wysyłki
+        nagród i rozpatrzenia reklamacji (art. 6 ust. 1 lit. b i f RODO). Dane obejmują imię,
+        nazwisko i e-mail, a u laureatów także adres do wysyłki.</li>
+      <li>Adresy laureatów zostaną usunięte po doręczeniu nagród, najpóźniej 31 stycznia 2027 r.
+        Odpowiedzi osób, które nie zgodziły się na publikację, zostaną usunięte do tej samej daty.</li>
+      <li>Uczestnikom przysługują prawa opisane w <a href="/prywatnosc/">Polityce prywatności</a>,
+        w tym prawo skargi do Prezesa UODO.</li>
+    </ol>
+
+    <h2>§ 7. Reklamacje i postanowienia końcowe</h2>
+    <ol>
+      <li>Reklamacje można zgłaszać e-mailem na
+        <a href="mailto:michal@michalbezstresu.pl">michal@michalbezstresu.pl</a> do 30 listopada 2026 r.
+        Organizator odpowie w ciągu 14 dni.</li>
+      <li>Regulamin jest dostępny pod adresem www.michalbezstresu.pl/ksiazka/regulamin-konkursu/.</li>
+      <li>W sprawach nieuregulowanych w regulaminie stosuje się prawo polskie. Organizator może
+        zmienić regulamin tylko z ważnych przyczyn i bez pogorszenia sytuacji uczestników.</li>
+    </ol>
+
+  </main>
+
+  <Stopka />
+</Layout>
+
+<style>
+.phead{padding:72px 0 28px}
+.phead h1{font-size:clamp(30px,4.6vw,44px);margin-bottom:14px}
+.lead{font-size:clamp(16px,2.1vw,19px);color:#4A5A55;max-width:60ch}
+.tresc{padding-bottom:72px;max-width:760px}
+.tresc h2{font-size:clamp(20px,2.6vw,26px);margin:36px 0 10px}
+.tresc ol{margin:0 0 12px 22px;color:#3A4A45}
+.tresc li{margin-bottom:9px}
+.tresc a{color:var(--sygnal)}
+</style>
