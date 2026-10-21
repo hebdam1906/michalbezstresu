@@ -24,6 +24,30 @@ async function sekret(nazwa: string): Promise<string | null> {
   return typeof data === 'string' && data ? data : null;
 }
 
+/** Plan B: linki do plików z naszego storage, gdy EasyCart nie dostarcza plików. */
+const PLIKI_PLANB = [
+  { nazwa: 'Z-obu-stron-stolu_Michal-Hebda.epub', sciezka: 'ksiazka-final.epub' },
+  { nazwa: 'Z-obu-stron-stolu_Michal-Hebda.pdf', sciezka: 'ksiazka-final.pdf' },
+];
+async function planB(a: { email: string; imie: string; zamowienie: string; idLog?: number }) {
+  const { data: flaga } = await supabaseAdmin!.from('przelaczniki').select('wlaczone').eq('nazwa', 'planb_wysylka').maybeSingle();
+  if (!flaga?.wlaczone) return;
+  const oznacz = (w: string) => a.idLog ? supabaseAdmin!.from('easycart_zdarzenia').update({ planb: w }).eq('id', a.idLog) : null;
+  const linki: Record<string, string> = {};
+  for (const f of PLIKI_PLANB) {
+    const { data, error } = await supabaseAdmin!.storage.from('ksiazka-prywatne').createSignedUrl(f.sciezka, 60 * 60 * 24 * 7, { download: f.nazwa });
+    if (error || !data?.signedUrl) { await oznacz('blad-linku:' + f.sciezka); return; }
+    linki[f.sciezka.endsWith('.epub') ? 'link_epub' : 'link_pdf'] = data.signedUrl;
+  }
+  const hook = await sekret('make_planb_hook');
+  if (!hook) { await oznacz('brak-hooka'); return; }
+  const r = await fetch(hook, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: a.email, imie: a.imie.split(/\s+/)[0] ?? '', zamowienie: a.zamowienie, ...linki }),
+  }).catch(() => null);
+  await oznacz(r && r.ok ? 'wyslano-do-make' : 'blad-make');
+}
+
 const PRODUKT_ID = '85908319-6f76-4a7f-aa3b-6c7b15640eb6';
 const ok = (b: unknown = { ok: true }) =>
   new Response(JSON.stringify(b), { status: 200, headers: { 'Content-Type': 'application/json' } });
@@ -70,6 +94,12 @@ export const POST: APIRoute = async ({ request, url }) => {
   const zakup = /product_assigned|single_product_bought|order/i.test(zdarzenie) || !zdarzenie;
   const toEbook = !produktId || produktId === PRODUKT_ID || /obu stron/i.test(produkt);
   if (!zakup || !toEbook || !email || !zamowienie) return ok({ ok: true, dedykacja: 'pominieto' });
+
+  // PLAN B (21.10.2026): jeśli pobieranie z EasyCart nie działa, przełącznik `planb_wysylka`
+  // (tabela przelaczniki) włącza wysyłkę linków do EPUB i PDF z naszego bucketu, ważnych 7 dni,
+  // przez scenariusz Make (sekret „make_planb_hook”) → mail z Zoho (michal@). Domyślnie WYŁĄCZONE.
+  // Błąd planu B nie blokuje dedykacji niżej.
+  try { await planB({ email, imie, zamowienie, idLog }); } catch { /* log niżej */ }
 
   const w = await przygotujDedykacje({ email, imie, zamowienie, data: data || undefined });
   if (idLog) await supabaseAdmin.from('easycart_zdarzenia').update({ dedykacja: w.powod }).eq('id', idLog);
