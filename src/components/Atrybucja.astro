@@ -54,5 +54,27 @@
       try { return JSON.parse(sessionStorage.getItem('mbs_atr') || '{}'); }
       catch (e) { return {}; }
     };
+
+    /* 22.10.2026: źródło przy zapisie na listę → /api/zrodlo (Supabase `zapisy_zrodla`).
+       Leci tylko razem z formularzem, który człowiek świadomie wysyła. */
+    window.mbsZrodlo = function (formularz, email) {
+      try {
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return;
+        var body = JSON.stringify({ formularz: formularz, email: email, atr: window.mbsAtrybucja(), strona: location.pathname });
+        if (!(navigator.sendBeacon && navigator.sendBeacon('/api/zrodlo', new Blob([body], { type: 'text/plain' }))))
+          fetch('/api/zrodlo', { method: 'POST', body: body, keepalive: true });
+      } catch (e) {}
+    };
+    /* Osadzone formularze MailerLite (checklista PL/EN, wzór planu, book EN). */
+    var FORMY = { by0euU: 'checklista', kfrfAr: 'checklista-en', cyWujb: 'plan-naprawczy', ukePWT: 'book-en' };
+    document.addEventListener('submit', function (e) {
+      try {
+        var box = e.target && e.target.closest && e.target.closest('.ml-embedded');
+        if (!box) return;
+        var nazwa = FORMY[box.getAttribute('data-form')];
+        var pole = e.target.querySelector('input[type=email], input[name*="mail"]');
+        if (nazwa && pole && pole.value) window.mbsZrodlo(nazwa, pole.value.trim().toLowerCase());
+      } catch (err) {}
+    }, true);
   })();
 </script>

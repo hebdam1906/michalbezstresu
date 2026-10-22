@@ -76,6 +76,7 @@ import Stopka from '../components/Stopka.astro';
             if (x.ok && x.d.ok) {
               f.innerHTML = '<div class="zapis-ok"><strong>Jesteś zapisany ✓</strong><br>Za chwilę dostaniesz maila z potwierdzeniem, a link do transmisji — 4 i 5 listopada.</div>';
               try { if (window.va) window.va('event', { name: 'live_zapis' }); } catch (e) {}
+              try { if (window.mbsZrodlo) window.mbsZrodlo('live', email.toLowerCase()); } catch (e) {}
             } else { kom.textContent = (x.d && x.d.error) || 'Nie udało się zapisać. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; }
           })
           .catch(function () { kom.textContent = 'Brak połączenia. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; });
