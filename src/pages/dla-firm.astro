@@ -70,6 +70,13 @@ const jakTo = [
 ];
 import { Image } from 'astro:assets';
 import zdjecie from '../assets/michal-hebda.jpg';
+
+// SZKIC 23.10: pakiety „Prezent świąteczny dla menedżerów” — opisy od Klaudiusza do 27.10.
+const pakiety = [
+  { t: 'Zespół', cena: '490 zł netto', d: '[opis]', pkt: ['[punkt]', '[punkt]'] },
+  { t: 'Menedżerowie', cena: '1 990 zł netto', d: '[opis]', pkt: ['[punkt]', '[punkt]'] },
+  { t: 'Na wymiar', cena: 'wycena indywidualna', d: '[opis]', pkt: ['[punkt]', '[punkt]'] },
+];
 ---
 <Layout
   title="Szkolenia dla firm — trudne rozmowy, feedback, ocena roczna"
@@ -155,6 +162,31 @@ import zdjecie from '../assets/michal-hebda.jpg';
           </article>
         ))}
       </div>
+    </div>
+  </section>
+
+  {/* SZKIC 23.10 (gałąź prezent-firmowy, NIE na produkcję przed 16.11).
+      Teksty: Klaudiusz do 27.10 — placeholdery w nawiasach kwadratowych. Ceny netto.
+      Linki z zewnątrz: /dla-firm/?utm_source=…&utm_campaign=prezent-firmowy#prezent
+      (Atrybucja.astro zapisze UTM, formularz firmy_zapytania doklei je do zapytania). */}
+  <section id="prezent">
+    <div class="wrap">
+      <div class="eyebrow">Na święta</div>
+      <h2>Prezent świąteczny dla menedżerów</h2>
+      <p class="sub">[Lead — tekst od Klaudiusza do 27.10.]</p>
+      <div class="cards">
+        {pakiety.map((k) => (
+          <article class="card">
+            <span class="tag">Pakiet</span>
+            <h3>{k.t}</h3>
+            <p class="cena">{k.cena}</p>
+            <p class="cd">{k.d}</p>
+            <ul>{k.pkt.map((x) => <li>{x}</li>)}</ul>
+            <a class="btn btn-primary pakiet-btn" href="#kontakt" data-pakiet={k.t} data-ev={`prezent:${k.t}`}>Zapytaj o pakiet</a>
+          </article>
+        ))}
+      </div>
+      <p class="sub">Ceny netto, do kwoty dolicz 23% VAT.</p>
     </div>
   </section>
 
@@ -306,6 +338,16 @@ import zdjecie from '../assets/michal-hebda.jpg';
   </section>
 
   <Stopka />
+
+<script is:inline>
+  /* SZKIC 23.10: „Zapytaj o pakiet” → przewinięcie do formularza + wstępnie wpisana wiadomość. */
+  document.addEventListener('click', function (e) {
+    var b = e.target && e.target.closest && e.target.closest('.pakiet-btn');
+    if (!b) return;
+    var w = document.getElementById('wiadomosc');
+    if (w && !w.value.trim()) w.value = 'Dzień dobry, interesuje mnie pakiet świąteczny „' + b.getAttribute('data-pakiet') + '”. ';
+  });
+</script>
 </Layout>
 
 <script is:inline>
@@ -393,6 +435,8 @@ import zdjecie from '../assets/michal-hebda.jpg';
 .card{background:var(--mgla);border:1px solid var(--linia);border-radius:12px;padding:28px 26px;display:flex;flex-direction:column}
 .card .tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;background:rgba(46,107,93,.12);color:var(--sygnal);padding:4px 10px;border-radius:99px;align-self:flex-start;margin-bottom:16px}
 .card h3{font-size:21px;margin-bottom:10px;line-height:1.25}
+.card .cena{font-family:var(--disp);font-size:22px;color:var(--sygnal);margin:-4px 0 12px}
+.card .pakiet-btn{margin-top:auto;align-self:flex-start}
 .card .cd{font-size:15px;color:#4A5A55;margin-bottom:18px}
 .card .wprog{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#5E6E68;margin-bottom:10px}
 .card ul{list-style:none;padding:0;margin:0 0 18px}
