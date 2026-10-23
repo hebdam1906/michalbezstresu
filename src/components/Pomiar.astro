@@ -14,6 +14,7 @@
  *   klik              — kliknięcie przycisku/CTA na stronie     {strona, cel}
  *   wyjscie           — kliknięcie linku na zewnątrz            {strona, cel: domena}
  *   przewiniecie      — przewinięcie 50% / 90% strony           {strona, proc}
+ *   zgoda             — wybór na banerze cookies (23.10)       {strona, wybor: tak|nie}
  * Sukces wysyłki: /dziekuje*, ksiazka_zapis, konsultacje_wyslane, pytanie_wyslane.
  */
 ---
@@ -40,6 +41,8 @@
   document.addEventListener('click', function (e) {
     var a = e.target && e.target.closest && e.target.closest('a,button');
     if (!a || a.type === 'submit') return;
+    /* 23.10: baner cookies osobno — jako „klik” zjadał ~90% metryki (443 „tak” + 120 „nie” w tydzień). */
+    if (a.closest('#zgody')) { if (a.id === 'zgody-tak' || a.id === 'zgody-nie') ev('zgoda', { strona: p, wybor: a.id === 'zgody-tak' ? 'tak' : 'nie' }); return; }
     if (a.tagName === 'A') {
       var h = a.getAttribute('href') || '';
       if (/^https?:/i.test(h) && a.hostname && a.hostname.replace(/^www\./, '') !== location.hostname.replace(/^www\./, '')) {
