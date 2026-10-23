@@ -71,11 +71,16 @@ const jakTo = [
 import { Image } from 'astro:assets';
 import zdjecie from '../assets/michal-hebda.jpg';
 
-// SZKIC 23.10: pakiety „Prezent świąteczny dla menedżerów” — opisy od Klaudiusza do 27.10.
+// 23.10: pakiety „Prezent świąteczny dla menedżerów” — teksty Klaudiusza, zatwierdzone przez Michała 23.10.
 const pakiety = [
-  { t: 'Zespół', cena: '490 zł netto', d: '[opis]', pkt: ['[punkt]', '[punkt]'] },
-  { t: 'Menedżerowie', cena: '1 990 zł netto', d: '[opis]', pkt: ['[punkt]', '[punkt]'] },
-  { t: 'Na wymiar', cena: 'wycena indywidualna', d: '[opis]', pkt: ['[punkt]', '[punkt]'] },
+  { t: 'Zespół', cena: '490 zł netto', d: 'Dla jednego zespołu.',
+    pkt: ['10 książek z dedykacją dla firmy lub zespołu', 'E-book dla każdej osoby'] },
+  { t: 'Menedżerowie', polecany: true, cena: '1 990 zł netto', d: 'Książki i godzina wspólnej pracy na trudnych rozmowach.',
+    pkt: ['20 książek z dedykacją dla firmy lub zespołu', 'E-book dla każdej osoby',
+          'Warsztat online 60 min „Trudne rozmowy z obu stron stołu” (do 20 osób, termin do końca stycznia)'] },
+  { t: 'Na wymiar', cena: 'wycena indywidualna', d: 'Dla większych organizacji.',
+    pkt: ['50+ książek z dedykacją dla firmy lub zespołu', 'E-book dla każdej osoby',
+          'Warsztat stacjonarny w Krakowie lub online'] },
 ];
 ---
 <Layout
@@ -165,19 +170,22 @@ const pakiety = [
     </div>
   </section>
 
-  {/* SZKIC 23.10 (gałąź prezent-firmowy, NIE na produkcję przed 16.11).
-      Teksty: Klaudiusz do 27.10 — placeholdery w nawiasach kwadratowych. Ceny netto.
+  {/* Gałąź prezent-firmowy, NIE na produkcję przed 16.11. Teksty: Klaudiusz, zatwierdził Michał 23.10. Ceny netto.
       Linki z zewnątrz: /dla-firm/?utm_source=…&utm_campaign=prezent-firmowy#prezent
       (Atrybucja.astro zapisze UTM, formularz firmy_zapytania doklei je do zapytania). */}
   <section id="prezent">
     <div class="wrap">
       <div class="eyebrow">Na święta</div>
-      <h2>Prezent świąteczny dla menedżerów</h2>
-      <p class="sub">[Lead — tekst od Klaudiusza do 27.10.]</p>
+      <h2>Prezent świąteczny, który zostaje w zespole dłużej niż do stycznia</h2>
+      <p class="sub">Grudzień to w wielu firmach czas ocen rocznych, a styczeń czas nowych celów. Najtrudniejsze
+        rozmowy w roku dzieją się właśnie wtedy. Książka „Z obu stron stołu” pokazuje je z dwóch stron: tak,
+        jak widzi je menedżer, i tak, jak widzi je pracownik.</p>
+      <p class="sub">Przez dwadzieścia lat prowadziłem takie rozmowy w międzynarodowych instytucjach finansowych
+        i sam w nich uczestniczyłem jako pracownik. Ta książka to praktyka, nie teoria.</p>
       <div class="cards">
         {pakiety.map((k) => (
           <article class="card">
-            <span class="tag">Pakiet</span>
+            <span class="tag">{k.polecany ? 'Polecany' : 'Pakiet'}</span>
             <h3>{k.t}</h3>
             <p class="cena">{k.cena}</p>
             <p class="cd">{k.d}</p>
@@ -186,7 +194,8 @@ const pakiety = [
           </article>
         ))}
       </div>
-      <p class="sub">Ceny netto, do kwoty dolicz 23% VAT.</p>
+      <p class="sub">Ceny netto. Faktura VAT. Wysyłka na jeden adres w cenie. Zamówienia na święta do <strong>4 grudnia</strong>.</p>
+      <p class="sub">Po kliknięciu „Zapytaj o pakiet” odpiszę w ciągu jednego dnia roboczego z terminem dostawy i propozycją terminu warsztatu.</p>
     </div>
   </section>
 
