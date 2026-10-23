@@ -171,6 +171,31 @@ let nr = 0;
     </section>
   )}
 
+  <!-- Wydanie drukowane z dedykacją (od 16.11; gałąź prezent-firmowy, nie wdrażać wcześniej) -->
+  <section class="band" id="druk">
+    <div class="wrap waska">
+      <div class="eyebrow">Wydanie drukowane</div>
+      <h2>Z dedykacją, na prezent albo dla siebie</h2>
+      <p class="sub">Każdy egzemplarz podpisuję i wpisuję dedykację dla osoby, którą wskażesz.
+        Format A5, 160 stron, oprawa miękka klejona. Wysyłka paczkomatem InPost w ciągu 2 dni roboczych.</p>
+      <div class="oferty">
+        <div class="oferta">
+          <div class="oferta-nazwa">Wydanie drukowane z dedykacją</div>
+          <div class="oferta-cena">59 zł <span>z wysyłką</span></div>
+          <p>Książka podpisana dla Ciebie albo dla osoby, której ją dajesz.</p>
+          <a class="btn btn-ghost" href="https://cart.easy.tools/checkout/michalbezstresu/z-obu-stron-stolu-wydanie-drukowane?utm_source=strona&utm_medium=ksiazka&utm_campaign=druk&utm_content=druk" data-zdarzenie="kup_druk">Zamawiam druk</a>
+        </div>
+        <div class="oferta polecana">
+          <div class="oferta-nazwa">Druk z dedykacją + e-book</div>
+          <div class="oferta-cena">69 zł <span>z wysyłką</span></div>
+          <p>E-book (EPUB + PDF) dostajesz od razu, książka dociera paczkomatem w kilka dni.</p>
+          <a class="btn btn-primary" href="https://cart.easy.tools/checkout/michalbezstresu/z-obu-stron-stolu-druk-ebook?utm_source=strona&utm_medium=ksiazka&utm_campaign=druk&utm_content=pakiet" data-zdarzenie="kup_pakiet">Zamawiam pakiet</a>
+        </div>
+      </div>
+      <p class="sub uwaga">Dedykację wpiszesz w formularzu zamówienia. Jeśli zostawisz pole puste, podpiszę egzemplarz bez dedykacji.</p>
+    </div>
+  </section>
+
   <section>
     <div class="wrap waska autor">
       <Image src={zdjecie} alt="Michał Hebda" width={180} height={180} class="foto" />
@@ -266,4 +291,13 @@ let nr = 0;
 .autor :global(.foto){width:140px;height:140px;border-radius:50%;object-fit:cover;flex:none}
 .koniec{text-align:center}
 .koniec .sub{margin:10px auto 24px}
+.oferty{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+@media(max-width:680px){.oferty{grid-template-columns:1fr}}
+.oferta{background:#fff;border:1px solid var(--linia);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:8px}
+.oferta.polecana{border-color:var(--sygnal);box-shadow:0 8px 24px rgba(22,33,29,.08)}
+.oferta-nazwa{font-weight:700;font-size:17px}
+.oferta-cena{font-family:var(--disp);font-size:30px;color:var(--atrament)}
+.oferta-cena span{font-family:inherit;font-size:14px;color:#4A5A55}
+.oferta p{font-size:15px;color:#4A5A55;flex:1}
+.oferta .btn{align-self:flex-start}
 </style>
