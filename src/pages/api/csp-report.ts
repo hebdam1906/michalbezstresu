@@ -1,7 +1,7 @@
 // ============================================================================
 // 🛡️ /api/csp-report — odbiór raportów Content-Security-Policy-Report-Only
 // ----------------------------------------------------------------------------
-// 15.10.2026. CSP działa na razie tylko w trybie raportowania (nic nie blokuje).
+// 15.10.2026. CSP od 27.10.2026 wymuszane (wcześniej Report-Only).
 // Raporty lądują w logach Vercel (Runtime Logs, szukaj „CSP-REPORT”). Po tygodniu
 // bez istotnych raportów przełączamy nagłówek na egzekwowanie (vercel.json).
 // ============================================================================
