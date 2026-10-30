@@ -31,19 +31,15 @@ const { lang = 'pl' } = Astro.props;
 
 const t = lang === 'en'
   ? {
-      tytul: 'Before we go on',
-      opis1: 'I want to know whether my materials reach the right people, and to be able to show my ads to people who have already visited. That needs tools from Meta and Google, which store cookies. ',
-      opis2: 'Without your consent I do not load them at all — the site works normally. Details in the ',
-      polityka: 'privacy policy',
+      opis: 'I use Meta and Google tools (cookies) to see whether my materials reach the right people and to show ads. Without your consent they stay off. ',
+      polityka: 'Privacy policy',
       politykaUwaga: ' (in Polish)',
       nie: 'Essential only',
       tak: 'I agree',
     }
   : {
-      tytul: 'Zanim ruszymy dalej',
-      opis1: 'Chcemy wiedzieć, czy nasze materiały trafiają do właściwych osób, i móc pokazać nasze reklamy osobom, które już nas odwiedziły. Do tego potrzebujemy narzędzi Meta i Google, które zapisują ciasteczka. ',
-      opis2: 'Bez Twojej zgody nie uruchamiamy ich w ogóle — strona działa normalnie. Szczegóły w ',
-      polityka: 'polityce prywatności',
+      opis: 'Używamy narzędzi Meta i Google (ciasteczka), żeby sprawdzać, czy nasze materiały trafiają do właściwych osób, i pokazywać reklamy. Bez Twojej zgody ich nie uruchamiamy. ',
+      polityka: 'Polityka prywatności',
       politykaUwaga: '',
       nie: 'Tylko niezbędne',
       tak: 'Zgadzam się',
@@ -51,15 +47,12 @@ const t = lang === 'en'
 ---
 
 <div id="zgody" class="zgody" hidden role="dialog" aria-live="polite"
-     aria-labelledby="zgody-tytul" aria-describedby="zgody-opis">
-  <div class="zgody-tresc">
-    <p id="zgody-tytul" class="zgody-naglowek">{t.tytul}</p>
-    <p id="zgody-opis">
-      {t.opis1}{t.opis2}<a href="/prywatnosc/"
-        hreflang={lang === 'en' ? 'pl' : undefined}
-        lang={lang === 'en' ? 'pl' : undefined}>{t.polityka}</a>{t.politykaUwaga}.
-    </p>
-  </div>
+     aria-label={lang === 'en' ? 'Cookie consent' : 'Zgoda na ciasteczka'} aria-describedby="zgody-opis">
+  <p id="zgody-opis" class="zgody-tresc">
+    {t.opis}<a href="/prywatnosc/"
+      hreflang={lang === 'en' ? 'pl' : undefined}
+      lang={lang === 'en' ? 'pl' : undefined}>{t.polityka}</a>{t.politykaUwaga}
+  </p>
   <div class="zgody-przyciski">
     <button type="button" id="zgody-nie" class="btn btn-ghost">{t.nie}</button>
     <button type="button" id="zgody-tak" class="btn btn-primary">{t.tak}</button>
@@ -108,25 +101,25 @@ const t = lang === 'en'
 </script>
 
 <style>
+/* 30.10.2026: kompaktowy pasek zamiast dużej karty — wcześniej na telefonie
+   zasłaniał ok. 40% ekranu razem z głównym przyciskiem strony. */
 .zgody{
-  position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;
-  max-width:720px;margin:0 auto;
+  position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;
+  max-width:980px;margin:0 auto;
   background:var(--papier);color:var(--atrament);
-  border:1px solid var(--linia);border-radius:14px;
-  box-shadow:0 10px 34px rgba(30,43,40,.16);
-  padding:22px 24px;
-  display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;
+  border:1px solid var(--linia);border-radius:12px;
+  box-shadow:0 6px 24px rgba(30,43,40,.14);
+  padding:12px 14px 12px 18px;
+  display:flex;gap:16px;align-items:center;
 }
 .zgody[hidden]{display:none}
-.zgody-tresc{flex:1 1 340px;min-width:0}
-.zgody-naglowek{font-family:var(--disp);font-size:18px;margin-bottom:6px}
-.zgody-tresc p{font-size:14.5px;line-height:1.55;color:#4A5A55}
-.zgody-tresc a{color:var(--sygnal);text-decoration:underline}
-.zgody-przyciski{display:flex;gap:10px;flex:0 0 auto}
-.zgody-przyciski .btn{font-size:14.5px;padding:11px 18px}
-@media(max-width:560px){
-  .zgody{padding:18px}
-  .zgody-przyciski{width:100%}
-  .zgody-przyciski .btn{flex:1}
+.zgody-tresc{flex:1 1 auto;min-width:0;margin:0;font-size:13.5px;line-height:1.5;color:#4A5A55}
+.zgody-tresc a{color:var(--sygnal);text-decoration:underline;white-space:nowrap}
+.zgody-przyciski{display:flex;gap:8px;flex:0 0 auto}
+.zgody-przyciski .btn{font-size:14px;padding:9px 16px;white-space:nowrap}
+@media(max-width:700px){
+  .zgody{left:8px;right:8px;bottom:8px;flex-direction:column;align-items:stretch;gap:10px;padding:12px 14px}
+  .zgody-tresc{font-size:12.5px;line-height:1.45}
+  .zgody-przyciski .btn{flex:1;padding:9px 10px;font-size:13.5px}
 }
 </style>
