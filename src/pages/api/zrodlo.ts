@@ -37,3 +37,9 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   }, { onConflict: 'email,formularz', ignoreDuplicates: true });
   return ok();
 };
+
+// 30.10.2026: Googlebot pobierał /api/zrodlo GET-em i dostawał 404 (Search Console).
+// robots.txt celowo nie ma Disallow (sprawa Google Ads, 7.09), więc zamiast blokady
+// zwracamy 405 z nagłówkiem Allow — jasny sygnał, że to endpoint tylko do POST.
+export const GET: APIRoute = () =>
+  new Response(null, { status: 405, headers: { Allow: 'POST', 'X-Robots-Tag': 'noindex' } });
