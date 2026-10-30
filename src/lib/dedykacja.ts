@@ -72,7 +72,10 @@ export async function pdfZDedykacja(imie: string | null): Promise<Uint8Array> {
   const reg = await doc.embedFont(f.reg, { subset: true });
   const it = await doc.embedFont(f.it, { subset: true });
   const png = await doc.embedPng(f.podpis);
-  const W = 419.53, H = 595.28, mm = 2.8346;
+  // 30.10.2026: format bierzemy z pliku (v3.4 ma 420×671 pt, wcześniej A5 419,5×595,3),
+  // żeby strona dedykacji miała ten sam rozmiar co reszta książki.
+  const { width: W, height: H } = doc.getPage(Math.min(1, doc.getPageCount() - 1)).getSize();
+  const mm = 2.8346;
   const page = doc.insertPage(1, [W, H]);
   const ink = rgb(0.114, 0.141, 0.133), green = rgb(0.18, 0.42, 0.365), grey = rgb(0.35, 0.4, 0.38);
   const size = 13, lh = size * 1.55;
