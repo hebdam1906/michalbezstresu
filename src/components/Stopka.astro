@@ -7,8 +7,8 @@
  * to osobna decyzja Michała i Klaudiusza — do tego czasu uczciwiej jest
  * uprzedzić niż wpuścić kogoś w polski tekst prawny bez ostrzeżenia.
  */
-interface Props { lang?: 'pl' | 'en' }
-const { lang = 'pl' } = Astro.props;
+interface Props { lang?: 'pl' | 'en'; sprzedawca?: boolean }
+const { lang = 'pl', sprzedawca = false } = Astro.props;
 ---
 
 <footer>
@@ -29,6 +29,9 @@ const { lang = 'pl' } = Astro.props;
       <a href="https://www.facebook.com/michalbezstresu" target="_blank" rel="noopener">Facebook</a>
       <a href="https://open.spotify.com/show/033Xdd4fISRZxTSUZhASOW" target="_blank" rel="noopener">Podcast</a>
     </div>
+    {sprzedawca && (
+      <div class="sprzedawca">Sprzedawca: MH Consulting - Michał Hebda, ul. Henryka i Karola Czeczów 36, 30-798 Kraków · NIP 6772240049 · REGON 122905620</div>
+    )}
   </div>
 </footer>
 
@@ -39,4 +42,5 @@ footer{padding:56px 0 40px;border-top:1px solid var(--linia)}
 .foot a:hover{color:var(--sygnal)}
 .socials{display:flex;gap:18px;font-family:var(--mono);font-size:13px}
 .foot .drobne{color:#84948F}
+.foot .sprzedawca{flex-basis:100%;font-size:12.5px;color:#84948F}
 </style>
