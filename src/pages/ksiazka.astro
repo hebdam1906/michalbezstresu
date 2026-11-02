@@ -12,14 +12,20 @@ import zdjecie from '../assets/michal-hebda.jpg';
  * i miejscem na opinie, zapis = grupa MailerLite „Ksiazka-premiera”
  * (endpoint /api/ksiazka). Okładka NB1 (decyzja Michała 14.10).
  *
- * ⚠️ BEZ CENY I BEZ SPRZEDAŻY do 2.11 (status PUP Michała do 31.10).
- *    2.11: przycisk „Kup” → EasyCart (produkt 4) — osobna zmiana.
+ * 2.11.2026 (i16): sprzedaż — przycisk „Kup” → EasyCart (produkt 4).
+ *    Cena 39 zł do 15.11; od 16.11 0:00 (Warszawa) skrypt na dole sam
+ *    podmienia teksty na 49 zł (zgrać z ręczną zmianą ceny w EasyCart 16.11).
+ *    UTM z adresu strony (np. z maila) przechodzą do linku kasy.
  * ⚠️ W „O autorze” nie ma Lean Six Sigma — Michał nie ma tego certyfikatu.
  *
  * OPINIE: tablica `opinie` niżej. Pusta = sekcja się nie wyświetla.
  * Dopisujemy cytaty recenzentów (termin opinii 29.10) — imię, rola, tekst.
  */
 const opinie: { tekst: string; kto: string; rola: string }[] = [];
+
+/* Kasa EasyCart, produkt 4. Domyślne UTM, gdy wejście bez UTM. */
+const KASA = 'https://cart.easy.tools/checkout/michalbezstresu/z-obu-stron-stolu-ebook';
+const KASA_UTM = KASA + '?utm_source=strona&utm_medium=ksiazka&utm_campaign=premiera-ksiazki';
 
 const czesci = [
   {
@@ -51,17 +57,17 @@ const czesci = [
 let nr = 0;
 ---
 <Layout
-  title="Z obu stron stołu — książka Michała Hebdy | premiera 2 listopada"
-  description="Co dzieje się w rozmowach, od których zależy Twoja praca: feedback, plan naprawczy, ocena roczna, podwyżka, awans, restrukturyzacja. E-book ukaże się 2 listopada — zapisz się na listę premierową."
+  title="Z obu stron stołu — e-book Michała Hebdy (EPUB + PDF)"
+  description="Co dzieje się w rozmowach, od których zależy Twoja praca: feedback, plan naprawczy, ocena roczna, podwyżka, awans, restrukturyzacja. E-book (EPUB + PDF) do pobrania od razu po zakupie."
   ogObraz="/og/og-ksiazka.jpg"
-  ogAlt="Z obu stron stołu — książka Michała Hebdy, premiera 2 listopada"
+  ogAlt="Z obu stron stołu — e-book Michała Hebdy"
 >
   <Nav />
 
   <header class="khero">
     <div class="wrap khero-in">
       <div class="khero-txt">
-        <div class="eyebrow">Książka · premiera e-booka 2 listopada</div>
+        <div class="eyebrow">Książka · e-book (EPUB + PDF)</div>
         <h1>Z obu stron stołu</h1>
         <p class="podtytul">Co dzieje się w rozmowach, od których zależy Twoja praca</p>
         <p class="lead">Piętnaście rozdziałów o rozmowach, które zmieniają kariery: od maila,
@@ -69,23 +75,13 @@ let nr = 0;
           i awans, aż po restrukturyzację i własny trudny zespół. Każda z nich opisana
           z obu stron stołu — tak, jak ją widzi pracownik, i tak, jak ją widzi menedżer.</p>
 
-        <form class="zapis" id="zapis" novalidate>
-          <div class="zapis-tytul">Zapisz się na listę premierową</div>
-          <p class="zapis-opis">2 listopada dostaniesz maila jako pierwszy — razem z ceną premierową.
-            Jeden mail o premierze, bez spamu.</p>
-          <div class="pola">
-            <input type="text" name="imie" placeholder="Imię (opcjonalnie)" autocomplete="given-name" maxlength="80" />
-            <input type="email" name="email" placeholder="Twój e-mail" autocomplete="email" required maxlength="160" />
-          </div>
-          <input type="text" name="www" class="pulapka" tabindex="-1" autocomplete="off" aria-hidden="true" />
-          <label class="zgoda">
-            <input type="checkbox" name="zgoda" required />
-            <span>Chcę dostać od Michała bez Stresu informację o premierze książki.
-              Wypiszesz się jednym kliknięciem. <a href="/prywatnosc/">Polityka prywatności</a>.</span>
-          </label>
-          <button class="btn btn-primary" type="submit">Zapisz mnie na listę</button>
-          <p class="komunikat" role="status" aria-live="polite"></p>
-        </form>
+        <div class="zapis kup" id="kup">
+          <div class="zapis-tytul">E-book „Z obu stron stołu”</div>
+          <p class="kup-cena"><span data-cena>39 zł</span> <span class="kup-do" data-do>do 15 listopada (potem 49 zł)</span></p>
+          <a class="btn btn-primary" href={KASA_UTM} data-kasa data-ev="ksiazka-kup-hero"><span data-przycisk>Kupuję e-book za 39 zł</span></a>
+          <p class="zapis-opis kup-pod">EPUB + PDF, od razu na maila.</p>
+          <p class="zapis-opis kup-ded">Osoby z listy premierowej, które kupią go w pierwszym tygodniu (2–8 listopada), dostaną egzemplarz z imienną dedykacją.</p>
+        </div>
       </div>
       <div class="okladka">
         <img src="/ksiazka/okladka-nb1-600x960.jpg" width="600" height="960"
@@ -188,9 +184,9 @@ let nr = 0;
 
   <section class="band koniec">
     <div class="wrap waska">
-      <h2>Premiera 2 listopada</h2>
-      <p class="sub">Zapisz się na listę — dostaniesz maila w dniu premiery, razem z ceną premierową.</p>
-      <a class="btn btn-primary" href="#zapis">Zapisz mnie na listę</a>
+      <h2>Z obu stron stołu</h2>
+      <p class="sub">E-book (EPUB + PDF), od razu na maila. <span data-cena>39 zł</span> <span data-do>do 15 listopada (potem 49 zł)</span>.</p>
+      <a class="btn btn-primary" href={KASA_UTM} data-kasa data-ev="ksiazka-kup-dol"><span data-przycisk>Kupuję e-book za 39 zł</span></a>
     </div>
   </section>
 
@@ -198,29 +194,17 @@ let nr = 0;
 
   <script is:inline>
     (function () {
-      var f = document.getElementById('zapis');
-      if (!f) return;
-      var kom = f.querySelector('.komunikat');
-      var btn = f.querySelector('button[type=submit]');
-      f.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var email = f.email.value.trim();
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { kom.textContent = 'Sprawdź adres e-mail.'; kom.className = 'komunikat blad'; return; }
-        if (!f.zgoda.checked) { kom.textContent = 'Zaznacz zgodę, żebym mógł wysłać informację o premierze.'; kom.className = 'komunikat blad'; return; }
-        btn.disabled = true; kom.textContent = 'Zapisuję…'; kom.className = 'komunikat';
-        fetch('/api/ksiazka', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email, imie: f.imie.value.trim(), zgoda: true, www: f.www.value })
-        }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
-          .then(function (x) {
-            if (x.ok && x.d.ok) {
-              f.innerHTML = '<div class="zapis-ok"><strong>Jesteś na liście ✓</strong><br>2 listopada dostaniesz ode mnie maila o premierze — jako jeden z pierwszych.</div>';
-              try { if (window.va) window.va('event', { name: 'ksiazka_zapis' }); } catch (e) {}
-              try { if (window.mbsZrodlo) window.mbsZrodlo('ksiazka', email.toLowerCase()); } catch (e) {}
-            } else { kom.textContent = (x.d && x.d.error) || 'Nie udało się zapisać. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; }
-          })
-          .catch(function () { kom.textContent = 'Brak połączenia. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; });
-      });
+      /* UTM z adresu strony (np. z maila 2.11) przekazujemy do kasy. */
+      var q = new URLSearchParams(location.search), utm = [];
+      q.forEach(function (v, k) { if (/^utm_/.test(k)) utm.push(encodeURIComponent(k) + '=' + encodeURIComponent(v)); });
+      if (utm.length) document.querySelectorAll('[data-kasa]').forEach(function (a) { a.href = a.href.split('?')[0] + '?' + utm.join('&'); });
+      /* Od 16.11.2026 0:00 Warszawa (15.11 23:00 UTC): cena 49 zł. */
+      if (Date.now() >= Date.UTC(2026, 10, 15, 23, 0, 0)) {
+        document.querySelectorAll('[data-cena]').forEach(function (e) { e.textContent = '49 zł'; });
+        document.querySelectorAll('[data-do]').forEach(function (e) { e.remove(); });
+        document.querySelectorAll('[data-przycisk]').forEach(function (e) { e.textContent = 'Kupuję e-book za 49 zł'; });
+        document.querySelectorAll('.kup-ded').forEach(function (e) { e.remove(); });
+      }
     })();
   </script>
 </Layout>
@@ -246,6 +230,11 @@ let nr = 0;
 .komunikat{font-size:14px;margin-top:10px;min-height:1em}
 .komunikat.blad{color:#B3261E}
 .zapis-ok{font-size:16px;line-height:1.6;color:var(--atrament)}
+.kup-cena{font-size:15px;color:#4A5A55;margin:6px 0 14px}
+.kup-cena [data-cena]{font-family:var(--disp);font-size:30px;color:var(--atrament);margin-right:6px}
+.kup .btn{display:inline-block}
+.kup-pod{margin:12px 0 4px}
+.kup-ded{font-size:13.5px;margin:0}
 .band{background:var(--papier);border-top:1px solid var(--linia);border-bottom:1px solid var(--linia)}
 .quotes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:30px}
 @media(max-width:680px){.quotes{grid-template-columns:1fr}}
