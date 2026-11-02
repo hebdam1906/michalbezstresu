@@ -115,12 +115,20 @@ export async function przygotujDedykacje(a: { email: string; imie?: string; zamo
   if (!a.test && !(kiedy >= OD && kiedy < DO)) return { powod: 'poza-okresem' };
   const { data: osoba } = await supabaseAdmin.from('premiera_lista').select('email, imie').eq('email', email).maybeSingle();
   if (!osoba && !a.test) return { powod: 'nie-na-liscie' };
-  if (!a.test) {
-    const { data: byl } = await supabaseAdmin.from('dedykacje_log').select('id').eq('zamowienie', a.zamowienie).maybeSingle();
-    if (byl) return { powod: 'juz-wyslano' };
-  }
   const imie = normalizujImie(a.imie) ?? normalizujImie(osoba?.imie);
-  const pdf = await pdfZDedykacja(imie);
-  if (!a.test) await supabaseAdmin.from('dedykacje_log').insert({ zamowienie: a.zamowienie, email, imie_uzyte: imie, wynik: 'wygenerowano' });
-  return { powod: 'wygenerowano', pdf, imie };
+  // 2.11.2026: EasyCart wysyła single_product_bought i product_assigned w tej samej sekundzie.
+  // Stare „sprawdź, potem zapisz” przepuszczało oba → dwa maile (zam. 1544838). Teraz NAJPIERW
+  // rezerwujemy zamówienie w logu (unikalny klucz na `zamowienie`); kto przegra wyścig → juz-wyslano.
+  if (!a.test) {
+    const { error } = await supabaseAdmin.from('dedykacje_log').insert({ zamowienie: a.zamowienie, email, imie_uzyte: imie, wynik: 'wygenerowano' });
+    if (error) return { powod: 'juz-wyslano' };
+  }
+  try {
+    const pdf = await pdfZDedykacja(imie);
+    return { powod: 'wygenerowano', pdf, imie };
+  } catch (e) {
+    // generowanie padło → zwalniamy rezerwację, żeby kolejne zdarzenie mogło spróbować
+    if (!a.test) await supabaseAdmin.from('dedykacje_log').delete().eq('zamowienie', a.zamowienie);
+    throw e;
+  }
 }
