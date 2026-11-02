@@ -6,15 +6,16 @@ import Layout from '../../layouts/Layout.astro';
  * EasyCart: produkt e-book → każdy wariant ceny → „Własna strona podziękowania”
  * przekierowuje tutaj. Pliki i tak idą mailem z EasyCart (+ portal klienta),
  * więc strona mówi „sprawdź maila” i pokazuje następny krok: konsultację.
- * Cena dla czytelników 149 zł do 30.11 (zgoda Michała 2.11, 17:52) — realizowana
- * kodem CZYTELNIK149 (EasyCart, produkt „Konsultacja 60 minut”, do 30.11 23:59),
- * który formularz /konsultacje/ wypełnia sam z parametru ?kod=.
+ * Cena dla czytelników 149 zł do 30.11 (zgoda Michała 2.11, 17:52) — decyzja Michała 2.11:
+ * osobny, UKRYTY wariant „Konsultacja 45 minut dla czytelników książki” (149 zł) w produkcie
+ * EasyCart „Konsultacja 60 minut”, dostępny do 30.11 23:55. Przycisk prowadzi prosto do niego.
+ * (Kod CZYTELNIK149 −150 zł na 60 min też istnieje w EasyCart, do 30.11 — na razie nieużywany.)
  * Po 30.11 sekcja oferty znika sama (sprawdzane przy każdym wejściu).
  */
 export const prerender = false;
 const KONIEC_OFERTY = Date.parse('2026-12-01T00:00:00+01:00');
 const ofertaAktywna = Date.now() < KONIEC_OFERTY;
-const LINK = '/konsultacje/?kod=CZYTELNIK149&utm_source=po-zakupie&utm_medium=strona&utm_campaign=ksiazka#formularz';
+const LINK = 'https://cart.easy.tools/checkout/michalbezstresu/konsultacja-60-minut?plan=price_1UXOnwG1D25g3EalTfkSL7rU&utm_source=po-zakupie&utm_medium=strona&utm_campaign=ksiazka';
 ---
 <Layout
   title="Dziękuję za zakup — Michał bez Stresu"
@@ -38,10 +39,10 @@ const LINK = '/konsultacje/?kod=CZYTELNIK149&utm_source=po-zakupie&utm_medium=st
         <section class="oferta" aria-labelledby="oferta-tytul">
           <h2 id="oferta-tytul">Masz już plan na rozmowę. Chcesz go przećwiczyć?</h2>
           <p>Jeśli trudna rozmowa jest blisko — ocena, podwyżka, plan naprawczy — umów
-            60 minut ze mną. Przejdziemy Twoją sytuację i przygotujemy, co powiesz
+            45 minut ze mną. Przejdziemy Twoją sytuację i przygotujemy, co powiesz
             i o co zapytasz.</p>
           <a class="oferta-btn" href={LINK} data-cta-po-zakupie>Umów konsultację — 149 zł dla czytelników, do 30.11</a>
-          <p class="oferta-pod">Zamiast 299 zł. Kod rabatowy wpisze się w formularzu sam.</p>
+          <p class="oferta-pod">Rozmowa online. Po płatności odezwę się mailem w ciągu 48 godzin, żeby ustalić termin.</p>
         </section>
       )}
     </div>
