@@ -117,6 +117,22 @@ export const POST: APIRoute = async ({ request, url }) => {
     }
   } catch { /* push nigdy nie blokuje webhooka */ }
 
+  // KUPUJĄCY → grupa MailerLite „Ksiazka-kupujacy” (2.11.2026, decyzja Michała), żeby automat
+  // „Ksiazka-fragment” nie wysyłał im maila 2. TYLKO gdy adres już jest subskrybentem (GET 200);
+  // nikogo nowego nie zapisujemy bez zgody. Błąd nie blokuje webhooka.
+  try {
+    const KLUCZ_ML = import.meta.env.MAILERLITE_API_KEY;
+    if (KLUCZ_ML && email && zdarzenie === 'single_product_bought' && toKsiazka(produkt)) {
+      const h = { Accept: 'application/json', Authorization: `Bearer ${KLUCZ_ML}` };
+      const r = await fetch('https://connect.mailerlite.com/api/subscribers/' + encodeURIComponent(email), { headers: h });
+      if (r.ok) {
+        const sub: any = await r.json().catch(() => null);
+        const id = sub?.data?.id;
+        if (id) await fetch(`https://connect.mailerlite.com/api/subscribers/${id}/groups/203022308254680638`, { method: 'POST', headers: h });
+      }
+    }
+  } catch { /* grupa kupujących nie blokuje webhooka */ }
+
   const zakup = /product_assigned|single_product_bought|order/i.test(zdarzenie) || !zdarzenie;
   const toEbook = !produktId || produktId === PRODUKT_ID || /obu stron/i.test(produkt);
   if (!zakup || !toEbook || !email || !zamowienie) return ok({ ok: true, dedykacja: 'pominieto' });
