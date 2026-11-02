@@ -133,6 +133,25 @@ let nr = 0;
           rozpoznać, czy dostałeś plan pisany pod sukces, czy pod formalność — i gotowe zdania
           na każdy etap planu.</p>
       </div>
+
+      <!-- 2.11.2026: darmowy rozdział 1 (PDF) za zapis — druga akcja strony (główna: „Kupuję”). -->
+      <form class="zapis" id="fragmentZapis" novalidate>
+        <div class="zapis-tytul">Pobierz cały rozdział 1 (PDF)</div>
+        <p class="zapis-opis">„Ten mail właśnie stał się dokumentem” — o negatywnym feedbacku i o tym,
+          co zrobić, zanim rozmowa trafi do akt. Wyślę Ci go mailem.</p>
+        <div class="pola">
+          <input type="text" name="imie" placeholder="Imię (opcjonalnie)" autocomplete="given-name" maxlength="80" />
+          <input type="email" name="email" placeholder="Twój e-mail" autocomplete="email" required maxlength="160" />
+        </div>
+        <input type="text" name="www" class="pulapka" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <label class="zgoda">
+          <input type="checkbox" name="zgoda" required />
+          <span>Chcę dostać od Michała bez Stresu rozdział 1 i kilka maili o książce.
+            Wypiszesz się jednym kliknięciem. <a href="/prywatnosc/">Polityka prywatności</a>.</span>
+        </label>
+        <button class="btn btn-ghost" type="submit">Wyślij mi rozdział 1</button>
+        <p class="komunikat" role="status" aria-live="polite"></p>
+      </form>
     </div>
   </section>
 
@@ -194,6 +213,34 @@ let nr = 0;
 
   <script is:inline>
     (function () {
+      var f = document.getElementById('fragmentZapis');
+      if (!f) return;
+      var kom = f.querySelector('.komunikat');
+      var btn = f.querySelector('button[type=submit]');
+      f.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var email = f.email.value.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { kom.textContent = 'Sprawdź adres e-mail.'; kom.className = 'komunikat blad'; return; }
+        if (!f.zgoda.checked) { kom.textContent = 'Zaznacz zgodę, żebym mógł wysłać rozdział.'; kom.className = 'komunikat blad'; return; }
+        btn.disabled = true; kom.textContent = 'Wysyłam…'; kom.className = 'komunikat';
+        fetch('/api/ksiazka/', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, imie: f.imie.value.trim(), zgoda: true, www: f.www.value, cel: 'fragment' })
+        }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+          .then(function (x) {
+            if (x.ok && x.d.ok) {
+              f.innerHTML = '<div class="zapis-ok"><strong>Rozdział jest w drodze ✓</strong><br>Za chwilę przyjdzie mail. Jeśli nie chcesz czekać: <a href="/pobierz/z-obu-stron-stolu_rozdzial-1.pdf" target="_blank" rel="noopener">pobierz PDF teraz</a>.</div>';
+              try { if (window.va) window.va('event', { name: 'ksiazka_fragment' }); } catch (e) {}
+              try { if (window.mbsZrodlo) window.mbsZrodlo('ksiazka-fragment', email.toLowerCase()); } catch (e) {}
+            } else { kom.textContent = (x.d && x.d.error) || 'Nie udało się wysłać. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; }
+          })
+          .catch(function () { kom.textContent = 'Brak połączenia. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; });
+      });
+    })();
+  </script>
+
+  <script is:inline>
+    (function () {
       /* UTM z adresu strony (np. z maila 2.11) przekazujemy do kasy. */
       var q = new URLSearchParams(location.search), utm = [];
       q.forEach(function (v, k) { if (/^utm_/.test(k)) utm.push(encodeURIComponent(k) + '=' + encodeURIComponent(v)); });
@@ -230,6 +277,8 @@ let nr = 0;
 .komunikat{font-size:14px;margin-top:10px;min-height:1em}
 .komunikat.blad{color:#B3261E}
 .zapis-ok{font-size:16px;line-height:1.6;color:var(--atrament)}
+.zapis-ok a{color:var(--sygnal)}
+#fragment .zapis{margin-top:34px}
 .kup-cena{font-size:15px;color:#4A5A55;margin:6px 0 14px}
 .kup-cena [data-cena]{font-family:var(--disp);font-size:30px;color:var(--atrament);margin-right:6px}
 .kup .btn{display:inline-block}

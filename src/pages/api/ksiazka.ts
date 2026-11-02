@@ -19,6 +19,8 @@ import type { APIRoute } from 'astro';
 import { przepusc, zaDuzo } from '../../lib/ratelimit';
 
 const GRUPA = '201320469525169413'; // „Ksiazka-premiera” (id grupy nie jest sekretem)
+// 2.11.2026: darmowy rozdział 1 (PDF) za zapis → grupa „Ksiazka-fragment” (automat w MailerLite).
+const GRUPA_FRAGMENT = '203021825808008668';
 const KLUCZ_ML = import.meta.env.MAILERLITE_API_KEY;
 
 const json = (b: unknown, s = 200) =>
@@ -38,7 +40,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const email = tekst(b.email, 160).toLowerCase();
   const imie = tekst(b.imie, 80);
   if (!czyMail(email)) return json({ error: 'Sprawdź adres e-mail.' }, 400);
-  if (b.zgoda !== true) return json({ error: 'Zaznacz zgodę — bez niej nie mogę wysłać informacji o premierze.' }, 400);
+  const fragment = b.cel === 'fragment';
+  if (b.zgoda !== true) return json({ error: fragment ? 'Zaznacz zgodę — bez niej nie mogę wysłać rozdziału.' : 'Zaznacz zgodę — bez niej nie mogę wysłać informacji o premierze.' }, 400);
 
   const fields: Record<string, string> = {};
   if (imie) fields.name = imie;
@@ -47,7 +50,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const r = await fetch('https://connect.mailerlite.com/api/subscribers', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json', Authorization: `Bearer ${KLUCZ_ML}` },
-      body: JSON.stringify({ email, fields, groups: [GRUPA] }),
+      body: JSON.stringify({ email, fields, groups: [fragment ? GRUPA_FRAGMENT : GRUPA] }),
     });
     if (!r.ok) return json({ error: 'Nie udało się zapisać. Spróbuj jeszcze raz albo napisz na kontakt@michalbezstresu.pl.' }, 502);
   } catch {
