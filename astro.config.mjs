@@ -31,6 +31,8 @@ export default defineConfig({
         if (/\/witaj\/?$/.test(page)) return false;
         // /ksiazka/regulamin-konkursu (21.10) — noindex, niepodlinkowany do akceptacji prawniczki.
         if (/\/ksiazka\/regulamin-konkursu\/?$/.test(page)) return false;
+        // /ksiazka/dziekuje-za-zakup (2.11) — przekierowanie z EasyCart po zakupie e-booka (noindex).
+        if (/\/ksiazka\/dziekuje-za-zakup\/?$/.test(page)) return false;
         // /pytanie/dziekuje (25.09) — podziękowanie po formularzu „Zadaj pytanie”.
         if (/\/pytanie\/dziekuje\/?$/.test(page)) return false;
         // Angielska strona podziękowania (24.09) — ta sama zasada co wyżej:

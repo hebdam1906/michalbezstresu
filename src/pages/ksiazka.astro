@@ -55,6 +55,11 @@ const czesci = [
   },
 ];
 let nr = 0;
+/* 2.11 (brief Klaudiusza): wideo 60 s Michała nad pierwszym „Kup”. Michał nagrywa 3.11.
+   Wgrać na YouTube jako NIEPUBLICZNE (z napisami), wpisać tu ID filmu → sekcja się pojawi.
+   Lekkie osadzenie: miniatura + iframe youtube-nocookie dopiero po kliknięciu
+   (zero kosztu dla szybkości strony, CSP już pozwala na youtube-nocookie). */
+const WIDEO_YT_ID = '';
 ---
 <Layout
   title="Z obu stron stołu — e-book Michała Hebdy (EPUB + PDF)"
@@ -74,6 +79,16 @@ let nr = 0;
           który właśnie stał się dokumentem, przez plan naprawczy, ocenę roczną, podwyżkę
           i awans, aż po restrukturyzację i własny trudny zespół. Każda z nich opisana
           z obu stron stołu — tak, jak ją widzi pracownik, i tak, jak ją widzi menedżer.</p>
+
+        {WIDEO_YT_ID && (
+          <div class="kwideo" data-yt={WIDEO_YT_ID}>
+            <button type="button" class="kwideo-start" aria-label="Odtwórz: Michał o książce (1 minuta)">
+              <img src={`https://i.ytimg.com/vi/${WIDEO_YT_ID}/hqdefault.jpg`} alt="" width="480" height="360" loading="lazy" decoding="async" />
+              <span class="kwideo-play" aria-hidden="true">▶</span>
+              <span class="kwideo-opis">Michał o książce · 1 min</span>
+            </button>
+          </div>
+        )}
 
         <div class="zapis kup" id="kup">
           <div class="zapis-tytul">E-book „Z obu stron stołu”</div>
@@ -256,7 +271,28 @@ let nr = 0;
   </script>
 </Layout>
 
+<script is:inline>
+  /* Wideo na /ksiazka/: iframe dopiero po kliknięciu + zdarzenie ksiazka_wideo_start (Vercel). */
+  (function () {
+    var w = document.querySelector('.kwideo');
+    if (!w) return;
+    w.querySelector('.kwideo-start').addEventListener('click', function () {
+      var id = w.getAttribute('data-yt');
+      w.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&cc_load_policy=1&cc_lang_pref=pl&rel=0" title="Michał o książce" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+      try { if (window.va) window.va('event', { name: 'ksiazka_wideo_start' }); } catch (e) {}
+    });
+  })();
+</script>
+
 <style>
+.kwideo{position:relative;aspect-ratio:16/9;max-width:560px;margin:22px 0 6px;border-radius:12px;overflow:hidden;background:#1D2422}
+.kwideo iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.kwideo-start{all:unset;cursor:pointer;position:absolute;inset:0;display:block}
+.kwideo-start img{width:100%;height:100%;object-fit:cover;display:block}
+.kwideo-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;
+  background:rgba(46,107,93,.92);color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center;padding-left:4px}
+.kwideo-opis{position:absolute;left:12px;bottom:10px;background:rgba(0,0,0,.6);color:#fff;font-size:13px;padding:4px 9px;border-radius:6px}
+.kwideo-start:focus-visible{outline:3px solid var(--marker);outline-offset:-3px}
 .khero{padding:64px 0 56px;background:linear-gradient(180deg,var(--mgla),var(--papier))}
 .khero-in{display:grid;grid-template-columns:1.25fr .75fr;gap:48px;align-items:center}
 @media(max-width:860px){.khero-in{grid-template-columns:1fr}.okladka{order:-1;max-width:260px}}

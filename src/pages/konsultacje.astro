@@ -232,6 +232,13 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
       var kom = document.getElementById('komunikat');
       if (!f) return;
 
+      /* ?kod=… w adresie wypełnia pole kodu (2.11: oferta po zakupie książki,
+         /ksiazka/dziekuje-za-zakup/ → CZYTELNIK149). Tylko litery/cyfry/myślnik. */
+      try {
+        var kodZUrl = new URLSearchParams(location.search).get('kod');
+        if (kodZUrl && /^[A-Za-z0-9-]{3,40}$/.test(kodZUrl) && f.kod && !f.kod.value) f.kod.value = kodZUrl.toUpperCase();
+      } catch (e) {}
+
       /* Pole „a dokładniej?" pokazuje się tylko po wybraniu „Inne" —
          reszcie osób nie zawracamy głowy dodatkowym polem. */
       var skad = document.getElementById('skad');
