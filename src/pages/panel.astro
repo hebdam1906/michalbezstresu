@@ -56,6 +56,18 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
     .warn{background:var(--marker);color:#6B5A14;border-radius:10px;padding:14px 18px;font-size:14px;margin-bottom:22px}
     .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px}
     @media(max-width:820px){.kpis{grid-template-columns:1fr 1fr}}
+    .sprz{margin-bottom:26px}
+    .sprz .sprz-kpis{margin:14px 0 18px}
+    .sprz .kpi{background:var(--mgla);border:0}
+    .sprz-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+    @media(max-width:820px){.sprz-grid{grid-template-columns:1fr}}
+    .sprz-h{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--szalwia);font-weight:500;margin:14px 0 6px}
+    .sprz-cel{margin-bottom:10px;font-size:13px}
+    .sprz-cel .bar{margin-top:4px}
+    .sprz-wykres{display:flex;align-items:flex-end;gap:6px;height:110px;border-bottom:1px solid var(--linia);padding-top:8px}
+    .sprz-wykres .d{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-family:var(--mono);font-size:10px;color:#5E6E68}
+    .sprz-wykres .d i{display:block;width:100%;max-width:34px;background:var(--sygnal);border-radius:3px 3px 0 0;min-height:2px}
+    .sprz-wykres .d b{font-weight:500;margin-bottom:3px;color:var(--atrament)}
     .kpi{background:var(--papier);border:1px solid var(--linia);border-radius:12px;padding:18px 20px}
     .kpi .lbl{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--szalwia)}
     .kpi .val{font-family:var(--disp);font-size:32px;line-height:1.1;margin-top:6px}
@@ -191,6 +203,37 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
             <b> SUPABASE_PANEL.sql</b>. Instrukcja: <b>PANEL_SETUP.md</b>.
           </div>
         )}
+
+        <!-- KSIĄŻKA: SPRZEDAŻ (2.11.2026) — /api/panel/sprzedaz -->
+        <section class="card full sprz" id="sprzedaz">
+          <div class="card-head">
+            <div>
+              <h2>Książka: sprzedaż</h2>
+              <div class="hint">Na żywo z EasyCart (webhook). Bez testów i zwrotów. Start sprzedaży: 2.11, 7:16.</div>
+            </div>
+            <button class="mini" id="sprzOdswiez">Odśwież</button>
+          </div>
+          <div class="kpis sprz-kpis">
+            <div class="kpi"><div class="lbl">Dziś</div><div class="val" id="sprzDzis">—</div></div>
+            <div class="kpi"><div class="lbl">Od startu</div><div class="val" id="sprzStart">—</div></div>
+            <div class="kpi"><div class="lbl">Przychód brutto</div><div class="val" id="sprzPrzychod">—</div></div>
+            <div class="kpi"><div class="lbl">Ostatnia sprzedaż</div><div class="val" id="sprzOstatnia">—</div></div>
+          </div>
+          <div class="sprz-grid">
+            <div>
+              <h3 class="sprz-h">Rodzaj</h3>
+              <table><tbody id="sprzRodzaj"></tbody></table>
+              <h3 class="sprz-h">Źródło</h3>
+              <table><tbody id="sprzZrodla"></tbody></table>
+            </div>
+            <div>
+              <h3 class="sprz-h">Cel z prognozy (e-booki)</h3>
+              <div id="sprzCele"></div>
+              <h3 class="sprz-h">Sprzedaż dzienna</h3>
+              <div class="sprz-wykres" id="sprzWykres"></div>
+            </div>
+          </div>
+        </section>
 
         <div class="kpis" id="kpis">
           <div class="kpi"><div class="lbl">Zadania otwarte</div><div class="val" id="kZad">—</div></div>
@@ -363,6 +406,30 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
         await fetch('/api/panel/logout/', { method: 'POST' });
         location.reload();
       });
+
+      // ---------- KSIĄŻKA: SPRZEDAŻ ----------
+      const zl = (n) => (Math.round(n * 100) / 100).toLocaleString('pl-PL', { minimumFractionDigits: 0, maximumFractionDigits: 2 }) + ' zł';
+      async function loadSprzedaz() {
+        let d;
+        try { d = await api('sprzedaz'); } catch (e) { $('sprzDzis').textContent = '!'; return; }
+        $('sprzDzis').textContent = d.dzis;
+        $('sprzStart').textContent = d.odStartu;
+        $('sprzPrzychod').textContent = zl(d.przychod);
+        $('sprzOstatnia').innerHTML = d.ostatnia ? esc(d.ostatnia.godzina) + ' <small>' + esc(d.ostatnia.dzien.slice(8, 10) + '.' + d.ostatnia.dzien.slice(5, 7)) + '</small>' : '—';
+        const R = [['ebook', 'E-book 39/49 zł'], ['druk', 'Druk z dedykacją'], ['druk_ebook', 'Druk + e-book'], ['bf', 'Black Friday']];
+        $('sprzRodzaj').innerHTML = R.map(([k, n]) => '<tr><td>' + n + '</td><td style="text-align:right" class="mono">' + (d.naRodzaj[k] || 0) + '</td></tr>').join('');
+        $('sprzZrodla').innerHTML = d.zrodla.length
+          ? d.zrodla.map(([z, n]) => '<tr><td>' + esc(z) + '</td><td style="text-align:right" class="mono">' + n + '</td></tr>').join('')
+          : '<tr><td style="opacity:.6">jeszcze brak</td><td></td></tr>';
+        $('sprzCele').innerHTML = d.cele.map((c) => {
+          const pr = Math.min(100, Math.round((c.teraz / c.ebooki) * 100));
+          return '<div class="sprz-cel">do ' + esc(c.data.slice(8, 10) + '.' + c.data.slice(5, 7)) + ': <b>' + c.teraz + ' / ' + c.ebooki + '</b> e-booków (' + pr + '%)<div class="bar"><i style="width:' + pr + '%"></i></div></div>';
+        }).join('');
+        const max = Math.max(1, ...d.dni.map((x) => x.n));
+        $('sprzWykres').innerHTML = d.dni.map((x) =>
+          '<div class="d"><b>' + x.n + '</b><i style="height:' + Math.round((x.n / max) * 80) + 'px"></i>' + esc(x.data.slice(8, 10) + '.' + x.data.slice(5, 7)) + '</div>').join('');
+      }
+      $('sprzOdswiez').addEventListener('click', loadSprzedaz);
 
       // ---------- ZADANIA ----------
       const ZAD_OWNERS = ['mike', 'marcin', 'klaudiusz', 'team'];
@@ -833,7 +900,7 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
         loadFirmy();
       });
 
-      loadZadania(); loadPub(); loadRoz(); loadLejek(); loadStat(); loadSubskrybenci(); loadFirmy();
+      loadSprzedaz(); loadZadania(); loadPub(); loadRoz(); loadLejek(); loadStat(); loadSubskrybenci(); loadFirmy();
     </script>
   </>
 )}

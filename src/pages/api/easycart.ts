@@ -17,6 +17,7 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 import { supabaseAdmin } from '../../lib/supabase';
 import { przygotujDedykacje } from '../../lib/dedykacja';
+import { zakupyKsiazki, pushNtfy, toKsiazka, toTest, RODZAJ_NAZWA, rodzaj, dzienPL } from '../../lib/sprzedaz';
 
 /** Sekrety trzymamy w Supabase (prywatne.sekrety, funkcja sekret() tylko dla service_role). */
 async function sekret(nazwa: string): Promise<string | null> {
@@ -90,6 +91,31 @@ export const POST: APIRoute = async ({ request, url }) => {
     zdarzenie, zamowienie, email, imie, produkt, zgoda_konkurs: zgodaKonkurs(p), surowe: p,
   }).select('id').single();
   const idLog = zapis.data?.id;
+
+  // PUSH ntfy przy sprzedaży książki (2.11.2026, decyzja Michała). Bez danych kupującego.
+  // Testy (TEST…, lista TESTY, sprzed startu) dostają push z dopiskiem [TEST] i nie liczą się do #N.
+  try {
+    if (toKsiazka(produkt) && zamowienie) {
+      if (zdarzenie === 'single_product_bought') {
+        const kwota = Number(znajdz(p, ['amount_paid', 'order_amount']) ?? 0) || 0;
+        const cp = p?.custom_params ?? {};
+        const skad = cp.utm_source ? (cp.utm_medium ? `${cp.utm_source}/${cp.utm_medium}` : String(cp.utm_source)) : 'bezpośrednio';
+        const nazwa = RODZAJ_NAZWA[rodzaj(produkt)];
+        if (toTest(zamowienie, new Date().toISOString())) {
+          await pushNtfy(`[TEST] 📕 Sprzedaż: ${nazwa} ${kwota} zł`, `źródło: ${skad} · zamówienie testowe, nie liczy się`);
+        } else {
+          const zakupy = (await zakupyKsiazki()).filter((z) => !z.zwrot);
+          const dzis = dzienPL(new Date());
+          const nDzis = zakupy.filter((z) => dzienPL(z.kiedy) === dzis).length;
+          await pushNtfy(`📕 Sprzedaż #${zakupy.length}: ${nazwa} ${kwota} zł`, `źródło: ${skad} · dziś: ${nDzis}, od startu: ${zakupy.length}`);
+        }
+      } else if (zdarzenie === 'product_access_expired' && !toTest(zamowienie, new Date().toISOString())) {
+        const { count } = await supabaseAdmin.from('easycart_zdarzenia').select('id', { count: 'exact', head: true })
+          .eq('zamowienie', zamowienie).eq('zdarzenie', 'single_product_bought');
+        if (count) await pushNtfy(`↩️ Zwrot: ${RODZAJ_NAZWA[rodzaj(produkt)]}`, `zamówienie ${zamowienie}`, 'leftwards_arrow_with_hook');
+      }
+    }
+  } catch { /* push nigdy nie blokuje webhooka */ }
 
   const zakup = /product_assigned|single_product_bought|order/i.test(zdarzenie) || !zdarzenie;
   const toEbook = !produktId || produktId === PRODUKT_ID || /obu stron/i.test(produkt);
