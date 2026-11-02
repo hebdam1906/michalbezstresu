@@ -37,6 +37,8 @@ import Stopka from '../components/Stopka.astro';
           <div class="zapis-tytul">Zapisz się na transmisję</div>
           <p class="zapis-opis">Potwierdzenie dostaniesz od razu, a przypomnienie z linkiem — 4 listopada
             i 5 listopada o 17:00.</p>
+          <p class="zapis-opis zapis-sub"><strong>Dostajesz już mój newsletter?</strong> Zapisz się i tak:
+            link do transmisji wysyłam tylko osobom zapisanym na live. To 10 sekund.</p>
           <div class="pola">
             <input type="text" name="imie" placeholder="Imię (opcjonalnie)" autocomplete="given-name" maxlength="80" />
             <input type="email" name="email" placeholder="Twój e-mail" autocomplete="email" required maxlength="160" />
@@ -50,6 +52,12 @@ import Stopka from '../components/Stopka.astro';
           <button class="btn btn-primary" type="submit">Zapisuję się</button>
           <p class="komunikat" role="status" aria-live="polite"></p>
         </form>
+
+        <div class="kalendarz">
+          <span>Dodaj do kalendarza: czwartek 5.11, 19:00–20:00</span>
+          <a class="btn-kal" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Live%3A%20Szef%20m%C3%B3wi%2C%20%C5%BCe%20nie%20ma%20bud%C5%BCetu.%20Co%20dalej%3F&dates=20261105T180000Z%2F20261105T190000Z&details=Darmowy%20live%20Micha%C5%82a%20bez%20Stresu%20na%20LinkedInie.%20Link%20do%20transmisji%20przyjdzie%20mailem%204%20i%205%20listopada.%20Zapis%3A%20https%3A%2F%2Fwww.michalbezstresu.pl%2Flive%2F&location=https%3A%2F%2Fwww.michalbezstresu.pl%2Flive%2F" target="_blank" rel="noopener" data-kal="google">Google</a>
+          <a class="btn-kal" href="/live-5-11.ics" download data-kal="ics">Apple / Outlook (.ics)</a>
+        </div>
       </div>
     </div>
   </header>
@@ -83,6 +91,14 @@ import Stopka from '../components/Stopka.astro';
       });
     })();
   </script>
+  <script is:inline>
+    /* 2.11: kliknięcie „Dodaj do kalendarza” → Vercel Analytics `live_kalendarz` (google / ics). */
+    document.querySelectorAll('[data-kal]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        try { if (window.va) window.va('event', { name: 'live_kalendarz', data: { typ: a.getAttribute('data-kal') } }); } catch (e) {}
+      });
+    });
+  </script>
 </Layout>
 
 <style>
@@ -104,6 +120,11 @@ import Stopka from '../components/Stopka.astro';
 .zgoda input{margin-top:3px}
 .zgoda a{color:var(--sygnal)}
 .komunikat{font-size:14px;margin-top:10px;min-height:1em}
+.zapis-sub{background:var(--mgla);border-radius:8px;padding:10px 12px}
+.kalendarz{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:18px;max-width:560px;font-size:14.5px;color:#4A5A55}
+.kalendarz span{flex-basis:100%}
+.btn-kal{display:inline-block;padding:9px 14px;border:1px solid var(--sygnal);border-radius:9px;color:var(--sygnal);text-decoration:none;font-weight:600;font-size:14.5px}
+.btn-kal:hover{background:var(--sygnal);color:#fff}
 .komunikat.blad{color:#B3261E}
 .zapis-ok{font-size:16px;line-height:1.6;color:var(--atrament)}
 .band{background:var(--papier);border-top:1px solid var(--linia);border-bottom:1px solid var(--linia)}

@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Michal bez Stresu//Live 5.11//PL
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:live-5-11-2026@michalbezstresu.pl
+DTSTAMP:20261102T180000Z
+DTSTART:20261105T180000Z
+DTEND:20261105T190000Z
+SUMMARY:Live: Szef mówi\, że nie ma budżetu. Co dalej? (Michał bez Stresu)
+DESCRIPTION:Darmowy live na LinkedInie. Link do transmisji wysyłam mailem 4 i 5 listopada osobom zapisanym na https://www.michalbezstresu.pl/live/
+LOCATION:https://www.michalbezstresu.pl/live/
+URL:https://www.michalbezstresu.pl/live/
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:Za 30 minut live Michała bez Stresu
+END:VALARM
+END:VEVENT
+END:VCALENDAR
