@@ -95,6 +95,7 @@ const WIDEO_YT_ID = '';
           <p class="kup-cena"><span data-cena>39 zł</span> <span class="kup-do" data-do>do 15 listopada (potem 49 zł)</span></p>
           <a class="btn btn-primary" href={KASA_UTM} data-kasa data-ev="ksiazka-kup-hero"><span data-przycisk>Kupuję e-book za 39 zł</span></a>
           <p class="zapis-opis kup-pod">EPUB + PDF, od razu na maila.</p>
+          <p class="kup-fragment"><a href="#fragmentZapis" data-fragment-gora>albo najpierw przeczytaj rozdział 1 za darmo ↓</a></p>
           <p class="zapis-opis kup-ded">Osoby z listy premierowej, które kupią go w pierwszym tygodniu (2–8 listopada), dostaną egzemplarz z imienną dedykacją.</p>
         </div>
       </div>
@@ -104,6 +105,30 @@ const WIDEO_YT_ID = '';
       </div>
     </div>
   </header>
+
+  <section id="rozdzial1" class="r1">
+    <div class="wrap waska">
+      <!-- 2.11.2026: darmowy rozdział 1 (PDF) za zapis — druga akcja strony (główna: „Kupuję”).
+           Od 2.11 wieczorem zaraz pod hero (wcześniej pod fragmentem rozdziału 2): 0 zapisów z zimnego ruchu. -->
+      <form class="zapis" id="fragmentZapis" novalidate>
+        <div class="zapis-tytul">Pobierz cały rozdział 1 (PDF)</div>
+        <p class="zapis-opis">„Ten mail właśnie stał się dokumentem” — o negatywnym feedbacku i o tym,
+          co zrobić, zanim rozmowa trafi do akt. Wyślę Ci go mailem.</p>
+        <div class="pola">
+          <input type="text" name="imie" placeholder="Imię (opcjonalnie)" autocomplete="given-name" maxlength="80" />
+          <input type="email" name="email" placeholder="Twój e-mail" autocomplete="email" required maxlength="160" />
+        </div>
+        <input type="text" name="www" class="pulapka" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <label class="zgoda">
+          <input type="checkbox" name="zgoda" required />
+          <span>Chcę dostać od Michała bez Stresu rozdział 1 i kilka maili o książce.
+            Wypiszesz się jednym kliknięciem. <a href="/prywatnosc/">Polityka prywatności</a>.</span>
+        </label>
+        <button class="btn btn-ghost" type="submit">Wyślij mi rozdział 1</button>
+        <p class="komunikat" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
 
   <section class="band">
     <div class="wrap">
@@ -147,26 +172,8 @@ const WIDEO_YT_ID = '';
         <p class="dalej">W książce dalej: <strong>test pięciu pytań</strong> — jak w kwadrans
           rozpoznać, czy dostałeś plan pisany pod sukces, czy pod formalność — i gotowe zdania
           na każdy etap planu.</p>
+        <p class="dalej-r1"><a href="#fragmentZapis">Rozdział 1 możesz przeczytać w całości za darmo ↑</a></p>
       </div>
-
-      <!-- 2.11.2026: darmowy rozdział 1 (PDF) za zapis — druga akcja strony (główna: „Kupuję”). -->
-      <form class="zapis" id="fragmentZapis" novalidate>
-        <div class="zapis-tytul">Pobierz cały rozdział 1 (PDF)</div>
-        <p class="zapis-opis">„Ten mail właśnie stał się dokumentem” — o negatywnym feedbacku i o tym,
-          co zrobić, zanim rozmowa trafi do akt. Wyślę Ci go mailem.</p>
-        <div class="pola">
-          <input type="text" name="imie" placeholder="Imię (opcjonalnie)" autocomplete="given-name" maxlength="80" />
-          <input type="email" name="email" placeholder="Twój e-mail" autocomplete="email" required maxlength="160" />
-        </div>
-        <input type="text" name="www" class="pulapka" tabindex="-1" autocomplete="off" aria-hidden="true" />
-        <label class="zgoda">
-          <input type="checkbox" name="zgoda" required />
-          <span>Chcę dostać od Michała bez Stresu rozdział 1 i kilka maili o książce.
-            Wypiszesz się jednym kliknięciem. <a href="/prywatnosc/">Polityka prywatności</a>.</span>
-        </label>
-        <button class="btn btn-ghost" type="submit">Wyślij mi rozdział 1</button>
-        <p class="komunikat" role="status" aria-live="polite"></p>
-      </form>
     </div>
   </section>
 
@@ -225,6 +232,14 @@ const WIDEO_YT_ID = '';
   </section>
 
   <Stopka sprzedawca />
+
+  <script is:inline>
+    /* Link „albo najpierw przeczytaj rozdział 1” pod pierwszym „Kupuję” → zdarzenie fragment_link_gora (Vercel). */
+    (function () {
+      var a = document.querySelector('[data-fragment-gora]');
+      if (a) a.addEventListener('click', function () { try { if (window.va) window.va('event', { name: 'fragment_link_gora' }); } catch (e) {} });
+    })();
+  </script>
 
   <script is:inline>
     (function () {
@@ -314,7 +329,13 @@ const WIDEO_YT_ID = '';
 .komunikat.blad{color:#B3261E}
 .zapis-ok{font-size:16px;line-height:1.6;color:var(--atrament)}
 .zapis-ok a{color:var(--sygnal)}
-#fragment .zapis{margin-top:34px}
+.r1{padding-top:8px}
+.r1 .zapis{margin:0 auto;max-width:620px;border-color:var(--szalwia)}
+.r1 .zapis{scroll-margin-top:20px}
+.fragment .dalej-r1{font-family:inherit;font-size:16px;margin:0}
+.dalej-r1 a{color:var(--sygnal)}
+.kup-fragment{margin:10px 0 6px;font-size:15px}
+.kup-fragment a{color:var(--sygnal);text-decoration:underline;text-underline-offset:3px}
 .kup-cena{font-size:15px;color:#4A5A55;margin:6px 0 14px}
 .kup-cena [data-cena]{font-family:var(--disp);font-size:30px;color:var(--atrament);margin-right:6px}
 .kup .btn{display:inline-block}
