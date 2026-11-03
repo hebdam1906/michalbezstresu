@@ -24,7 +24,7 @@ import Stopka from '../components/Stopka.astro';
  * Świadomie NIE publikujemy tu adnotacji „wersja robocza” — regulamin jest umową
  * z konsumentem i taka adnotacja działałaby przeciwko obu stronom.
  */
-const obowiazujeOd = '16 października 2026';
+const obowiazujeOd = '3 listopada 2026';
 ---
 <Layout
   title="Regulamin sprzedaży | Michał bez Stresu"
@@ -62,8 +62,8 @@ const obowiazujeOd = '16 października 2026';
         ul. Henryka i Karola Czeczów 36, 30-798 Kraków, <strong>NIP 6772240049</strong>,
         REGON 122905620 (wpis do CEIDG), a do tego dnia — działalność nierejestrowaną w rozumieniu
         art. 5 ustawy Prawo przedsiębiorców. Dla zamówień złożonych 2 listopada 2026 r. Sprzedawca
-        wystawia rachunek na życzenie Kupującego. Od 3 listopada 2026 r. do każdego zamówienia
-        wystawiana jest faktura VAT. Adres do korespondencji:
+        wystawia rachunek na życzenie Kupującego. Od 3 listopada 2026 r. Sprzedawca
+        wystawia fakturę VAT na życzenie Kupującego (szczegóły w §3). Adres do korespondencji:
         <strong>ul. Czeczów 36/65, 30-798 Kraków</strong>,
         e-mail: <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>.</li>
       <li>Kontakt ze Sprzedawcą: <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>.
@@ -112,8 +112,14 @@ const obowiazujeOd = '16 października 2026';
       <li>Kody rabatowe nie łączą się ze sobą, chyba że opis promocji stanowi
         inaczej. Ceny przekreślone prezentowane przy promocjach są rzeczywistymi
         cenami regularnymi stosowanymi przez Sprzedawcę.</li>
-      <li>Do każdego zamówienia Sprzedawca wystawia fakturę VAT, przesyłaną na adres e-mail
-        podany w zamówieniu.</li>
+      {/* 3.11.2026: faktura na życzenie (decyzja Michała). W integracji EasyCart → iFirma
+          „Wystawiaj faktury dla osób prywatnych” jest wyłączone: faktura idzie automatycznie
+          tylko przy podanym NIP. Osoba prywatna może poprosić mailem (art. 106b ust. 3 ustawy o VAT). */}
+      <li>Sprzedawca wystawia fakturę VAT na życzenie Kupującego. Kupujący, który podał
+        numer NIP w formularzu zamówienia, otrzymuje fakturę automatycznie na adres e-mail
+        podany w zamówieniu. Kupujący, który nie podał NIP, może poprosić o fakturę, pisząc na
+        <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a> w ciągu
+        3 miesięcy od końca miesiąca, w którym złożył zamówienie.</li>
     </ol>
 
     <h2>§4. Realizacja konsultacji</h2>
