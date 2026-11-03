@@ -1,0 +1,53 @@
+---
+/**
+ * Przyklejony pasek CTA na telefonie (faza 1 przebudowy, 3.11.2026).
+ * Zasady SEO od Klaudiusza: niski (56 px), nie zasłania treści, bez nakładki
+ * na cały ekran, pokazuje się dopiero po przewinięciu jednego ekranu.
+ * Nie pokazuje się, gdy otwarty jest baner zgód (oba siedzą na dole).
+ * Zdarzenie Vercel `sticky_cta` z nazwą przycisku i ścieżką strony.
+ * Wpinany w Layout.astro — wyłączenia (/ksiazka, /en, panele) są tam.
+ */
+---
+<div class="pasek-cta" id="pasekCta" aria-hidden="true">
+  <a href="/ksiazka/?utm_source=site&utm_medium=sticky&utm_campaign=sticky-cta" data-sticky="ksiazka">Książka 39 zł</a>
+  <a href="/konsultacje/?utm_source=site&utm_medium=sticky&utm_campaign=sticky-cta" data-sticky="konsultacja" class="drugi">Konsultacja</a>
+</div>
+<div class="pasek-cta-odstep" aria-hidden="true"></div>
+
+<script is:inline>
+(function () {
+  var p = document.getElementById('pasekCta');
+  if (!p) return;
+  function odswiez() {
+    var z = document.getElementById('zgody');
+    var zgodyOtwarte = z && !z.hidden;
+    var pokaz = window.scrollY > window.innerHeight * 0.9 && !zgodyOtwarte;
+    p.classList.toggle('widoczny', pokaz);
+    p.setAttribute('aria-hidden', pokaz ? 'false' : 'true');
+  }
+  window.addEventListener('scroll', odswiez, { passive: true });
+  window.addEventListener('resize', odswiez);
+  document.addEventListener('click', function () { setTimeout(odswiez, 50); });
+  odswiez();
+  p.addEventListener('click', function (e) {
+    var a = e.target.closest('a[data-sticky]');
+    if (!a) return;
+    try { if (window.va) window.va('event', { name: 'sticky_cta', data: { przycisk: a.dataset.sticky, strona: location.pathname } }); } catch (err) {}
+  });
+})();
+</script>
+
+<style>
+.pasek-cta,.pasek-cta-odstep{display:none}
+@media(max-width:760px){
+  .pasek-cta{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;gap:8px;
+    padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));box-sizing:content-box;
+    background:rgba(237,241,239,.97);border-top:1px solid var(--linia);
+    transform:translateY(110%);transition:transform .2s ease;height:40px}
+  .pasek-cta.widoczny{transform:none}
+  .pasek-cta a{flex:1;display:flex;align-items:center;justify-content:center;border-radius:8px;
+    font-weight:700;font-size:15px;text-decoration:none;background:var(--sygnal);color:#fff}
+  .pasek-cta a.drugi{background:#fff;color:var(--sygnal);border:1px solid var(--sygnal)}
+  .pasek-cta-odstep{display:block;height:56px}
+}
+</style>

@@ -65,7 +65,7 @@ const stan = stanOferty(Date.now(), import.meta.env.OFERTA_DZIEKUJE_STAN);
       </ul>
 
       <p class="dalej">
-        W międzyczasie: <a href="/#odcinki">odcinek o dokumentowaniu</a> pokazuje krok po
+        W międzyczasie: <a href="/odcinki/jak-dokumentowac-sytuacje-w-pracy/">odcinek o dokumentowaniu</a> pokazuje krok po
         kroku, jak używać tego wzoru w praktyce.
       </p>
       <p class="dalej">
@@ -97,7 +97,8 @@ const stan = stanOferty(Date.now(), import.meta.env.OFERTA_DZIEKUJE_STAN);
                 stołu — co myśli menedżer i co możesz zrobić, zanim usiądziesz.</p>
               <ul class="oferta-punkty">
                 <li>Co zapytać, gdy szef mówi, że nie ma budżetu</li>
-                <li>Pierwszy tydzień planu naprawczego — zanim coś podpiszesz</li>
+                <li>Pierwszy tydzień planu naprawczego — zanim coś podpiszesz
+                  (<a href="/konsultacje/?utm_source=site&utm_medium=dziekuje&utm_campaign=pakiet-pip#pip" data-dz="pip">masz plan naprawczy? zobacz pakiet</a>)</li>
                 <li>Jak wyjść z firmy i nie zostawić niczego na stole</li>
               </ul>
               <p class="oferta-cena">{stan === 'B' ? '39 zł (z VAT) do 15 listopada' : '49 zł (z VAT)'}</p>
@@ -109,8 +110,23 @@ const stan = stanOferty(Date.now(), import.meta.env.OFERTA_DZIEKUJE_STAN);
           )}
         </div>
       </section>
+
+      <section class="dz-konsultacja" aria-labelledby="dz-k-tytul">
+        <h2 id="dz-k-tytul">Rozmowa w ciągu dwóch tygodni?</h2>
+        <p>Konsultacja 60 minut, 299 zł: Twoja sytuacja, Twoje dokumenty i gotowe sformułowania na tę rozmowę.</p>
+        <a class="oferta-btn" href="/konsultacje/?utm_source=site&utm_medium=dziekuje&utm_campaign=konsultacja" data-dz="konsultacja">Umów konsultację</a>
+      </section>
     </div>
   </main>
+
+  <script is:inline>
+    /* 3.11.2026: kliknięcia w konsultację i pakiet PIP na /dziekuje (miary fazy 1). */
+    document.querySelectorAll('a[data-dz]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        try { if (window.va) window.va('event', { name: 'dziekuje_' + a.dataset.dz }); } catch (e) {}
+      });
+    });
+  </script>
 
   <script is:inline>
     /* Ścieżka startowa (SciezkaStartowa.astro): zapis z wybranej ścieżki.
@@ -182,6 +198,10 @@ const stan = stanOferty(Date.now(), import.meta.env.OFERTA_DZIEKUJE_STAN);
 </Layout>
 
 <style>
+.dz-konsultacja{margin-top:28px;padding:24px;border:1px solid rgba(255,255,255,.22);border-radius:12px;background:rgba(255,255,255,.07)}
+.dz-konsultacja h2{color:#fff}
+.dz-konsultacja h2{font-size:22px;margin-bottom:8px}
+.dz-konsultacja p{margin-bottom:16px}
 .lp{min-height:100vh;display:flex;align-items:center;justify-content:center;
   background:var(--sygnal);color:#F2F7F5;padding:56px 24px}
 .lp-wrap{width:100%;max-width:620px}

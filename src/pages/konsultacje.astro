@@ -23,6 +23,10 @@ const PRZEKRESLENIA = false;
 const CENA = { baza: 299, subskrybent: 254, pakiet: 749, pakietOsobno: 897 };
 /* 3.11.2026: cena startowa 199 zł (do 31.10) zdjęta — faza 0 przebudowy. */
 const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
+/* Koszyki EasyCart (3.11.2026, przebudowa): płatność od razu, termin mailem w 24 h.
+   Docelowo rezerwacja z kalendarzem (faza 3 — Zoho Bookings / Calendly). */
+const KOSZYK_KONSULTACJA = 'https://cart.easy.tools/checkout/michalbezstresu/konsultacja-60-minut?utm_source=site&utm_medium=konsultacje&utm_campaign=umow-rozmowe';
+const KOSZYK_PIP = 'https://cart.easy.tools/checkout/michalbezstresu/pakiet-przetrwaj-pip?utm_source=site&utm_medium=konsultacje&utm_campaign=pakiet-pip';
 ---
 <Layout
   title="Konsultacje indywidualne — Michał bez Stresu"
@@ -45,7 +49,10 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
         i konkretną rozmowę w kalendarzu.</p>
       <p class="pilnosc">Jeśli rozmowa o podwyżce albo ocena roczna czeka Cię w najbliższych
         tygodniach, najlepszy moment na przygotowanie jest teraz — nie tydzień przed.</p>
-      <a class="btn btn-primary" href="#formularz">Napisz o swojej sytuacji</a>
+      <div class="head-cta">
+        <a class="btn btn-primary" href="#umow">Umów rozmowę</a>
+        <a class="btn btn-ghost" href="#formularz">Najpierw napiszę o sytuacji</a>
+      </div>
     </div>
   </header>
 
@@ -64,11 +71,10 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
     <section class="blok">
       <h2>Jak to wygląda</h2>
       <ol class="kroki">
-        <li><strong>Piszesz do mnie</strong> przez formularz niżej albo wprost na
-          <a href="mailto:michal@michalbezstresu.pl">michal@michalbezstresu.pl</a> — dwa, trzy zdania o sytuacji.</li>
-        <li><strong>Odpowiadam w ciągu 48 godzin</strong>: czy i jak mogę pomóc. Jeśli Twoja sprawa
-          wymaga prawnika albo psychologa, powiem Ci to wprost już na tym etapie —
-          <strong>zanim wydasz złotówkę</strong>.</li>
+        <li><strong>Umawiasz rozmowę i płacisz online</strong> — albo, jeśli wolisz, najpierw piszesz
+          przez formularz niżej lub na <a href="mailto:michal@michalbezstresu.pl">michal@michalbezstresu.pl</a>.</li>
+        <li><strong>W ciągu 24 godzin dostajesz ode mnie propozycję terminów.</strong> Jeśli Twoja sprawa
+          wymaga prawnika albo psychologa, powiem Ci to wprost — i zwrócę pieniądze w całości.</li>
         <li><strong>Rozmawiamy online, 60 minut.</strong> Wcześniej dostajesz ode mnie kilka pytań,
           żeby ten czas pracował na Ciebie od pierwszej minuty.</li>
         <li><strong>Po rozmowie dostajesz podsumowanie</strong>: co ustaliliśmy, plan kroków
@@ -114,15 +120,25 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
           </div>
           <h3>Dla subskrybentów newslettera</h3>
           <p>Kod rabatowy −15% dostajesz w mailu powitalnym i masz go w stopce każdego
-            newslettera. Wpisujesz go w formularzu niżej.</p>
+            newslettera. Wpisujesz go w koszyku przy płatności albo w formularzu niżej.</p>
         </article>
 
-        {/* Pakiet „Przetrwaj PIP” ({CENA.pakiet} zł) zdjęty z cennika 24.09.2026
-            — decyzja Michała. Powód: cztery ceny naraz na ekranie telefonu
-            (93% ruchu) to za dużo. Produkt ZOSTAJE w EasyCart i wolno go
-            promować — schowana jest wyłącznie pozycja w tym cenniku.
-            Wraca po analizie strony po 4.10, możliwe że jako link
-            „masz PIP? zobacz pakiet” w sekcji „Z czym ludzie przychodzą”. */}
+        <article class="cena pip" id="pip">
+          <span class="etykieta">Dostałeś plan naprawczy?</span>
+          <div class="kwota">{CENA.pakiet} zł</div>
+          <h3>Pakiet „Przetrwaj PIP”: trzy sesje w rytmie planu naprawczego</h3>
+          <ul class="pip-lista">
+            <li><strong>Sesja 1, na start:</strong> czytamy Twój PIP punkt po punkcie — co jest mierzalne,
+              co nieprecyzyjne, o co dopytać, zanim podpiszesz. Strategia na cały okres.</li>
+            <li><strong>Sesja 2, w połowie:</strong> postępy względem celów, korekta strategii,
+              przygotowanie do rozmów kontrolnych.</li>
+            <li><strong>Sesja 3, przed finałem:</strong> przygotowanie do rozmowy podsumowującej,
+              niezależnie od scenariusza.</li>
+          </ul>
+          <p>Między sesjami możesz pisać do mnie maile — odpowiadam w 48 h (dni robocze).
+            Osobno trzy sesje to {CENA.pakietOsobno} zł.</p>
+          <a class="btn btn-primary" href={KOSZYK_PIP} data-koszyk="pip">Kupuję pakiet PIP</a>
+        </article>
       </div>
       <p class="uwaga pomost">Nie jesteś gotowy na rozmowę albo 299 zł to dziś za dużo?
         <a href="/pytanie/">Zadaj pytanie anonimowo</a> — odpowiadam na jedno w tygodniu
@@ -147,8 +163,17 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
         i nie terapia.</p>
     </section>
 
+    <section class="blok umow" id="umow">
+      <h2>Umów rozmowę</h2>
+      <p class="podtytul">Płacisz online {CENA.baza} zł (z VAT; kod subskrybenta wpisujesz w koszyku).
+        W ciągu 24 godzin piszę do Ciebie z propozycją terminów — rozmowa zwykle w ciągu kilku dni.
+        Jeśli okaże się, że nie jestem właściwą osobą, zwracam całą kwotę.</p>
+      <a class="btn btn-primary" href={KOSZYK_KONSULTACJA} data-koszyk="konsultacja">Umów i opłać konsultację — {CENA.baza} zł</a>
+      <p class="umow-pod">Faktura VAT: wpisz NIP w koszyku.</p>
+    </section>
+
     <section class="blok" id="formularz">
-      <h2>Napisz o swojej sytuacji</h2>
+      <h2>Wolisz najpierw napisać?</h2>
       <p class="podtytul">Dwa, trzy zdania wystarczą. Odpowiadam w ciągu 48 godzin —
         także wtedy, gdy uznam, że nie jestem właściwą osobą.</p>
 
@@ -220,6 +245,13 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
         var kodZUrl = new URLSearchParams(location.search).get('kod');
         if (kodZUrl && /^[A-Za-z0-9-]{3,40}$/.test(kodZUrl) && f.kod && !f.kod.value) f.kod.value = kodZUrl.toUpperCase();
       } catch (e) {}
+
+      /* Kliknięcia w koszyki (3.11.2026): Vercel `konsultacje_koszyk` z rodzajem. */
+      document.querySelectorAll('a[data-koszyk]').forEach(function (a) {
+        a.addEventListener('click', function () {
+          try { if (window.va) window.va('event', { name: 'konsultacje_koszyk', data: { produkt: a.dataset.koszyk } }); } catch (e) {}
+        });
+      });
 
       /* Pole „a dokładniej?" pokazuje się tylko po wybraniu „Inne" —
          reszcie osób nie zawracamy głowy dodatkowym polem. */
@@ -306,6 +338,15 @@ const rabat = (z: number) => Math.round((1 - z / CENA.baza) * 100);
 .cena .termin{margin-top:10px;font-size:14px;color:#5A6A65}
 @media(max-width:760px){.ceny{grid-template-columns:1fr}}
 .cena{background:var(--papier);border:1px solid var(--linia);border-radius:10px;padding:26px 24px}
+.head-cta{display:flex;gap:14px;flex-wrap:wrap}
+@media(min-width:761px){.ceny .pip{grid-column:1 / -1}}
+.cena.pip{border-color:var(--sygnal);box-shadow:0 0 0 1px var(--sygnal) inset;scroll-margin-top:90px}
+.pip-lista{margin:10px 0 12px 18px;font-size:15px;color:#3C4A46}
+.pip-lista li{margin-bottom:8px}
+.cena.pip .btn{margin-top:14px}
+.umow .btn{margin-top:4px}
+.umow-pod{font-size:14px;color:#5A6A65;margin-top:10px}
+#umow,#formularz{scroll-margin-top:80px}
 .cena.wyroznione{border-color:var(--sygnal);box-shadow:0 0 0 1px var(--sygnal) inset}
 .etykieta{font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;
   background:var(--marker);color:#6B5A14;padding:4px 10px;border-radius:99px;display:inline-block;margin-bottom:12px}

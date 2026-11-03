@@ -14,6 +14,9 @@
  * 12.10.2026: doszła angielska strona powitalna `/en/` — pozycja „Home”,
  * a logo w wersji EN prowadzi teraz na `/en/`, nie na polską główną.
  *
+ * 3.11.2026 (przebudowa „sklep, nie kanał”): PL menu = Książka · Konsultacje ·
+ * Pakiet PIP · Dla firm · Za darmo. Odcinki i O mnie przeszły do stopki.
+ *
  * Dochodzi nowa angielska strona → dopisujemy ją TUTAJ, nie w kopii komponentu.
  */
 interface Props { lang?: 'pl' | 'en' }
@@ -28,12 +31,11 @@ const pozycje = lang === 'en'
       { href: '/', etykieta: 'Polski', lang: 'pl' },
     ]
   : [
-      { href: '/#odcinki', etykieta: 'Odcinki' },
-      { href: '/konsultacje/', etykieta: 'Konsultacje' },
       { href: '/ksiazka/', etykieta: 'Książka' },
+      { href: '/konsultacje/', etykieta: 'Konsultacje' },
+      { href: '/konsultacje/#pip', etykieta: 'Pakiet PIP' },
       { href: '/dla-firm/', etykieta: 'Dla firm' },
-      { href: '/#checklista', etykieta: 'Bezpłatna checklista' },
-      { href: '/#omnie', etykieta: 'O mnie' },
+      { href: '/#checklista', etykieta: 'Za darmo' },
     ];
 ---
 
