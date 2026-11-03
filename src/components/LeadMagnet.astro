@@ -28,6 +28,20 @@
   ml('account', '2494941');
 </script>
 <!-- End MailerLite Universal -->
+<script is:inline>
+  /* 3.11.2026: formularz MailerLite renderuje się z angielskimi placeholderami
+     („Email”/„Name”). Podmieniamy je po załadowaniu formularza. */
+  (function () {
+    var n = 0;
+    var t = setInterval(function () {
+      var e = document.querySelector('#checklista input[name="fields[email]"]');
+      var i = document.querySelector('#checklista input[name="fields[name]"]');
+      if (e) e.placeholder = 'E-mail';
+      if (i) i.placeholder = 'Imię';
+      if ((e && i) || ++n > 60) clearInterval(t);
+    }, 250);
+  })();
+</script>
 
 <!--
   Zaawansowane dopasowywanie — krok 1 z 2 (22.09.2026).
@@ -68,6 +82,8 @@
 
 <style>
 .lead{background:var(--sygnal);color:#F2F7F5;scroll-margin-top:64px}
+:global(#checklista .ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.primary){background-color:#2E6B5D!important;color:#fff!important;font-weight:700!important;border-radius:8px!important}
+:global(#checklista .ml-form-embedContainer .ml-form-embedWrapper .ml-form-embedBody .ml-form-embedSubmit button.primary:hover){background-color:#24584C!important}
 .lead-dopisek{margin-top:14px;font-size:15px;color:#CFE0DA}
 .lead-dopisek a{color:var(--marker);font-weight:700}
 .lead .eyebrow{color:var(--marker)}

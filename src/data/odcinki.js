@@ -17,6 +17,15 @@
 
 export const odcinki = [
   {
+    nr: 16,
+    etykieta: 'Sezon 2 · Odcinek 1',
+    data: '2026-11-02',
+    tytul: 'Awans to zmiana zawodu. Trzy rzeczy, które tracisz pierwszego dnia',
+    opis: 'Koledzy, poczucie kompetencji i ktoś, z kim można porozmawiać. Pierwszy odcinek drugiego sezonu, w którym siadam na krześle menedżera: dla tych, którzy właśnie dostali zespół, i dla tych, którzy chcą zrozumieć swojego szefa.',
+    yt: 'https://youtu.be/0_eBIhkAAi0',
+    spotify: null,
+  },
+  {
     nr: 15,
     data: '2026-10-26',
     tytul: 'Dostałem zespół, który wolałby kogoś innego',

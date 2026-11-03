@@ -37,16 +37,10 @@ const KOSZYK_PIP = 'https://cart.easy.tools/checkout/michalbezstresu/pakiet-prze
   <header class="khead">
     <div class="wrap">
       <div class="eyebrow">Konsultacje</div>
-      <h1>Jesteś po trudnej rozmowie z szefem? Porozmawiajmy o Twojej sytuacji</h1>
-      <p class="lead">Dostałeś ocenę, z którą się nie zgadzasz, bo uważasz, że zasługujesz na
-        więcej? Nie dostałeś podwyżki albo awansu, na który liczyłeś? Masz przed sobą rozmowę,
-        którą chcesz przegadać na konkretach, a nie na ogólnych zasadach? Jeśli szukasz sposobu
-        na rozwiązanie swojego problemu, napisz do mnie. Przez godzinę zajmiemy się wyłącznie
-        Twoją sytuacją, z kimś, kto siedział po obu stronach tego stołu, i wspólnie poszukamy
-        rozwiązania.</p>
-      <p class="lead">Filmy i podcast dają wiedzę ogólną: jak działa system, jakie są zasady gry.
-        Ale Twoja sytuacja nie jest ogólna. Ma nazwiska, daty, konkretny dokument na stole
-        i konkretną rozmowę w kalendarzu.</p>
+      <h1>Masz przed sobą trudną rozmowę? Przygotujmy ją razem.</h1>
+      <p class="lead">Podwyżka, ocena, plan naprawczy, porozumienie stron. Przez godzinę zajmujemy się
+        wyłącznie Twoją sytuacją, z kimś, kto przez 20 lat siedział po obu stronach stołu.
+        Po rozmowie dostajesz notatkę z planem i gotowymi zdaniami.</p>
       <p class="pilnosc">Jeśli rozmowa o podwyżce albo ocena roczna czeka Cię w najbliższych
         tygodniach, najlepszy moment na przygotowanie jest teraz — nie tydzień przed.</p>
       <div class="head-cta">
@@ -137,9 +131,20 @@ const KOSZYK_PIP = 'https://cart.easy.tools/checkout/michalbezstresu/pakiet-prze
           </ul>
           <p>Między sesjami możesz pisać do mnie maile — odpowiadam w 48 h (dni robocze).
             Osobno trzy sesje to {CENA.pakietOsobno} zł.</p>
-          <a class="btn btn-primary" href={KOSZYK_PIP} data-koszyk="pip">Kupuję pakiet PIP</a>
+          <div class="pip-cta">
+            <a class="btn btn-primary" href={KOSZYK_PIP} data-koszyk="pip">Kupuję pakiet PIP</a>
+            <a class="pip-napisz" href="#formularz">Najpierw napiszę o swojej sytuacji</a>
+          </div>
         </article>
       </div>
+    <div class="umow" id="umow">
+      <h3>Umów rozmowę</h3>
+      <p class="podtytul">Płacisz online {CENA.baza} zł (z VAT; kod subskrybenta wpisujesz w koszyku).
+        W ciągu 24 godzin piszę do Ciebie z propozycją terminów — rozmowa zwykle w ciągu kilku dni.
+        Jeśli okaże się, że nie jestem właściwą osobą, zwracam całą kwotę.</p>
+      <a class="btn btn-primary" href={KOSZYK_KONSULTACJA} data-koszyk="konsultacja">Umów i opłać konsultację — {CENA.baza} zł</a>
+      <p class="umow-pod">Faktura VAT: wpisz NIP w koszyku.</p>
+    </div>
       <p class="uwaga pomost">Nie jesteś gotowy na rozmowę albo 299 zł to dziś za dużo?
         <a href="/pytanie/">Zadaj pytanie anonimowo</a> — odpowiadam na jedno w tygodniu
         w newsletterze. Bez nazwisk, bez nazwy firmy, bez zobowiązań. Albo
@@ -161,15 +166,6 @@ const KOSZYK_PIP = 'https://cart.easy.tools/checkout/michalbezstresu/pakiet-prze
         uporządkować i powiem wprost, do kogo się zwrócić. Konsultacja ze mną to praktyczna wiedza
         o tym, jak działa korporacyjny system i jak się w nim poruszać — nie porada prawna
         i nie terapia.</p>
-    </section>
-
-    <section class="blok umow" id="umow">
-      <h2>Umów rozmowę</h2>
-      <p class="podtytul">Płacisz online {CENA.baza} zł (z VAT; kod subskrybenta wpisujesz w koszyku).
-        W ciągu 24 godzin piszę do Ciebie z propozycją terminów — rozmowa zwykle w ciągu kilku dni.
-        Jeśli okaże się, że nie jestem właściwą osobą, zwracam całą kwotę.</p>
-      <a class="btn btn-primary" href={KOSZYK_KONSULTACJA} data-koszyk="konsultacja">Umów i opłać konsultację — {CENA.baza} zł</a>
-      <p class="umow-pod">Faktura VAT: wpisz NIP w koszyku.</p>
     </section>
 
     <section class="blok" id="formularz">
@@ -344,7 +340,12 @@ const KOSZYK_PIP = 'https://cart.easy.tools/checkout/michalbezstresu/pakiet-prze
 .pip-lista{margin:10px 0 12px 18px;font-size:15px;color:#3C4A46}
 .pip-lista li{margin-bottom:8px}
 .cena.pip .btn{margin-top:14px}
+.umow{margin-top:26px;padding:24px;border:1px solid var(--sygnal);border-radius:10px;background:var(--papier)}
+.umow h3{font-size:22px;margin-bottom:8px}
 .umow .btn{margin-top:4px}
+.pip-cta{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:14px}
+.cena.pip .pip-cta .btn{margin-top:0}
+.pip-napisz{font-size:15px;color:var(--sygnal);font-weight:600}
 .umow-pod{font-size:14px;color:#5A6A65;margin-top:10px}
 #umow,#formularz{scroll-margin-top:80px}
 .cena.wyroznione{border-color:var(--sygnal);box-shadow:0 0 0 1px var(--sygnal) inset}
