@@ -80,16 +80,6 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
           i awans, aż po restrukturyzację i własny trudny zespół. Każda z nich opisana
           z obu stron stołu — tak, jak ją widzi pracownik, i tak, jak ją widzi menedżer.</p>
 
-        {WIDEO_YT_ID && (
-          <div class="kwideo" data-yt={WIDEO_YT_ID}>
-            <button type="button" class="kwideo-start" aria-label="Odtwórz: Michał o książce (1 minuta)">
-              <img src={`https://i.ytimg.com/vi/${WIDEO_YT_ID}/hqdefault.jpg`} alt="" width="480" height="360" loading="lazy" decoding="async" />
-              <span class="kwideo-play" aria-hidden="true">▶</span>
-              <span class="kwideo-opis">Michał o książce · 1 min</span>
-            </button>
-          </div>
-        )}
-
         <div class="zapis kup" id="kup">
           <div class="zapis-tytul">E-book „Z obu stron stołu”</div>
           <p class="kup-cena"><span data-cena>39 zł</span> <span class="kup-do" data-do>do 15 listopada (potem 49 zł)</span></p>
@@ -110,6 +100,16 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
     <div class="wrap waska">
       <!-- 2.11.2026: darmowy rozdział 1 (PDF) za zapis — druga akcja strony (główna: „Kupuję”).
            Od 2.11 wieczorem zaraz pod hero (wcześniej pod fragmentem rozdziału 2): 0 zapisów z zimnego ruchu. -->
+      {/* 3.11: wideo przeniesione tuż nad formularz — w filmie pada „zostaw maila tuż pod tym filmem”. */}
+      {WIDEO_YT_ID && (
+        <div class="kwideo" data-yt={WIDEO_YT_ID}>
+          <button type="button" class="kwideo-start" aria-label="Odtwórz: Michał o książce (1 minuta)">
+            <img src={`https://i.ytimg.com/vi/${WIDEO_YT_ID}/hqdefault.jpg`} alt="" width="480" height="360" loading="lazy" decoding="async" />
+            <span class="kwideo-play" aria-hidden="true">▶</span>
+            <span class="kwideo-opis">Michał o książce · 1 min</span>
+          </button>
+        </div>
+      )}
       <form class="zapis" id="fragmentZapis" novalidate>
         <div class="zapis-tytul">Pobierz cały rozdział 1 (PDF)</div>
         <p class="zapis-opis">„Ten mail właśnie stał się dokumentem” — o negatywnym feedbacku i o tym,
@@ -300,7 +300,7 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
 </script>
 
 <style>
-.kwideo{position:relative;aspect-ratio:16/9;max-width:560px;margin:22px 0 6px;border-radius:12px;overflow:hidden;background:#1D2422}
+.kwideo{position:relative;aspect-ratio:16/9;max-width:560px;margin:0 0 18px;border-radius:12px;overflow:hidden;background:#1D2422}
 .kwideo iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .kwideo-start{all:unset;cursor:pointer;position:absolute;inset:0;display:block}
 .kwideo-start img{width:100%;height:100%;object-fit:cover;display:block}
