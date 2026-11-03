@@ -1,7 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 
-/* Lista oczekujących na angielskie wydanie książki — test popytu, październik 2026.
+/* 3.11.2026: przedsprzedaż Kindle (ASIN B0HQ6YTG8Q, premiera 23.11) — główny przycisk
+ * „Pre-order on Amazon”, niżej zapis na checklistę EN (zamiast waitlisty).
+ *
+ * Historia: lista oczekujących na angielskie wydanie książki — test popytu, październik 2026.
  * Brief: Klaudiusz, `Klaudiusz-do-Marcina_EN-waitlist-ksiazki_strona-i-teksty_03-10.md`
  * (tytuł „Both Sides of the Table" zatwierdzony przez Michała 3.10).
  * Próg decyzji 30.11: lista EN (checklista EN + waitlist) > ~200 osób → wydanie EN w grudniu.
@@ -14,35 +17,58 @@ import Layout from '../../layouts/Layout.astro';
 ---
 <Layout ogObraz="/og/og-en-book.jpg" ogAlt="Both Sides of the Table — a book by Michał Hebda"
   lang="en"
-  title="Both Sides of the Table — English edition waitlist | Michał bez Stresu"
-  description="Fifteen difficult conversations at work — the improvement plan, the annual review, the pay rise, the promotion, the restructuring — described from both sides of the table. Join the waitlist for the English edition."
+  title="Both Sides of the Table — pre-order on Amazon Kindle | Michał bez Stresu"
+  description="The pay rise, the annual review, the improvement plan, leaving: the conversations your job depends on, explained from both sides of the table. Kindle edition out on 23 November, $4.99 launch price."
 >
   <main class="lp">
     <div class="lp-wrap">
       <div class="brand mono">Michał bez Stresu</div>
 
-      <div class="eyebrow">Book · English edition in preparation</div>
-      <h1>Both Sides of the Table</h1>
-      <p class="sub">What really happens in the conversations your career depends on.</p>
-
-      <p class="lead">Fifteen difficult conversations from twenty years in corporate finance
-        operations — each described from both sides of the table: the employee's and the
-        manager's. The book comes out in Polish on 30 October. The English edition is being
-        adapted, not just translated, because some chapters touch on local employment law.</p>
-
-      <ul class="benefits">
-        <li>How annual reviews are really decided — and why the meeting with your manager is usually not where it happens</li>
-        <li>Why the best specialists get promoted least often, and what to do about it</li>
-        <li>What to say when you hear “there's no budget” — and what to ask instead</li>
-        <li>What to do in the first 48 hours after an unexpected meeting with HR</li>
-      </ul>
-
-      <!-- Formularz MailerLite (embedded) — konto 2494941, formularz ukePWT -->
-      <div class="form-embed">
-        <div class="ml-embedded" data-form="ukePWT"></div>
+      <div class="eyebrow">Book · Kindle edition · out 23 November</div>
+      <div class="kniga">
+        <img class="okladka" src="/en/both-sides-cover-600x960.jpg" width="600" height="960"
+          alt="Cover of Both Sides of the Table by Michał Hebda" loading="eager" decoding="async" />
+        <div>
+          <h1>Both Sides of the Table</h1>
+          <p class="sub">What really happens in the conversations your job depends on.</p>
+          <p class="cena">$4.99 launch price until 30 November, then $9.99</p>
+          <a class="btn-pre" href="#preorder">Pre-order on Amazon</a>
+        </div>
       </div>
 
-      <p class="fineprint">No spam. One email when the English edition is ready. Unsubscribe with one click.</p>
+      <p class="lead">Fifteen difficult conversations from twenty years in corporate finance
+        operations, each described from both sides of the table: the employee's and the
+        manager's. I was reviewed, and later I decided reviews, raises and exits for my own teams.</p>
+
+      <ul class="benefits">
+        <li>The pay rise: what to do when you hear “there's no budget”, and what to do a week later</li>
+        <li>The improvement plan: why the first 48 hours matter more than the next 60 days</li>
+        <li>The annual review: why the rating is usually decided before you sit down</li>
+        <li>Leaving: notice, mutual termination, and why you shouldn't sign anything on the day</li>
+      </ul>
+
+      <section class="preorder" id="preorder" aria-labelledby="pre-tytul">
+        <h2 id="pre-tytul">Pre-order on your Amazon store</h2>
+        <p>Pre-order now and Amazon charges you the launch price and delivers the book to your
+          Kindle on 23 November. No Kindle? The Kindle app is free on any phone or tablet.</p>
+        <div class="rynki">
+          <a href="https://www.amazon.com/dp/B0HQ6YTG8Q" data-rynek="com" rel="noopener">Amazon.com <span>$4.99</span></a>
+          <a href="https://www.amazon.co.uk/dp/B0HQ6YTG8Q" data-rynek="co.uk" rel="noopener">Amazon.co.uk <span>£4.49</span></a>
+          <a href="https://www.amazon.de/dp/B0HQ6YTG8Q" data-rynek="de" rel="noopener">Amazon.de <span>€4.99</span></a>
+        </div>
+        <p class="drobne">In Poland? Use the Amazon store your Kindle account is registered with, usually Amazon.com. If a store says the book is unavailable in your country, try another one.</p>
+      </section>
+
+      <section class="nie-teraz">
+        <h2>Not ready yet? Get the free checklist</h2>
+        <p>How to document difficult situations at work: a note template, ten calm replies to
+          unfair feedback, and where to keep your records.</p>
+        <!-- Formularz MailerLite (embedded) — konto 2494941, formularz kfrfAr (Checklist EN) -->
+        <div class="form-embed">
+          <div class="ml-embedded" data-form="kfrfAr"></div>
+        </div>
+        <p class="fineprint">No spam. One email with the checklist, and you can unsubscribe with one click.</p>
+      </section>
     </div>
   </main>
 
@@ -55,6 +81,14 @@ import Layout from '../../layouts/Layout.astro';
     ml('account', '2494941');
   </script>
   <!-- End MailerLite Universal -->
+  <script is:inline>
+    /* 3.11.2026: kliknięcia w przedsprzedaż — Vercel `en_preorder_klik` {rynek}. */
+    document.querySelectorAll('a[data-rynek]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        try { if (window.va) window.va('event', { name: 'en_preorder_klik', data: { rynek: a.dataset.rynek } }); } catch (e) {}
+      });
+    });
+  </script>
 </Layout>
 
 <style>
@@ -71,6 +105,20 @@ import Layout from '../../layouts/Layout.astro';
 .benefits{list-style:none;margin:26px 0 34px}
 .benefits li{padding-left:30px;position:relative;margin-bottom:14px;font-size:16px}
 .benefits li::before{content:"✓";position:absolute;left:0;color:var(--marker);font-weight:700}
+.kniga{display:flex;gap:26px;align-items:center;margin:8px 0 6px}
+.okladka{width:150px;height:auto;border-radius:6px;box-shadow:0 14px 34px -12px rgba(0,0,0,.45);flex-shrink:0}
+@media(max-width:560px){.kniga{flex-direction:column;align-items:flex-start}.okladka{width:130px}}
+.cena{font-weight:700;color:#fff;font-size:16px;margin:14px 0 16px}
+.btn-pre,.rynki a{display:inline-block;background:var(--marker);color:var(--atrament);font-weight:700;text-decoration:none;
+  padding:14px 22px;border-radius:8px;font-size:16px}
+.btn-pre:hover,.rynki a:hover{background:#F7DD8B}
+.preorder,.nie-teraz{margin-top:38px;padding-top:30px;border-top:1px solid rgba(255,255,255,.18);scroll-margin-top:20px}
+.preorder h2,.nie-teraz h2{font-family:var(--disp);font-weight:500;color:#fff;font-size:clamp(21px,3.2vw,27px);margin-bottom:10px}
+.preorder p,.nie-teraz p{font-size:15.5px;color:#CFE0DA;margin-bottom:16px}
+.rynki{display:flex;flex-direction:column;gap:10px;max-width:360px}
+.rynki a{display:flex;justify-content:space-between}
+.rynki span{font-weight:500;opacity:.8}
+.drobne{font-size:13.5px!important;color:#B9CFC8!important;margin-top:12px}
 .form-embed{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
   border-radius:12px;padding:26px 24px}
 .fineprint{margin-top:16px;font-size:12.5px;color:#B9CFC8;text-align:center}

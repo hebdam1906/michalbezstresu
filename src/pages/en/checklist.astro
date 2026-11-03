@@ -44,6 +44,15 @@ import Layout from '../../layouts/Layout.astro';
       </div>
 
       <p class="fineprint">No spam. One email with the checklist, and you can unsubscribe with one click.</p>
+
+      <!-- 3.11.2026: po zapisie (komunikat sukcesu MailerLite) pokazujemy przedsprzedaż książki. -->
+      <section class="po-zapisie" id="poZapisie" hidden>
+        <h2>The book is on pre-order</h2>
+        <p><strong>Both Sides of the Table</strong>: the pay rise, the annual review, the improvement plan
+          and leaving, each explained from both sides of the table. Kindle edition out on 23 November,
+          $4.99 launch price until 30 November.</p>
+        <a class="btn-pre" href="/en/book/?utm_source=site&utm_medium=en-checklist&utm_campaign=en-launch&utm_content=en-checklist-thanks#preorder">See the book</a>
+      </section>
     </div>
   </main>
 
@@ -56,6 +65,25 @@ import Layout from '../../layouts/Layout.astro';
     ml('account', '2494941');
   </script>
   <!-- End MailerLite Universal -->
+  <script is:inline>
+    /* 3.11.2026: formularz EN nie przekierowuje (sukces pokazuje się w miejscu formularza).
+       Gdy pojawi się komunikat sukcesu: zdarzenie Lead (Meta, tylko gdy piksel działa = zgoda),
+       Vercel `checklista_en_zapis` i sekcja z przedsprzedażą książki. */
+    (function () {
+      var gotowe = false;
+      function sprawdz() {
+        if (gotowe) return;
+        var ok = document.querySelector('.ml-embedded .ml-form-successBody');
+        if (!ok || ok.style.display === 'none' || ok.offsetParent === null) return;
+        gotowe = true;
+        var sek = document.getElementById('poZapisie');
+        if (sek) sek.hidden = false;
+        try { if (window.fbq) window.fbq('track', 'Lead', { content_category: 'checklista_en' }); } catch (e) {}
+        try { if (window.va) window.va('event', { name: 'checklista_en_zapis' }); } catch (e) {}
+      }
+      new MutationObserver(sprawdz).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['style', 'class'] });
+    })();
+  </script>
 </Layout>
 
 <style>
@@ -71,6 +99,10 @@ import Layout from '../../layouts/Layout.astro';
 .benefits{list-style:none;margin:26px 0 34px}
 .benefits li{padding-left:30px;position:relative;margin-bottom:14px;font-size:16px}
 .benefits li::before{content:"✓";position:absolute;left:0;color:var(--marker);font-weight:700}
+.po-zapisie{margin-top:34px;padding:24px;border:1px solid rgba(255,255,255,.22);border-radius:12px;background:rgba(255,255,255,.07)}
+.po-zapisie h2{font-family:var(--disp);font-weight:500;color:#fff;font-size:24px;margin-bottom:10px}
+.po-zapisie p{font-size:15.5px;color:#CFE0DA;margin-bottom:16px}
+.btn-pre{display:inline-block;background:var(--marker);color:var(--atrament);font-weight:700;text-decoration:none;padding:13px 22px;border-radius:8px}
 .form-embed{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
   border-radius:12px;padding:26px 24px}
 .fineprint{margin-top:16px;font-size:12.5px;color:#B9CFC8;text-align:center}
