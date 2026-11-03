@@ -261,6 +261,7 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
             if (x.ok && x.d.ok) {
               f.innerHTML = '<div class="zapis-ok"><strong>Rozdział jest w drodze ✓</strong><br>Za chwilę przyjdzie mail. Jeśli nie chcesz czekać: <a href="/pobierz/z-obu-stron-stolu_rozdzial-1.pdf" target="_blank" rel="noopener">pobierz PDF teraz</a>.</div>';
               try { if (window.va) window.va('event', { name: 'ksiazka_fragment' }); } catch (e) {}
+              try { if (window.fbq) window.fbq('track', 'Lead', { content_category: 'ksiazka_fragment' }); } catch (e) {}
               try { if (window.mbsZrodlo) window.mbsZrodlo('ksiazka-fragment', email.toLowerCase()); } catch (e) {}
             } else { kom.textContent = (x.d && x.d.error) || 'Nie udało się wysłać. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; }
           })
