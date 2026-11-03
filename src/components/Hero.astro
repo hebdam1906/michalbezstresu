@@ -10,7 +10,9 @@
  */
 import { Image } from 'astro:assets';
 import zdjecie from '../assets/michal-hebda.jpg';
-const WIDEO_YT_ID = '';
+import miniatura from '../assets/wideo-powitalne-miniatura.jpg';
+/* 3.11.2026: wideo powitalne (YT niepubliczne, napisy wypalone, dźwięk z Q2U). */
+const WIDEO_YT_ID = 'D6z5fywUN-8';
 ---
 <header class="hero">
   <div class="wrap hero-grid">
@@ -25,9 +27,10 @@ const WIDEO_YT_ID = '';
     <div class="hero-media">
       {WIDEO_YT_ID ? (
         <button type="button" class="wideo" data-yt={WIDEO_YT_ID} aria-label="Odtwórz wideo powitalne">
-          <Image src={zdjecie} alt="Michał Hebda" widths={[360, 540, 720]} sizes="(max-width: 880px) 92vw, 460px"
-            width={1080} height={1080} loading="eager" class="hero-foto" />
+          <Image src={miniatura} alt="Michał Hebda — wideo powitalne, 50 sekund" widths={[480, 720, 960, 1280]}
+            sizes="(max-width: 880px) 92vw, 520px" width={1280} height={720} loading="eager" class="hero-mini" />
           <span class="play" aria-hidden="true"></span>
+          <span class="czas">▶ 50 s · z napisami</span>
         </button>
       ) : (
         <Image src={zdjecie} alt="Michał Hebda" widths={[360, 540, 720]} sizes="(max-width: 880px) 92vw, 460px"
@@ -66,10 +69,12 @@ const WIDEO_YT_ID = '';
 .hero-foto{display:block;width:100%;max-width:460px;height:auto;aspect-ratio:1/1;object-fit:cover;object-position:center 30%;
   border-radius:14px;border:1px solid var(--linia)}
 @media(max-width:880px){.hero-foto{max-width:360px}}
-.wideo{position:relative;display:block;padding:0;border:0;background:none;cursor:pointer;width:100%;max-width:460px}
-.play{position:absolute;left:50%;top:50%;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:99px;
+.wideo{position:relative;display:block;padding:0;border:0;background:none;cursor:pointer;width:100%;max-width:520px}
+.hero-mini{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:14px;border:1px solid var(--linia)}
+.czas{position:absolute;left:12px;bottom:12px;font-family:var(--mono);font-size:12px;color:#fff;background:rgba(20,30,27,.72);padding:4px 9px;border-radius:99px}
+.play{position:absolute;left:22%;top:50%;width:76px;height:76px;margin:-38px 0 0 -38px;border-radius:99px;
   background:rgba(46,107,93,.92);box-shadow:0 8px 30px rgba(0,0,0,.25)}
 .play::after{content:"";position:absolute;left:31px;top:24px;border-style:solid;border-width:14px 0 14px 22px;
   border-color:transparent transparent transparent #fff}
-.hero-iframe{width:100%;max-width:460px;aspect-ratio:1/1;border:0;border-radius:14px}
+.hero-iframe{width:100%;max-width:520px;aspect-ratio:16/9;border:0;border-radius:14px}
 </style>
