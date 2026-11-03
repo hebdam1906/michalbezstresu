@@ -4,10 +4,17 @@
     <h2>Wiedza, którą zabierzesz ze sobą</h2>
     <div class="prod-grid">
       <article class="prod">
-        <span class="status st-soon">Książka · szykuje się do wydania</span>
-        <h3>Książka jest napisana</h3>
-        <p>Piętnaście rozdziałów o rozmowach, od których zależy Twoja praca — z obu stron stołu. Tytuł, data i cena pojawią się wkrótce.</p>
-        <a class="btn btn-ghost" href="/ksiazka/">Więcej o książce</a>
+        <span class="status st-soon">Książka · już jest</span>
+        <h3>Z obu stron stołu</h3>
+        <p>Cztery rozmowy, od których zależy Twoja praca: podwyżka, ocena roczna, plan naprawczy, odejście. Każda z obu stron stołu.</p>
+        <p class="cena-prod">39 zł do 15.11, potem 49 zł</p>
+        <a class="btn btn-primary" href="/ksiazka/?utm_source=site&utm_medium=home&utm_campaign=premiera-ksiazki&utm_content=home-karta">Kupuję e-book</a>
+      </article>
+      <article class="prod">
+        <span class="status st-b2b">Konsultacja 60 min · 299 zł</span>
+        <h3>Porozmawiajmy o Twojej sytuacji</h3>
+        <p>Godzina jeden na jeden: Twoja sytuacja, Twoje dokumenty, gotowe sformułowania na rozmowę.</p>
+        <a class="btn btn-ghost" href="/konsultacje/">Umów konsultację</a>
       </article>
       <article class="prod" id="firmy">
         <span class="status st-b2b">Dla firm</span>
@@ -20,8 +27,10 @@
 </section>
 
 <style>
-.prod-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:40px}
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px}
+@media(max-width:980px){.prod-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:760px){.prod-grid{grid-template-columns:1fr}}
+.cena-prod{font-family:var(--disp);font-size:19px;color:var(--sygnal)!important;font-weight:600}
 .prod{background:var(--papier);border:1px solid var(--linia);border-radius:10px;padding:30px 28px}
 .prod .status{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;display:inline-block;margin-bottom:16px}
 .st-soon{background:var(--marker);color:#6B5A14}
