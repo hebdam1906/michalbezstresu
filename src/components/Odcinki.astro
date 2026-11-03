@@ -16,6 +16,9 @@ import { odcinki as fallback, ILE_KART, KANAL_YT, PODCAST } from '../data/odcink
 // i posłuchania, a strona dostaje link ze strony głównej, czyli z najmocniejszej
 // strony w serwisie.
 import { stronyGotowe } from '../data/strony-odcinkow.js';
+/* 3.11.2026: na stronie głównej tylko 3 najnowsze + link do /odcinki/. */
+interface Props { ile?: number }
+const { ile } = Astro.props;
 
 const doCzytania = new Map(stronyGotowe.map((s) => [s.nr, s.slug]));
 
@@ -41,7 +44,8 @@ const dzis = new Date().toISOString().slice(0, 10);
 
 // karta = odcinek, który już wyszedł i ma link do filmu
 const wyszly = (o) => o.data <= dzis && !!o.yt;
-const karty = wszystkie.filter(wyszly).slice(0, ILE_KART);
+const LIMIT = ile ?? ILE_KART;
+const karty = wszystkie.filter(wyszly).slice(0, LIMIT);
 // zapowiedź = najbliższy odcinek, który jeszcze nie wyszedł
 const przyszle = wszystkie.filter((o) => o.data > dzis).sort((a, b) => a.data.localeCompare(b.data));
 const nastepny = przyszle[0] ?? null;
@@ -84,20 +88,16 @@ function kiedy(iso) {
     )}
 
     <p class="wiecej">
-      Wszystkie odcinki: <a href={KANAL_YT} target="_blank" rel="noopener">na YouTube</a>
+      <a href="/odcinki/">Wszystkie odcinki →</a>
       <span aria-hidden="true"> · </span>
-      <a href={PODCAST} target="_blank" rel="noopener">w podcaście</a>
+      <a href={KANAL_YT} target="_blank" rel="noopener">YouTube</a>
+      <span aria-hidden="true"> · </span>
+      <a href={PODCAST} target="_blank" rel="noopener">podcast</a>
     </p>
-
-    {doCzytania.size > 0 && (
-      <p class="wiecej">
-        Wolisz przeczytać? <a href="/odcinki/">Wybrane odcinki rozpisane krok po kroku</a>.
-      </p>
-    )}
   </div>
 </section>
 
-<script type="module" is:inline define:vars={{ ILE_KART }}>
+<script type="module" is:inline define:vars={{ ILE_KART: LIMIT }}>
   // Korekta po stronie przeglądarki — patrz komentarz na górze pliku.
   const dzis = new Date().toISOString().slice(0, 10);
   const kontener = document.querySelector('[data-karty]');

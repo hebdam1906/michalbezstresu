@@ -1,34 +1,31 @@
 ---
+/** „Kim jestem” (przebudowa 3.11.2026). Kotwice: #kim-jestem (stopka) i #omnie (stare linki). */
 import { Image } from 'astro:assets';
 import zdjecie from '../assets/michal-hebda.jpg';
 ---
-<section class="omnie" id="omnie">
+<section class="omnie" id="kim-jestem">
+  <span id="omnie" class="stara-kotwica" aria-hidden="true"></span>
   <div class="wrap omnie-grid">
+    <Image src={zdjecie} alt="Michał Hebda" widths={[320, 480, 640]} sizes="(max-width: 880px) 240px, 320px"
+      loading="lazy" class="omnie-foto" />
     <div>
-      <Image src={zdjecie} alt="Michał Hebda" widths={[320, 480, 640]} sizes="(max-width: 880px) 280px, 360px"
-        loading="lazy" class="omnie-foto" />
-      <div class="eyebrow">O mnie</div>
-      <h2>Siedziałem po obu stronach tego stołu</h2>
-      <p class="sub">Przez 20 lat pracowałem w międzynarodowych korporacjach finansowych — od specjalisty po senior managera. Dawałem feedbacki i je dostawałem. Prowadziłem oceny roczne i przechodziłem przez własne. Wiem, jak ta maszyna działa od środka — i uważam, że każdy pracownik powinien znać jej instrukcję obsługi.</p>
-    </div>
-    <div class="stats">
-      <div class="stat"><b>20 lat</b><span>w korporacjach finansowych</span></div>
-      <div class="stat"><b>4 firmy</b><span>od specjalisty po senior managera</span></div>
-      <div class="stat"><b>1 książka</b><span>„Z obu stron stołu” — 15 rozmów, 2 perspektywy</span></div>
-      <div class="stat"><b>1 cel</b><span>mniej stresu po Twojej stronie biurka</span></div>
+      <h2>Kim jestem</h2>
+      <p><strong>Michał Hebda.</strong> Przez dwadzieścia lat pracowałem w operacjach finansowych w międzynarodowych instytucjach, od specjalisty po senior menedżera. Byłem oceniany i oceniałem. Dostałem plan naprawczy i wręczałem je innym. Dziś mówię o tych rozmowach głośno, bo zasady znali tylko ci po drugiej stronie stołu.</p>
+      {/* Miejsce na opinię z Lubimyczytać (z podpisem i linkiem do źródła) — gdy będzie. */}
+      <p class="empik">Książka dostępna w Empiku</p>
     </div>
   </div>
 </section>
 
 <style>
-.omnie{background:var(--papier);border-top:1px solid var(--linia)}
-.omnie-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:center}
-@media(max-width:880px){.omnie-grid{grid-template-columns:1fr}}
-.omnie-foto{display:block;width:100%;max-width:360px;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:center 30%;
-  border-radius:12px;border:1px solid var(--linia);margin-bottom:24px}
-@media(max-width:880px){.omnie-foto{max-width:280px}}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.stat{background:var(--mgla);border:1px solid var(--linia);border-radius:10px;padding:18px}
-.stat b{font-family:var(--disp);font-size:30px;font-weight:600;display:block;color:var(--sygnal)}
-.stat span{font-size:13.5px;color:#5E6E68}
+.omnie{background:var(--papier);border-top:1px solid var(--linia);scroll-margin-top:64px}
+.stara-kotwica{display:block;position:relative;top:-64px}
+.omnie-grid{display:grid;grid-template-columns:320px 1fr;gap:48px;align-items:center}
+@media(max-width:880px){.omnie-grid{grid-template-columns:1fr;gap:24px}}
+.omnie-foto{display:block;width:100%;max-width:320px;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:center 30%;
+  border-radius:12px;border:1px solid var(--linia)}
+@media(max-width:880px){.omnie-foto{max-width:240px}}
+.omnie h2{font-size:clamp(26px,3.6vw,36px);margin-bottom:16px}
+.omnie p{font-size:17px;color:#33413C;max-width:60ch;margin-bottom:14px}
+.omnie .empik{font-family:var(--mono);font-size:13px;color:var(--sygnal);letter-spacing:.04em}
 </style>

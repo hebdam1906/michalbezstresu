@@ -1,40 +1,88 @@
-<section id="produkty">
+---
+/**
+ * „Trzy sposoby, żeby się przygotować” — 3 karty z cenami (przebudowa 3.11.2026).
+ * `krotko` = wersja na zakończenie strony (nazwa, cena, przycisk).
+ * Zdarzenie Vercel `glowna_produkt` { produkt, miejsce }.
+ */
+interface Props { krotko?: boolean }
+const { krotko = false } = Astro.props;
+const miejsce = krotko ? 'dol' : 'karty';
+const u = (c: string) => `utm_source=site&utm_medium=home&utm_campaign=produkty&utm_content=${c}-${miejsce}`;
+const KOSZYK_PIP = `https://cart.easy.tools/checkout/michalbezstresu/pakiet-przetrwaj-pip?${u('pip')}`;
+---
+<section class={krotko ? 'produkty krotko' : 'produkty'} id={krotko ? 'produkty-dol' : 'produkty'}>
   <div class="wrap">
-    <div class="eyebrow">Produkty</div>
-    <h2>Wiedza, którą zabierzesz ze sobą</h2>
+    <h2>{krotko ? 'Gotowy, żeby się przygotować?' : 'Trzy sposoby, żeby się przygotować'}</h2>
     <div class="prod-grid">
       <article class="prod">
-        <span class="status st-soon">Książka · już jest</span>
-        <h3>Z obu stron stołu</h3>
-        <p>Cztery rozmowy, od których zależy Twoja praca: podwyżka, ocena roczna, plan naprawczy, odejście. Każda z obu stron stołu.</p>
-        <p class="cena-prod">39 zł do 15.11, potem 49 zł</p>
-        <a class="btn btn-primary" href="/ksiazka/?utm_source=site&utm_medium=home&utm_campaign=premiera-ksiazki&utm_content=home-karta">Kupuję e-book</a>
+        <span class="status">E-book</span>
+        <h3>„Z obu stron stołu”</h3>
+        <p class="cena-prod">39 zł z VAT do 15.11, potem 49 zł</p>
+        {!krotko && <p>Cztery rozmowy, od których zależy Twoja praca, każda z obu stron stołu. Gotowe zdania, pytania, testy. EPUB + PDF od razu.</p>}
+        <a class="btn btn-primary" href={`/ksiazka/?${u('ebook')}`} data-produkt="ebook">Kupuję e-book</a>
+        {!krotko && <a class="maly" href={`/ksiazka/?${u('fragment')}#fragmentZapis`} data-produkt="fragment">Najpierw przeczytaj rozdział 1 za darmo →</a>}
       </article>
       <article class="prod">
-        <span class="status st-b2b">Konsultacja 60 min · 299 zł</span>
-        <h3>Porozmawiajmy o Twojej sytuacji</h3>
-        <p>Godzina jeden na jeden: Twoja sytuacja, Twoje dokumenty, gotowe sformułowania na rozmowę.</p>
-        <a class="btn btn-ghost" href="/konsultacje/">Umów konsultację</a>
+        <span class="status">Konsultacja 60 minut</span>
+        <h3>Rozmowa o Twojej sytuacji</h3>
+        <p class="cena-prod">299 zł z VAT <span>(254 zł dla subskrybentów)</span></p>
+        {!krotko && <p>Jeśli rozmowa jest w ciągu dwóch tygodni. Twoja sytuacja, Twoje dokumenty, gotowe sformułowania. Po rozmowie notatka z planem.</p>}
+        <a class="btn btn-primary" href={`/konsultacje/?${u('konsultacja')}`} data-produkt="konsultacja">Umów rozmowę</a>
       </article>
-      <article class="prod" id="firmy">
-        <span class="status st-b2b">Dla firm</span>
-        <h3>Szkolenia i warsztaty</h3>
-        <p>Feedback, który nie niszczy. Zarządzanie stresem w zespole. Profilaktyka antymobbingowa. Warsztaty prowadzone przez praktyka z 20-letnim doświadczeniem operacyjnym, nie z prezentacji.</p>
-        <a class="btn btn-primary" href="mailto:kontakt@michalbezstresu.pl">Porozmawiajmy o Twoim zespole</a>
+      <article class="prod">
+        <span class="status">Pakiet „Przetrwaj PIP”</span>
+        <h3>Trzy sesje w rytmie planu naprawczego</h3>
+        <p class="cena-prod">749 zł z VAT</p>
+        {!krotko && (
+          <>
+            <p>Dostałeś plan naprawczy. Przechodzimy przez dokument, pierwsze 48 godzin i cały okres planu.</p>
+            <ul>
+              <li>Sesja na start: Twój PIP punkt po punkcie, zanim podpiszesz</li>
+              <li>Sesja w połowie: postępy, korekta strategii, rozmowy kontrolne</li>
+              <li>Sesja przed finałem: rozmowa podsumowująca + maile między sesjami</li>
+            </ul>
+          </>
+        )}
+        <a class="btn btn-primary" href={`/konsultacje/?${u('pip')}#pip`} data-produkt="pip">Zobacz pakiet</a>
       </article>
     </div>
+    {!krotko && (
+      <div class="firmy-pasek">
+        <p><strong>Dla firm:</strong> warsztaty dla menedżerów z trudnych rozmów, 20 lat praktyki, nie prezentacja.</p>
+        <a class="btn btn-ghost" href={`/dla-firm/?${u('firmy')}`} data-produkt="firmy">Porozmawiajmy</a>
+      </div>
+    )}
   </div>
 </section>
 
+<script is:inline define:vars={{ miejsce }}>
+document.querySelectorAll('#' + (miejsce === 'dol' ? 'produkty-dol' : 'produkty') + ' a[data-produkt]').forEach(function (a) {
+  a.addEventListener('click', function () {
+    try { if (window.va) window.va('event', { name: 'glowna_produkt', data: { produkt: a.dataset.produkt, miejsce: miejsce } }); } catch (e) {}
+  });
+});
+</script>
+
 <style>
-.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px}
-@media(max-width:980px){.prod-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:760px){.prod-grid{grid-template-columns:1fr}}
-.cena-prod{font-family:var(--disp);font-size:19px;color:var(--sygnal)!important;font-weight:600}
-.prod{background:var(--papier);border:1px solid var(--linia);border-radius:10px;padding:30px 28px}
-.prod .status{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;display:inline-block;margin-bottom:16px}
-.st-soon{background:var(--marker);color:#6B5A14}
-.st-b2b{background:rgba(46,107,93,.12);color:var(--sygnal)}
-.prod h3{font-size:23px;margin-bottom:10px}
-.prod p{font-size:15px;color:#4A5A55;margin-bottom:20px}
+.produkty h2{font-size:clamp(26px,3.6vw,36px)}
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:32px}
+@media(max-width:980px){.prod-grid{grid-template-columns:1fr}}
+.prod{background:var(--papier);border:1px solid var(--linia);border-radius:10px;padding:28px 24px;display:flex;flex-direction:column;align-items:flex-start}
+.prod .status{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:99px;
+  display:inline-block;margin-bottom:14px;background:rgba(46,107,93,.12);color:var(--sygnal)}
+.prod h3{font-size:22px;margin-bottom:8px}
+.prod p{font-size:15px;color:#4A5A55;margin-bottom:14px}
+.prod .cena-prod{font-family:var(--disp);font-size:21px;font-weight:600;color:var(--sygnal);margin-bottom:12px}
+.prod .cena-prod span{font-family:var(--body);font-size:14px;font-weight:400;color:#5E6E68}
+.prod ul{list-style:none;margin:0 0 18px;font-size:14.5px;color:#3C4A46}
+.prod li{padding-left:20px;position:relative;margin-bottom:6px}
+.prod li::before{content:"—";position:absolute;left:0;color:var(--sygnal)}
+.prod .btn{margin-top:auto}
+.prod .maly{margin-top:12px;font-size:14px;color:var(--sygnal);text-decoration:none}
+.prod .maly:hover{text-decoration:underline}
+.firmy-pasek{margin-top:22px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  background:var(--mgla);border:1px dashed var(--szalwia);border-radius:10px;padding:18px 22px}
+.firmy-pasek p{margin:0;font-size:15.5px;max-width:60ch}
+.krotko{border-top:1px solid var(--linia)}
+.krotko .prod{padding:22px 20px}
 </style>

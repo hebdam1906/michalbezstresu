@@ -1,13 +1,19 @@
 ---
+/**
+ * Strona główna — przebudowa „sklep, nie kanał” (3.11.2026, decyzja Michała,
+ * teksty Klaudiusza 1:1). Kolejność: hero → sytuacje → 3 produkty → kim jestem
+ * → checklista → 3 odcinki → produkty jeszcze raz.
+ * Jeden H1 (w Hero). SciezkaStartowa.astro i PoCoToRobie.astro zostają w repo,
+ * ale nie są już na stronie głównej (treść „po co” przeszła do „Kim jestem”).
+ */
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
-import SciezkaStartowa from '../components/SciezkaStartowa.astro';
-import Odcinki from '../components/Odcinki.astro';
-import LeadMagnet from '../components/LeadMagnet.astro';
+import Sytuacje from '../components/Sytuacje.astro';
 import Produkty from '../components/Produkty.astro';
-import PoCoToRobie from '../components/PoCoToRobie.astro';
 import OMnie from '../components/OMnie.astro';
+import LeadMagnet from '../components/LeadMagnet.astro';
+import Odcinki from '../components/Odcinki.astro';
 import Stopka from '../components/Stopka.astro';
 
 /* hreflang z angielską stroną powitalną /en/ (12.10.2026) — para musi być wzajemna. */
@@ -17,18 +23,18 @@ const alternatywy = [
   { hreflang: 'x-default', href: 'https://www.michalbezstresu.pl/' },
 ];
 ---
-<Layout alternatywy={alternatywy}>
+<Layout
+  title="Trudne rozmowy w pracy, z obu stron stołu | Michał bez Stresu"
+  description="Podwyżka, ocena roczna, plan naprawczy, odejście. Książka, konsultacje i darmowe narzędzia od kogoś, kto 20 lat siedział po obu stronach stołu."
+  alternatywy={alternatywy}
+>
   <Nav />
   <Hero />
-  {/* Ścieżka startowa: pod powitaniem, nad listą odcinków (brief Klaudiusza 16.09) */}
-  <SciezkaStartowa />
-  <Odcinki />
-  <LeadMagnet />
+  <Sytuacje />
   <Produkty />
-  {/* „Po co to robię" celowo PO produktach, a przed „O mnie": najpierw widz
-      wie, co dostaje, potem dlaczego to dostaje za darmo, a dopiero potem
-      kim jest osoba, która to mówi. */}
-  <PoCoToRobie />
   <OMnie />
+  <LeadMagnet />
+  <Odcinki ile={3} />
+  <Produkty krotko />
   <Stopka />
 </Layout>
