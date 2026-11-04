@@ -16,7 +16,7 @@ import type { APIRoute } from 'astro';
 import { przepusc, zaDuzo } from '../../lib/ratelimit';
 import { supabaseAdmin } from '../../lib/supabase';
 
-const FORMULARZE = new Set(['checklista', 'checklista-en', 'plan-naprawczy', 'ksiazka', 'book-en', 'live', 'ksiazka-fragment']);
+const FORMULARZE = new Set(['checklista', 'checklista-en', 'plan-naprawczy', 'ksiazka', 'book-en', 'live', 'ksiazka-fragment', 'rozdzial-1', 'rozdzial-9']);
 const t = (v: unknown, max: number) => { const s = String(v ?? '').trim().slice(0, max); return s || null; };
 const ok = () => new Response(null, { status: 204 });
 

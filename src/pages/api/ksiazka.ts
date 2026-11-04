@@ -45,6 +45,15 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   const fields: Record<string, string> = {};
   if (imie) fields.name = imie;
+  // 4.11.2026: dwa darmowe fragmenty (/rozdzial → 1, /rozdzial/podwyzka → 9). Pole MailerLite
+  // `fragment` decyduje, który PDF wysyła mail D0 automatu „Ksiazka-fragment”.
+  // UTM z adresu strony → pola utm_* (pomiar: reklama → zapis → sprzedaż).
+  if (fragment) fields.fragment = b.fragment === '9' ? '9' : '1';
+  const u = b.utm && typeof b.utm === 'object' ? b.utm : {};
+  for (const k of ['source', 'campaign', 'content'] as const) {
+    const v = tekst(u[k], 120);
+    if (v) fields['utm_' + k] = v;
+  }
 
   try {
     const r = await fetch('https://connect.mailerlite.com/api/subscribers', {

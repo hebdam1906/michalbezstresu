@@ -1,0 +1,108 @@
+---
+/**
+ * Landing „darmowy rozdział” dla zimnego ruchu z reklam (brief Klaudiusza 4.11, plan
+ * `Plan-konwersji-ruchu_450-osob-dziennie…`). Mechanika jak /checklista (33 % zapisów):
+ * jeden ekran na telefonie, bez menu i bez „Kup” nad formularzem.
+ * Zapis → /api/ksiazka (cel 'fragment', pole `fragment` = 1/9, UTM → pola MailerLite)
+ * → grupa „Ksiazka-fragment” → automat wysyła właściwy PDF.
+ * Po zapisie: link do PDF na ekranie, Meta Lead, Vercel `rozdzial_zapis`, /api/zrodlo.
+ */
+interface Props { nr: '1' | '9'; h1: string; lead: string; przycisk: string; eyebrow: string }
+const { nr, h1, lead, przycisk, eyebrow } = Astro.props;
+const pdf = `/pobierz/z-obu-stron-stolu_rozdzial-${nr}.pdf`;
+---
+<main class="lp" data-nr={nr}>
+  <div class="lp-wrap">
+    <div class="brand mono">Michał bez Stresu</div>
+    <div class="eyebrow">{eyebrow}</div>
+    <h1>{h1}</h1>
+    <p class="sub">{lead}</p>
+
+    <form class="rz-form" id="rozdzialZapis" novalidate>
+      <div class="pola">
+        <input type="email" name="email" placeholder="Twój e-mail" autocomplete="email" required maxlength="160" />
+        <input type="text" name="imie" placeholder="Imię (opcjonalnie)" autocomplete="given-name" maxlength="80" />
+      </div>
+      <input type="text" name="www" class="pulapka" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <button class="rz-btn" type="submit">{przycisk}</button>
+      <p class="fineprint">Zero spamu. Rozdział od razu na maila, potem 5 krótkich wiadomości o książce.
+        Wypisujesz się jednym kliknięciem. Klikając, zgadzasz się na te maile —
+        <a href="/prywatnosc/">polityka prywatności</a>.</p>
+      <p class="komunikat" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</main>
+
+<section class="rz-ksiazka">
+  <div class="rz-ksiazka-in">
+    <img src="/ksiazka/okladka-nb1-600x960.jpg" width="600" height="960" loading="lazy" decoding="async"
+      alt="Okładka e-booka „Z obu stron stołu” Michała Hebdy" />
+    <div>
+      <h2>Cała książka: 15 rozmów, od których zależy praca</h2>
+      <p>Każda z obu stron stołu, z gotowymi zdaniami. E-book 39 zł do 15.11, potem 49 zł.</p>
+      <p><a href="/ksiazka/?utm_source=strona&utm_medium=rozdzial&utm_campaign=premiera-ksiazki" data-rz-ksiazka>Zobacz książkę →</a></p>
+    </div>
+  </div>
+</section>
+
+<script is:inline define:vars={{ nr, pdf }}>
+  (function () {
+    var f = document.getElementById('rozdzialZapis');
+    if (!f) return;
+    var kom = f.querySelector('.komunikat');
+    var btn = f.querySelector('button[type=submit]');
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = f.email.value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { kom.textContent = 'Sprawdź adres e-mail.'; kom.className = 'komunikat blad'; return; }
+      btn.disabled = true; kom.textContent = 'Wysyłam…'; kom.className = 'komunikat';
+      var atr = {}; try { atr = (window.mbsAtrybucja && window.mbsAtrybucja()) || {}; } catch (er) {}
+      var q = new URLSearchParams(location.search);
+      var utm = { source: q.get('utm_source') || atr.utm_source || '', campaign: q.get('utm_campaign') || atr.utm_campaign || '', content: q.get('utm_content') || atr.utm_content || '' };
+      fetch('/api/ksiazka/', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, imie: f.imie.value.trim(), zgoda: true, www: f.www.value, cel: 'fragment', fragment: nr, utm: utm })
+      }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (x) {
+          if (x.ok && x.d.ok) {
+            f.innerHTML = '<div class="rz-ok"><strong>Gotowe ✓</strong><br><a class="rz-btn rz-pdf" href="' + pdf + '" target="_blank" rel="noopener">Otwórz rozdział (PDF)</a><br>Rozdział leci też na maila. Nie widzisz go? Sprawdź spam i zakładkę „Oferty”.<br><a class="rz-dalej" href="/ksiazka/?utm_source=strona&utm_medium=rozdzial&utm_campaign=premiera-ksiazki&utm_content=po-zapisie-' + nr + '">Zobacz całą książkę →</a></div>';
+            try { if (window.va) window.va('event', { name: 'rozdzial_zapis', data: { nr: nr } }); } catch (er) {}
+            try { if (window.fbq) window.fbq('track', 'Lead', { content_category: 'rozdzial-' + nr }); } catch (er) {}
+            try { if (window.gtag) window.gtag('event', 'generate_lead', { form: 'rozdzial-' + nr }); } catch (er) {}
+            try { if (window.mbsZrodlo) window.mbsZrodlo('rozdzial-' + nr, email.toLowerCase()); } catch (er) {}
+          } else { kom.textContent = (x.d && x.d.error) || 'Nie udało się wysłać. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; }
+        })
+        .catch(function () { kom.textContent = 'Brak połączenia. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; });
+    });
+  })();
+</script>
+
+<style>
+.lp{min-height:100svh;display:flex;align-items:center;justify-content:center;background:var(--sygnal);color:#F2F7F5;padding:36px 20px}
+.lp-wrap{width:100%;max-width:600px}
+.brand{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--marker);margin-bottom:22px}
+.lp .eyebrow{color:var(--marker)}
+.lp h1{font-family:var(--disp);font-weight:500;color:#fff;font-size:clamp(26px,6.4vw,42px);line-height:1.13;margin:6px 0 14px}
+.lp .sub{font-size:clamp(15.5px,2.2vw,18.5px);color:#CFE0DA;max-width:54ch;margin-bottom:22px}
+.rz-form{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:18px}
+.pola{display:grid;grid-template-columns:1.3fr 1fr;gap:10px}
+@media(max-width:560px){.pola{grid-template-columns:1fr}}
+.rz-form input[type=email],.rz-form input[type=text]{width:100%;padding:14px;border:0;border-radius:9px;font-size:16px;font-family:inherit}
+.pulapka{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.rz-btn{display:block;width:100%;margin-top:12px;padding:15px 18px;border:0;border-radius:10px;background:var(--marker);color:#16211D;font-weight:700;font-size:17px;cursor:pointer;text-align:center;text-decoration:none;font-family:inherit}
+.rz-btn:disabled{opacity:.7}
+.fineprint{margin-top:12px;font-size:12.5px;line-height:1.5;color:#B9CFC8}
+.fineprint a{color:#DCEAE5}
+.komunikat{font-size:14px;margin-top:8px;min-height:1em}
+.komunikat.blad{color:#FFD5CF}
+.rz-ok{font-size:16px;line-height:1.6}
+.rz-ok .rz-pdf{margin:12px 0}
+.rz-ok .rz-dalej{color:var(--marker)}
+.rz-ksiazka{background:var(--papier);padding:48px 20px}
+.rz-ksiazka-in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:140px 1fr;gap:24px;align-items:center}
+@media(max-width:520px){.rz-ksiazka-in{grid-template-columns:100px 1fr;gap:16px}}
+.rz-ksiazka img{width:100%;height:auto;border-radius:4px;box-shadow:0 10px 26px rgba(22,33,29,.25)}
+.rz-ksiazka h2{font-family:var(--disp);font-weight:500;font-size:clamp(19px,3vw,24px);line-height:1.2;margin:0 0 8px}
+.rz-ksiazka p{color:#3C4A46;margin:0 0 8px}
+.rz-ksiazka a{color:var(--sygnal);font-weight:600}
+</style>

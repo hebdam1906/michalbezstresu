@@ -36,7 +36,7 @@ const {
 /* Przyklejony pasek CTA na telefonie (3.11.2026): wszystkie polskie strony
    oprócz /ksiazka (ma własne przyciski), paneli i stron wewnętrznych. */
 const sciezka = Astro.url.pathname;
-const BEZ_PASKA = ['/ksiazka', '/en', '/panel', '/dashboard', '/live', '/glos', '/witaj', '/api'];
+const BEZ_PASKA = ['/rozdzial', '/ksiazka', '/en', '/panel', '/dashboard', '/live', '/glos', '/witaj', '/api'];
 const pokazPasek = lang === 'pl' && !BEZ_PASKA.some((p) => sciezka === p || sciezka.startsWith(p + '/') || sciezka.startsWith(p + '.'));
 
 const ogLocale = lang === 'en' ? 'en_GB' : 'pl_PL';
