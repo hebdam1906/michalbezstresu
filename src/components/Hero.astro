@@ -25,7 +25,9 @@ const odm = (n: number) => (n === 1 ? 'odcinek' : [2, 3, 4].includes(n % 10) && 
       <div class="eyebrow">Trudne rozmowy w pracy · z obu stron stołu</div>
       <h1>Masz przed sobą rozmowę, od której zależy Twoja praca?</h1>
       <p class="lead">Podwyżka, ocena roczna, plan naprawczy, odejście. Przez 20 lat siedziałem po obu stronach stołu. Pokażę Ci, co myśli druga strona i co powiedzieć, zanim usiądziesz.</p>
-      <a class="btn btn-primary" href="#sytuacje">Wybierz swoją sytuację ↓</a>
+      {/* 5.11: główny przycisk → /test (brief Klaudiusza 4.11, C). */}
+      <a class="btn btn-primary" href="/test/?utm_source=strona&utm_medium=hero&utm_campaign=test">Która rozmowa Cię czeka? Test, 1 min →</a>
+      <a class="btn btn-ghost" href="#sytuacje">Wybierz swoją sytuację ↓</a>
       <div class="hero-note">1 900+ osób dostaje mój newsletter · {ileOdc} {odm(ileOdc)} · książka w Empiku i na Lubimyczytać</div>
     </div>
 

@@ -1,0 +1,165 @@
+---
+import Layout from '../layouts/Layout.astro';
+/* /test „Która trudna rozmowa Cię czeka?” — 5 pytań, wynik za e-mail (brief Klaudiusza 4.11, wyniki zatwierdzone 5.11).
+   Teksty i logika: src/data/test-rozmowa.js (wspólne z /api/test). Telefon, kciuk, 60 sekund. */
+---
+<Layout
+  title="Która trudna rozmowa Cię czeka? Test, 1 minuta | Michał bez Stresu"
+  description="5 pytań, minuta. Podwyżka, ocena, plan naprawczy, odejście, awans, trudny zespół: sprawdź, która rozmowa przed Tobą, i dostań konkretne wskazówki na start."
+  ogObraz="/og/og-ksiazka-v2.jpg"
+>
+<main class="lp">
+  <div class="lp-wrap" id="test">
+    <div class="brand mono">Michał bez Stresu</div>
+
+    <section class="ekran" data-ekran="start">
+      <div class="eyebrow">Test · 1 minuta</div>
+      <h1>Która trudna rozmowa Cię czeka?</h1>
+      <p class="sub">5 pytań, minuta. Na końcu: konkretne wskazówki na start i rozdział, który tego dotyczy.</p>
+      <button class="t-btn" type="button" data-start>Zaczynam</button>
+    </section>
+
+    <section class="ekran" data-ekran="pytanie" hidden>
+      <div class="pasek" aria-hidden="true"><span></span></div>
+      <div class="eyebrow licznik"></div>
+      <h2 class="pyt"></h2>
+      <div class="opcje" role="list"></div>
+      <button class="wstecz" type="button" data-wstecz>← Wstecz</button>
+    </section>
+
+    <section class="ekran" data-ekran="brama" hidden>
+      <h2 class="pyt">Twój wynik jest gotowy.</h2>
+      <p class="sub">Podaj e-mail, pokażę go tutaj i wyślę na skrzynkę, razem z rozdziałem, który tego dotyczy.</p>
+      <form class="t-form" id="testZapis" novalidate>
+        <div class="pola">
+          <input type="email" name="email" placeholder="Twój e-mail" autocomplete="email" required maxlength="160" />
+          <input type="text" name="imie" placeholder="Imię (opcjonalnie)" autocomplete="given-name" maxlength="80" />
+        </div>
+        <input type="text" name="www" class="pulapka" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button class="t-btn" type="submit">Pokaż wynik</button>
+        <p class="fineprint">Zero spamu. Wypisujesz się jednym kliknięciem. Klikając przycisk, zgadzasz się na maile ode mnie — <a href="/prywatnosc/">polityka prywatności</a>.</p>
+        <p class="komunikat" role="status" aria-live="polite"></p>
+      </form>
+      <button class="wstecz" type="button" data-wstecz>← Wstecz</button>
+    </section>
+
+    <section class="ekran wynik" data-ekran="wynik" hidden></section>
+  </div>
+</main>
+
+<script>
+  import { PYTANIA, wynik } from '../data/test-rozmowa.js';
+  const root = document.getElementById('test')!;
+  const ekrany = root.querySelectorAll<HTMLElement>('.ekran');
+  const pokaz = (n: string) => { ekrany.forEach((e) => (e.hidden = e.dataset.ekran !== n)); window.scrollTo(0, 0); };
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+  const odp: Record<string, string> = {};
+  let i = 0;
+  const sledz = (name: string, data: Record<string, string> = {}) => { try { (window as any).va?.('event', { name, data }); } catch {} };
+
+  const ekranP = root.querySelector<HTMLElement>('[data-ekran="pytanie"]')!;
+  function pytanie() {
+    const p = PYTANIA[i];
+    ekranP.querySelector<HTMLElement>('.pasek span')!.style.width = `${((i + 1) / PYTANIA.length) * 100}%`;
+    ekranP.querySelector('.licznik')!.textContent = `${i + 1}/${PYTANIA.length}`;
+    ekranP.querySelector('.pyt')!.textContent = p.pytanie;
+    const box = ekranP.querySelector('.opcje')!;
+    box.innerHTML = p.opcje.map(([k, t]) =>
+      `<button type="button" role="listitem" class="opcja${odp[p.pole] === k ? ' wybrana' : ''}" data-k="${k}">${esc(t)}</button>`).join('');
+    pokaz('pytanie');
+  }
+  ekranP.querySelector('.opcje')!.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>('.opcja');
+    if (!b) return;
+    odp[PYTANIA[i].pole] = b.dataset.k!;
+    i++;
+    if (i < PYTANIA.length) pytanie(); else { pokaz('brama'); sledz('test_brama', { rozmowa: odp.rozmowa }); }
+  });
+  root.querySelector('[data-start]')!.addEventListener('click', () => { i = 0; pytanie(); sledz('test_start'); });
+  root.querySelectorAll('[data-wstecz]').forEach((b) => b.addEventListener('click', () => {
+    if (i > 0) i--; pytanie();
+  }));
+
+  function render() {
+    const w = wynik(odp)!;
+    const ks = `/ksiazka/?utm_source=strona&utm_medium=test&utm_campaign=test&utm_content=${w.rozmowa}`;
+    root.querySelector<HTMLElement>('[data-ekran="wynik"]')!.innerHTML = `
+      <div class="eyebrow">Twój wynik</div>
+      <h2 class="pyt">Twoja rozmowa: ${esc(w.nazwa)}.</h2>
+      <p class="strona">Po stronie: ${esc(w.stronaNazwa)}.</p>
+      <p>${esc(w.akapit)}</p>
+      ${w.zdania.length ? `<div class="zdania"><strong>Trzy zdania na start:</strong><ol>${w.zdania.map((z) => `<li>${esc(z)}</li>`).join('')}</ol></div>` : ''}
+      <p>${esc(w.stronaTekst)}</p>
+      <p class="dopisek">${esc(w.dopisek)}</p>
+      <div class="rozdzial"><strong>Rozdział, który tego dotyczy:</strong> ${esc(w.rozdzial)}
+        <a class="t-btn" href="${ks}" data-test-ksiazka>Czytam o tym w książce (39 zł do 15.11)</a></div>
+      <p class="pod">Wynik leci też na maila, razem z darmowym rozdziałem.<br>
+        <a href="${w.odcinek[1]}" target="_blank" rel="noopener">▶ Odcinek: ${esc(w.odcinek[0])}</a>
+        ${w.symulator ? ` · <a href="/symulator/podwyzka/">Symulator rozmowy o podwyżce</a>` : ''}</p>`;
+    pokaz('wynik');
+  }
+
+  const f = document.getElementById('testZapis') as HTMLFormElement;
+  const kom = f.querySelector('.komunikat')!;
+  const btn = f.querySelector<HTMLButtonElement>('button[type=submit]')!;
+  f.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = (f.email as unknown as HTMLInputElement).value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { kom.textContent = 'Sprawdź adres e-mail.'; kom.className = 'komunikat blad'; return; }
+    btn.disabled = true; kom.textContent = 'Wysyłam…'; kom.className = 'komunikat';
+    let atr: any = {}; try { atr = (window as any).mbsAtrybucja?.() || {}; } catch {}
+    const q = new URLSearchParams(location.search);
+    const utm = { source: q.get('utm_source') || atr.utm_source || '', campaign: q.get('utm_campaign') || atr.utm_campaign || '', content: q.get('utm_content') || atr.utm_content || '' };
+    fetch('/api/test/', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, imie: (f.imie as unknown as HTMLInputElement).value.trim(), www: (f.www as unknown as HTMLInputElement).value, odp, utm }),
+    }).then((r) => r.json().then((d) => ({ ok: r.ok, d })))
+      .then((x) => {
+        if (x.ok && x.d.ok) {
+          render();
+          sledz('test_zapis', { rozmowa: odp.rozmowa, strona: odp.strona });
+          try { (window as any).fbq?.('track', 'Lead', { content_category: 'test-' + odp.rozmowa }); } catch {}
+          try { (window as any).gtag?.('event', 'generate_lead', { form: 'test' }); } catch {}
+          try { (window as any).mbsZrodlo?.('test', email.toLowerCase()); } catch {}
+        } else { kom.textContent = x.d?.error || 'Nie udało się wysłać. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; }
+      })
+      .catch(() => { kom.textContent = 'Brak połączenia. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; });
+  });
+</script>
+
+<style>
+.lp{min-height:100svh;display:flex;align-items:center;justify-content:center;background:var(--sygnal);color:#F2F7F5;padding:36px 20px}
+.lp-wrap{width:100%;max-width:600px}
+.brand{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--marker);margin-bottom:22px}
+.lp .eyebrow{color:var(--marker)}
+.lp h1{font-family:var(--disp);font-weight:500;color:#fff;font-size:clamp(28px,7vw,44px);line-height:1.12;margin:6px 0 14px}
+.lp .pyt{font-family:var(--disp);font-weight:500;color:#fff;font-size:clamp(22px,5.4vw,32px);line-height:1.18;margin:8px 0 18px}
+.lp .sub{font-size:clamp(15.5px,2.2vw,18.5px);color:#CFE0DA;max-width:54ch;margin-bottom:22px}
+.t-btn{display:block;width:100%;margin-top:12px;padding:15px 18px;border:0;border-radius:10px;background:var(--marker);color:#16211D;font-weight:700;font-size:17px;cursor:pointer;text-align:center;text-decoration:none;font-family:inherit}
+.t-btn:disabled{opacity:.7}
+.pasek{height:6px;background:rgba(255,255,255,.15);border-radius:3px;overflow:hidden;margin-bottom:14px}
+.pasek span{display:block;height:100%;background:var(--marker);transition:width .25s}
+.opcje{display:grid;gap:10px}
+.opcja{display:block;width:100%;text-align:left;padding:16px;border-radius:10px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:#fff;font-size:16.5px;line-height:1.35;font-family:inherit;cursor:pointer;min-height:56px}
+.opcja:hover,.opcja:focus-visible,.opcja.wybrana{border-color:var(--marker);background:rgba(255,255,255,.14)}
+.wstecz{margin-top:18px;background:none;border:0;color:#B9CFC8;font-size:14px;cursor:pointer;font-family:inherit;padding:6px 0}
+.t-form{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:18px}
+.pola{display:grid;grid-template-columns:1.3fr 1fr;gap:10px}
+@media(max-width:560px){.pola{grid-template-columns:1fr}}
+.t-form input[type=email],.t-form input[type=text]{width:100%;padding:14px;border:0;border-radius:9px;font-size:16px;font-family:inherit}
+.pulapka{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.fineprint{margin-top:12px;font-size:12.5px;line-height:1.5;color:#B9CFC8}
+.fineprint a{color:#DCEAE5}
+.komunikat{font-size:14px;margin-top:8px;min-height:1em}
+.komunikat.blad{color:#FFD5CF}
+.wynik p{font-size:16.5px;line-height:1.6;color:#E3EEEA;margin:0 0 14px}
+.wynik .strona{color:var(--marker);font-weight:600}
+.zdania{background:rgba(255,255,255,.08);border-left:3px solid var(--marker);border-radius:8px;padding:14px 16px;margin:0 0 14px;font-size:16px;line-height:1.55}
+.zdania ol{margin:8px 0 0;padding-left:20px}
+.zdania li{margin-bottom:8px}
+.wynik .dopisek{font-style:italic}
+.rozdzial{background:rgba(255,255,255,.1);border-radius:10px;padding:16px;margin:18px 0;font-size:16px}
+.wynik .pod{font-size:14px;color:#B9CFC8}
+.wynik .pod a{color:var(--marker)}
+</style>
+</Layout>
