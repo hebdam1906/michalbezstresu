@@ -17,6 +17,24 @@
 
 export const odcinki = [
   {
+    nr: 18,
+    etykieta: 'Sezon 2 · Odcinek 3',
+    data: '2026-11-16',
+    tytul: 'Wiedziałem, ale nie mogłem powiedzieć. Co menedżer robi z tajną decyzją',
+    opis: 'Reorganizacja, budżet, czyjaś umowa, czyjś awans. Menedżer prawie zawsze wie więcej niż zespół. Trzy drogi na tygodnie między „wiem” a „mogę powiedzieć”, w tym historia o kredycie, przy której świadomie przekroczyłem granicę.',
+    yt: 'https://youtu.be/bSvL8dNglNo',
+    spotify: null,
+  },
+  {
+    nr: 17,
+    etykieta: 'Sezon 2 · Odcinek 2',
+    data: '2026-11-09',
+    tytul: 'Ocena roczna z fotela szefa. Co naprawdę dzieje się na kalibracji',
+    opis: 'Jako menedżer piszesz oceny dla kilku, kilkunastu osób. Potem bronisz ich w pokoju, do którego żadna z nich nie wejdzie. Jak wygląda kalibracja od środka i co Twój szef musi mieć w ręku, żeby Cię obronić.',
+    yt: 'https://youtu.be/RHxhokz-B58',
+    spotify: null,
+  },
+  {
     nr: 16,
     etykieta: 'Sezon 2 · Odcinek 1',
     data: '2026-11-02',
