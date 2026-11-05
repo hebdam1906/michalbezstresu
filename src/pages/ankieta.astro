@@ -1,0 +1,117 @@
+---
+import Layout from '../layouts/Layout.astro';
+/* /ankieta — ankieta po live 5.11 (brief Klaudiusza 5.11, zatwierdzone przez Michała). Zapis: /api/ankieta.
+   Nagroda: e-book 39 zł do 22.11 → /ksiazka/cena-live/ (jeden adres, cel zmieniany w cena-live.ts). */
+const CENA = '/ksiazka/cena-live/';
+const temat = [['ocena', 'Ocena roczna'], ['pip', 'Plan naprawczy'], ['awans', 'Awans'], ['odejscie', 'Odejście'], ['zespol', 'Trudny zespół'], ['inny', 'Inny']];
+const strony = [['pracownik', 'Pracownik'], ['menedzer', 'Menedżer'], ['hr', 'HR'], ['inne', 'Inne']];
+---
+<Layout title="Jak Ci się podobał live? | Michał bez Stresu"
+  description="7 pytań, minuta. Ankieta po live 5.11." noindex={true}>
+<main class="lp">
+  <div class="lp-wrap">
+    <div class="brand mono">Michał bez Stresu</div>
+    <div id="formularz">
+      <h1>Jak Ci się podobał live?</h1>
+      <p class="sub">7 pytań, minuta. Za wypełnienie: e-book „Z obu stron stołu” za 39 zł do 22.11 (dla innych od 16.11 cena 49 zł).</p>
+      <form id="ankieta" novalidate>
+        <fieldset><legend>1. Jak oceniasz temat live’a?</legend>
+          <div class="skala">{[1,2,3,4,5].map((n) => <label><input type="radio" name="ocena_temat" value={n} /><span>{n}</span></label>)}</div></fieldset>
+        <fieldset><legend>2. Jak oceniasz prowadzenie?</legend>
+          <div class="skala">{[1,2,3,4,5].map((n) => <label><input type="radio" name="ocena_prowadzenie" value={n} /><span>{n}</span></label>)}</div></fieldset>
+        <fieldset><legend>3. Po której stronie stołu siedzisz?</legend>
+          <div class="wybor">{strony.map(([k, t]) => <label><input type="radio" name="strona" value={k} /><span>{t}</span></label>)}</div></fieldset>
+        <fieldset><legend>4. Co było najbardziej przydatne? <em>(opcjonalnie)</em></legend>
+          <textarea name="przydatne" rows="3" maxlength="1500"></textarea></fieldset>
+        <fieldset><legend>5. Co zmienić następnym razem? <em>(opcjonalnie)</em></legend>
+          <textarea name="zmienic" rows="3" maxlength="1500"></textarea></fieldset>
+        <fieldset><legend>6. Temat kolejnego live’a?</legend>
+          <div class="wybor">{temat.map(([k, t]) => <label><input type="radio" name="temat_nastepny" value={k} /><span>{t}</span></label>)}</div>
+          <input type="text" name="temat_inny" placeholder="Jaki temat?" maxlength="300" hidden /></fieldset>
+        <fieldset><legend>7. E-mail <em>(opcjonalnie — potrzebny, żeby dostać cenę 39 zł mailem)</em></legend>
+          <div class="pola">
+            <input type="email" name="email" placeholder="Twój e-mail" autocomplete="email" maxlength="160" />
+            <input type="text" name="imie" placeholder="Imię (opcjonalnie)" autocomplete="given-name" maxlength="80" />
+          </div>
+          <p class="fineprint">Zero spamu. Wypisujesz się jednym kliknięciem. Podając e-mail i klikając przycisk, zgadzasz się na maile ode mnie — <a href="/prywatnosc/">polityka prywatności</a>.</p></fieldset>
+        <input type="text" name="www" class="pulapka" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <button class="t-btn" type="submit">Wyślij</button>
+        <p class="komunikat" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+    <div id="dzieki" hidden>
+      <h1>Dziękuję!</h1>
+      <p class="sub">Twoja cena 39 zł do 22.11:</p>
+      <a class="t-btn" href={CENA}>Kupuję e-book za 39 zł →</a>
+      <p class="fineprint mail-info" hidden>Ten sam link wysłałem Ci mailem.</p>
+    </div>
+  </div>
+</main>
+
+<script>
+  const f = document.getElementById('ankieta') as HTMLFormElement;
+  const kom = f.querySelector('.komunikat')!;
+  const btn = f.querySelector<HTMLButtonElement>('button[type=submit]')!;
+  const inny = f.querySelector<HTMLInputElement>('[name=temat_inny]')!;
+  const va = (name: string) => { try { (window as any).va?.('event', { name }); } catch {} };
+  let start = false;
+  f.addEventListener('change', () => {
+    if (!start) { start = true; va('ankieta_start'); }
+    inny.hidden = (f.querySelector<HTMLInputElement>('[name=temat_nastepny]:checked')?.value) !== 'inny';
+  });
+  const v = (n: string) => (f.querySelector<HTMLInputElement>(`[name=${n}]:checked`)?.value) || (f.elements.namedItem(n) as HTMLInputElement | null)?.value?.trim?.() || '';
+  f.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const dane: Record<string, any> = {};
+    for (const n of ['ocena_temat', 'ocena_prowadzenie', 'strona', 'temat_nastepny']) dane[n] = f.querySelector<HTMLInputElement>(`[name=${n}]:checked`)?.value || '';
+    if (!dane.ocena_temat || !dane.ocena_prowadzenie || !dane.strona || !dane.temat_nastepny) { kom.textContent = 'Odpowiedz na pytania 1, 2, 3 i 6.'; kom.className = 'komunikat blad'; return; }
+    for (const n of ['przydatne', 'zmienic', 'temat_inny', 'email', 'imie', 'www']) dane[n] = ((f.elements.namedItem(n) as HTMLInputElement).value || '').trim();
+    if (dane.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(dane.email)) { kom.textContent = 'Sprawdź adres e-mail.'; kom.className = 'komunikat blad'; return; }
+    const q = new URLSearchParams(location.search);
+    dane.utm = { source: q.get('utm_source') || '', medium: q.get('utm_medium') || '', campaign: q.get('utm_campaign') || '' };
+    btn.disabled = true; kom.textContent = 'Wysyłam…'; kom.className = 'komunikat';
+    fetch('/api/ankieta/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dane) })
+      .then((r) => r.json().then((d) => ({ ok: r.ok, d })))
+      .then((x) => {
+        if (x.ok && x.d.ok) {
+          document.getElementById('formularz')!.hidden = true;
+          document.getElementById('dzieki')!.hidden = false;
+          if (dane.email) document.querySelector<HTMLElement>('.mail-info')!.hidden = false;
+          window.scrollTo(0, 0);
+          va('ankieta_wyslana');
+          if (dane.email) { try { (window as any).fbq?.('track', 'Lead', { content_category: 'ankieta-live-5-11' }); } catch {} }
+        } else { kom.textContent = x.d?.error || 'Nie udało się wysłać. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; }
+      })
+      .catch(() => { kom.textContent = 'Brak połączenia. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; });
+  });
+</script>
+
+<style>
+.lp{min-height:100svh;display:flex;justify-content:center;background:var(--sygnal);color:#F2F7F5;padding:36px 20px}
+.lp-wrap{width:100%;max-width:600px}
+.brand{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--marker);margin-bottom:22px}
+.lp h1{font-family:var(--disp);font-weight:500;color:#fff;font-size:clamp(28px,7vw,42px);line-height:1.12;margin:6px 0 12px}
+.lp .sub{font-size:clamp(15.5px,2.2vw,18px);color:#CFE0DA;margin-bottom:20px}
+fieldset{border:0;padding:0;margin:0 0 22px}
+legend{font-weight:600;font-size:17px;margin-bottom:10px;color:#fff}
+legend em{font-weight:400;font-style:normal;color:#B9CFC8;font-size:14px}
+.skala{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.wybor{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.skala label,.wybor label{display:block;cursor:pointer}
+.skala input,.wybor input{position:absolute;opacity:0;width:1px;height:1px}
+.skala span,.wybor span{display:block;text-align:center;padding:14px 8px;border-radius:10px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);font-size:16px;min-height:48px}
+.skala input:checked+span,.wybor input:checked+span{border-color:var(--marker);background:var(--marker);color:#16211D;font-weight:700}
+.skala input:focus-visible+span,.wybor input:focus-visible+span{outline:2px solid #fff}
+textarea,.lp input[type=email],.lp input[type=text]{width:100%;padding:13px;border:0;border-radius:9px;font-size:16px;font-family:inherit;box-sizing:border-box}
+[name=temat_inny]{margin-top:10px}
+.pola{display:grid;grid-template-columns:1.3fr 1fr;gap:10px}
+@media(max-width:560px){.pola{grid-template-columns:1fr}}
+.pulapka{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.t-btn{display:block;width:100%;margin-top:8px;padding:15px 18px;border:0;border-radius:10px;background:var(--marker);color:#16211D;font-weight:700;font-size:17px;cursor:pointer;text-align:center;text-decoration:none;font-family:inherit}
+.t-btn:disabled{opacity:.7}
+.fineprint{margin-top:10px;font-size:12.5px;line-height:1.5;color:#B9CFC8}
+.fineprint a{color:#DCEAE5}
+.komunikat{font-size:14px;margin-top:8px;min-height:1em}
+.komunikat.blad{color:#FFD5CF}
+</style>
+</Layout>
