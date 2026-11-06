@@ -14,7 +14,8 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 import { przepusc, zaDuzo } from '../../lib/ratelimit';
 
-const GRUPY = ['201774856487831284', '192331437972653709']; // Live-5-11, Checklista (id grup nie są sekretem)
+// 6.11.2026: zapisy na listę oczekujących „Live-lista” (203378098649958396) zamiast „Live-5-11” (201774856487831284).
+const GRUPY = ['203378098649958396', '192331437972653709']; // Live-lista, Checklista (id grup nie są sekretem)
 const KLUCZ_ML = import.meta.env.MAILERLITE_API_KEY;
 
 const json = (b: unknown, s = 200) =>
@@ -34,7 +35,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const email = tekst(b.email, 160).toLowerCase();
   const imie = tekst(b.imie, 80);
   if (!czyMail(email)) return json({ error: 'Sprawdź adres e-mail.' }, 400);
-  if (b.zgoda !== true) return json({ error: 'Zaznacz zgodę — bez niej nie mogę wysłać linku do transmisji.' }, 400);
+  if (b.zgoda !== true) return json({ error: 'Zaznacz zgodę — bez niej nie mogę wysłać terminu i linku do spotkania.' }, 400);
 
   const fields: Record<string, string> = {};
   if (imie) fields.name = imie;

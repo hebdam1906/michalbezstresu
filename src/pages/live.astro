@@ -4,42 +4,32 @@ import Nav from '../components/Nav.astro';
 import Stopka from '../components/Stopka.astro';
 
 /**
- * /live/ — LinkedIn Live 5.11.2026, 19:00–20:00 (brief Klaudiusza i20, 19.10).
- * Zapis: /api/live → MailerLite „Live-5-11” + „Checklista — lead magnet”.
- * Link z UTM utm_campaign=live-5-11 idzie do newslettera 28.10, maila 2.11, newslettera 4.11.
- * Teksty: Klaudiusz 19.10 (`Klaudiusz-do-Marcina_live-5-11_teksty-…`).
- * Wydarzenie LinkedIn: https://www.linkedin.com/events/7517999645843746816/ (link w kalendarzu Google/.ics, 2.11).
- * ⚠️ Bez ceny na stronie (cena pada dopiero na żywo, od 2.11).
+ * /live/ — lista oczekujących na kolejne spotkanie na żywo (Google Meet, 55 min). Etap 1, 6.11.2026
+ * (brief Klaudiusza `Klaudiusz-do-Marcina_live-etap-1-TAK_2-dodatki_06-11.md`).
+ * Zapis: /api/live → MailerLite „Live-lista” (+ „Checklista — lead magnet”). Automat „Live-lista: potwierdzenie zapisu”.
+ * Live 5.11 na LinkedInie się nie odbył (StreamYard → LinkedIn). Etap 2 (termin, link Meet, kalendarz) po decyzji Michała.
  */
 ---
 <Layout
-  title="Szef mówi, że nie ma budżetu na podwyżkę. Co dalej? | Live 5 listopada"
-  description="Bezpłatna transmisja na LinkedInie z Michałem Hebdą: czwartek 5 listopada, 19:00. 40 minut o rozmowie o podwyżce i 20 minut na Twoje pytania. Zapisz się, a przypomnę Ci o starcie."
+  title="Spotkanie na żywo z Michałem Hebdą na Google Meet | Michał bez Stresu"
+  description="Bezpłatne spotkanie na Google Meet: 35 minut o jednej trudnej rozmowie w pracy i 20 minut na Twoje pytania. Zapisz się, a dam Ci znać o terminie."
   ogObraz="/og/og-ksiazka.jpg"
-  ogAlt="LinkedIn Live z Michałem Hebdą — 5 listopada, 19:00"
+  ogAlt="Spotkanie na żywo z Michałem Hebdą na Google Meet"
 >
   <Nav />
 
   <header class="khero">
     <div class="wrap khero-in">
       <div class="khero-txt">
-        <div class="eyebrow">Darmowy live na LinkedInie · czwartek 5 listopada, 19:00 · 60 minut</div>
-        <h1>Szef mówi, że nie ma budżetu na podwyżkę. Co dalej?</h1>
-        <p class="lead">„Nie ma budżetu” to jedno z najczęstszych zdań w rozmowie o podwyżce. I jedno
-          z najczęściej źle rozumianych. Przez 20 lat słyszałem je jako pracownik i mówiłem jako menedżer.
-          Rzadko oznaczało koniec rozmowy.</p>
-        <p class="lead">Przez 40 minut pokażę, co zwykle stoi za tym zdaniem, co możesz powiedzieć od razu
-          i co zrobić w tygodniu po rozmowie, żeby temat nie umarł. Ostatnie 20 minut to Twoje pytania.
-          Możesz je zadać na żywo albo wcześniej, odpisując na mail z potwierdzeniem zapisu.</p>
-        <p class="lead">Zapisz się, a dzień przed i w dniu live'a wyślę Ci przypomnienie z linkiem.
-          Dostaniesz też checklistę z narzędziami z całej serii.</p>
+        <div class="eyebrow">Darmowe spotkanie na żywo · Google Meet · 55 minut</div>
+        <h1>Następne spotkanie na żywo: wkrótce</h1>
+        <p class="lead">Rozmawiamy na Google Meet: 35 minut o jednej trudnej rozmowie w pracy i 20 minut
+          na Twoje pytania. Zapisz się, a dam Ci znać o terminie. Link do spotkania dostaniesz mailem.</p>
+        <p class="lead miejsca"><strong>Liczba miejsc: 100</strong></p>
 
         <form class="zapis" id="zapis" novalidate>
-          <div class="zapis-tytul">Zapisz się na transmisję</div>
-          <p class="zapis-opis">Potwierdzenie dostaniesz od razu, a przypomnienie z linkiem — 4 listopada
-            i 5 listopada o 17:00.</p>
-          <p class="zapis-opis zapis-sub"><strong>Dostajesz już mój newsletter?</strong> Zapisz się i tak:
-            link do transmisji wysyłam tylko osobom zapisanym na live. To 10 sekund.</p>
+          <div class="zapis-tytul">Zapisz się na kolejne spotkanie</div>
+          <p class="zapis-opis">Potwierdzenie dostaniesz od razu, a termin i link do Google Meet: mailem, gdy ustalę datę.</p>
           <div class="pola">
             <input type="text" name="imie" placeholder="Imię (opcjonalnie)" autocomplete="given-name" maxlength="80" />
             <input type="email" name="email" placeholder="Twój e-mail" autocomplete="email" required maxlength="160" />
@@ -47,19 +37,16 @@ import Stopka from '../components/Stopka.astro';
           <input type="text" name="www" class="pulapka" tabindex="-1" autocomplete="off" aria-hidden="true" />
           <label class="zgoda">
             <input type="checkbox" name="zgoda" required />
-            <span>Chcę dostać od Michała bez Stresu link do transmisji i checklistę z newsletterem.
+            <span>Chcę dostać od Michała bez Stresu termin i link do spotkania oraz checklistę z newsletterem.
               Wypiszesz się jednym kliknięciem. <a href="/prywatnosc/">Polityka prywatności</a>.</span>
           </label>
           <button class="btn btn-primary" type="submit">Zapisuję się</button>
           <p class="komunikat" role="status" aria-live="polite"></p>
         </form>
 
-        <p class="live-rozdzial"><a href="/rozdzial/podwyzka/?utm_source=strona&utm_medium=live&utm_campaign=rozdzial-9" data-live-rozdzial>Przed live’em: rozdział o podwyżce za darmo →</a></p>
-
-        <div class="kalendarz">
-          <span>Dodaj do kalendarza: czwartek 5.11, 19:00–20:00</span>
-          <a class="btn-kal" href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Live%3A%20Szef%20m%C3%B3wi%2C%20%C5%BCe%20nie%20ma%20bud%C5%BCetu.%20Co%20dalej%3F&dates=20261105T180000Z%2F20261105T190000Z&details=Darmowy%20live%20Micha%C5%82a%20bez%20Stresu%20na%20LinkedInie%3A%20https%3A%2F%2Fwww.linkedin.com%2Fevents%2F7517999645843746816%2F%20%E2%80%94%20przypomnienie%20z%20linkiem%20przyjdzie%20te%C5%BC%20mailem%204%20i%205%20listopada%20%28zapis%3A%20https%3A%2F%2Fwww.michalbezstresu.pl%2Flive%2F%29.&location=https%3A%2F%2Fwww.linkedin.com%2Fevents%2F7517999645843746816%2F" target="_blank" rel="noopener" data-kal="google">Google</a>
-          <a class="btn-kal" href="/live-5-11.ics" download data-kal="ics">Apple / Outlook (.ics)</a>
+        <div class="ostatni">
+          <strong>Ostatni live:</strong> nagranie o rozmowie o podwyżce („Szef mówi, że nie ma budżetu”) wkrótce na YouTube.
+          <br><a href="/rozdzial/podwyzka/?utm_source=strona&utm_medium=live&utm_campaign=rozdzial-9" data-live-rozdzial>Rozdział o podwyżce za darmo →</a>
         </div>
       </div>
     </div>
@@ -77,7 +64,7 @@ import Stopka from '../components/Stopka.astro';
         e.preventDefault();
         var email = f.email.value.trim();
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { kom.textContent = 'Sprawdź adres e-mail.'; kom.className = 'komunikat blad'; return; }
-        if (!f.zgoda.checked) { kom.textContent = 'Zaznacz zgodę, żebym mógł wysłać link do transmisji.'; kom.className = 'komunikat blad'; return; }
+        if (!f.zgoda.checked) { kom.textContent = 'Zaznacz zgodę, żebym mógł wysłać termin i link do spotkania.'; kom.className = 'komunikat blad'; return; }
         btn.disabled = true; kom.textContent = 'Zapisuję…'; kom.className = 'komunikat';
         fetch('/api/live', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -85,9 +72,9 @@ import Stopka from '../components/Stopka.astro';
         }).then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
           .then(function (x) {
             if (x.ok && x.d.ok) {
-              f.innerHTML = '<div class="zapis-ok"><strong>Jesteś zapisany ✓</strong><br>Za chwilę dostaniesz maila z potwierdzeniem, a link do transmisji — 4 i 5 listopada.<br><br>A w międzyczasie: <a href="/ksiazka/?utm_source=site&utm_medium=live&utm_campaign=live-5-11#fragmentZapis">rozdział 1 książki „Z obu stron stołu” za darmo →</a></div>';
+              f.innerHTML = '<div class="zapis-ok"><strong>Jesteś zapisany ✓</strong><br>Za chwilę dostaniesz maila z potwierdzeniem. Termin i link do Google Meet wyślę, gdy ustalę datę.<br><br>A w międzyczasie: <a href="/ksiazka/?utm_source=site&utm_medium=live&utm_campaign=live-lista#fragmentZapis">rozdział 1 książki „Z obu stron stołu” za darmo →</a></div>';
               try { if (window.va) window.va('event', { name: 'live_zapis' }); } catch (e) {}
-              try { if (window.fbq) window.fbq('track', 'Lead', { content_category: 'live_5_11' }); } catch (e) {}
+              try { if (window.fbq) window.fbq('track', 'Lead', { content_category: 'live_lista' }); } catch (e) {}
               try { if (window.mbsZrodlo) window.mbsZrodlo('live', email.toLowerCase()); } catch (e) {}
             } else { kom.textContent = (x.d && x.d.error) || 'Nie udało się zapisać. Spróbuj jeszcze raz.'; kom.className = 'komunikat blad'; btn.disabled = false; }
           })
@@ -106,6 +93,9 @@ import Stopka from '../components/Stopka.astro';
 </Layout>
 
 <style>
+.miejsca{margin-top:-6px}
+.ostatni{margin-top:22px;padding:14px 16px;border-radius:10px;background:var(--mgla);font-size:15px;line-height:1.6}
+.ostatni a{font-weight:600}
 .khero{padding:64px 0 56px;background:linear-gradient(180deg,var(--mgla),var(--papier))}
 .khero-in{display:grid;grid-template-columns:1fr;max-width:760px;gap:48px;align-items:center}
 @media(max-width:860px){.khero-in{grid-template-columns:1fr}.okladka{order:-1;max-width:260px}}
