@@ -21,7 +21,15 @@ import zdjecie from '../assets/michal-hebda.jpg';
  * OPINIE: tablica `opinie` niżej. Pusta = sekcja się nie wyświetla.
  * Dopisujemy cytaty recenzentów (termin opinii 29.10) — imię, rola, tekst.
  */
-const opinie: { tekst: string; kto: string; rola: string }[] = [];
+// 7.11.2026: cytat Edyty (lubimyczytać, 10/10) — zgoda autorki potwierdzona przez Michała; tekst dosłowny, skrót […].
+const opinie: { tekst: string; kto: string; rola: string; link?: string }[] = [
+  {
+    tekst: 'Nie jest pisana z pozycji »guru«, wręcz przeciwnie, autor nie unika pokazania błędów, które sam popełnił, ich konsekwencji, jednocześnie daje narzędzia i sposoby abyś Ty ich uniknął (uniknęła). […] sprawdzą się nie tylko w korporacji – zasady i reguły gry wszędzie są bardzo podobne, zmienia się tylko otoczenie (pracuję w »budżetówce«).',
+    kto: 'Edyta',
+    rola: 'lubimyczytać.pl, 10/10',
+    link: 'https://lubimyczytac.pl/ksiazka/5267391/z-obu-stron-stolu',
+  },
+];
 
 /* Kasa EasyCart, produkt 4. Domyślne UTM, gdy wejście bez UTM. */
 const KASA = 'https://cart.easy.tools/checkout/michalbezstresu/z-obu-stron-stolu-ebook';
@@ -201,7 +209,7 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
         <h2>Co mówią pierwsi czytelnicy</h2>
         <div class="quotes">
           {opinie.map((o) => (
-            <blockquote>„{o.tekst}”<footer><strong>{o.kto}</strong>, {o.rola}</footer></blockquote>
+            <blockquote>„{o.tekst}”<footer><strong>{o.kto}</strong>, {o.rola}{o.link && <> · <a href={o.link} target="_blank" rel="noopener">zobacz opinię</a></>}</footer></blockquote>
           ))}
         </div>
       </div>
