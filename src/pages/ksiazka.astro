@@ -4,6 +4,7 @@ import Nav from '../components/Nav.astro';
 import Stopka from '../components/Stopka.astro';
 import { Image } from 'astro:assets';
 import zdjecie from '../assets/michal-hebda.jpg';
+import { opinie, LUBIMYCZYTAC, LC_PODSUMOWANIE } from '../data/opinie-ksiazka.js';
 
 /**
  * /ksiazka/ — „Z obu stron stołu”, lista premierowa (14.10.2026).
@@ -21,15 +22,8 @@ import zdjecie from '../assets/michal-hebda.jpg';
  * OPINIE: tablica `opinie` niżej. Pusta = sekcja się nie wyświetla.
  * Dopisujemy cytaty recenzentów (termin opinii 29.10) — imię, rola, tekst.
  */
-// 7.11.2026: cytat Edyty (lubimyczytać, 10/10) — zgoda autorki potwierdzona przez Michała; tekst dosłowny, skrót […].
-const opinie: { tekst: string; kto: string; rola: string; link?: string }[] = [
-  {
-    tekst: 'Nie jest pisana z pozycji »guru«, wręcz przeciwnie, autor nie unika pokazania błędów, które sam popełnił, ich konsekwencji, jednocześnie daje narzędzia i sposoby abyś Ty ich uniknął (uniknęła). […] sprawdzą się nie tylko w korporacji – zasady i reguły gry wszędzie są bardzo podobne, zmienia się tylko otoczenie (pracuję w »budżetówce«).',
-    kto: 'Edyta',
-    rola: 'lubimyczytać.pl, 10/10',
-    link: 'https://lubimyczytac.pl/ksiazka/5267391/z-obu-stron-stolu',
-  },
-];
+// 9.11.2026: opinie przeniesione do src/data/opinie-ksiazka.js (3 cytaty, łatwe dopisywanie kolejnych).
+const edyta = opinie.find((o) => o.kto === 'Edyta');
 
 /* Kasa EasyCart, produkt 4. Domyślne UTM, gdy wejście bez UTM. */
 const KASA = 'https://cart.easy.tools/checkout/michalbezstresu/z-obu-stron-stolu-ebook';
@@ -96,10 +90,10 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
           <a class="btn btn-primary kup-btn" href={KASA_UTM} data-kasa data-ev="ksiazka-kup-hero"><span data-przycisk>Kupuję za 39 zł</span></a>
           <p class="zapis-opis kup-pod">EPUB + PDF od razu na maila · bezpieczna płatność</p>
           <p class="kup-fragment"><a href="#fragmentZapis" data-fragment-gora>Najpierw przeczytaj rozdział 1 za darmo ↓</a></p>
-          {opinie[0] && (
+          {edyta && (
             <blockquote class="kup-cytat">
               <p>„Nie jest pisana z pozycji »guru«, wręcz przeciwnie, autor nie unika pokazania błędów, które sam popełnił […]”</p>
-              <footer>— {opinie[0].kto}, {opinie[0].link ? <a href={opinie[0].link} target="_blank" rel="noopener">{opinie[0].rola}</a> : opinie[0].rola}</footer>
+              <footer>— {edyta.kto}, {edyta.link ? <a href={edyta.link} target="_blank" rel="noopener">{edyta.rola}</a> : edyta.rola}</footer>
             </blockquote>
           )}
         </div>
@@ -123,6 +117,24 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
       </div>
     </div>
   </header>
+
+  {/* 9.11.2026: opinie zaraz pod pierwszym ekranem (brief Klaudiusza). Dane: src/data/opinie-ksiazka.js */}
+  {opinie.length > 0 && (
+    <section class="kopinie">
+      <div class="wrap">
+        <h2>Co mówią pierwsi czytelnicy</h2>
+        <p class="kopinie-ocena"><a href={LUBIMYCZYTAC} target="_blank" rel="noopener">{LC_PODSUMOWANIE}</a></p>
+        <div class="kopinie-karty">
+          {opinie.map((o) => (
+            <blockquote>
+              <p>„{o.tekst}”</p>
+              <footer><strong>{o.kto}</strong>, {o.link ? <a href={o.link} target="_blank" rel="noopener">{o.rola}</a> : o.rola}{o.uwaga && <span class="kopinie-uwaga">{o.uwaga}</span>}</footer>
+            </blockquote>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 
   <section id="rozdzial1" class="r1">
     <div class="wrap waska">
@@ -222,19 +234,6 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
     </div>
   </section>
 
-  {opinie.length > 0 && (
-    <section>
-      <div class="wrap">
-        <div class="eyebrow">Opinie</div>
-        <h2>Co mówią pierwsi czytelnicy</h2>
-        <div class="quotes">
-          {opinie.map((o) => (
-            <blockquote>„{o.tekst}”<footer><strong>{o.kto}</strong>, {o.rola}{o.link && <> · <a href={o.link} target="_blank" rel="noopener">zobacz opinię</a></>}</footer></blockquote>
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
 
   <section>
     <div class="wrap waska autor">
@@ -385,6 +384,17 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
 .kup-cena [data-cena]{font-family:var(--disp);font-size:30px;color:var(--atrament);margin-right:6px}
 .kup .btn{display:inline-block}
 .kup-pod{margin:12px 0 4px}
+/* 9.11: sekcja opinii pod pierwszym ekranem */
+.kopinie{padding:44px 0}
+.kopinie h2{margin-bottom:4px}
+.kopinie-ocena{margin:0 0 22px;font-size:15px}
+.kopinie-ocena a{color:var(--sygnal);font-weight:700;text-underline-offset:3px}
+.kopinie-karty{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px}
+.kopinie-karty blockquote{margin:0;background:#fff;border-left:3px solid var(--szalwia);border-radius:0 10px 10px 0;padding:18px 20px;display:flex;flex-direction:column;justify-content:space-between}
+.kopinie-karty p{margin:0 0 12px;font-family:var(--disp);font-size:17.5px;line-height:1.45;color:var(--atrament)}
+.kopinie-karty footer{font-size:14px;color:#4A5A55}
+.kopinie-karty footer a{color:inherit}
+.kopinie-uwaga{display:block;font-style:italic;font-size:13px;margin-top:3px}
 .kup-ded{font-size:13.5px;margin:0}
 /* 9.11: nowy pierwszy ekran */
 .khero .k-h1{font-size:clamp(27px,4.2vw,46px);line-height:1.12;margin:6px 0 16px}
