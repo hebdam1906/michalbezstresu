@@ -12,27 +12,86 @@ const tematy = [
   'Odejście z firmy bez palenia mostów',
 ];
 
+// Zdanie o druku: „od 16.11” dopiero po potwierdzeniu terminu z Advertem (decyzja Michała).
+const DRUK_OD = 'wkrótce';
+
+const pliki = [
+  { href: '/media/Z-obu-stron-stolu_okladka_1600x2560.jpg', mini: '/ksiazka/okladka-nb1-600x960.jpg', co: 'Okładka „Z obu stron stołu”', opis: 'JPG, 1600×2560 px, 0,7 MB', id: 'okladka-pl' },
+  { href: '/media/Both-Sides-of-the-Table_cover_1600x2560.jpg', mini: '/en/both-sides-cover-600x960.jpg', co: 'Okładka „Both Sides of the Table” (EN)', opis: 'JPG, 1600×2560 px, 0,7 MB', id: 'okladka-en' },
+  { href: '/media/Michal-Hebda_autor_2316x3088.jpg', mini: '/media/Michal-Hebda_autor_mini.jpg', co: 'Zdjęcie autora: Michał Hebda', opis: 'JPG, 2316×3088 px, 1,1 MB', id: 'autor' },
+];
+
 const bioShort = 'Michał — twórca „Michał bez Stresu”, praktyk z 20-letnim doświadczeniem operacyjnym w korporacji. Uczy, jak przechodzić przez trudne sytuacje w pracy — feedback, oceny, plany naprawcze, eskalacje — bez paniki i z podniesioną głową.';
 ---
 <Layout
-  title="Dla mediów | Michał bez Stresu"
-  description="Press room Michał bez Stresu: bio, tematy do rozmowy, kontakt dla dziennikarzy i organizatorów. Ekspert od trudnych sytuacji w korporacji."
+  title="Dla mediów: Z obu stron stołu | Michał bez Stresu"
+  description="Informacja prasowa o książce „Z obu stron stołu” Michała Hebdy, okładki i zdjęcie autora w wysokiej rozdzielczości, kontakt dla mediów."
+  ogImage="/og/og-ksiazka-v2.jpg"
 >
   <Nav />
 
   <header class="phead">
     <div class="wrap">
       <div class="eyebrow">Dla mediów</div>
-      <h1>Press room</h1>
-      <p class="lead">Materiały dla dziennikarzy, podcasterów i organizatorów wydarzeń.
-        Chętnie rozmawiam o realiach pracy w korporacji — konkretnie, bez sensacji
-        i bez ogólników.</p>
+      <h1>Z obu stron stołu</h1>
+      <p class="lead">Informacja prasowa o książce Michała Hebdy, okładki i zdjęcie autora do pobrania.
+        Tekst możesz wykorzystać w całości lub we fragmentach.</p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="mailto:kontakt@michalbezstresu.pl?subject=Zapytanie%20medialne">Zapytanie medialne</a>
-        <span class="cta-note">Odpowiadam osobiście, zwykle w ciągu jednego dnia roboczego.</span>
+        <a class="btn btn-primary" href="#do-pobrania">Pliki do pobrania</a>
+        <a class="btn btn-ghost" href="mailto:kontakt@michalbezstresu.pl?subject=Z%20obu%20stron%20sto%C5%82u%20%E2%80%93%20pytanie%20medialne">Napisz do autora</a>
       </div>
     </div>
   </header>
+
+  <section>
+    <div class="wrap">
+      <div class="eyebrow">Informacja prasowa</div>
+      <article class="notka">
+        <h2>„Nie ma budżetu”, „staraj się”, „zaproszenie bez tematu”. Po 20 latach w korporacji Michał Hebda opisał rozmowy, od których zależy praca, z obu stron stołu</h2>
+        <p><strong>Kraków, listopad 2026.</strong> Ukazała się książka „Z obu stron stołu. Co dzieje się w rozmowach, od których zależy Twoja praca”. Autor, Michał Hebda, przez 20 lat pracował w operacjach finansowych międzynarodowych instytucji, najpierw jako specjalista, potem jako menedżer. Dostawał oceny i słyszał „nie ma budżetu”, a potem sam prowadził takie rozmowy z drugiej strony stołu.</p>
+        <p>Książka ma 15 rozdziałów. Każdy zaczyna się od zdania, które ktoś kiedyś usłyszał w pracy: „Ten mail właśnie stał się dokumentem”, „Przygotowaliśmy dla Ciebie plan poprawy”, „Twoja ocena została napisana…”, „Staraj się, staraj”. Każda rozmowa jest pokazana dwa razy: tak, jak widzi ją pracownik, i tak, jak widzi ją menedżer, wraz z tym, czego menedżer powiedzieć nie może.</p>
+        <blockquote>„Najwięcej stresu w pracy nie bierze się z samej pracy, tylko z rozmów o niej. A większość z nas idzie na nie bez przygotowania, bo nikt nas tego nie uczył. Napisałem książkę, której sam potrzebowałem, kiedy siedziałem po obu stronach stołu” – mówi Michał Hebda.</blockquote>
+        <h3>W książce m.in.:</h3>
+        <ul>
+          <li>dlaczego większość próśb o podwyżkę przegrywa w kalendarzu, a nie na argumentach;</li>
+          <li>co robić w pierwszym tygodniu planu naprawczego, zanim cokolwiek się podpisze;</li>
+          <li>dlaczego ocena roczna zapada przed rozmową i co można zrobić wcześniej;</li>
+          <li>jak przejść przez restrukturyzację i odejście, nie zostawiając niczego na stole;</li>
+          <li>gotowe zdania do użycia w rozmowie, dla pracownika i dla menedżera.</li>
+        </ul>
+        <p>Historie w książce są prawdziwe i zanonimizowane: bez nazw firm i bez nazwisk.</p>
+        <h3>O autorze</h3>
+        <p>Michał Hebda: 20 lat w operacjach finansowych międzynarodowych instytucji, jako specjalista i menedżer. Twórca „Michał bez Stresu” (michalbezstresu.pl), podcastu i kanału YouTube o trudnych rozmowach w pracy. Prowadzi konsultacje przed ważnymi rozmowami i warsztaty dla menedżerów. Mieszka w Krakowie.</p>
+        <h3>Dostępność</h3>
+        <ul>
+          <li>E-book (EPUB + PDF): <a href="/ksiazka/">michalbezstresu.pl/ksiazka</a>, Empik. 49 zł (do 15.11 cena premierowa 39 zł).</li>
+          <li>Wydanie drukowane z dedykacją autora: {DRUK_OD} na michalbezstresu.pl, 59 zł. Na Empiku od 30.11.</li>
+          <li>Wydanie angielskie „Both Sides of the Table”: Amazon (<a href="/en/book/">michalbezstresu.pl/en/book</a>).</li>
+          <li>Dla firm: pakiety egzemplarzy z warsztatem online dla menedżerów (<a href="/dla-firm/">michalbezstresu.pl/dla-firm</a>).</li>
+        </ul>
+        <p class="fragment">Fragment rozdziału 1 do przeczytania online: <a href="/rozdzial/">michalbezstresu.pl/rozdzial</a></p>
+        <p class="kontakt-notka"><strong>Kontakt dla mediów:</strong> Michał Hebda, <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>, tel. <a href="tel:+48604456046">604 456 046</a></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="band" id="do-pobrania">
+    <div class="wrap">
+      <div class="eyebrow">Do pobrania</div>
+      <h2>Okładki i zdjęcie autora</h2>
+      <p class="sub">Pliki w wysokiej rozdzielczości do publikacji z informacją o książce. Podpis zdjęcia: Michał Hebda.</p>
+      <div class="pliki">
+        {pliki.map((f) => (
+          <a class="plik" href={f.href} download data-media={f.id}>
+            <img src={f.mini} alt={f.co} loading="lazy" width="300" height={f.id === 'autor' ? 400 : 480} />
+            <span class="plik-co">{f.co}</span>
+            <span class="plik-opis mono">{f.opis}</span>
+            <span class="plik-btn">Pobierz</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
 
   <section>
     <div class="wrap">
@@ -59,22 +118,13 @@ const bioShort = 'Michał — twórca „Michał bez Stresu”, praktyk z 20-let
     </div>
   </section>
 
-  <section>
-    <div class="wrap">
-      <div class="eyebrow">Materiały</div>
-      <h2>Zdjęcia i logo</h2>
-      <p class="sub">Pakiet prasowy (zdjęcia w wysokiej rozdzielczości + logo) udostępniam
-        na życzenie — napisz, a odeślę linkiem. Wkrótce dostępny też do pobrania bezpośrednio stąd.</p>
-      <a class="btn btn-ghost" href="mailto:kontakt@michalbezstresu.pl?subject=Pakiet%20prasowy">Poproś o pakiet prasowy</a>
-    </div>
-  </section>
-
   <section class="band contact">
     <div class="wrap">
       <div class="eyebrow">Kontakt dla mediów</div>
       <h2>Napisz bezpośrednio</h2>
       <div class="c-grid">
         <div class="c-item"><span class="mono">E-mail</span><a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a></div>
+        <div class="c-item"><span class="mono">Telefon</span><a href="tel:+48604456046">604 456 046</a></div>
         <div class="c-item"><span class="mono">YouTube</span><a href="https://www.youtube.com/@michalbezstresu" target="_blank" rel="noopener">@michalbezstresu</a></div>
         <div class="c-item"><span class="mono">TikTok</span><a href="https://www.tiktok.com/@michalbezstresu.pl" target="_blank" rel="noopener">@michalbezstresu.pl</a></div>
         <div class="c-item"><span class="mono">Instagram</span><a href="https://www.instagram.com/michalbezstresu" target="_blank" rel="noopener">@michalbezstresu</a></div>
@@ -83,6 +133,14 @@ const bioShort = 'Michał — twórca „Michał bez Stresu”, praktyk z 20-let
   </section>
 
   <Stopka />
+
+  <script is:inline>
+    document.querySelectorAll('[data-media]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        try { if (window.va) window.va('event', { name: 'media_pobierz', plik: a.getAttribute('data-media') }); } catch (e) {}
+      });
+    });
+  </script>
 </Layout>
 
 <style>
@@ -100,10 +158,27 @@ const bioShort = 'Michał — twórca „Michał bez Stresu”, praktyk z 20-let
 @media(max-width:760px){.topics{grid-template-columns:1fr}}
 .topics li{background:var(--mgla);border:1px solid var(--linia);border-radius:10px;padding:16px 18px 16px 42px;position:relative;font-size:16px}
 .topics li::before{content:"“";position:absolute;left:16px;top:10px;font-family:var(--disp);font-size:28px;color:var(--szalwia);line-height:1}
-.c-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:32px}
+.c-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;margin-top:32px}
 @media(max-width:760px){.c-grid{grid-template-columns:1fr 1fr}}
 .c-item{display:flex;flex-direction:column;gap:6px}
 .c-item .mono{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--szalwia)}
 .c-item a{font-size:16px;color:var(--sygnal);text-decoration:none;word-break:break-word}
 .c-item a:hover{text-decoration:underline}
+.notka{max-width:72ch;margin-top:22px}
+.notka h2{font-size:clamp(23px,3vw,30px);line-height:1.3;margin-bottom:22px}
+.notka h3{font-family:var(--disp);font-weight:500;font-size:20px;margin:30px 0 10px}
+.notka p{font-size:17px;line-height:1.7;margin-bottom:14px;color:#2A3633}
+.notka ul{margin:6px 0 14px 20px}
+.notka li{font-size:17px;line-height:1.6;margin-bottom:6px}
+.notka a{color:var(--sygnal)}
+.notka blockquote{border-left:3px solid var(--sygnal);background:var(--mgla);padding:18px 22px;margin:22px 0;font-family:var(--disp);font-size:19px;line-height:1.55;border-radius:0 10px 10px 0}
+.notka .kontakt-notka{margin-top:24px;padding-top:18px;border-top:1px solid var(--linia)}
+.pliki{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:30px}
+@media(max-width:760px){.pliki{grid-template-columns:1fr}}
+.plik{display:flex;flex-direction:column;gap:8px;background:#fff;border:1px solid var(--linia);border-radius:12px;padding:16px;text-decoration:none;color:var(--atrament);transition:transform .15s,box-shadow .15s}
+.plik:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.plik img{width:100%;height:280px;object-fit:contain;background:var(--mgla);border-radius:8px}
+.plik-co{font-weight:700;font-size:16px}
+.plik-opis{font-family:var(--mono);font-size:12px;color:#5E6E68}
+.plik-btn{margin-top:4px;align-self:flex-start;background:var(--sygnal);color:#fff;font-weight:700;font-size:15px;padding:10px 18px;border-radius:8px}
 </style>
