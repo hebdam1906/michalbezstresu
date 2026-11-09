@@ -242,6 +242,22 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
   <Stopka sprzedawca />
 
   <script is:inline>
+    /* 9.11.2026: kliknięcie „Kupuję” → zdarzenie ksiazka_kup (Vercel): miejsce (hero/dol) i wariant (tekst przycisku, np. 39 zł / 49 zł).
+       Piksel Meta (tylko po zgodzie): InitiateCheckout. */
+    (function () {
+      document.querySelectorAll('[data-kasa]').forEach(function (a) {
+        a.addEventListener('click', function () {
+          var miejsce = (a.dataset.ev || '').replace('ksiazka-kup-', '') || 'inne';
+          var t = (a.textContent || '').trim(), m = t.match(/(\d+)\s*zł/);
+          var wariant = m ? m[1] + ' zł' : t.slice(0, 40);
+          try { if (window.va) window.va('event', { name: 'ksiazka_kup', miejsce: miejsce, wariant: wariant }); } catch (e) {}
+          try { if (window.fbq) window.fbq('track', 'InitiateCheckout', { content_name: 'ebook', value: m ? Number(m[1]) : undefined, currency: 'PLN' }); } catch (e) {}
+        });
+      });
+    })();
+  </script>
+
+  <script is:inline>
     /* Link „albo najpierw przeczytaj rozdział 1” pod pierwszym „Kupuję” → zdarzenie fragment_link_gora (Vercel). */
     (function () {
       var a = document.querySelector('[data-fragment-gora]');
