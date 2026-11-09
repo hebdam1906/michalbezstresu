@@ -77,24 +77,44 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
 >
   <Nav />
 
+  <!-- 9.11.2026: nowy pierwszy ekran (brief Klaudiusza, zatwierdził Michał 9:23).
+       Telefon: nadtytuł → H1 → mała okładka → ramka z ceną → podtytuł → punkty → autor.
+       Po 15.11 23:59 skrypt na dole: 49 zł bez przekreślenia i etykiety ([data-do]). -->
   <header class="khero">
     <div class="wrap khero-in">
       <div class="khero-txt">
-        <div class="eyebrow">Książka · e-book (EPUB + PDF)</div>
-        <h1>Z obu stron stołu</h1>
-        <p class="podtytul">Co dzieje się w rozmowach, od których zależy Twoja praca</p>
-        <p class="lead">Piętnaście rozdziałów o rozmowach, które zmieniają kariery: od maila,
-          który właśnie stał się dokumentem, przez plan naprawczy, ocenę roczną, podwyżkę
-          i awans, aż po restrukturyzację i własny trudny zespół. Każda z nich opisana
-          z obu stron stołu — tak, jak ją widzi pracownik, i tak, jak ją widzi menedżer.</p>
+        <div class="eyebrow k-eyebrow">Nowa książka · e-book (EPUB + PDF)</div>
+        <h1 class="k-h1">Wiedz, co dzieje się po drugiej stronie stołu, zanim usiądziesz do rozmowy.</h1>
 
-        <div class="zapis kup" id="kup">
-          <div class="zapis-tytul">E-book „Z obu stron stołu”</div>
-          <p class="kup-cena"><span data-cena>39 zł</span> <span class="kup-do" data-do>do 15 listopada (potem 49 zł)</span></p>
-          <a class="btn btn-primary" href={KASA_UTM} data-kasa data-ev="ksiazka-kup-hero"><span data-przycisk>Kupuję e-book za 39 zł</span></a>
-          <p class="zapis-opis kup-pod">EPUB + PDF, od razu na maila.</p>
-          <p class="kup-fragment"><a href="#fragmentZapis" data-fragment-gora>albo najpierw przeczytaj rozdział 1 za darmo ↓</a></p>
-          <p class="zapis-opis kup-ded">Osoby z listy premierowej, które kupią go w pierwszym tygodniu (2–8 listopada), dostaną egzemplarz z imienną dedykacją.</p>
+        <div class="k-mini" aria-hidden="true">
+          <img src="/ksiazka/okladka-nb1-600x960.jpg" width="60" height="96" alt="" loading="eager" />
+          <div><strong>Z obu stron stołu</strong><span>15 rozdziałów · Michał Hebda</span></div>
+        </div>
+
+        <div class="zapis kup k-cena" id="kup">
+          <p class="kup-cena"><span data-cena>39 zł</span> <s class="kup-stara" data-do>49 zł</s> <span class="kup-etykieta" data-do>tylko do niedzieli 15.11</span></p>
+          <a class="btn btn-primary kup-btn" href={KASA_UTM} data-kasa data-ev="ksiazka-kup-hero"><span data-przycisk>Kupuję za 39 zł</span></a>
+          <p class="zapis-opis kup-pod">EPUB + PDF od razu na maila · bezpieczna płatność</p>
+          <p class="kup-fragment"><a href="#fragmentZapis" data-fragment-gora>Najpierw przeczytaj rozdział 1 za darmo ↓</a></p>
+          {opinie[0] && (
+            <blockquote class="kup-cytat">
+              <p>„Nie jest pisana z pozycji »guru«, wręcz przeciwnie, autor nie unika pokazania błędów, które sam popełnił […]”</p>
+              <footer>— {opinie[0].kto}, {opinie[0].link ? <a href={opinie[0].link} target="_blank" rel="noopener">{opinie[0].rola}</a> : opinie[0].rola}</footer>
+            </blockquote>
+          )}
+        </div>
+
+        <p class="podtytul k-pod">„Z obu stron stołu” to 15 rozmów, od których zależy Twoja praca: podwyżka, ocena roczna,
+          plan naprawczy, restrukturyzacja. Każda pokazana oczami pracownika i menedżera.</p>
+        <ul class="k-punkty">
+          <li>Co zapytać, kiedy słyszysz „nie ma budżetu”</li>
+          <li>Co zrobić w pierwszym tygodniu planu naprawczego, zanim cokolwiek podpiszesz</li>
+          <li>Gotowe zdania do użycia jeszcze tego samego dnia</li>
+        </ul>
+
+        <div class="k-autor">
+          <Image src={zdjecie} alt="Michał Hebda" width={56} height={56} class="k-foto" />
+          <p><strong>Michał Hebda</strong> · 20 lat w operacjach finansowych międzynarodowych instytucji, jako specjalista i menedżer.</p>
         </div>
       </div>
       <div class="okladka">
@@ -366,6 +386,36 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
 .kup .btn{display:inline-block}
 .kup-pod{margin:12px 0 4px}
 .kup-ded{font-size:13.5px;margin:0}
+/* 9.11: nowy pierwszy ekran */
+.khero .k-h1{font-size:clamp(27px,4.2vw,46px);line-height:1.12;margin:6px 0 16px}
+.k-pod{font-family:inherit;font-size:clamp(16px,1.9vw,18.5px);color:#3C4A46;margin:22px 0 10px;max-width:60ch}
+.k-punkty{list-style:none;padding:0;margin:0 0 18px}
+.k-punkty li{position:relative;padding-left:28px;margin:7px 0;font-size:16px}
+.k-punkty li::before{content:"✓";position:absolute;left:0;top:0;color:var(--sygnal);font-weight:700}
+.k-cena{margin-top:8px}
+.kup-cena{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.kup-stara{font-size:19px;color:#7A8A85}
+.kup-etykieta{background:#F6D84A;color:#16211D;font-weight:700;font-size:13.5px;padding:3px 9px;border-radius:6px}
+.kup .kup-btn{display:block;width:100%;text-align:center;font-size:18px}
+.kup-cytat{margin:14px 0 0;padding:12px 14px;border-left:3px solid var(--szalwia);background:var(--mgla);border-radius:0 8px 8px 0;font-size:14.5px;color:#3C4A46}
+.kup-cytat p{margin:0 0 6px;font-style:italic}
+.kup-cytat footer{font-size:13px;color:#5A6A65}
+.kup-cytat a{color:inherit}
+.k-autor{display:flex;gap:12px;align-items:center;font-size:14.5px;color:#4A5A55;max-width:560px}
+.k-autor p{margin:0}
+.k-autor :global(.k-foto){width:56px;height:56px;border-radius:50%;object-fit:cover;flex:none}
+.k-mini{display:none}
+@media(max-width:860px){
+  .khero{padding:20px 0 36px}
+  .khero .okladka{display:none}
+  .khero .k-h1{font-size:27px;margin-bottom:12px}
+  .k-mini{display:flex;gap:12px;align-items:center;margin:0 0 12px}
+  .k-mini img{width:44px;height:auto;border-radius:3px;box-shadow:0 4px 10px rgba(22,33,29,.25)}
+  .k-mini strong{display:block;font-size:15px}
+  .k-mini span{font-size:13px;color:#5A6A65}
+  .k-cena{padding:16px;margin-top:0}
+  .kup-cena{margin:0 0 10px}
+}
 .band{background:var(--papier);border-top:1px solid var(--linia);border-bottom:1px solid var(--linia)}
 .quotes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:30px}
 @media(max-width:680px){.quotes{grid-template-columns:1fr}}
