@@ -10,6 +10,8 @@
 interface Props { nr: '1' | '9'; h1: string; lead: string; przycisk: string; eyebrow: string }
 const { nr, h1, lead, przycisk, eyebrow } = Astro.props;
 const pdf = `/pobierz/z-obu-stron-stolu_rozdzial-${nr}.pdf`;
+/* 11.11.2026 (B1–B2, brief Klaudiusza): pełny przycisk do kasy pod formularzem i w ramce książki. */
+const KASA_RZ = `https://cart.easy.tools/checkout/michalbezstresu/z-obu-stron-stolu-ebook?utm_source=strona&utm_medium=rozdzial&utm_campaign=premiera-ksiazki&utm_content=rozdzial-${nr}`;
 ---
 <main class="lp" data-nr={nr}>
   <div class="lp-wrap">
@@ -29,6 +31,10 @@ const pdf = `/pobierz/z-obu-stron-stolu_rozdzial-${nr}.pdf`;
       <p class="fineprint">Zero spamu. Wypisujesz się jednym kliknięciem. Klikając przycisk, zgadzasz się na maile ode mnie — <a href="/prywatnosc/">polityka prywatności</a>.</p>
       <p class="komunikat" role="status" aria-live="polite"></p>
     </form>
+    <div class="rz-kup">
+      <p class="rz-kup-lub">albo od razu cała książka:</p>
+      <a class="rz-kup-btn" href={KASA_RZ} data-kasa-rz data-miejsce="pod-formularzem"><span data-przycisk-rz>Kupuję e-book za 39 zł (do 15.11)</span></a>
+    </div>
   </div>
 </main>
 
@@ -38,8 +44,9 @@ const pdf = `/pobierz/z-obu-stron-stolu_rozdzial-${nr}.pdf`;
       alt="Okładka e-booka „Z obu stron stołu” Michała Hebdy" />
     <div>
       <h2>Cała książka: 15 rozmów, od których zależy praca</h2>
-      <p>Każda z obu stron stołu, z gotowymi zdaniami. E-book 39 zł do 15.11, potem 49 zł.</p>
-      <p><a href="/ksiazka/?utm_source=strona&utm_medium=rozdzial&utm_campaign=premiera-ksiazki" data-rz-ksiazka>Zobacz książkę →</a></p>
+      <p>Każda z obu stron stołu, z gotowymi zdaniami. E-book <span data-cena-rz>39 zł</span><span data-do-rz> do 15.11, potem 49 zł</span>.</p>
+      <a class="rz-kup-btn rz-kup-btn--ramka" href={KASA_RZ} data-kasa-rz data-miejsce="ramka"><span data-przycisk-rz>Kupuję e-book za 39 zł (do 15.11)</span></a>
+      <p class="rz-wiecej"><a href="/ksiazka/?utm_source=strona&utm_medium=rozdzial&utm_campaign=premiera-ksiazki" data-rz-ksiazka>Więcej o książce</a></p>
     </div>
   </div>
 </section>
@@ -76,6 +83,26 @@ const pdf = `/pobierz/z-obu-stron-stolu_rozdzial-${nr}.pdf`;
   })();
 </script>
 
+<script is:inline>
+  /* 11.11.2026: „Kupuję” na stronie rozdziału → ksiazka_kup (miejsce=rozdzial) + InitiateCheckout (piksel tylko po zgodzie).
+     Od 16.11.2026 0:00 Warszawa (15.11 23:00 UTC) tekst przycisku i ramki: 49 zł — tak jak na /ksiazka. */
+  (function () {
+    var po = Date.now() >= Date.UTC(2026, 10, 15, 23, 0, 0);
+    if (po) {
+      document.querySelectorAll('[data-przycisk-rz]').forEach(function (e) { e.textContent = 'Kupuję e-book za 49 zł'; });
+      document.querySelectorAll('[data-cena-rz]').forEach(function (e) { e.textContent = '49 zł'; });
+      document.querySelectorAll('[data-do-rz]').forEach(function (e) { e.remove(); });
+    }
+    document.querySelectorAll('[data-kasa-rz]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        var m = (a.textContent || '').match(/(\d+)\s*zł/);
+        try { if (window.va) window.va('event', { name: 'ksiazka_kup', miejsce: 'rozdzial', wariant: (m ? m[1] + ' zł' : '') + ' ' + (a.dataset.miejsce || '') }); } catch (e) {}
+        try { if (window.fbq) window.fbq('track', 'InitiateCheckout', { content_name: 'ebook', value: m ? Number(m[1]) : undefined, currency: 'PLN' }); } catch (e) {}
+      });
+    });
+  })();
+</script>
+
 <style>
 .lp{min-height:100svh;display:flex;align-items:center;justify-content:center;background:var(--sygnal);color:#F2F7F5;padding:36px 20px}
 .lp-wrap{width:100%;max-width:600px}
@@ -104,4 +131,10 @@ const pdf = `/pobierz/z-obu-stron-stolu_rozdzial-${nr}.pdf`;
 .rz-ksiazka h2{font-family:var(--disp);font-weight:500;font-size:clamp(19px,3vw,24px);line-height:1.2;margin:0 0 8px}
 .rz-ksiazka p{color:#3C4A46;margin:0 0 8px}
 .rz-ksiazka a{color:var(--sygnal);font-weight:600}
+.rz-kup{margin-top:16px;text-align:center}
+.rz-kup-lub{margin:0 0 8px;font-size:14px;color:#CFE0DA}
+.rz-kup-btn{display:block;width:100%;padding:14px 18px;border-radius:10px;background:#fff;color:var(--sygnal);font-weight:700;font-size:16.5px;text-align:center;text-decoration:none;border:2px solid #fff}
+.rz-kup-btn--ramka{background:var(--sygnal);color:#fff;border-color:var(--sygnal);margin:6px 0 10px}
+.rz-ksiazka .rz-kup-btn--ramka{color:#fff}
+.rz-wiecej{font-size:14px}
 </style>
