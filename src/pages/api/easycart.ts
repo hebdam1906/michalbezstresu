@@ -136,6 +136,20 @@ export const POST: APIRoute = async ({ request, url }) => {
     }
   } catch { /* grupa kupujących nie blokuje webhooka */ }
 
+  // 11.11.2026: kupujący KONSULTACJĘ lub PAKIET PIP → grupa „Konsultacje-PIP-kupujacy” (wykluczenie z maila
+  // o pakiecie PIP 19.11 i retargetingu). Tylko istniejący subskrybenci, nikogo nie zapisujemy. Błąd nie blokuje webhooka.
+  try {
+    const KLUCZ_ML = import.meta.env.MAILERLITE_API_KEY;
+    if (KLUCZ_ML && email && zdarzenie === 'single_product_bought' && /konsultacj|przetrwaj pip|pakiet.*pip/i.test(produkt)) {
+      const h = { Accept: 'application/json', Authorization: `Bearer ${KLUCZ_ML}` };
+      const r = await fetch('https://connect.mailerlite.com/api/subscribers/' + encodeURIComponent(email), { headers: h });
+      if (r.ok) {
+        const id = ((await r.json().catch(() => null)) as any)?.data?.id;
+        if (id) await fetch(`https://connect.mailerlite.com/api/subscribers/${id}/groups/203845574090294912`, { method: 'POST', headers: h });
+      }
+    }
+  } catch { /* grupa kupujących konsultacje nie blokuje webhooka */ }
+
   // PODZIĘKOWANIE + PYTANIE PO ZAKUPIE (11.11.2026, decyzja Michała; od 16.11): krótki mail z michal@
   // (Make „podziękowanie po zakupie”, sekret „make_podziekowanie_hook”) z pytaniem „co sprawiło, że
   // książka trafiła do Ciebie właśnie teraz?”. Odpowiedź wpada do Zoho → maile_odpowiedzi.
