@@ -129,6 +129,9 @@ export const POST: APIRoute = async ({ request, url }) => {
         const sub: any = await r.json().catch(() => null);
         const id = sub?.data?.id;
         if (id) await fetch(`https://connect.mailerlite.com/api/subscribers/${id}/groups/203022308254680638`, { method: 'POST', headers: h });
+        // 11.11.2026: kupujący DRUK → dodatkowo grupa „Druk-kupujacy” (wykluczenie z maila 17.11 i oferty 49 zł dla posiadaczy e-booka).
+        const rd = rodzaj(produkt);
+        if (id && (rd === 'druk' || rd === 'druk_ebook' || rd === 'bf')) await fetch(`https://connect.mailerlite.com/api/subscribers/${id}/groups/203841355714135683`, { method: 'POST', headers: h });
       }
     }
   } catch { /* grupa kupujących nie blokuje webhooka */ }
