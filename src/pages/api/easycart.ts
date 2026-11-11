@@ -133,6 +133,24 @@ export const POST: APIRoute = async ({ request, url }) => {
     }
   } catch { /* grupa kupujących nie blokuje webhooka */ }
 
+  // PODZIĘKOWANIE + PYTANIE PO ZAKUPIE (11.11.2026, decyzja Michała; od 16.11): krótki mail z michal@
+  // (Make „podziękowanie po zakupie”, sekret „make_podziekowanie_hook”) z pytaniem „co sprawiło, że
+  // książka trafiła do Ciebie właśnie teraz?”. Odpowiedź wpada do Zoho → maile_odpowiedzi.
+  // Raz na zamówienie (tylko zdarzenie single_product_bought), bez testów. Błąd nie blokuje webhooka.
+  try {
+    const teraz = new Date().toISOString();
+    if (zdarzenie === 'single_product_bought' && toKsiazka(produkt) && email && zamowienie
+        && dzienPL(teraz) >= '2026-11-16' && !toTest(zamowienie, teraz)) {
+      const hookP = await sekret('make_podziekowanie_hook');
+      const r = rodzaj(produkt);
+      if (hookP) await fetch(hookP, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, imie: imie.split(/\s+/)[0] ?? '', zamowienie,
+          ebook: r !== 'druk', druk: r === 'druk' || r === 'druk_ebook' || r === 'bf' }),
+      }).catch(() => {});
+    }
+  } catch { /* podziękowanie nie blokuje webhooka */ }
+
   const zakup = /product_assigned|single_product_bought|order/i.test(zdarzenie) || !zdarzenie;
   const toEbook = !produktId || produktId === PRODUKT_ID || /obu stron/i.test(produkt);
   if (!zakup || !toEbook || !email || !zamowienie) return ok({ ok: true, dedykacja: 'pominieto' });
