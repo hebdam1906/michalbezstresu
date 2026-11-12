@@ -96,7 +96,7 @@ const KASA_RZ = `https://cart.easy.tools/checkout/michalbezstresu/z-obu-stron-st
     document.querySelectorAll('[data-kasa-rz]').forEach(function (a) {
       a.addEventListener('click', function () {
         var m = (a.textContent || '').match(/(\d+)\s*zł/);
-        try { if (window.va) window.va('event', { name: 'ksiazka_kup', miejsce: 'rozdzial', wariant: (m ? m[1] + ' zł' : '') + ' ' + (a.dataset.miejsce || '') }); } catch (e) {}
+        try { if (window.va) window.va('event', { name: 'ksiazka_kup', data: { miejsce: 'rozdzial', wariant: (m ? m[1] + ' zł' : '') + ' ' + (a.dataset.miejsce || '') } }); } catch (e) {}
         try { if (window.fbq) window.fbq('track', 'InitiateCheckout', { content_name: 'ebook', value: m ? Number(m[1]) : undefined, currency: 'PLN' }); } catch (e) {}
       });
     });

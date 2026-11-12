@@ -269,7 +269,7 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
           var miejsce = (a.dataset.ev || '').replace('ksiazka-kup-', '') || 'inne';
           var t = (a.textContent || '').trim(), m = t.match(/(\d+)\s*zł/);
           var wariant = m ? m[1] + ' zł' : t.slice(0, 40);
-          try { if (window.va) window.va('event', { name: 'ksiazka_kup', miejsce: miejsce, wariant: wariant }); } catch (e) {}
+          try { if (window.va) window.va('event', { name: 'ksiazka_kup', data: { miejsce: miejsce, wariant: wariant } }); } catch (e) {}
           try { if (window.fbq) window.fbq('track', 'InitiateCheckout', { content_name: 'ebook', value: m ? Number(m[1]) : undefined, currency: 'PLN' }); } catch (e) {}
         });
       });

@@ -137,7 +137,7 @@ const bioShort = 'Michał — twórca „Michał bez Stresu”, praktyk z 20-let
   <script is:inline>
     document.querySelectorAll('[data-media]').forEach(function (a) {
       a.addEventListener('click', function () {
-        try { if (window.va) window.va('event', { name: 'media_pobierz', plik: a.getAttribute('data-media') }); } catch (e) {}
+        try { if (window.va) window.va('event', { name: 'media_pobierz', data: { plik: a.getAttribute('data-media') } }); } catch (e) {}
       });
     });
   </script>

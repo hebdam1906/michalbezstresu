@@ -206,7 +206,7 @@ const q = (t: string) => (cudzyslow ? `„${t}”` : t);
   document.querySelectorAll('[data-kasa-sym]').forEach(function (a) {
     a.addEventListener('click', function () {
       var m = (a.textContent || '').match(/(\d+)\s*zł/);
-      try { if (window.va) window.va('event', { name: 'ksiazka_kup', miejsce: a.dataset.miejsce || 'symulator', wariant: (m ? m[1] + ' zł' : '') }); } catch (e) {}
+      try { if (window.va) window.va('event', { name: 'ksiazka_kup', data: { miejsce: a.dataset.miejsce || 'symulator', wariant: (m ? m[1] + ' zł' : '') } }); } catch (e) {}
       try { if (window.fbq) window.fbq('track', 'InitiateCheckout', { content_name: 'ebook', value: m ? Number(m[1]) : undefined, currency: 'PLN' }); } catch (e) {}
     });
   });
