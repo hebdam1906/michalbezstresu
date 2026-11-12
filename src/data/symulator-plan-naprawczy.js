@@ -79,7 +79,7 @@ export const RUNDY = [
 const CTA = [
   { etykieta: 'Pobierz wzór planu naprawczego (PDF, 6 pól, za darmo)', href: WZOR, typ: 'primary', cel: 'wzor' },
   { etykieta: 'Obejrzyj odcinek o planie naprawczym', href: ODCINEK, typ: 'ghost', cel: 'odcinek' },
-  { etykieta: 'Porozmawiajmy o Twoim planie — konsultacja 1:1', href: KONSULTACJA, typ: 'ghost', cel: 'konsultacje' },
+  { etykieta: 'Pakiet „Przetrwaj PIP”: przejdźmy przez plan razem', href: KONSULTACJA, typ: 'ghost', cel: 'konsultacje' },
 ];
 
 export const WYNIKI = [

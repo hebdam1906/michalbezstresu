@@ -16,7 +16,7 @@ interface Props {
   slug: string; eyebrow: string; h1: string; lead: string;
   rozmowca?: { imie: string; rola: string };
   rundy: any[]; wyniki: any[];
-  ksiazka: { pytanie: string; tekst: string; href: string };
+  ksiazka: { pytanie: string; tekst: string; href: string; kasa?: string; miejsce?: string };
   nota: string; cudzyslow?: boolean;
 }
 const { slug, eyebrow, h1, lead, rozmowca, rundy, wyniki, ksiazka, nota, cudzyslow = false } = Astro.props;
@@ -72,7 +72,9 @@ const q = (t: string) => (cudzyslow ? `„${t}”` : t);
         <div class="wynik-ksiazka">
           <p><strong>{ksiazka.pytanie}</strong></p>
           <p>{ksiazka.tekst}</p>
-          <a class="wynik-ksiazka-link" href={ksiazka.href} data-cel="ksiazka" data-ev="symulator-ksiazka">Zobacz książkę →</a>
+          {ksiazka.kasa
+            ? <a class="btn btn-primary wynik-kup" href={ksiazka.kasa} data-cel="ksiazka-kup" data-kasa-sym data-miejsce={ksiazka.miejsce} data-ev="symulator-kup"><span data-przycisk-sym>Kupuję e-book za 39 zł (do 15.11)</span></a>
+            : <a class="wynik-ksiazka-link" href={ksiazka.href} data-cel="ksiazka" data-ev="symulator-ksiazka">Zobacz książkę →</a>}
         </div>
         <div class="wynik-cta">
           {w.cta.map((c) => (
@@ -169,6 +171,8 @@ const q = (t: string) => (cudzyslow ? `„${t}”` : t);
         var d = r.querySelector('.dalej');
         d.hidden = false;
         d.focus({ preventScroll: true });
+        /* 12.11: na desktopie baner zgód zasłaniał „Dalej / Zobacz wynik” — przewijamy przycisk na środek ekranu. */
+        setTimeout(function () { d.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 150);
       });
     });
     r.querySelector('.dalej').addEventListener('click', function () {
@@ -193,6 +197,19 @@ const q = (t: string) => (cudzyslow ? `„${t}”` : t);
     wynik.scrollIntoView({ behavior: 'smooth', block: 'start' });
     ga('symulator_koniec', { symulator: SLUG, wynik: suma });
   }
+
+  /* 12.11: przycisk „Kupuję e-book” pod wynikiem (symulator PIP) — jak na /rozdzial: od 16.11 0:00 Warszawa 49 zł,
+     zdarzenie ksiazka_kup (miejsce z data-miejsce) + InitiateCheckout (piksel tylko po zgodzie). */
+  if (Date.now() >= Date.UTC(2026, 10, 15, 23, 0, 0)) {
+    document.querySelectorAll('[data-przycisk-sym]').forEach(function (e) { e.textContent = 'Kupuję e-book za 49 zł'; });
+  }
+  document.querySelectorAll('[data-kasa-sym]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      var m = (a.textContent || '').match(/(\d+)\s*zł/);
+      try { if (window.va) window.va('event', { name: 'ksiazka_kup', miejsce: a.dataset.miejsce || 'symulator', wariant: (m ? m[1] + ' zł' : '') }); } catch (e) {}
+      try { if (window.fbq) window.fbq('track', 'InitiateCheckout', { content_name: 'ebook', value: m ? Number(m[1]) : undefined, currency: 'PLN' }); } catch (e) {}
+    });
+  });
 
   document.getElementById('znowu').addEventListener('click', function () {
     start.click();
@@ -261,4 +278,6 @@ const q = (t: string) => (cudzyslow ? `„${t}”` : t);
 .faq-item p{margin:10px 0 0}
 .sytuacja-tytul{font-weight:700;color:var(--sygnal);margin-bottom:6px}
 .druga-runda{margin-top:14px;padding:12px 16px;background:#fff;border-left:3px solid var(--sygnal);border-radius:8px;font-size:16px;color:#3C4A46}
+.wynik-kup{display:block;text-align:center;margin-top:6px}
+.sym{padding-bottom:120px}
 </style>
