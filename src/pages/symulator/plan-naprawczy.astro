@@ -1,0 +1,56 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Stopka from '../../components/Stopka.astro';
+import Symulator from '../../components/Symulator.astro';
+import { RUNDY, WYNIKI } from '../../data/symulator-plan-naprawczy.js';
+
+/**
+ * Symulator „Plan naprawczy” (PIP) — 12.11.2026. Treść: Klaudiusz 27.10, zatwierdzona przez Michała.
+ * Szablon wspólny z symulatorem podwyżki: src/components/Symulator.astro.
+ */
+---
+<Layout
+  title="Symulator: dostajesz plan naprawczy. Co mówisz? | Michał bez Stresu"
+  description="5 sytuacji z rozmowy o planie naprawczym (PIP). Wybierz odpowiedź i zobacz, jak brzmi z drugiej strony stołu. Bez rejestracji."
+  ogObraz="/og/og-symulator-pip.jpg"
+  ogAlt="Symulator: dostajesz plan naprawczy. Co mówisz?"
+>
+  <Nav />
+  <Symulator
+    slug="plan-naprawczy"
+    eyebrow="Symulator · plan naprawczy (PIP)"
+    h1="Dostajesz plan naprawczy. Co mówisz?"
+    lead="Pięć momentów z rozmowy o planie naprawczym (PIP). Przy każdym wybierz odpowiedź, która jest najbliżej tego, co naprawdę byś powiedział. Po każdej zobaczysz, jak brzmi z drugiej strony stołu."
+    rundy={RUNDY}
+    wyniki={WYNIKI}
+    ksiazka={{ pytanie: 'Chcesz przejść przez plan naprawczy krok po kroku?', tekst: 'Rozdział o planie naprawczym w książce „Z obu stron stołu” opisuje pierwszy tydzień, rozmowy kontrolne i to, jak wygląda koniec planu z perspektywy menedżera.', href: '/ksiazka/?utm_source=symulator&utm_medium=strona&utm_campaign=premiera-ksiazki&utm_content=symulator-pip' }}
+    nota="Nie jestem prawnikiem. Symulator nie zastępuje porady prawnej."
+  >
+    <section class="poradnik">
+      <h2>Plan naprawczy (PIP): jak się przygotować do rozmowy</h2>
+      <p>Plan naprawczy, nazywany też PIP (Performance Improvement Plan), to dokument, w którym firma opisuje,
+        co pracownik ma poprawić, w jakim czasie i jak będzie to oceniane. Dla jednych to realna szansa, dla innych
+        pierwszy krok do rozstania. Dużo zależy od tego, jak przebiegnie pierwsza rozmowa i pierwszy tydzień.</p>
+      <p>Najczęstsze błędy pracowników są trzy: podpis na gorąco bez przeczytania, zgoda na ogólne kryteria typu
+        „poprawa jakości pracy” i brak dokumentowania rozmów. Każdy z nich da się naprawić prostym zdaniem albo
+        krótkim mailem.</p>
+      <p>Dobry plan naprawczy ma sześć elementów: cel, mierzalne kryteria, termin, wsparcie, regularne spotkania
+        i jasne zakończenie. Jeśli któregoś brakuje, warto o niego poprosić. Nie jako polemikę, tylko jako pytanie:
+        „Po czym poznamy, że jest lepiej?”. Wszystkie sześć pól znajdziesz we
+        <a href="/dla-firm/plan-naprawczy-wzor/">wzorze planu naprawczego</a>.</p>
+      <p>Symulator powyżej pozwala przećwiczyć pięć kluczowych momentów: zaproszenie bez tematu, dokument do podpisu,
+        ogólne kryteria, dokumentowanie i decyzję o odejściu. Przy każdej odpowiedzi zobaczysz, jak ta sama sytuacja
+        wygląda z perspektywy menedżera. Więcej o tym, jak plan wygląda od środka, mówię w
+        <a href="/odcinki/plan-naprawczy-pip/">odcinku o planie naprawczym</a>.</p>
+      <p>Jeśli plan budzi Twoje wątpliwości prawne, skonsultuj się z prawnikiem od prawa pracy przed podpisem,
+        nie po nim.</p>
+    </section>
+  </Symulator>
+  <Stopka />
+</Layout>
+<style>
+.poradnik{margin-top:48px;padding-top:32px;border-top:1px solid var(--linia);max-width:66ch}
+.poradnik h2{font-size:clamp(22px,3vw,28px);margin:0 0 14px}
+.poradnik p{margin-bottom:14px;font-size:16.5px;line-height:1.6}
+</style>
