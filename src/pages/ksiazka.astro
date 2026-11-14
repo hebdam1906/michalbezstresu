@@ -90,7 +90,7 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
           <a class="btn btn-primary kup-btn" href={KASA_UTM} data-kasa data-ev="ksiazka-kup-hero"><span data-przycisk>Kupuję za 39 zł</span></a>
           <p class="zapis-opis kup-pod">EPUB + PDF od razu na maila · bezpieczna płatność</p>
           <p class="kup-fragment"><a href="#fragmentZapis" data-fragment-gora>Najpierw przeczytaj rozdział 1 za darmo ↓</a></p>
-          <!-- 14.11.2026, Plan Tornado: Empik od 16.11 (wcześniej ukryte; pokazuje skrypt niżej). Pomiar: ksiazka_empik. -->
+          <!-- 14.11.2026, Plan Tornado: linijka o Empiku UKRYTA do odwołania (decyzja Michała 14.11, ceny). Podgląd ?empik=1. Pomiar: ksiazka_empik. -->
           <p class="kup-empik" data-empik hidden>Wolisz czytać w Empik Go? <a href="https://www.empik.com/z-obu-stron-stolu-co-dzieje-sie-w-rozmowach-od-ktorych-zalezy-twoja-praca-hebda-michal,p1814220332,ebooki-i-mp3-p" target="_blank" rel="noopener" data-empik-link>Książka jest też w Empiku</a></p>
           {edyta && (
             <blockquote class="kup-cytat">
@@ -283,7 +283,8 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
     (function () {
       var p = document.querySelector('[data-empik]');
       if (!p) return;
-      if (Date.now() >= Date.UTC(2026, 10, 15, 23, 0, 0) || /[?&]empik=1/.test(location.search)) p.hidden = false;
+      /* 14.11 (Michał): ukryte do odwołania — Empik 44,99 zł vs nasze 49 zł. Podgląd tylko ?empik=1. */
+      if (/[?&]empik=1/.test(location.search)) p.hidden = false;
       var a = p.querySelector('[data-empik-link]');
       if (a) a.addEventListener('click', function () { try { if (window.va) window.va('event', { name: 'ksiazka_empik' }); } catch (e) {} });
     })();
