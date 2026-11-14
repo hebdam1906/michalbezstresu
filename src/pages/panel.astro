@@ -64,6 +64,8 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
     .sprz-h{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--szalwia);font-weight:500;margin:14px 0 6px}
     .sprz-cel{margin-bottom:10px;font-size:13px}
     .sprz-cel .bar{margin-top:4px}
+    .sprz-reczne{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0 4px;font-size:13px}
+    .sprz-reczne input{width:64px;margin-left:4px;padding:3px 6px}
     .sprz-wykres{display:flex;align-items:flex-end;gap:6px;height:110px;border-bottom:1px solid var(--linia);padding-top:8px}
     .sprz-wykres .d{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-family:var(--mono);font-size:10px;color:#5E6E68}
     .sprz-wykres .d i{display:block;width:100%;max-width:34px;background:var(--sygnal);border-radius:3px 3px 0 0;min-height:2px}
@@ -227,6 +229,14 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
               <table><tbody id="sprzZrodla"></tbody></table>
             </div>
             <div>
+              <h3 class="sprz-h">Plan Tornado: cel od 16.11 (wszystkie kanały)</h3>
+              <div id="sprzTornado"></div>
+              <div class="sprz-reczne">
+                <label>Empik <input type="number" min="0" id="sprzEmpik" class="mono"></label>
+                <label>Amazon PL <input type="number" min="0" id="sprzAmazon" class="mono"></label>
+                <button class="mini" id="sprzReczneZapisz">Zapisz</button>
+              </div>
+              <div class="hint" id="sprzReczneInfo">Łączna liczba sprzedanych egzemplarzy od 16.11 (z raportów Empik i KDP). EasyCart liczy się sam.</div>
               <h3 class="sprz-h">Cel z prognozy (e-booki)</h3>
               <div id="sprzCele"></div>
               <h3 class="sprz-h">Sprzedaż dzienna</h3>
@@ -425,11 +435,23 @@ const envOk = Boolean(import.meta.env.PUBLIC_SUPABASE_URL); // podpowiedź, czy 
           const pr = Math.min(100, Math.round((c.teraz / c.ebooki) * 100));
           return '<div class="sprz-cel">do ' + esc(c.data.slice(8, 10) + '.' + c.data.slice(5, 7)) + ': <b>' + c.teraz + ' / ' + c.ebooki + '</b> e-booków (' + pr + '%)<div class="bar"><i style="width:' + pr + '%"></i></div></div>';
         }).join('');
+        $('sprzTornado').innerHTML = (d.tornado || []).map((c) => {
+          const pr = Math.min(100, Math.round((c.teraz / c.egz) * 100));
+          return '<div class="sprz-cel">do ' + esc(c.data.slice(8, 10) + '.' + c.data.slice(5, 7)) + ': <b>' + c.teraz + ' / ' + c.egz + '</b> egz. (' + pr + '%)<div class="bar"><i style="width:' + pr + '%"></i></div></div>';
+        }).join('') + '<div class="hint">EasyCart od 16.11: ' + (d.easycartTornado ?? 0) + ' · Empik: ' + (d.reczne?.empik ?? 0) + ' · Amazon PL: ' + (d.reczne?.amazon_pl ?? 0) + '</div>';
+        if (d.reczne) { $('sprzEmpik').value = d.reczne.empik; $('sprzAmazon').value = d.reczne.amazon_pl; }
         const max = Math.max(1, ...d.dni.map((x) => x.n));
         $('sprzWykres').innerHTML = d.dni.map((x) =>
           '<div class="d"><b>' + x.n + '</b><i style="height:' + Math.round((x.n / max) * 80) + 'px"></i>' + esc(x.data.slice(8, 10) + '.' + x.data.slice(5, 7)) + '</div>').join('');
       }
       $('sprzOdswiez').addEventListener('click', loadSprzedaz);
+      $('sprzReczneZapisz').addEventListener('click', async () => {
+        try {
+          await api('sprzedaz', 'POST', { kanal: 'empik', sztuki: Number($('sprzEmpik').value || 0) });
+          await api('sprzedaz', 'POST', { kanal: 'amazon_pl', sztuki: Number($('sprzAmazon').value || 0) });
+          $('sprzReczneInfo').textContent = 'Zapisano.'; loadSprzedaz();
+        } catch (e) { $('sprzReczneInfo').textContent = 'Błąd zapisu: ' + e.message; }
+      });
 
       // ---------- ZADANIA ----------
       const ZAD_OWNERS = ['mike', 'marcin', 'klaudiusz', 'team'];

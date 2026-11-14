@@ -18,6 +18,24 @@ export const CELE = [
   { data: '2026-11-08', ebooki: 18 },
   { data: '2026-11-15', ebooki: 30 },
 ];
+/* Plan Tornado (14.11.2026, decyzja Michała): cele liczone od 16.11 ze WSZYSTKICH kanałów
+   (EasyCart: każdy rodzaj książki + ręczne pola Empik i Amazon PL z panel_sprzedaz_reczna). */
+export const TORNADO_START = '2026-11-15T23:00:00Z'; // 16.11.2026 00:00 Warszawa
+export const CELE_TORNADO = [
+  { data: '2026-11-30', egz: 50 },
+  { data: '2026-12-17', egz: 150 },
+];
+export const KANALY_RECZNE = ['empik', 'amazon_pl'] as const;
+export type KanalReczny = (typeof KANALY_RECZNE)[number];
+
+export async function sprzedazReczna(): Promise<Record<KanalReczny, number>> {
+  const out: Record<KanalReczny, number> = { empik: 0, amazon_pl: 0 };
+  if (!supabaseAdmin) return out;
+  const { data, error } = await supabaseAdmin.from('panel_sprzedaz_reczna').select('kanal, sztuki');
+  if (error) throw new Error(error.message);
+  for (const r of data ?? []) if ((KANALY_RECZNE as readonly string[]).includes(r.kanal)) out[r.kanal as KanalReczny] = Number(r.sztuki) || 0;
+  return out;
+}
 
 export const toKsiazka = (produkt: string) => /obu stron|stołu|stolu/i.test(produkt || '');
 export const toTest = (zamowienie: string, odebrano?: string) =>
@@ -112,7 +130,12 @@ export async function podsumowanieSprzedazy() {
     dni.push({ data: d, n: naDzien[d] ?? 0 });
   }
   const ostatnia = zakupy.at(-1);
+  const reczne = await sprzedazReczna();
+  const easycartTornado = zakupy.filter((z) => z.kiedy >= TORNADO_START).length;
+  const tornadoTeraz = easycartTornado + reczne.empik + reczne.amazon_pl;
   return {
+    reczne, easycartTornado,
+    tornado: CELE_TORNADO.map((c) => ({ ...c, teraz: tornadoTeraz })),
     dzis: naDzien[dzis] ?? 0,
     odStartu: zakupy.length,
     ostatnia: ostatnia ? { kiedy: ostatnia.kiedy, godzina: godzinaPL(ostatnia.kiedy), dzien: dzienPL(ostatnia.kiedy) } : null,
