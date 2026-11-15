@@ -24,11 +24,11 @@ import Stopka from '../components/Stopka.astro';
  * Świadomie NIE publikujemy tu adnotacji „wersja robocza” — regulamin jest umową
  * z konsumentem i taka adnotacja działałaby przeciwko obu stronom.
  */
-const obowiazujeOd = '3 listopada 2026';
+const obowiazujeOd = '16 listopada 2026'; // 15.11: dopisana książka drukowana (§5a, §6 pkt 6, §7) — do sprawdzenia przez prawniczkę 16.11; poprzednia wersja: 3 listopada 2026
 ---
 <Layout
   title="Regulamin sprzedaży | Michał bez Stresu"
-  description="Zasady sprzedaży konsultacji i treści cyfrowych: zamówienia, płatności, realizacja, prawo odstąpienia i reklamacje."
+  description="Zasady sprzedaży konsultacji, treści cyfrowych i książki drukowanej: zamówienia, płatności, dostawa, prawo odstąpienia i reklamacje."
 >
   <Nav />
 
@@ -46,8 +46,8 @@ const obowiazujeOd = '3 listopada 2026';
 
     <h2>§1. Postanowienia ogólne</h2>
     <ol>
-      <li>Niniejszy Regulamin określa zasady sprzedaży usług i treści cyfrowych
-        za pośrednictwem strony michalbezstresu.pl oraz koszyka płatności EasyCart.</li>
+      <li>Niniejszy Regulamin określa zasady sprzedaży usług, treści cyfrowych
+        i książki drukowanej za pośrednictwem strony michalbezstresu.pl oraz koszyka płatności EasyCart.</li>
       {/* ZMIANA 1 wobec draftu: adres kontaktowy kontakt@ zamiast michal@ —
           to adres podany w stopce, na /konsultacje i w polityce prywatności.
           Jeden adres w całym serwisie zamiast dwóch. */}
@@ -89,6 +89,8 @@ const obowiazujeOd = '3 listopada 2026';
         na stronie produktu.</li>
       <li><strong>Treści cyfrowe</strong> (np. e-booki, materiały PDF) — dostarczane
         po opłaceniu na adres e-mail podany w zamówieniu.</li>
+      <li><strong>Książka drukowana</strong> „Z obu stron stołu” (także w pakiecie z e-bookiem)
+        — wysyłana do paczkomatu na zasadach z §5a.</li>
       <li>Konsultacje mają charakter edukacyjny i informacyjny.
         <strong>Nie stanowią porady prawnej, psychologicznej ani medycznej.</strong>
         Sprzedawca nie jest prawnikiem ani psychologiem; w sytuacjach wymagających
@@ -146,11 +148,23 @@ const obowiazujeOd = '3 listopada 2026';
         do użytku własnego Kupującego.</li>
     </ol>
 
+    <h2>§5a. Książka drukowana</h2>
+    <ol>
+      <li>Książkę drukowaną (także w pakiecie z e-bookiem) Sprzedawca wysyła przesyłką
+        InPost do paczkomatu wybranego w koszyku, na terytorium Polski. Koszt dostawy
+        jest wliczony w cenę.</li>
+      <li>Wysyłka następuje w ciągu 24 godzin od złożenia zamówienia, w dni robocze.
+        Czas doręczenia zależy od InPost (zwykle 1–2 dni robocze).</li>
+      <li>Na życzenie Kupującego Sprzedawca wpisuje w egzemplarzu dedykację o treści
+        podanej w formularzu zamówienia. Jeśli pole pozostanie puste, egzemplarz
+        zostanie wysłany z samym podpisem autora.</li>
+    </ol>
+
     <h2>§6. Prawo odstąpienia od umowy — polityka zwrotów</h2>
     <ol>
       <li>Kupującemu będącemu konsumentem przysługuje prawo odstąpienia od umowy
         zawartej na odległość w terminie <strong>14 dni</strong> bez podania
-        przyczyny — z wyjątkami opisanymi w pkt 4 i 5.</li>
+        przyczyny — z wyjątkami opisanymi w pkt 4, 5 i 6.</li>
       <li>Odstąpienie wymaga oświadczenia — wystarczy e-mail na
         <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>;
         można użyć wzoru z §9.</li>
@@ -166,6 +180,15 @@ const obowiazujeOd = '3 listopada 2026';
         Sprzedawca dostarczył treść za wyraźną i uprzednią zgodą Kupującego przed
         upływem terminu odstąpienia, a Kupujący przyjął do wiadomości utratę tego
         prawa (odpowiedni checkbox w koszyku).</li>
+      <li><strong>Książka drukowana:</strong> termin 14 dni liczy się od dnia, w którym
+        Kupujący lub wskazana przez niego osoba odebrała przesyłkę. Kupujący odsyła
+        książkę na własny koszt w ciągu 14 dni od odstąpienia; Sprzedawca może wstrzymać
+        zwrot płatności do chwili otrzymania książki albo dowodu jej odesłania.
+        Prawo odstąpienia nie przysługuje w odniesieniu do egzemplarza z dedykacją wpisaną
+        według wskazań Kupującego — jako rzeczy wyprodukowanej według specyfikacji
+        konsumenta lub służącej zaspokojeniu jego zindywidualizowanych potrzeb
+        (art. 38 ust. 1 pkt 3 ustawy o prawach konsumenta). W pakiecie druk + e-book
+        do części cyfrowej stosuje się pkt 5.</li>
       <li>Niezależnie od powyższego: jeśli po pierwszej konsultacji albo po lekturze
         zakupionej treści cyfrowej Kupujący uzna, że nie otrzymał wartości —
         Sprzedawca prosi o wiadomość. Sprawy rozpatrywane
@@ -174,8 +197,10 @@ const obowiazujeOd = '3 listopada 2026';
 
     <h2>§7. Reklamacje</h2>
     <ol>
-      <li>Reklamacje dotyczące usług i treści cyfrowych można składać na
+      <li>Reklamacje dotyczące usług, treści cyfrowych i książki drukowanej można składać na
         <a href="mailto:kontakt@michalbezstresu.pl">kontakt@michalbezstresu.pl</a>.</li>
+      <li>Jeśli książka dotrze uszkodzona albo z wadą druku, Sprzedawca prosi o zdjęcie
+        egzemplarza w wiadomości — wyśle nowy egzemplarz albo zwróci płatność.</li>
       <li>Sprzedawca odpowiada na reklamację w terminie 14 dni.</li>
       <li>Sprzedawca ponosi odpowiedzialność za zgodność świadczenia z umową
         na zasadach ustawy o prawach konsumenta.</li>
