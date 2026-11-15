@@ -13,7 +13,7 @@
 import { supabaseAdmin } from './supabase';
 
 export const START_SPRZEDAZY = '2026-11-02T06:16:00Z'; // 2.11, 7:16 PL
-export const TESTY = new Set(['1544088']);
+export const TESTY = new Set(['1544088', '1578952', '1583974']); // 15.11: + testy druku (13.11) i pakietu (15.11)
 export const CELE = [
   { data: '2026-11-08', ebooki: 18 },
   { data: '2026-11-15', ebooki: 30 },
