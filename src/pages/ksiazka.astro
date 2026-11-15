@@ -28,6 +28,9 @@ const edyta = opinie.find((o) => o.kto === 'Edyta');
 /* Kasa EasyCart, produkt 4. Domyślne UTM, gdy wejście bez UTM. */
 const KASA = 'https://cart.easy.tools/checkout/michalbezstresu/z-obu-stron-stolu-ebook';
 const KASA_UTM = KASA + '?utm_source=strona&utm_medium=ksiazka&utm_campaign=premiera-ksiazki';
+/* 15.11.2026: druk z dedykacją (59 zł) i pakiet druk + e-book (69 zł), sprzedaż od 16.11 0:00 Warszawa. */
+const KASA_DRUK = 'https://cart.easy.tools/checkout/michalbezstresu/z-obu-stron-stolu-wydanie-drukowane?utm_source=strona&utm_medium=ksiazka&utm_campaign=druk-start&utm_content=druk';
+const KASA_PAKIET = 'https://cart.easy.tools/checkout/michalbezstresu/z-obu-stron-stolu-druk-ebook?utm_source=strona&utm_medium=ksiazka&utm_campaign=druk-start&utm_content=pakiet';
 
 const czesci = [
   {
@@ -89,6 +92,7 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
           <p class="kup-cena"><span data-cena>39 zł</span> <s class="kup-stara" data-do>49 zł</s> <span class="kup-etykieta" data-do>tylko do niedzieli 15.11</span></p>
           <a class="btn btn-primary kup-btn" href={KASA_UTM} data-kasa data-ev="ksiazka-kup-hero"><span data-przycisk>Kupuję za 39 zł</span></a>
           <p class="zapis-opis kup-pod">EPUB + PDF od razu na maila · bezpieczna płatność</p>
+          <p class="kup-druk" data-druk hidden>Wolisz papier? <a href="#druk">Wydanie drukowane z dedykacją od 59 zł ↓</a></p>
           <p class="kup-fragment"><a href="#fragmentZapis" data-fragment-gora>Najpierw przeczytaj rozdział 1 za darmo ↓</a></p>
           <!-- 14.11.2026, Plan Tornado: linijka o Empiku UKRYTA do odwołania (decyzja Michała 14.11, ceny). Podgląd ?empik=1. Pomiar: ksiazka_empik. -->
           <p class="kup-empik" data-empik hidden>Wolisz czytać w Empik Go? <a href="https://www.empik.com/z-obu-stron-stolu-co-dzieje-sie-w-rozmowach-od-ktorych-zalezy-twoja-praca-hebda-michal,p1814220332,ebooki-i-mp3-p" target="_blank" rel="noopener" data-empik-link>Książka jest też w Empiku</a></p>
@@ -232,10 +236,36 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
         </div>
       ))}
       <p class="sub uwaga">Do tego wstęp, zakończenie „Co z tym zrobić w poniedziałek” i słowniczek
-        pojęć. Książka ukaże się jako e-book (EPUB i PDF).</p>
+        pojęć. Książka jest jako e-book (EPUB i PDF) i w wydaniu drukowanym.</p>
     </div>
   </section>
 
+
+  <!-- 15.11.2026: wydanie drukowane z dedykacją (z gałęzi prezent-firmowy, 7fedb1d). Widoczne od 16.11 0:00 Warszawa (skrypt na dole). -->
+  <section class="band" id="druk" data-druk hidden>
+    <div class="wrap waska">
+      <div class="eyebrow">Wydanie drukowane</div>
+      <h2>Z dedykacją, na prezent albo dla siebie</h2>
+      <p class="sub">Każdy egzemplarz podpisuję i wpisuję dedykację dla osoby, którą wskażesz.
+        Format A5, 168 stron, oprawa miękka. Wysyłka paczkomatem InPost w ciągu 24 godzin (w dni robocze).</p>
+      <div class="oferty">
+        <div class="oferta">
+          <div class="oferta-nazwa">Wydanie drukowane z dedykacją</div>
+          <div class="oferta-cena">59 zł <span>z wysyłką</span></div>
+          <p>Książka podpisana dla Ciebie albo dla osoby, której ją dajesz.</p>
+          <a class="btn btn-ghost" href={KASA_DRUK} data-kasa-druk="druk">Zamawiam druk</a>
+        </div>
+        <div class="oferta polecana">
+          <div class="oferta-nazwa">Druk z dedykacją + e-book</div>
+          <div class="oferta-cena">69 zł <span>z wysyłką</span></div>
+          <p>E-book (EPUB + PDF) dostajesz od razu, książka dociera paczkomatem w kilka dni.</p>
+          <a class="btn btn-primary" href={KASA_PAKIET} data-kasa-druk="pakiet">Zamawiam pakiet</a>
+        </div>
+      </div>
+      <p class="sub uwaga">Dedykację wpiszesz w formularzu zamówienia. Jeśli zostawisz pole puste, podpiszę egzemplarz bez dedykacji.
+        Zamówienia do 17.12 dotrą przed świętami.</p>
+    </div>
+  </section>
 
   <section>
     <div class="wrap waska autor">
@@ -273,6 +303,27 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
           var wariant = m ? m[1] + ' zł' : t.slice(0, 40);
           try { if (window.va) window.va('event', { name: 'ksiazka_kup', data: { miejsce: miejsce, wariant: wariant } }); } catch (e) {}
           try { if (window.fbq) window.fbq('track', 'InitiateCheckout', { content_name: 'ebook', value: m ? Number(m[1]) : undefined, currency: 'PLN' }); } catch (e) {}
+        });
+      });
+    })();
+  </script>
+
+  <script is:inline>
+    /* 15.11.2026: druk widoczny od 16.11 0:00 Warszawa (15.11 23:00 UTC); podgląd wcześniej: ?druk=1.
+       UTM z adresu strony przechodzą do kasy druku (utm_content zostaje: druk/pakiet).
+       Klik → zdarzenie ksiazka_druk (Vercel) + InitiateCheckout (Meta, po zgodzie). */
+    (function () {
+      if (Date.now() < Date.UTC(2026, 10, 15, 23, 0, 0) && !/[?&]druk=1/.test(location.search)) return;
+      document.querySelectorAll('[data-druk]').forEach(function (e) { e.hidden = false; });
+      var q = new URLSearchParams(location.search);
+      document.querySelectorAll('[data-kasa-druk]').forEach(function (a) {
+        var u = new URL(a.href);
+        ['utm_source', 'utm_medium', 'utm_campaign'].forEach(function (k) { if (q.get(k)) u.searchParams.set(k, q.get(k)); });
+        a.href = u.toString();
+        a.addEventListener('click', function () {
+          var w = a.getAttribute('data-kasa-druk');
+          try { if (window.va) window.va('event', { name: 'ksiazka_druk', data: { wariant: w } }); } catch (e) {}
+          try { if (window.fbq) window.fbq('track', 'InitiateCheckout', { content_name: w, value: w === 'pakiet' ? 69 : 59, currency: 'PLN' }); } catch (e) {}
         });
       });
     })();
@@ -393,6 +444,17 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
 .fragment .dalej-r1{font-family:inherit;font-size:16px;margin:0}
 .dalej-r1 a{color:var(--sygnal)}
 .kup-fragment{margin:10px 0 6px;font-size:15px}
+.kup-druk{margin:10px 0 0;font-size:15px}
+.oferty{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+@media(max-width:680px){.oferty{grid-template-columns:1fr}}
+.oferta{background:#fff;border:1px solid var(--linia);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:8px}
+.oferta.polecana{border-color:var(--sygnal);box-shadow:0 8px 24px rgba(22,33,29,.08)}
+.oferta-nazwa{font-weight:700;font-size:17px}
+.oferta-cena{font-family:var(--disp);font-size:30px;color:var(--atrament)}
+.oferta-cena span{font-family:var(--body);font-size:14px;color:#4A5A55}
+.oferta p{font-size:15px;color:#4A5A55;flex:1}
+.oferta .btn{align-self:flex-start}
+
 .kup-fragment a{color:var(--sygnal);text-decoration:underline;text-underline-offset:3px}
 .kup-empik{margin:0 0 6px;font-size:14px;color:#4A5A55}
 .kup-empik a{color:var(--sygnal);text-decoration:underline;text-underline-offset:3px}

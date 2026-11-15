@@ -7,7 +7,7 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 
 const CEL = 'https://cart.easy.tools/checkout/michalbezstresu/z-obu-stron-stolu-wydanie-drukowane';
-const PLAN = '';
+const PLAN = 'price_1UbIepG1D25g3EalquiOdBsW'; // 15.11: wariant druk-49 (ukryty), sprawdzone — kasa pokazuje 49 zł
 const KONIEC = Date.parse('2026-11-30T23:59:59+01:00');
 
 export const GET: APIRoute = ({ url }) => {
