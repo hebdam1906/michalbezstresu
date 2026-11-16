@@ -36,6 +36,7 @@ import Stopka from '../../components/Stopka.astro';
             <li>jakimi pytaniami na koniec otworzyć rozmowę o podwyżce.</li>
           </ul>
           <p>Na końcu odpowiem na pytania, które przyślesz do 1 grudnia.</p>
+          <p class="sym-link">Sprawdź, jak zareagujesz: <a href="/symulator/ocena-roczna/?utm_source=site&utm_medium=webinar&utm_campaign=webinar-03-12">symulator oceny rocznej</a> (5 sytuacji, 3 minuty).</p>
         </div>
 
         <form class="zapis" id="zapis" novalidate>
@@ -104,6 +105,8 @@ import Stopka from '../../components/Stopka.astro';
 .program-tytul{font-weight:700;margin-bottom:6px}
 .program ul{margin:0 0 8px 20px;padding:0}
 .program li{margin-bottom:4px}
+.sym-link{font-size:15px}
+.sym-link a{color:var(--sygnal);font-weight:600}
 .zapis{margin-top:26px;background:#fff;border:1px solid var(--linia);border-radius:14px;padding:24px;max-width:560px}
 .pola{display:grid;grid-template-columns:1fr 1.3fr;gap:10px}
 @media(max-width:560px){.pola{grid-template-columns:1fr}}

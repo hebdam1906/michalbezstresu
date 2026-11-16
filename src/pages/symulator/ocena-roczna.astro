@@ -1,0 +1,57 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Stopka from '../../components/Stopka.astro';
+import Symulator from '../../components/Symulator.astro';
+import { RUNDY, WYNIKI, KSIAZKA_HREF } from '../../data/symulator-ocena-roczna.js';
+
+/**
+ * Symulator „Ocena roczna” — 16.11.2026. Treść: Klaudiusz 16.11, zatwierdzona przez Michała.
+ * Szablon wspólny: src/components/Symulator.astro. CTA 1 = webinar 3.12 (po 5.12 podmienić).
+ */
+---
+<Layout
+  title="Symulator: ocena roczna niższa, niż się spodziewasz. Co mówisz? | Michał bez Stresu"
+  description="5 momentów z oceny rocznej: od przygotowania po rozmowę o podwyżce. Wybierz odpowiedź i zobacz, jak brzmi z drugiej strony stołu. 3 minuty, bez rejestracji."
+  ogObraz="/og/og-symulator-ocena.jpg"
+  ogAlt="Symulator: dostajesz ocenę niższą, niż się spodziewasz. Co mówisz?"
+>
+  <Nav />
+  <Symulator
+    slug="ocena-roczna"
+    eyebrow="Symulator · ocena roczna"
+    h1="Dostajesz ocenę niższą, niż się spodziewasz. Co mówisz?"
+    lead="Pięć momentów z oceny rocznej: od trzech tygodni przed rozmową po dzień po niej. Przy każdym wybierz odpowiedź najbliższą temu, co naprawdę robisz. Po każdej zobaczysz, jak ten sam moment wygląda z drugiej strony stołu."
+    rundy={RUNDY}
+    wyniki={WYNIKI}
+    ksiazka={{ pytanie: 'Chcesz przejść przez ocenę roczną z obu stron stołu?', tekst: 'W książce „Z obu stron stołu” ocena roczna ma osobny rozdział: jak powstaje na kalibracji, co przygotować i jakie zdania działają, gdy wynik jest niższy, niż się spodziewasz.', href: KSIAZKA_HREF, miejsce: 'symulator-ocena' }}
+    nota="Symulator nie zastępuje rozmowy z przełożonym ani porady prawnej."
+  >
+    <section class="poradnik">
+      <h2>Ocena roczna: jak się przygotować, zanim usiądziesz do rozmowy</h2>
+      <p>Ocena roczna w większości firm nie zapada w pokoju, w którym ją słyszysz. Zapada wcześniej, na kalibracji:
+        spotkaniu menedżerów, na którym oceny całego działu są porównywane i dopasowywane do limitów. Na jedną osobę
+        przypada tam minuta, dwie. Twój menedżer może obronić tylko to, co o Tobie wie konkretnie.</p>
+      <p>Dlatego najważniejszy moment oceny rocznej to trzy tygodnie przed rozmową, nie sama rozmowa. Jedna strona
+        wyników: projekty z datami, liczby, które się poprawiły, sprawy załatwione bez eskalacji, opinie z innych
+        zespołów. Wysłana szefowi, zanim napisze ocenę. Przymiotniki w samoocenie („zaangażowanie”, „dobra współpraca”)
+        nie bronią się na kalibracji; daty i liczby tak.</p>
+      <p>W rozmowie, gdy wynik jest niższy, niż się spodziewasz, działa jedno pytanie: „Czego zabrakło do oceny
+        wyżej?”. Nie podważa oceny, tylko prosi o kryteria. Odpowiedź jest planem na kolejny rok i podstawą do
+        <a href="/symulator/podwyzka/">rozmowy o podwyżce</a>. Gdy słyszysz „nie ma budżetu”, zamień „nie” na warunki
+        i termin: „Co musiałoby się zmienić i kiedy do tego wracamy?”.</p>
+      <p>Dzień po rozmowie wyślij krótki mail z podsumowaniem ustaleń. Ustalenia z pokoju żyją tydzień; mail żyje do
+        następnej oceny.</p>
+      <p>Symulator powyżej pozwala przećwiczyć pięć takich momentów: przygotowanie, samoocenę, niższy wynik, rozmowę
+        o podwyżce i dzień po. Przy każdej odpowiedzi zobaczysz, jak ta sama sytuacja wygląda z fotela menedżera, bo
+        przez dwadzieścia lat siedziałem po obu stronach tego stołu. Więcej w
+        <a href="/odcinki/niesprawiedliwa-ocena-roczna/">odcinku o niesprawiedliwej ocenie rocznej</a>.</p>
+    </section>
+  </Symulator>
+  <Stopka />
+</Layout>
+<style>
+.poradnik{margin-top:48px;padding-top:32px;border-top:1px solid var(--linia);max-width:66ch}
+.poradnik h2{font-size:clamp(22px,3vw,28px);margin:0 0 14px}
+.poradnik p{margin-bottom:14px;font-size:16.5px;line-height:1.6}
+</style>
