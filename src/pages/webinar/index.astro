@@ -35,7 +35,7 @@ import Stopka from '../../components/Stopka.astro';
             <li>co powiedzieć, gdy ocena jest niższa, niż się spodziewasz;</li>
             <li>jakimi pytaniami na koniec otworzyć rozmowę o podwyżce.</li>
           </ul>
-          <p>Potem 15 minut na pytania.</p>
+          <p>Na końcu odpowiem na pytania, które przyślesz do 1 grudnia.</p>
         </div>
 
         <form class="zapis" id="zapis" novalidate>
@@ -46,11 +46,11 @@ import Stopka from '../../components/Stopka.astro';
           <input type="text" name="www" class="pulapka" tabindex="-1" autocomplete="off" aria-hidden="true" />
           <label class="zgoda">
             <input type="checkbox" name="zgoda" required />
-            <span>Chcę dostać od Michała bez Stresu link do webinaru, przypomnienia i nagranie oraz checklistę z newsletterem.
+            <span>Chcę dostać od Michała bez Stresu link do premiery webinaru, przypomnienia i nagranie oraz checklistę z newsletterem.
               Wypiszesz się jednym kliknięciem. <a href="/prywatnosc/">Polityka prywatności</a>.</span>
           </label>
           <button class="btn btn-primary" type="submit">Zapisuję się</button>
-          <p class="pod-przyciskiem">Link do transmisji dostają tylko zapisane osoby. Nagranie będzie dostępne przez 48 godzin.</p>
+          <p class="pod-przyciskiem">Link do premiery dostają tylko zapisane osoby. Po 3.12 nagranie zostaje dostępne przez 48 godzin.</p>
           <p class="komunikat" role="status" aria-live="polite"></p>
         </form>
 
@@ -75,7 +75,7 @@ import Stopka from '../../components/Stopka.astro';
         e.preventDefault();
         var email = f.email.value.trim();
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { kom.textContent = 'Sprawdź adres e-mail.'; kom.className = 'komunikat blad'; return; }
-        if (!f.zgoda.checked) { kom.textContent = 'Zaznacz zgodę, żebym mógł wysłać link do transmisji.'; kom.className = 'komunikat blad'; return; }
+        if (!f.zgoda.checked) { kom.textContent = 'Zaznacz zgodę, żebym mógł wysłać link do premiery.'; kom.className = 'komunikat blad'; return; }
         btn.disabled = true; kom.textContent = 'Zapisuję…'; kom.className = 'komunikat';
         fetch('/api/webinar', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },

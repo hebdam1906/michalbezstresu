@@ -32,7 +32,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const email = tekst(b.email, 160).toLowerCase();
   const imie = tekst(b.imie, 80);
   if (!czyMail(email)) return json({ error: 'Sprawdź adres e-mail.' }, 400);
-  if (b.zgoda !== true) return json({ error: 'Zaznacz zgodę — bez niej nie mogę wysłać linku do transmisji.' }, 400);
+  if (b.zgoda !== true) return json({ error: 'Zaznacz zgodę — bez niej nie mogę wysłać linku do premiery.' }, 400);
 
   const fields: Record<string, string> = {};
   if (imie) fields.name = imie;
