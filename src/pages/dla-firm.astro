@@ -104,6 +104,7 @@ const pakiety = [
       <p class="lead mocne">Te warsztaty są zbudowane z tego doświadczenia — nie z teorii zarządzania.</p>
       <div class="cta-row">
         <a class="btn btn-primary" href="#kontakt">Porozmawiajmy</a>
+        <a class="btn btn-ghost" href="#prezent" data-ev="prezent:hero">Pakiety świąteczne dla zespołu ↓</a>
         <span class="cta-note">Odpowiadam w ciągu jednego dnia roboczego.</span>
       </div>
       {/* Akapit po angielsku dodany 23.09.2026: angielski artykul
@@ -120,6 +121,35 @@ const pakiety = [
       </p>
     </div>
   </header>
+
+  {/* Pakiety świąteczne — na produkcji od 17.11 (brief Klaudiusza 16.11). Teksty: Klaudiusz, zatwierdził Michał 23.10. Ceny netto.
+      Linki z zewnątrz: /dla-firm/?utm_source=…&utm_campaign=prezent-firmowy#prezent
+      (Atrybucja.astro zapisze UTM, formularz firmy_zapytania doklei je do zapytania). */}
+  <section id="prezent">
+    <div class="wrap">
+      <div class="eyebrow">Na święta</div>
+      <h2>Prezent świąteczny, który zostaje w zespole dłużej niż do stycznia</h2>
+      <p class="sub">Grudzień to w wielu firmach czas ocen rocznych, a styczeń czas nowych celów. Najtrudniejsze
+        rozmowy w roku dzieją się właśnie wtedy. Książka „Z obu stron stołu” pokazuje je z dwóch stron: tak,
+        jak widzi je menedżer, i tak, jak widzi je pracownik.</p>
+      <p class="sub">Przez dwadzieścia lat prowadziłem takie rozmowy w międzynarodowych instytucjach finansowych
+        i sam w nich uczestniczyłem jako pracownik. Ta książka to praktyka, nie teoria.</p>
+      <div class="cards">
+        {pakiety.map((k) => (
+          <article class="card">
+            <span class="tag">{k.polecany ? 'Polecany' : 'Pakiet'}</span>
+            <h3>{k.t}</h3>
+            <p class="cena">{k.cena}</p>
+            <p class="cd">{k.d}</p>
+            <ul>{k.pkt.map((x) => <li>{x}</li>)}</ul>
+            <a class="btn btn-primary pakiet-btn" href="#kontakt" data-pakiet={k.t} data-ev={`prezent:${k.t}`}>Zapytaj o pakiet</a>
+          </article>
+        ))}
+      </div>
+      <p class="sub">Ceny netto. Faktura VAT. Wysyłka na jeden adres w cenie. Zamówienia na święta do <strong>4 grudnia</strong>.</p>
+      <p class="sub">Po kliknięciu „Zapytaj o pakiet” odpiszę w ciągu jednego dnia roboczego z terminem dostawy i propozycją terminu warsztatu.</p>
+    </div>
+  </section>
 
   <section>
     <div class="wrap">
@@ -167,35 +197,6 @@ const pakiety = [
           </article>
         ))}
       </div>
-    </div>
-  </section>
-
-  {/* Pakiety świąteczne — na produkcji od 17.11 (brief Klaudiusza 16.11). Teksty: Klaudiusz, zatwierdził Michał 23.10. Ceny netto.
-      Linki z zewnątrz: /dla-firm/?utm_source=…&utm_campaign=prezent-firmowy#prezent
-      (Atrybucja.astro zapisze UTM, formularz firmy_zapytania doklei je do zapytania). */}
-  <section id="prezent">
-    <div class="wrap">
-      <div class="eyebrow">Na święta</div>
-      <h2>Prezent świąteczny, który zostaje w zespole dłużej niż do stycznia</h2>
-      <p class="sub">Grudzień to w wielu firmach czas ocen rocznych, a styczeń czas nowych celów. Najtrudniejsze
-        rozmowy w roku dzieją się właśnie wtedy. Książka „Z obu stron stołu” pokazuje je z dwóch stron: tak,
-        jak widzi je menedżer, i tak, jak widzi je pracownik.</p>
-      <p class="sub">Przez dwadzieścia lat prowadziłem takie rozmowy w międzynarodowych instytucjach finansowych
-        i sam w nich uczestniczyłem jako pracownik. Ta książka to praktyka, nie teoria.</p>
-      <div class="cards">
-        {pakiety.map((k) => (
-          <article class="card">
-            <span class="tag">{k.polecany ? 'Polecany' : 'Pakiet'}</span>
-            <h3>{k.t}</h3>
-            <p class="cena">{k.cena}</p>
-            <p class="cd">{k.d}</p>
-            <ul>{k.pkt.map((x) => <li>{x}</li>)}</ul>
-            <a class="btn btn-primary pakiet-btn" href="#kontakt" data-pakiet={k.t} data-ev={`prezent:${k.t}`}>Zapytaj o pakiet</a>
-          </article>
-        ))}
-      </div>
-      <p class="sub">Ceny netto. Faktura VAT. Wysyłka na jeden adres w cenie. Zamówienia na święta do <strong>4 grudnia</strong>.</p>
-      <p class="sub">Po kliknięciu „Zapytaj o pakiet” odpiszę w ciągu jednego dnia roboczego z terminem dostawy i propozycją terminu warsztatu.</p>
     </div>
   </section>
 
