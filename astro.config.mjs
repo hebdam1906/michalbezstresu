@@ -35,6 +35,8 @@ export default defineConfig({
         if (/\/ksiazka\/dziekuje-za-zakup\/?$/.test(page)) return false;
         // /pytanie/dziekuje (25.09) — podziękowanie po formularzu „Zadaj pytanie”.
         if (/\/pytanie\/dziekuje\/?$/.test(page)) return false;
+        // /webinar/zapisany (16.11) — potwierdzenie zapisu na webinar (noindex).
+        if (/\/webinar\/zapisany\/?$/.test(page)) return false;
         // Angielska strona podziękowania (24.09) — ta sama zasada co wyżej:
         // osiągalna tylko przez przekierowanie z formularza /en/contact.
         if (/\/en\/thank-you\/?$/.test(page)) return false;

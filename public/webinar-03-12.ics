@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Michal bez Stresu//Webinar//PL
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:webinar-03-12-2026@michalbezstresu.pl
+DTSTAMP:20261116T120000Z
+DTSTART:20261203T180000Z
+DTEND:20261203T190000Z
+SUMMARY:Webinar: Ocena roczna – co zrobić\, zanim usiądziesz do rozmowy
+DESCRIPTION:Bezpłatny webinar Michała Hebdy. Link do transmisji przyjdzie mailem 2.12 i godzinę przed startem.
+LOCATION:Online (link w mailu)
+URL:https://www.michalbezstresu.pl/webinar/
+BEGIN:VALARM
+TRIGGER:-PT30M
+ACTION:DISPLAY
+DESCRIPTION:Webinar o ocenie rocznej za 30 minut
+END:VALARM
+END:VEVENT
+END:VCALENDAR

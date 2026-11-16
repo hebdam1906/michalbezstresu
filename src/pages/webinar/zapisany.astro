@@ -1,0 +1,78 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Stopka from '../../components/Stopka.astro';
+
+/**
+ * /webinar/zapisany/ — potwierdzenie zapisu na webinar 3.12, 19:00 (16.11.2026). noindex, poza sitemapą.
+ * Kalendarz: Google (link) + /webinar-03-12.ics. Kliknięcia: Vercel `webinar_kalendarz`, `webinar_oferta`.
+ */
+const G = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+  + '&text=' + encodeURIComponent('Webinar: Ocena roczna – co zrobić, zanim usiądziesz do rozmowy')
+  + '&dates=20261203T180000Z/20261203T190000Z'
+  + '&details=' + encodeURIComponent('Bezpłatny webinar Michała Hebdy. Link do transmisji przyjdzie mailem 2.12 i godzinę przed startem. https://www.michalbezstresu.pl/webinar/')
+  + '&location=' + encodeURIComponent('Online (link w mailu)');
+const U = 'utm_source=site&utm_medium=webinar&utm_campaign=webinar-03-12&utm_content=zapisany';
+---
+<Layout
+  title="Miejsce jest Twoje: webinar 3.12, 19:00 | Michał bez Stresu"
+  description="Potwierdzenie zapisu na bezpłatny webinar o ocenie rocznej."
+  ogObraz="/og/og-ksiazka.jpg"
+  noindex
+>
+  <Nav />
+
+  <header class="khero">
+    <div class="wrap khero-in">
+      <div class="eyebrow">Webinar · czwartek 3 grudnia, 19:00</div>
+      <h1>Miejsce jest Twoje. Do zobaczenia 3 grudnia o 19:00</h1>
+      <p class="lead">Potwierdzenie jest już na Twojej skrzynce. Link do transmisji wyślę dzień wcześniej i godzinę przed startem.</p>
+
+      <div class="kalendarz">
+        <span><strong>Dodaj do kalendarza:</strong></span>
+        <a class="btn-kal" href={G} target="_blank" rel="noopener" data-kal="google">Google Calendar</a>
+        <a class="btn-kal" href="/webinar-03-12.ics" download data-kal="ics">Apple / Outlook (.ics)</a>
+      </div>
+
+      <p class="pytanie">Masz pytanie o swoją ocenę roczną? Odpisz na maila z potwierdzeniem. Na najczęstsze odpowiem na żywo.</p>
+
+      <div class="oferta">
+        <p>Zanim zamkniesz tę stronę: w książce „Z obu stron stołu” ocena roczna ma osobny rozdział,
+          z gotowymi zdaniami na trudne momenty.</p>
+        <div class="przyciski">
+          <a class="btn btn-primary" href={`/ksiazka/?${U}`} data-oferta="ksiazka">Zobacz książkę</a>
+          <a class="btn btn-ghost" href={`/ksiazka/?${U}#fragmentZapis`} data-oferta="fragment">Najpierw przeczytaj fragment</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <Stopka />
+
+  <script is:inline>
+    document.querySelectorAll('[data-kal]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        try { if (window.va) window.va('event', { name: 'webinar_kalendarz', data: { typ: a.getAttribute('data-kal') } }); } catch (e) {}
+      });
+    });
+    document.querySelectorAll('[data-oferta]').forEach(function (a) {
+      a.addEventListener('click', function () {
+        try { if (window.va) window.va('event', { name: 'webinar_oferta', data: { typ: a.getAttribute('data-oferta') } }); } catch (e) {}
+      });
+    });
+  </script>
+</Layout>
+
+<style>
+.khero{padding:64px 0 56px;background:linear-gradient(180deg,var(--mgla),var(--papier))}
+.khero-in{max-width:760px}
+.khero h1{font-family:var(--disp);font-weight:500;font-size:clamp(32px,5vw,52px);line-height:1.08;margin:6px 0 14px}
+.khero .lead{font-size:clamp(16px,2vw,18.5px);color:#3C4A46;max-width:60ch}
+.kalendarz{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px;font-size:15px}
+.kalendarz span{flex-basis:100%}
+.btn-kal{display:inline-block;padding:10px 16px;border:1px solid var(--sygnal);border-radius:9px;color:var(--sygnal);text-decoration:none;font-weight:600;font-size:15px}
+.btn-kal:hover{background:var(--sygnal);color:#fff}
+.pytanie{margin-top:24px;font-size:16px;color:#3C4A46}
+.oferta{margin-top:28px;padding:20px;border-radius:12px;background:#fff;border:1px solid var(--linia);font-size:16px;line-height:1.6;max-width:620px}
+.przyciski{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+</style>
