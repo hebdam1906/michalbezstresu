@@ -86,9 +86,11 @@ export const stronyOdcinkow = [
     // 'Plan naprawczy w pracy — co oznacza PIP i co teraz zrobić'.
     // 16.10.2026: druga wersja pod CTR (Klaudiusz, zatw. Michał) — fraza „czy muszę podpisać" z badania Apify. Nie zmieniać do 13.11.
     // Poprzednia: 'Plan naprawczy (PIP) — jak go czytać, zanim podpiszesz cokolwiek'.
-    tytul: 'Plan naprawczy (PIP): czy musisz podpisać i co sprawdzić',
+    // 16.11.2026: trzecia wersja pod CTR (Klaudiusz, zatw. Michał 19:52). Odczyt GSC 1.12, próg CTR ≥ 2%.
+    // Poprzednia: 'Plan naprawczy (PIP): czy musisz podpisać i co sprawdzić'.
+    tytul: 'Plan naprawczy (PIP): podpisać czy nie? Sprawdź 6 rzeczy',
     opis:
-      'Dostałeś plan naprawczy? Nie podpisuj na spotkaniu. 6 elementów dobrego PIP, 6 pytań, gdy ich brakuje, i test: plan pod sukces czy pod zwolnienie.',
+      'PIP na stole, a szef czeka na podpis. Podpis to nie zgoda, ale są rzeczy, które warto sprawdzić wcześniej: kryteria, termin, wsparcie. Test: plan pod sukces czy pod zwolnienie.',
     h1: 'Dostałem plan naprawczy. Co to naprawdę znaczy?',
     lead: [
       "Zaproszenie w kalendarzu: Ty, Twój szef i ktoś z HR. Temat: „rozmowa o wynikach\". Na stole leży dokument, a ktoś wypowiada zdanie, które zapamiętasz na długo — „przygotowaliśmy dla Ciebie plan poprawy\".",
@@ -239,9 +241,11 @@ export const stronyOdcinkow = [
     // 'Negatywny feedback od szefa — jak zareagować i odpowiedzieć'.
     // 16.10.2026: druga wersja pod CTR (Klaudiusz, zatw. Michał). Pomiar GSC 30.10 i 13.11 — nie zmieniać do 13.11.
     // Poprzednia: 'Negatywny feedback od szefa — co zrobić w pierwszych 48 h'.
-    tytul: 'Negatywny feedback od szefa: 3 kroki w pierwszych 48 godzin',
+    // 16.11.2026: trzecia wersja pod CTR (Klaudiusz, zatw. Michał 19:52). Odczyt GSC 1.12, próg CTR ≥ 2%.
+    // Poprzednia: 'Negatywny feedback od szefa: 3 kroki w pierwszych 48 godzin'.
+    tytul: 'Negatywny feedback od szefa? Nie odpowiadaj dziś. Co zamiast',
     opis:
-      'Negatywny feedback od szefa? Nie odpowiadaj dziś. Zapytaj o kryteria, zapisz fakty w 5 minut, wróć z planem. Krok po kroku — od byłego menedżera.',
+      'Krytyka od szefa boli najbardziej w pierwszych 48 godzinach. Trzy kroki, które robi były menedżer: zapytaj o kryteria, zapisz fakty, wróć z planem. Bez tłumaczenia się.',
     h1: 'Negatywny feedback od szefa. Jak zareagować?',
     lead: [
       "Dostałeś od szefa maila z krytyką i palce już wiszą nad klawiaturą, żeby odpisać. Zatrzymaj się — bo ten mail przed chwilą stał się dokumentem. I Twoja odpowiedź też nim będzie.",
@@ -715,9 +719,11 @@ export const stronyOdcinkow = [
     nr: 8,
     slug: 'spotkanie-z-hr-bez-tematu',
     zapytanie: 'spotkanie z HR bez tematu co oznacza',
-    tytul: 'Spotkanie z HR bez tematu — co oznacza i jak się zachować',
+    // 16.11.2026: trzecia wersja pod CTR (Klaudiusz, zatw. Michał 19:52). Odczyt GSC 1.12, próg CTR ≥ 2%.
+    // Poprzednia: 'Spotkanie z HR bez tematu — co oznacza i jak się zachować'.
+    tytul: 'Spotkanie z HR bez tematu? Co to znaczy i co zrobić dziś',
     opis:
-      'Zaproszenie bez tematu, za dwie godziny, a na liście gości ktoś z HR. Wyjaśniam, co zwykle znaczy taki wpis w kalendarzu i czego nie robić w sali.',
+      'Zaproszenie bez tematu, w kalendarzu ktoś z HR. Zwykle oznacza, że decyzja o formie rozmowy już zapadła. Co przygotować w jeden wieczór, żeby nie wejść tam z pustymi rękami.',
     h1: 'Zaproszenie na spotkanie z HR, bez tematu. Co to znaczy?',
     lead: [
       "W kalendarzu pojawia się zaproszenie. Bez tematu, za dwie godziny, a na liście gości ktoś z HR. Każdy, kto pracował w dużej firmie, zna ten skok tętna.",
@@ -969,8 +975,10 @@ export const stronyOdcinkow = [
     slug: 'nowy-szef-w-zespole',
     zapytanie: 'nowy szef w pracy jak się zachować',
     // Treść: Klaudiusz, 11.10 (z transkrypcji odc. 11). Historie z odcinka zostają w książce — tu tylko obserwacje.
-    tytul: 'Nowy szef w pracy — jak się zachować na początku współpracy',
-    opis: 'Nowy szef w pracy: co wie o Tobie, zanim Cię pozna, trzy błędy na pierwszym spotkaniu 1:1, co z ustaleniami z poprzednim szefem i po czym poznać gotowy plan.',
+    // 16.11.2026: trzecia wersja pod CTR (Klaudiusz, zatw. Michał 19:52). Odczyt GSC 1.12, próg CTR ≥ 2%.
+    // Poprzednia: 'Nowy szef w pracy — jak się zachować na początku współpracy'.
+    tytul: 'Nowy szef w pracy: co wie o Tobie, zanim Cię pozna',
+    opis: 'Nowy szef dostaje o Tobie opinię, zanim odbędzie pierwsze 1:1. Trzy błędy na starcie, które trudno odkręcić, i jedno zdanie, które ustawia relację na nowo. Z obu stron stołu.',
     h1: 'Nowy szef w pracy — jak się zachować w pierwszych tygodniach?',
     lead: [
       'Mail od dyrektora: od pierwszego dnia miesiąca Waszym przełożonym będzie… i nazwisko, którego nigdy nie słyszałeś. Kwadrans później cały zespół zgaduje w kuchni, co to znaczy.',
