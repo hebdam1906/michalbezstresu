@@ -698,6 +698,19 @@ export const stronyOdcinkow = [
           '<strong>Szef regularnie je odwołuje?</strong> Raz czy dwa to normalne życie. Ale systematyczne znikanie Twoich 1:1, gdy spotkania innych się odbywają, bywa cichym początkiem izolowania — jednego z sygnałów, przy których warto sprawdzić, <a href="/odcinki/mobbing-w-pracy-gdzie-granica/">gdzie przebiega granica mobbingu</a>. Nie panikuj, dokumentuj: po każdym odwołanym spotkaniu grzeczny mail z propozycją nowego terminu.',
           '<strong>Spotkanie to monolog szefa?</strong> Użyj agendy: „Zanim przejdziemy dalej — mam dwie rzeczy, które chcę dziś poruszyć”. Powtarzane konsekwentnie, zmienia dynamikę w kilka tygodni.'
         ]
+      },
+      {
+        // SEO 18.11 (Klaudiusz, zatw. Michał 18.11): fraza „spotkanie 1:1”, odczyt pozycji 1.12
+        h2: 'Spotkanie 1:1 z szefem: o czym rozmawiać i kto ustala agendę',
+        tresc: [
+          'Spotkanie 1:1 jest Twoje, nie szefa. Szef rezerwuje czas, ale tematy przynosisz Ty. Jeśli przychodzisz z pustymi rękami, rozmowa zamienia się w raport ze statusu zadań, a to szef może przeczytać w mailu.',
+          'Stała agenda w trzech punktach:',
+          '<strong>1. Co idzie dobrze.</strong> Jedna konkretna rzecz z ostatnich tygodni, z efektem. Z takich zdań szef buduje potem Twoją ocenę roczną.',
+          '<strong>2. Gdzie potrzebujesz decyzji albo wsparcia.</strong> Blokada, priorytet do ustalenia, zgoda, na którą czekasz.',
+          '<strong>3. Kierunek.</strong> Czego chcesz się nauczyć i jaką odpowiedzialność wziąć w następnym kwartale.',
+          'Agendę wyślij dzień wcześniej, w dwóch–trzech linijkach. Szef przyjdzie przygotowany, a Ty zdecydujesz, o czym jest ta rozmowa.',
+          'Po spotkaniu zapisz trzy rzeczy: co ustaliliście, kto co robi i do kiedy. Krótka notatka wysłana szefowi tego samego dnia to ślad, do którego wrócisz przy ocenie rocznej.'
+        ]
       }
     ],
     zapamietaj: [
