@@ -74,48 +74,20 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
 >
   <Nav />
 
-  <!-- 9.11.2026: nowy pierwszy ekran (brief Klaudiusza, zatwierdził Michał 9:23).
-       Telefon: nadtytuł → H1 → mała okładka → ramka z ceną → podtytuł → punkty → autor.
-       Po 15.11 23:59 skrypt na dole: 49 zł bez przekreślenia i etykiety ([data-do]). -->
+  <!-- 19.11.2026 wieczór: pierwszy ekran po konsultacji z Magdaleną Marek (zatw. Michał 19:39).
+       Duża okładka (na telefonie NAD tekstem), krótkie hasło, dwa równorzędne przyciski: druk i e-book.
+       Szczegóły (dedykacja, format, pakiet) niżej. Pomiar: ksiazka:hero-druk / ksiazka:hero-ebook. -->
   <header class="khero">
     <div class="wrap khero-in">
       <div class="khero-txt">
-        <div class="eyebrow k-eyebrow">Nowa książka · e-book i druk z dedykacją</div>
-        <h1 class="k-h1">Wiedz, co dzieje się po drugiej stronie stołu, zanim usiądziesz do rozmowy.</h1>
-
-        <div class="k-mini" aria-hidden="true">
-          <img src="/ksiazka/okladka-nb1-600x960.jpg" width="60" height="96" alt="" loading="eager" />
-          <div><strong>Z obu stron stołu</strong><span>15 rozdziałów · Michał Hebda</span></div>
+        <div class="eyebrow k-eyebrow">Nowa książka Michała Hebdy</div>
+        <h1 class="k-h1">Wiedz, co powie szef, zanim usiądziesz do rozmowy</h1>
+        <p class="k-lead">Gotowe scenariusze trudnych rozmów w pracy: ocena roczna, podwyżka, plan naprawczy, odejście.</p>
+        <div class="kup k-2btn" id="kup">
+          <a class="btn btn-primary" href={KASA_DRUK} data-kasa-druk="druk" data-ev="ksiazka:hero-druk">Książka drukowana · 59 zł</a>
+          <a class="btn btn-primary" href={KASA_UTM} data-kasa data-ev="ksiazka:hero-ebook">E-book · 49 zł</a>
         </div>
-
-        <div class="zapis kup k-cena" id="kup">
-          <!-- 19.11.2026: jedna rekomendacja w hero (Klaudiusz, zatw. Michał 19.11): jeden przycisk do #druk zamiast e-booka + druku. -->
-          <p class="kup-cena"><span class="kup-kwota">59 zł</span> <span class="kup-etykieta">z dedykacją i wysyłką</span></p>
-          <a class="btn btn-primary kup-btn" href="#druk" data-ev="ksiazka:hero-druk">Kupuję z dedykacją ↓</a>
-          <p class="zapis-opis kup-pod">Wysyłam w 24 godziny w dni robocze · e-book od 49 zł niżej</p>
-          <p class="kup-fragment"><a href="#fragmentZapis" data-fragment-gora>Najpierw przeczytaj rozdział 1 za darmo ↓</a></p>
-          <!-- 14.11.2026, Plan Tornado: linijka o Empiku UKRYTA do odwołania (decyzja Michała 14.11, ceny). Podgląd ?empik=1. Pomiar: ksiazka_empik. -->
-          <p class="kup-empik" data-empik hidden>Wolisz czytać w Empik Go? <a href="https://www.empik.com/z-obu-stron-stolu-co-dzieje-sie-w-rozmowach-od-ktorych-zalezy-twoja-praca-hebda-michal,p1814220332,ebooki-i-mp3-p" target="_blank" rel="noopener" data-empik-link>Książka jest też w Empiku</a></p>
-          {edyta && (
-            <blockquote class="kup-cytat">
-              <p>„Nie jest pisana z pozycji »guru«, wręcz przeciwnie, autor nie unika pokazania błędów, które sam popełnił […]”</p>
-              <footer>— {edyta.kto}, {edyta.link ? <a href={edyta.link} target="_blank" rel="noopener">{edyta.rola}</a> : edyta.rola}</footer>
-            </blockquote>
-          )}
-        </div>
-
-        <p class="podtytul k-pod">„Z obu stron stołu” to 15 rozmów, od których zależy Twoja praca: podwyżka, ocena roczna,
-          plan naprawczy, restrukturyzacja. Każda pokazana oczami pracownika i menedżera.</p>
-        <ul class="k-punkty">
-          <li>Co zapytać, kiedy słyszysz „nie ma budżetu”</li>
-          <li>Co zrobić w pierwszym tygodniu planu naprawczego, zanim cokolwiek podpiszesz</li>
-          <li>Gotowe zdania do użycia jeszcze tego samego dnia</li>
-        </ul>
-
-        <div class="k-autor">
-          <Image src={zdjecie} alt="Michał Hebda" width={56} height={56} class="k-foto" />
-          <p><strong>Michał Hebda</strong> · 20 lat w operacjach finansowych międzynarodowych instytucji, jako specjalista i menedżer.</p>
-        </div>
+        <p class="k-pod2">Druk z dedykacją i wysyłką, wysyłam w 24 godziny w dni robocze · e-book od razu na maila</p>
       </div>
       <div class="okladka">
         <img src="/ksiazka/okladka-nb1-600x960.jpg" width="600" height="960"
@@ -123,6 +95,21 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
       </div>
     </div>
   </header>
+
+  <section class="kco">
+    <div class="wrap waska">
+      <p class="podtytul k-pod">„Z obu stron stołu” to 15 rozmów, od których zależy Twoja praca. Każda pokazana oczami pracownika i menedżera.</p>
+      <ul class="k-punkty">
+        <li>Co zapytać, kiedy słyszysz „nie ma budżetu”</li>
+        <li>Co zrobić w pierwszym tygodniu planu naprawczego, zanim cokolwiek podpiszesz</li>
+        <li>Gotowe zdania do użycia jeszcze tego samego dnia</li>
+      </ul>
+      <div class="k-autor">
+        <Image src={zdjecie} alt="Michał Hebda" width={56} height={56} class="k-foto" />
+        <p><strong>Michał Hebda</strong> · 20 lat w operacjach finansowych międzynarodowych instytucji, jako specjalista i menedżer.</p>
+      </div>
+    </div>
+  </section>
 
   {/* 9.11.2026: opinie zaraz pod pierwszym ekranem (brief Klaudiusza). Dane: src/data/opinie-ksiazka.js */}
   {opinie.length > 0 && (
@@ -145,37 +132,25 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
   <!-- 15.11.2026: wydanie drukowane z dedykacją (z gałęzi prezent-firmowy, 7fedb1d). Widoczne od 16.11 0:00 Warszawa (skrypt na dole). -->
   <section class="band" id="druk" data-druk>
     <div class="wrap waska">
-      <div class="eyebrow">Wydanie drukowane</div>
-      <h2>Z dedykacją, na prezent albo dla siebie</h2>
-      <p class="sub">Każdy egzemplarz podpisuję i wpisuję dedykację dla osoby, którą wskażesz.
-        Format A5, 168 stron, oprawa miękka. Wysyłka paczkomatem InPost w ciągu 24 godzin (w dni robocze).</p>
-      <!-- 19.11.2026: druk z dedykacją jako opcja wyróżniona, e-book i pakiet jako mniejsze karty (Klaudiusz, zatw. Michał 19.11). Odczyt po 7 dniach. -->
-      <div class="oferta polecana oferta-glowna">
-        <div class="oferta-etykieta">Najczęściej wybierane</div>
-        <div class="oferta-nazwa">Wydanie drukowane z dedykacją</div>
-        <div class="oferta-cena">59 zł <span>z wysyłką</span></div>
-        <p>Książka podpisana dla Ciebie albo dla osoby, której ją dajesz.</p>
-        <a class="btn btn-primary" href={KASA_DRUK} data-kasa-druk="druk" data-ev="ksiazka:druk-polecany">Kupuję z dedykacją</a>
-        <ul class="oferta-ryzyko">
-          <li>Wysyłam w 24 godziny w dni robocze</li>
-          <li>Dedykację wpisuję odręcznie, imię podajesz przy zamówieniu</li>
-          <li>Nie jesteś pewien? <a href="/rozdzial/" data-ev="ksiazka:rozdzial-1">Przeczytaj rozdział 1 za darmo →</a></li>
-        </ul>
-      </div>
-      <div class="oferty oferty-male">
+      <div class="eyebrow">Wybierz wersję</div>
+      <h2>Książka czy e-book</h2>
+      <!-- 19.11.2026 wieczór: dwie równorzędne opcje (Magdalena Marek, zatw. Michał). Pakiet jako link pod spodem. -->
+      <div class="oferty">
+        <div class="oferta">
+          <div class="oferta-nazwa">Książka drukowana</div>
+          <div class="oferta-cena">59 zł <span>z wysyłką</span></div>
+          <p>Podpisana, z dedykacją, jeśli chcesz. Format A5, oprawa miękka. Wysyłam w 24 godziny w dni robocze.</p>
+          <a class="btn btn-primary" href={KASA_DRUK} data-kasa-druk="druk" data-ev="ksiazka:druk">Kupuję książkę</a>
+        </div>
         <div class="oferta">
           <div class="oferta-nazwa">E-book (EPUB + PDF)</div>
           <div class="oferta-cena">49 zł</div>
           <p>Od razu na maila, czytasz jeszcze dziś.</p>
-          <a class="btn btn-ghost" href={KASA_UTM} data-kasa data-ev="ksiazka:ebook">Kupuję e-book</a>
-        </div>
-        <div class="oferta">
-          <div class="oferta-nazwa">Druk z dedykacją + e-book</div>
-          <div class="oferta-cena">69 zł <span>z wysyłką</span></div>
-          <p>E-book od razu, książka paczkomatem.</p>
-          <a class="btn btn-ghost" href={KASA_PAKIET} data-kasa-druk="pakiet" data-ev="ksiazka:pakiet">Zamawiam pakiet</a>
+          <a class="btn btn-primary" href={KASA_UTM} data-kasa data-ev="ksiazka:ebook">Kupuję e-book</a>
         </div>
       </div>
+      <p class="sub uwaga">Chcesz oba? <a href={KASA_PAKIET} data-kasa-druk="pakiet" data-ev="ksiazka:pakiet">Druk z dedykacją + e-book za 69 zł →</a>
+        · Nie jesteś pewien? <a href="#fragmentZapis" data-ev="ksiazka:rozdzial-1">Przeczytaj rozdział 1 za darmo ↓</a></p>
       <p class="sub uwaga">Dedykację wpiszesz w formularzu zamówienia. Jeśli zostawisz pole puste, podpiszę egzemplarz bez dedykacji.
         Zamówienia do 17.12 dotrą przed świętami.</p>
       <p class="sub firmy-link">Kupujesz dla zespołu? <a href="/dla-firm/?utm_source=site&utm_medium=ksiazka&utm_campaign=prezent-firmowy#prezent" data-ev="ksiazka_dla_firm">Pakiety dla firm →</a></p>
@@ -299,10 +274,11 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
   <section class="band koniec">
     <div class="wrap waska">
       <h2>Z obu stron stołu</h2>
-      <!-- 19.11.2026 (Michał): dół strony też prowadzi do rekomendacji — druk z dedykacją. -->
-      <p class="sub">Wydanie drukowane z dedykacją, 59 zł z wysyłką. Wysyłam w 24 godziny w dni robocze.</p>
-      <a class="btn btn-primary" href={KASA_DRUK} data-kasa-druk="druk" data-ev="ksiazka:druk-dol">Kupuję z dedykacją</a>
-      <p class="sub">Wolisz e-book? <a href="#druk" data-ev="ksiazka:dol-wersje">Zobacz wszystkie wersje ↑</a></p>
+      <p class="sub">Wysyłam w 24 godziny w dni robocze. E-book od razu na maila.</p>
+      <div class="k-2btn k-2btn-dol">
+        <a class="btn btn-primary" href={KASA_DRUK} data-kasa-druk="druk" data-ev="ksiazka:druk-dol">Książka drukowana · 59 zł</a>
+        <a class="btn btn-primary" href={KASA_UTM} data-kasa data-ev="ksiazka:ebook-dol">E-book · 49 zł</a>
+      </div>
     </div>
   </section>
 
@@ -425,6 +401,15 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
 </script>
 
 <style>
+/* 19.11.2026 wieczór: hero z dwoma przyciskami */
+.k-lead{font-size:clamp(16px,1.9vw,19px);color:#3C4A46;margin:0 0 20px;max-width:52ch}
+.k-2btn{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:560px}
+.k-2btn .btn{text-align:center;font-size:17px}
+.k-2btn-dol{margin:16px auto 0}
+.k-pod2{font-size:14px;color:#4A5A55;margin:12px 0 0}
+.kco{padding:36px 0 8px}
+@media(max-width:520px){.k-2btn{grid-template-columns:1fr}}
+
 .kwideo{position:relative;aspect-ratio:16/9;max-width:560px;margin:0 0 18px;border-radius:12px;overflow:hidden;background:#1D2422}
 .kwideo iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .kwideo-start{all:unset;cursor:pointer;position:absolute;inset:0;display:block}
@@ -522,7 +507,7 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
 .k-mini{display:none}
 @media(max-width:860px){
   .khero{padding:20px 0 36px}
-  .khero .okladka{display:none}
+  .khero .okladka{display:block;order:-1;max-width:190px;margin:0 auto 4px}
   .khero .k-h1{font-size:27px;margin-bottom:12px}
   .k-mini{display:flex;gap:12px;align-items:center;margin:0 0 12px}
   .k-mini img{width:44px;height:auto;border-radius:3px;box-shadow:0 4px 10px rgba(22,33,29,.25)}
