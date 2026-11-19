@@ -299,8 +299,10 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
   <section class="band koniec">
     <div class="wrap waska">
       <h2>Z obu stron stołu</h2>
-      <p class="sub">E-book (EPUB + PDF), od razu na maila. <span data-cena>39 zł</span> <span data-do>do 15 listopada (potem 49 zł)</span>.</p>
-      <a class="btn btn-primary" href={KASA_UTM} data-kasa data-ev="ksiazka-kup-dol"><span data-przycisk>Kupuję e-book za 39 zł</span></a>
+      <!-- 19.11.2026 (Michał): dół strony też prowadzi do rekomendacji — druk z dedykacją. -->
+      <p class="sub">Wydanie drukowane z dedykacją, 59 zł z wysyłką. Wysyłam w 24 godziny w dni robocze.</p>
+      <a class="btn btn-primary" href={KASA_DRUK} data-kasa-druk="druk" data-ev="ksiazka:druk-dol">Kupuję z dedykacją</a>
+      <p class="sub">Wolisz e-book? <a href="#druk" data-ev="ksiazka:dol-wersje">Zobacz wszystkie wersje ↑</a></p>
     </div>
   </section>
 
