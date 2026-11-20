@@ -87,7 +87,7 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
           <a class="btn btn-primary" href={KASA_DRUK} data-kasa-druk="druk" data-ev="ksiazka:hero-druk">Kup teraz – druk</a>
           <a class="btn btn-primary" href={KASA_UTM} data-kasa data-ev="ksiazka:hero-ebook">Kup teraz – e-book</a>
         </div>
-        <p class="k-pod2">Druk 59 zł z dedykacją i wysyłką (wysyłam w 24 godziny w dni robocze) · e-book 49 zł od razu na maila</p>
+        <p class="k-pod2">Druk z dedykacją 59 zł · e-book 49 zł</p>
       </div>
       <div class="okladka">
         <img src="/ksiazka/okladka-nb1-600x960.jpg" width="600" height="960"
@@ -98,7 +98,10 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
 
   <section class="kco">
     <div class="wrap waska">
-      <p class="podtytul k-pod">„Z obu stron stołu” to 15 rozmów, od których zależy Twoja praca. Każda pokazana oczami pracownika i menedżera.</p>
+      <div class="podtytul k-pod">
+        <p class="k-pyt">Boisz się oceny rocznej?<br />Wychodzisz z rozmów z szefem z poczuciem, że znowu przegrałeś?<br />Znowu awansował ktoś inny, a nie Ty, i zastanawiasz się dlaczego?</p>
+        <p><strong>Bądź przygotowany na każdą taką rozmowę dzięki tej książce.</strong></p>
+      </div>
       <ul class="k-punkty">
         <li>Co zapytać, kiedy słyszysz „nie ma budżetu”</li>
         <li>Co zrobić w pierwszym tygodniu planu naprawczego, zanim cokolwiek podpiszesz</li>
@@ -139,7 +142,7 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
         <div class="oferta">
           <div class="oferta-nazwa">Książka drukowana</div>
           <div class="oferta-cena">59 zł <span>z wysyłką</span></div>
-          <p>Podpisana, z dedykacją, jeśli chcesz. Format A5, oprawa miękka. Wysyłam w 24 godziny w dni robocze.</p>
+          <p>Podpisana, z dedykacją, jeśli chcesz. Format A5, oprawa miękka.</p>
           <a class="btn btn-primary" href={KASA_DRUK} data-kasa-druk="druk" data-ev="ksiazka:druk">Kup teraz – druk</a>
         </div>
         <div class="oferta">
@@ -274,7 +277,7 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
   <section class="band koniec">
     <div class="wrap waska">
       <h2>Z obu stron stołu</h2>
-      <p class="sub">Druk 59 zł z dedykacją i wysyłką, wysyłam w 24 godziny w dni robocze. E-book 49 zł od razu na maila.</p>
+      <p class="sub">Druk z dedykacją 59 zł · e-book 49 zł</p>
       <div class="k-2btn k-2btn-dol">
         <a class="btn btn-primary" href={KASA_DRUK} data-kasa-druk="druk" data-ev="ksiazka:druk-dol">Kup teraz – druk</a>
         <a class="btn btn-primary" href={KASA_UTM} data-kasa data-ev="ksiazka:ebook-dol">Kup teraz – e-book</a>
@@ -408,6 +411,7 @@ const WIDEO_YT_ID = 'CsWY4M0Wvq4'; /* 3.11: nagranie poprawione, dźwięk Q2U, n
 .k-2btn-dol{margin:16px auto 0}
 .k-pod2{font-size:14px;color:#4A5A55;margin:12px 0 0}
 .kco{padding:36px 0 8px}
+.k-pyt{margin:0 0 12px;line-height:1.6}
 @media(max-width:520px){.k-2btn{grid-template-columns:1fr}}
 
 .kwideo{position:relative;aspect-ratio:16/9;max-width:560px;margin:0 0 18px;border-radius:12px;overflow:hidden;background:#1D2422}
