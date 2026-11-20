@@ -49,6 +49,9 @@ const odcinki = [];
 for (const f of wpisy.slice(0, ILE_SPRAWDZIC)) {
   if (odcinki.length >= ILE_ODCINKOW) break;
   if (/#short|shorts/i.test(f.tytul)) continue; // tanio: tytuł mówi wprost
+  // 20.11.2026: webinary i nagrania z live'ów nie są odcinkami serii (żyją na /live,
+  // nie w odcinki.js). Webinar „nie ma budżetu” (9.11) blokował kontrolę od 17.11.
+  if (/webinar|\blive\b/i.test(f.tytul)) continue;
   const sek = await dlugoscSekund(f.id);
   // sek === null → nie udało się odczytać długości; wtedy lepiej sprawdzić
   // film niż go przeoczyć (fałszywy alarm jest tańszy niż odcinek bez strony).
